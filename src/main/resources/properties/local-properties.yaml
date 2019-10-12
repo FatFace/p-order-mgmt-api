@@ -1,0 +1,32 @@
+http:
+  basePath: "/api/*"
+  private:
+    port: "8081"
+  api:
+    p-template-api:
+      basePath: "/"
+      host: ""
+      port: ""
+      path: ""  
+autodiscovery:
+  id: ""
+  flow: "x-template-api-main"
+
+cloudhub:
+  domain: ""
+  usrname: "![]"
+  password: "![]"
+  environment: ""
+db:
+ audit: 
+  config:
+   host: ""
+   port: ""
+   user: "![]"
+   password: "![]"
+   database: "" 
+  
+  
+    
+        
+    

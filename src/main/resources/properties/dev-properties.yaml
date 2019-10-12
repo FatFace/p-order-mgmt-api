@@ -1,0 +1,52 @@
+http:
+  basePath: "/api/*"
+  port: "8081"
+  api:
+    p-template-api:
+      basePath: "/"
+      host: ""
+      port: ""
+      path: ""  
+
+cloudhub:
+  username: "![9PXkPKVtJcaOBOajyO/aN7ls5e9+9YSd]"
+  password: "![KXddxwRebw/CFr4FL7qybQ==]"
+
+db:
+ audit: 
+  config:
+   host: "mule-sandbox.cm1i2vsjtzdf.eu-west-1.rds.amazonaws.com"
+   port: "1433"
+   user: "![ZD7CPY0Dojcr9YGRFfDWZL76kVmQ7piw]"
+   password: "![bJmUgs4DmYYHVF890ccAPg==]"
+   database: "FATFACE_DB" 
+
+sftp:
+  host: "ftp.fatface.com"
+  port: "22"
+  username: "![G+RvyhEGV54IvkCSBQCwmuVIdKQO0HtR]"
+  password: "![dAYEo1B9zGPQp+B2B8elL8prps8rJswJ]" 
+  
+sqs:
+  accessKey: "![fylW0VwsnkyMl4yTAshdCs1q21/sTWxw]"
+  secretKey: "![RyTwGS30xrzhi/c3Pf8ZqYRqGqexMKNIu6bC6iL0ZOPEUZdhiVHLN7XovoEfBINS]"
+  region: "![mO7m6fK2Rx6Zjdh3hwVhXw==]"
+  queue:
+    target:
+      inventory: "Inventory"
+    url: 
+      reprocessingQueue: "https://sqs.eu-west-1.amazonaws.com/691628577374/msg-reprocessing-q"
+      targetQueueUrl: "https://sqs.eu-west-1.amazonaws.com/691628577374/inventory-q"
+smtp:
+  host: "![KeuWKLS+razwZT+xkXY1Rt/hZWrufrlP]"
+  port: "![JDlJLpEA6Bw=]"
+  user: "![iz7//COkIEFNtURkhXV0krWKJGtWm8QU]"
+  password: "![PkflFNbtA+Y+4XmwMZCrKw==]"
+  subject: "Fatface API Exception"
+        
+    
+  
+  
+    
+        
+    

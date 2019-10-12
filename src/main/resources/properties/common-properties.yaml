@@ -1,0 +1,58 @@
+is: 
+  audit:
+    toggle: "ON"
+    payload: "ON"
+  logging:
+    toggle: "OFF"
+
+domain: "common-template-api"
+environment:
+  id: "Development"  
+flow:
+  name:
+    undefined: "Flow Name not Defined"
+    
+retry:
+  frequency: "2000"
+  attempts: "3"   
+  
+error:
+  msg:
+    '404': "Resource not found"
+    '405': "Method not allowed"
+    '415': "Unsupported media type"
+    '406': "Not acceptable"
+    '400': "Bad request"  
+    '401': "HTTP Client Security"
+    '403': "Authorization Error"
+    '500': "Internal Server Error"
+    '503': "Retry Exhausted"
+    '504': "HTTP Timeout"
+    '429': "Too Many Requests"
+    http:
+      parsing: "Parsing Error"
+    generic:  
+      stream: "Stream Maximum Size Exceeded"
+      redelivery: "Redelivery Exhausted"
+      connectivity: "Connectivity Error"
+      timeout: "Timeout Error"
+      security: "Security Error"
+    db:
+      syntax: "Bad SQL syntax"
+      connection: "DB Connectivity Error"
+      Query: "Query Execution Error"
+      Retry: "DB Retry Exhausted"
+    transform: "Transformation Error"
+    expression: "Expression error"
+    routing: "Routing Error"
+    script: 
+      compile: "Script compilation error" 
+      execute: "Script execution error"
+      unknown: "Script unknown engine error"
+    sftp:
+      access: "SFTP Access Denied"
+      connection: "SFTP Connectivity error"
+      path: "SFTP Illegal Path"
+      retry: "SFTP Retry Exhausted"  
+      
+      
