@@ -43,4 +43,10 @@ http://www.mulesoft.org/schema/mule/tls http://www.mulesoft.org/schema/mule/tls/
 	<tls:context name="TLS_Context" doc:name="TLS Context" doc:id="9b4edc68-4a04-450d-b45c-e7f4ec9cd633" >
 		<tls:trust-store insecure="true" />
 	</tls:context>
+	<http:request-config name="JDA_HTTP_Request_configuration" doc:name="HTTP Request configuration" doc:id="ebcc1d7f-b3b7-442d-a627-0345c2afed19" basePath="/api" >
+		<http:request-connection host="${jda.host}" port="${jda.port}" />
+	</http:request-config>
+	<http:request-config name="D365_HTTP_Request_configuration" doc:name="HTTP Request configuration" doc:id="2acc99f7-5dc8-4a7a-b4ca-3e691cd3a4f5" basePath="/api" >
+		<http:request-connection host="localhost" port="8092" />
+	</http:request-config>
 </mule>

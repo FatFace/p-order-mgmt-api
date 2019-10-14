@@ -43,6 +43,13 @@ smtp:
   user: "![iz7//COkIEFNtURkhXV0krWKJGtWm8QU]"
   password: "![PkflFNbtA+Y+4XmwMZCrKw==]"
   subject: "Fatface API Exception"
+  
+jda:
+  http:
+    host: "localhost"
+    port: "8091"
+  manifestpath: "/manifestpath"
+    
         
     
   
