@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<flow name="shipment-manifest-impl-flow" doc:id="23a2590d-f562-46da-a911-2cf2098e8abe" >
+		<!-- <http:listener doc:name="Test Listener" doc:id="f4a25c17-79af-4c1d-a5cc-381e793ea577" config-ref="x-template-api-httpListenerConfig" path="/test"/> -->
+		<scheduler doc:name="Scheduler" doc:id="159ed4e9-21ba-4dc9-9370-3b7a49e20686" >
+			<scheduling-strategy >
+				<cron expression="${shipment.manifest.scheduler}" />
+			</scheduling-strategy>
+		</scheduler>
+		<set-variable value="#['shipment-manifest-impl-flow']" doc:name="Set Variable" doc:id="cdeb75e8-dcba-4247-b6c2-dcdbfd7e7814" variableName="flowName"/>
+		<http:request method="GET" doc:name="Call JDA HTTP Request Configuration" doc:id="84eca6ce-5203-422e-a214-79b809bdadc1" config-ref="JDA_HTTP_Request_configuration" path="${jda.manifestpath}">
+			<http:headers ><![CDATA[#[output application/java
+---
+{
+	"Start-Time" : "Value"
+}]]]></http:headers>
+		</http:request>
+		<choice doc:name="Choice" doc:id="eb997aef-0450-46ec-b3c7-17ef2eb36ef7" >
+			<when expression="#[payload.manifests.'order-no' != null]">
+				<ee:transform doc:name="Transform To D365" doc:id="3f52b408-ac5e-4cae-964a-6f79fcf2f17d">
+			<ee:message>
+				<ee:set-payload resource="dwl/manifest-jda-to-d365-mapping.dwl" />
+			</ee:message>
+		</ee:transform>
+			</when>
+			<otherwise >
+				<logger level="INFO" doc:name="Log Not An Ecom Order" doc:id="f992dbc9-1cc4-4ff3-b363-370b183532d8" message="It Is Not an Ecom order"/>
+			</otherwise>
+		</choice>
+		<http:request method="PUT" doc:name="Call D365 HTTP Request Configuration" doc:id="fc2267ae-7d3a-4a51-9e48-f720588bde44" config-ref="D365_HTTP_Request_configuration" path="/manifest">
+			<http:response-validator >
+				<http:success-status-code-validator values="#[200]" />
+			</http:response-validator>
+		</http:request>
+	</flow>
+	
+</mule>

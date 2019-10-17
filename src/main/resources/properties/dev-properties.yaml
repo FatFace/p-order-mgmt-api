@@ -49,6 +49,14 @@ jda:
     host: "localhost"
     port: "8091"
   manifestpath: "/manifestpath"
+  
+
+cron:
+  expression: 
+    manifest: "0 0/10 * 1/1 * ? *"
+    orderextract: "0 0/60 * 1/1 * ? *"
+  
+
     
         
     

@@ -1,13 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<mule xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core"
-	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+<mule xmlns:amqp="http://www.mulesoft.org/schema/mule/amqp" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
 http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
 	<sub-flow name="b-order-management-call-s-jda-manifest-extract-api" doc:id="ee49aa90-9657-4d9c-bcad-6b8c1e74dc3f" >
 		<http:request method="GET" doc:name="Call JDA HTTP Request Configuration" doc:id="956c7332-b7bb-4329-9ade-6b4add242625" config-ref="JDA_HTTP_Request_configuration" path="${jda.manifestpath}"/>
 	</sub-flow>
 	<sub-flow name="b-order-management-call-s-d365-manifest-extract-api" doc:id="564286bb-ab98-4182-8f62-553f8c928116" >
-		<http:request method="PUT" doc:name="Call D365 HTTP Request Configuration" doc:id="1ed83e7a-09b0-469e-83c4-302151822e14" config-ref="D365_HTTP_Request_configuration" path="/manifest"/>
+		<http:request method="PUT" doc:name="Call D365 HTTP Request Configuration" doc:id="1ed83e7a-09b0-469e-83c4-302151822e14" config-ref="D365_HTTP_Request_configuration" path="/manifest">
+			<http:response-validator >
+				<http:success-status-code-validator values="#[200]" />
+			</http:response-validator>
+		</http:request>
 	</sub-flow>
 </mule>
