@@ -1,5 +1,77 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<mule xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd"></mule>
+<mule xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
+	<flow name="order-managment-app-flow" doc:id="e4041d85-5c17-4374-b202-6367cd858318" >
+		<scheduler doc:name="Scheduler" doc:id="fd89417f-b2d5-4c23-8807-82f3eb5d99ee" >
+			<scheduling-strategy >
+				<cron expression="${scheduler.cron.expression}" />
+			</scheduling-strategy>
+		</scheduler>
+		<set-variable value="#['order-managment-appFlow']" doc:name="Set Flow Name" doc:id="45ba2651-cfa7-4d4b-99ed-c8ec5c530a42" variableName="flowName"/>
+		<flow-ref doc:name="Log Reveiver Entry" doc:id="01c4fa7d-b353-458a-9722-8a3217d8516f" name="log-receiver-entry-sub-flow"/>
+		<flow-ref doc:name="Audit Receiver Entry" doc:id="d7f34af9-ed70-48f0-b66f-775e7e1ca35d" name="audit-receiver-entry-sub-flow"/>
+		<flow-ref doc:name="Log Process Entry" doc:id="bde32360-83c3-4bb9-82d5-6a0a2390e60f" name="log-process-entry-sub-flow"/>
+		<flow-ref doc:name="Audit Process Entry" doc:id="7c238d72-7cbb-41e8-baa8-6b8572d19d76" name="audit-process-entry-sub-flow"/>
+		<http:request method="GET" doc:name="Invoke System Layer D365 Api to Get Pic Orders" doc:id="23912345-ad5d-4027-8b56-999893204273" config-ref="s_D365_Http_Request_configuration" path="${d365.getPickOrders}" responseTimeout="${response.timeout}">
+			<http:headers ><![CDATA[#[output application/java
+---
+{
+	"Transaction-Id" : "1234",
+	"Transaction-Start-Time" : "2018-08-02T16:58:12.121Z",
+	"Client-Id" : "1234567",
+	"Client-Secret" : "456789"
+}]]]></http:headers>
+		</http:request>
+		<flow-ref doc:name="Audit Process Exit" doc:id="4d7091e2-57ca-42a3-8292-2138987b695e" name="audit-process-exit-sub-flow"/>
+		<flow-ref doc:name="Log Process Exit" doc:id="57488e0a-6786-42d8-b5d8-77779ab8b576" name="log-process-exit-sub-flow"/>
+		<ee:transform doc:name="Transform D365 Response to JDA Request" doc:id="cf76c100-3d06-494c-a266-2209c8e73934">
+			<ee:message>
+			</ee:message>
+			<ee:variables>
+				<ee:set-variable resource="dwl/transform_d365_response_to_jda_request.dwl" variableName="originalPayload" />
+			</ee:variables>
+		</ee:transform>
+		<flow-ref doc:name="Log Process Entry" doc:id="0c3d0e86-05a8-48fd-9355-7849e7e45dfd" name="log-process-entry-sub-flow"/>
+		<flow-ref doc:name="Audit Process Entry" doc:id="09988aee-0cd6-4706-989e-468edc0cf587" name="audit-process-entry-sub-flow"/>
+		<http:request method="POST" doc:name="Invoke System Layer JDA Api to Post Orders" doc:id="1d39c868-a89c-48a5-8d97-9d5cb35a6020" config-ref="s_jda_Http_Request_configuration" path="${jda.postOrdersPath}" responseTimeout="${response.timeout}">
+			<http:body ><![CDATA[#[vars.originalPayload]]]></http:body>
+			<http:headers ><![CDATA[#[output application/java
+---
+{
+	"Transaction-Id" : "1234",
+	"Transaction-Start-Time" : "2018-08-02T16:58:12.121Z",
+	"Client-Id" : "1234567",
+	"Client-Secret" : "456789"
+}]]]></http:headers>
+		</http:request>
+		<flow-ref doc:name="Audit Process Exit" doc:id="b1b5f8de-13df-4b23-917e-24bac6fc8987" name="audit-process-exit-sub-flow"/>
+		<flow-ref doc:name="Log Process Exit" doc:id="78baee98-f66e-4843-9bcd-e72a625df755" name="log-process-exit-sub-flow"/>
+		<flow-ref doc:name="Log Process Entry" doc:id="e387b50b-1d53-468d-8c62-7af9f168e776" name="log-process-entry-sub-flow"/>
+		<flow-ref doc:name="Audit Process Entry" doc:id="008ffdb0-22ed-492c-8844-90927e0bd817" name="audit-process-entry-sub-flow"/>
+		<foreach doc:name="For Each" doc:id="01b0f104-5521-409e-9b69-2b2cb296e4c2" collection='vars.originalPayload."orders"' batchSize="${d365.batch.size}">
+			<http:request method="PUT" doc:name="Invoke System Layer D365 Api to Update Pick Orders Status" doc:id="ea9f19ba-e532-4631-9972-5e1b35db61fd" config-ref="s_D365_Http_Request_configuration" path="${d365.updateOrderStatus}" responseTimeout="${response.timeout}">
+			<http:headers ><![CDATA[#[output application/java
+---
+{
+	"Transaction-Id" : "1234",
+	"Transaction-Start-Time" : "2018-08-02T16:58:12.121Z",
+	"Client-Id" : "2345",
+	"Client-Secret" : "12345"
+}]]]></http:headers>
+				<http:uri-params><![CDATA[#[output application/java
+---
+{
+	"route-id" : payload.'pick-id'
+}]]]></http:uri-params>
+		</http:request>
+		</foreach>
+		<flow-ref doc:name="Audit Process Exit" doc:id="32749d0a-ede6-44e3-95d1-00364fa02bca" name="audit-process-exit-sub-flow"/>
+		<flow-ref doc:name="Log Process Exit" doc:id="432f3cdd-6d12-410e-b9e4-4d4f267d2d95" name="log-process-exit-sub-flow"/>
+		<flow-ref doc:name="Audit Dispatcher Exit" doc:id="aed28708-7f9c-4dd8-8b0c-7f897fd31b2d" name="audit-dispatcher-exit-sub-flow"/>
+		<flow-ref doc:name="Log Dispatcher Exit" doc:id="c445a4b5-389b-404f-a6f0-e886f84c57e4" name="log-dispatcher-exit-sub-flow"/>
+	</flow>
+</mule>

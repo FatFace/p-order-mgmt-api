@@ -7,30 +7,34 @@ http:
       host: ""
       port: ""
       path: ""  
+  
+scheduler:
+  cron:
+    expression: "0 0/15 * 1/1 * ? *"
 
 cloudhub:
-  username: "![9PXkPKVtJcaOBOajyO/aN7ls5e9+9YSd]"
-  password: "![KXddxwRebw/CFr4FL7qybQ==]"
+  username: "![Wkd/i0mr4M5DRXGPkpxl3A+qPh6NASJ83cobwz2qfXs=]"
+  password: "![TUOtb96a5rFz9HgwE5GrsA==]"
 
 db:
  audit: 
   config:
    host: "mule-sandbox.cm1i2vsjtzdf.eu-west-1.rds.amazonaws.com"
    port: "1433"
-   user: "![ZD7CPY0Dojcr9YGRFfDWZL76kVmQ7piw]"
-   password: "![bJmUgs4DmYYHVF890ccAPg==]"
+   user: "![AyD0mBi0zwPqptV8KbEJGkjzeMuTdVHL2AEWiq0N3sQ=]"
+   password: "![PX91DJD02zpJ0MJ3jLRKUw==]"
    database: "FATFACE_DB" 
 
 sftp:
   host: "ftp.fatface.com"
   port: "22"
-  username: "![G+RvyhEGV54IvkCSBQCwmuVIdKQO0HtR]"
-  password: "![dAYEo1B9zGPQp+B2B8elL8prps8rJswJ]" 
+  username: "![W49cMbSedB3HHfPcr0pWWyYHk27r5mLh++/a62Nglxg=]"
+  password: "![YoKYhq6QWsR9eW3AVcCh2TRSSvrwrp94baroSAHlBlg=]" 
   
 sqs:
-  accessKey: "![fylW0VwsnkyMl4yTAshdCs1q21/sTWxw]"
-  secretKey: "![RyTwGS30xrzhi/c3Pf8ZqYRqGqexMKNIu6bC6iL0ZOPEUZdhiVHLN7XovoEfBINS]"
-  region: "![mO7m6fK2Rx6Zjdh3hwVhXw==]"
+  accessKey: "![iKDP0/LYfR1ghGUCOAayKYI5kMT/ieTr3IMibNfn9y8=]"
+  secretKey: "![z8W9r4EBG78ATEDLlzRgrDu8pSr3cf8u0RPGoG/mEyLZSeyc1prL/JqYzbF2CWUY]"
+  region: "![6lleIG6Qoif/fTA7pK+sUA==]"
   queue:
     target:
       inventory: "Inventory"
@@ -38,13 +42,24 @@ sqs:
       reprocessingQueue: "https://sqs.eu-west-1.amazonaws.com/691628577374/msg-reprocessing-q"
       targetQueueUrl: "https://sqs.eu-west-1.amazonaws.com/691628577374/inventory-q"
 smtp:
-  host: "![KeuWKLS+razwZT+xkXY1Rt/hZWrufrlP]"
-  port: "![JDlJLpEA6Bw=]"
-  user: "![iz7//COkIEFNtURkhXV0krWKJGtWm8QU]"
-  password: "![PkflFNbtA+Y+4XmwMZCrKw==]"
+  host: "![rpQtD0vL4qh+Uema8l2LJxRngvgfBbF6l4RD5XEkF7Y=]"
+  port: "![jd2yTmc7NHA+FUYVXGfwbQ==]"
+  user: "![XImJcfQv4D6cYan0i6XwPZi8Uxv0OkDQvTITnsw/onM=]"
+  password: "![r9f7FSUCH+2adxR8OeswFg==]"
   subject: "Fatface API Exception"
         
-    
+d365:
+  host: "0.0.0.0"
+  port: "8091"
+  basepath: "/api"
+  getPickOrders: "/pick/orders"
+  updateOrderStatus: "/pick/orders/{route-id}"
+  
+jda:
+  host: "0.0.0.0"
+  port: "8091"
+  basepath: "/api"
+  postOrdersPath: "/orders"
   
   
     

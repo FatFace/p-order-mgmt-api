@@ -16,6 +16,13 @@ retry:
   frequency: "2000"
   attempts: "3"   
   
+d365:
+  batch:
+    size: "1"
+   
+response:
+  timeout: "30000"
+  
 error:
   msg:
     '404': "Resource not found"

@@ -1,0 +1,106 @@
+{
+  "pick-orders": [
+    {
+      "order-id": "10234342",
+      "order-date": "2019-07-02T09:30:23+00:00",
+      "route-id": "10234342",
+      "shipment-id": "00081",
+      "pick-status": "No",
+      "delivery-date": "2019-07-02T00:00:00+00:00",
+      "delivery-mode": "Courier",
+      "charges": "0.00000",
+      "net-amount": "50.00000",
+      "customer": {
+        "customer-id": "C000010",
+        "fullname": "William Wallace",
+        "first-name": "William",
+        "last-name": "Wallace",
+        "email": "staylor@hso.com",
+        "shipping-address": {
+          "address-1": "106 Castlemains Road",
+          "town": "Glasgow",
+          "postcode": "G62 7QB",
+          "county": "",
+          "country": "GBR"
+        },
+        "billing-address": {
+          "address-1": "29 Middleton Drive Milngavie",
+          "address-id": "00071",
+          "town": "Glasgow",
+          "postcode": "G62 8HS",
+          "country": "GBR"
+        }
+      },
+      "orderlines": [
+        {
+          "quantity": "1.000000",
+          "amount": "50.000000",
+          "sales-price": "50.000000",
+          "item-name": "Barbage Waterproof Jacket"
+        }
+      ],
+      "payments": [
+        {
+          "payment-mode-card": {
+          	"card-number": "243156763893",
+            "payment-mode": "PayPal"
+          }
+        }
+      ]
+    },
+    {
+      "order-id": "10234343",
+      "order-date": "2019-07-02T09:30:23+00:00",
+      "route-id": "10234343",
+      "shipment-id": "00082",
+      "pick-status": "No",
+      "delivery-date": "2019-07-02T00:00:00+00:00",
+      "delivery-mode": "Courier",
+      "charges": "0.00000",
+      "net-amount": "50.00000",
+      "customer": {
+        "customer-id": "C000010",
+        "fullname": "William Wallace",
+        "first-name": "William",
+        "last-name": "Wallace",
+        "email": "staylor@hso.com",
+        "shipping-address": {
+          "address-1": "106 Castlemains Road",
+          "town": "Glasgow",
+          "postcode": "G62 7QB",
+          "county": "",
+          "country": "GBR"
+        },
+        "billing-address": {
+          "address-1": "29 Middleton Drive Milngavie",
+          "address-id": "00071",
+          "town": "Solapur",
+          "postcode": "G62 8HS",
+          "country": "GBR"
+        }
+      },
+      "orderlines": [
+        {
+          "quantity": "1.000000",
+          "amount": "50.000000",
+          "sales-price": "50.000000",
+          "item-name": "Jacket"
+        },
+        {
+          "quantity": "1.000000",
+          "amount": "100.000000",
+          "sales-price": "50.000000",
+          "item-name": "Waterproof Jacket"
+        }
+      ],
+      "payments": [
+        {
+          "payment-mode-card": {
+            "card-number": "2431567383",
+            "payment-mode": "Google Pay"
+          }
+        }
+      ]
+    }
+  ]
+}
