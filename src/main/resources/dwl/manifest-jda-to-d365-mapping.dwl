@@ -3,25 +3,25 @@ output application/json
 ---
 
 {
-  "WMSPickingRegistration": payload.manifests  map (payloadMF,indexOfMF) -> 
- 	{
-      "WMSPickingRouteID": payloadMF.'route-id',
-      	"itemId": payloadMF.'item-id',
-      "ItemBarCode": payloadMF.barcode,
-      "SalesCarrierTrackingId": payloadMF.'carrier-consignment-id',
-      "SalesContainer": payloadMF.'container-id',
-      "InventSiteId": payloadMF.'site-id',
-      "InventLocationId": payloadMF.'location-id',
-      "WMSLocationId": "",
-      "Qty": payloadMF.quantity,
-      "SalesShippingDate": payloadMF.'shipping-date',
-      "SalesId": payloadMF.'order-no',
-      "SalesCarrierId":payloadMF.'carrier-id',
-      "WHSInventStatusId": payloadMF.status,
-      "LineTotal": 1.00,
-      "closePick": "YES"
-     
+  "manifests": payload.manifests map (manifest,indexOfM) -> 
+    {
+      "route-id": manifest.'route-id',
+      "item-id": manifest.'item-id',
+      "barcode": manifest.barcode,
+      "carrier-consignment-id": manifest.'carrier-consignment-id',
+      "container-id": manifest.'container-id',
+      "site-id": manifest.'site-id',
+      "location-id": manifest.'location-id',
+      "quantity": manifest.quantity,
+      "shipping-date": manifest.'shipping-date',
+      "order-no": manifest.'order-no',
+      "carrier-id": manifest.'carrier-id',
+      "status": manifest.status
     }
-    
- }
+  
+}
+
+ 
+
+
  

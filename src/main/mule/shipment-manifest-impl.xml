@@ -5,38 +5,69 @@
 	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
 http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
 http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
-	<flow name="shipment-manifest-impl-flow" doc:id="23a2590d-f562-46da-a911-2cf2098e8abe" >
+	<flow name="update-shipment-manifest-details-impl-main-flow" doc:id="23a2590d-f562-46da-a911-2cf2098e8abe" >
 		<!-- <http:listener doc:name="Test Listener" doc:id="f4a25c17-79af-4c1d-a5cc-381e793ea577" config-ref="x-template-api-httpListenerConfig" path="/test"/> -->
-		<scheduler doc:name="Scheduler" doc:id="159ed4e9-21ba-4dc9-9370-3b7a49e20686" >
+		<scheduler doc:name="Manifest Scheduler" doc:id="159ed4e9-21ba-4dc9-9370-3b7a49e20686" >
 			<scheduling-strategy >
 				<cron expression="${shipment.manifest.scheduler}" />
 			</scheduling-strategy>
 		</scheduler>
-		<set-variable value="#['shipment-manifest-impl-flow']" doc:name="Set Variable" doc:id="cdeb75e8-dcba-4247-b6c2-dcdbfd7e7814" variableName="flowName"/>
-		<http:request method="GET" doc:name="Call JDA HTTP Request Configuration" doc:id="84eca6ce-5203-422e-a214-79b809bdadc1" config-ref="JDA_HTTP_Request_configuration" path="${jda.manifestpath}">
-			<http:headers ><![CDATA[#[output application/java
+		<ee:transform doc:name="Set Variable" doc:id="29613637-3c1f-4944-8fee-13d71ee46871" >
+			<ee:message >
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="flowName" ><![CDATA[%dw 2.0
+output application/java
+---
+'shipment-manifest-impl-main-flow']]></ee:set-variable>
+				<ee:set-variable variableName="clientId" ><![CDATA[p('secure::jda.clientId')]]></ee:set-variable>
+				<ee:set-variable variableName="clientSecret" ><![CDATA[p('secure::jda.clientSecret')]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+		<flow-ref doc:name="Log Receiver Entry" doc:id="a5724754-50b0-41af-8620-4ea76b72bffb" name="log-receiver-entry-sub-flow"/>
+		<flow-ref doc:name="Audit Receiver Entry" doc:id="82deddf5-5caa-40d1-8dd5-091e9a936e45" name="audit-receiver-entry-sub-flow"/>
+		<flow-ref doc:name="call-s-jda-and-process-to-jda-impl-flow" doc:id="5790c01d-3cd4-42c2-86b2-2d0d1d38da18" name="call-s-jda-and-process-to-jda-impl-flow"/>
+		<flow-ref doc:name="Log Dispatcher Exit" doc:id="d57c4250-2708-407e-85d9-dce8a082cda5" name="log-dispatcher-exit-sub-flow"/>
+		<flow-ref doc:name="Audit Dispatcher Exit" doc:id="c104f5b6-72d3-45a6-849c-63fe1d74bc63" name="audit-dispatcher-exit-sub-flow"/>
+	</flow>
+	<flow name="call-s-jda-and-process-to-jda-impl-flow" doc:id="f6fefbac-01da-4e28-864c-b477c028d439">
+		<http:request method="GET" doc:name="Call JDA HTTP Request Configuration" doc:id="84eca6ce-5203-422e-a214-79b809bdadc1" config-ref="JDA_HTTP_Request_configuration" path="${jda.manifestpath}" responseTimeout="${response.timeout}">
+			
+			<http:query-params ><![CDATA[#[output application/java
 ---
 {
-	"Start-Time" : "Value"
-}]]]></http:headers>
+	"client-id" : vars.clientId,
+	"client-secret" : vars.clientSecret
+}]]]></http:query-params>
 		</http:request>
-		<choice doc:name="Choice" doc:id="eb997aef-0450-46ec-b3c7-17ef2eb36ef7" >
+		<set-variable value="#[attributes.headers.'has-more-files']" doc:name="Set Has More Files" doc:id="cdeb75e8-dcba-4247-b6c2-dcdbfd7e7814" variableName="hasMoreFiles" />
+		<choice doc:name="Choice" doc:id="eb997aef-0450-46ec-b3c7-17ef2eb36ef7">
 			<when expression="#[payload.manifests.'order-no' != null]">
 				<ee:transform doc:name="Transform To D365" doc:id="3f52b408-ac5e-4cae-964a-6f79fcf2f17d">
 			<ee:message>
 				<ee:set-payload resource="dwl/manifest-jda-to-d365-mapping.dwl" />
 			</ee:message>
 		</ee:transform>
-			</when>
-			<otherwise >
-				<logger level="INFO" doc:name="Log Not An Ecom Order" doc:id="f992dbc9-1cc4-4ff3-b363-370b183532d8" message="It Is Not an Ecom order"/>
-			</otherwise>
-		</choice>
-		<http:request method="PUT" doc:name="Call D365 HTTP Request Configuration" doc:id="fc2267ae-7d3a-4a51-9e48-f720588bde44" config-ref="D365_HTTP_Request_configuration" path="/manifest">
-			<http:response-validator >
+				<http:request method="PUT" doc:name="Call D365 HTTP Request Configuration" doc:id="fc2267ae-7d3a-4a51-9e48-f720588bde44" config-ref="D365_HTTP_Request_configuration" path="${d365.updateManifestPath}" responseTimeout="${response.timeout}">
+			<http:response-validator>
 				<http:success-status-code-validator values="#[200]" />
 			</http:response-validator>
 		</http:request>
+			</when>
+			<otherwise>
+				<set-variable value="The record is not an ecom order" doc:name="Set Logging payload" doc:id="52f9feb0-0ac9-4c50-a3f3-b42f7a4b8419" variableName="loggingPayload" />
+				<flow-ref doc:name="Logging Message" doc:id="d6f924fd-a9c6-4d14-b8a1-d054dd2a62d8" name="logging-sub-flow" />
+			</otherwise>
+		</choice>
+		<choice doc:name="Choice" doc:id="e1655a92-484a-4476-8faa-5ead7ba282c8">
+			<when expression="#[vars.hasMoreFiles == true]">
+				<flow-ref doc:name="call-s-jda-and-process-to-jda-impl-flow" doc:id="8a4270e6-54f4-4d00-a55f-04efa95c5f86" name="call-s-jda-and-process-to-jda-impl-flow" />
+			</when>
+			<otherwise>
+				<set-variable value="There are no more manifest extract files to process" doc:name="Set Logging Payload" doc:id="113ffc98-1710-4f87-91ce-7f6ce79867ff" variableName="loggingPayload" />
+				<flow-ref doc:name="Logging Message" doc:id="5886af25-4e7a-497b-89ce-bd2627146b31" name="logging-sub-flow"/>
+			</otherwise>
+		</choice>
 	</flow>
 	
 </mule>

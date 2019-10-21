@@ -5,6 +5,9 @@ is:
   logging:
     toggle: "OFF"
 
+response:
+  timeout: "30000"
+
 domain: "common-template-api"
 environment:
   id: "Development"  

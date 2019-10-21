@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http"
-	xmlns="http://www.mulesoft.org/schema/mule/core"
-	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+<mule xmlns:amqp="http://www.mulesoft.org/schema/mule/amqp" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
 http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
-http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/amqp http://www.mulesoft.org/schema/mule/amqp/current/mule-amqp.xsd">
 	<flow name="order-extract-impl-flow" doc:id="23a2590d-f562-46da-a911-2cf2098e8abe" >
 		<!-- <http:listener doc:name="Test Listener" doc:id="f4a25c17-79af-4c1d-a5cc-381e793ea577" config-ref="x-template-api-httpListenerConfig" path="/test"/> -->
 		<scheduler doc:name="Scheduler" doc:id="18363b90-3733-44b8-b930-913a1be28952" >
@@ -12,18 +13,22 @@ http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/
 				<cron expression="${cron.expression.orderextract}" />
 			</scheduling-strategy>
 		</scheduler>
-		<flow-ref doc:name="B-Order Get ManiFest Data" doc:id="cc7dd770-911a-4451-8cc8-59819183625b" name="b-order-management-call-s-jda-manifest-extract-api"/>
-		<choice doc:name="Choice" doc:id="eb997aef-0450-46ec-b3c7-17ef2eb36ef7" >
-			<when expression="#[payload.manifests.'order-no' != null]">
-				<ee:transform doc:name="Transform To D365" doc:id="3f52b408-ac5e-4cae-964a-6f79fcf2f17d">
+		<flow-ref doc:name="call-s-jda-and-process-to-d365-impl-flow" doc:id="cc7dd770-911a-4451-8cc8-59819183625b" name="call-s-jda-and-process-to-d365-impl-flow"/>
+	</flow>
+	<flow name="call-s-jda-and-process-to-d365-impl-flow" doc:id="586a59a6-47ab-44e1-b530-8afc050bbc93" >
+		<http:request method="GET" doc:name="S-JDA-HTTP-Request-Configuration" doc:id="32ab8900-4bc9-4e3d-875c-22de403920c5" config-ref="JDA_HTTP_Request_configuration" path="/orderextract" responseTimeout="${response.timeout}"/>
+		<set-variable value="#[attributes.headers.has-more-files]" doc:name="Set Has More Files" doc:id="1fa39fcf-a8cf-4e9a-b0fa-687bd5c36751" variableName="hasMoreFiles"/>
+		<choice doc:name="Choice" doc:id="eb997aef-0450-46ec-b3c7-17ef2eb36ef7">
+			<when expression="#[payload.orders.'order-no' != null]">
+				<ee:transform doc:name="Transform order extract To D365" doc:id="3f52b408-ac5e-4cae-964a-6f79fcf2f17d">
 			<ee:message>
-				<ee:set-payload resource="dwl/manifest-jda-to-d365-mapping.dwl" />
+						<ee:set-payload resource="dwl/order-extract-jda-to-d365-mapping.dwl" />
 			</ee:message>
 		</ee:transform>
-				<flow-ref doc:name="B-Order Update Manifest Data" doc:id="a126214a-f2c3-453b-b8ca-2c594643e302" name="b-order-management-call-s-d365-manifest-extract-api" />
 			</when>
-			<otherwise >
-				<logger level="INFO" doc:name="Log Not An Ecom Order" doc:id="f992dbc9-1cc4-4ff3-b363-370b183532d8" message="It Is Not an Ecom order"/>
+			<otherwise>
+				<set-variable value="The record is not an ecom order" doc:name="Set Logging payload" doc:id="aaeb13dd-b2e0-4af1-89f4-f3f437d03bd7" variableName="loggingPayload" />
+				<flow-ref doc:name="Logging Message" doc:id="01218511-df12-49c7-90e7-0977c9fe11b3" name="logging-sub-flow"/>
 			</otherwise>
 		</choice>
 	</flow>
