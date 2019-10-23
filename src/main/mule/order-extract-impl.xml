@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<mule xmlns:amqp="http://www.mulesoft.org/schema/mule/amqp" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
-	xmlns:http="http://www.mulesoft.org/schema/mule/http"
-	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+<mule xmlns:sqs="http://www.mulesoft.org/schema/mule/sqs" xmlns:amqp="http://www.mulesoft.org/schema/mule/amqp"
+	xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
 http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
 http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
-http://www.mulesoft.org/schema/mule/amqp http://www.mulesoft.org/schema/mule/amqp/current/mule-amqp.xsd">
-	<flow name="order-extract-impl-flow" doc:id="23a2590d-f562-46da-a911-2cf2098e8abe" >
+http://www.mulesoft.org/schema/mule/amqp http://www.mulesoft.org/schema/mule/amqp/current/mule-amqp.xsd
+http://www.mulesoft.org/schema/mule/sqs http://www.mulesoft.org/schema/mule/sqs/current/mule-sqs.xsd">
+	<flow name="order-extract-impl-flow" doc:id="23a2590d-f562-46da-a911-2cf2098e8abe" initialState="stopped">
 		<!-- <http:listener doc:name="Test Listener" doc:id="f4a25c17-79af-4c1d-a5cc-381e793ea577" config-ref="x-template-api-httpListenerConfig" path="/test"/> -->
 		<scheduler doc:name="Scheduler" doc:id="18363b90-3733-44b8-b930-913a1be28952" >
 			<scheduling-strategy >
@@ -25,6 +26,7 @@ http://www.mulesoft.org/schema/mule/amqp http://www.mulesoft.org/schema/mule/amq
 						<ee:set-payload resource="dwl/order-extract-jda-to-d365-mapping.dwl" />
 			</ee:message>
 		</ee:transform>
+				<sqs:send-message doc:name="Send message" doc:id="ca5b52d3-77e3-4a08-b4ec-edbcac9bfa45" config-ref="Amazon_SQS_Configuration"/>
 			</when>
 			<otherwise>
 				<set-variable value="The record is not an ecom order" doc:name="Set Logging payload" doc:id="aaeb13dd-b2e0-4af1-89f4-f3f437d03bd7" variableName="loggingPayload" />

@@ -7,12 +7,13 @@ http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/htt
 http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
 	<flow name="update-shipment-manifest-details-impl-main-flow" doc:id="23a2590d-f562-46da-a911-2cf2098e8abe" >
 		<!-- <http:listener doc:name="Test Listener" doc:id="f4a25c17-79af-4c1d-a5cc-381e793ea577" config-ref="x-template-api-httpListenerConfig" path="/test"/> -->
-		<scheduler doc:name="Manifest Scheduler" doc:id="159ed4e9-21ba-4dc9-9370-3b7a49e20686" >
+		<!-- <scheduler doc:name="Manifest Scheduler" doc:id="159ed4e9-21ba-4dc9-9370-3b7a49e20686" >
 			<scheduling-strategy >
-				<cron expression="${shipment.manifest.scheduler}" />
+				<cron expression="${cron.expression.manifest}" />
 			</scheduling-strategy>
-		</scheduler>
-		<ee:transform doc:name="Set Variable" doc:id="29613637-3c1f-4944-8fee-13d71ee46871" >
+		</scheduler> -->
+		<http:listener doc:name="Listener" doc:id="e2cf1d59-f85f-4f7b-8f2f-ec33955debe7" config-ref="x-template-api-httpListenerConfig" path="/manifest"/>
+		<ee:transform doc:name="Set Headers" doc:id="29613637-3c1f-4944-8fee-13d71ee46871" >
 			<ee:message >
 			</ee:message>
 			<ee:variables >
@@ -22,52 +23,53 @@ output application/java
 'shipment-manifest-impl-main-flow']]></ee:set-variable>
 				<ee:set-variable variableName="clientId" ><![CDATA[p('secure::jda.clientId')]]></ee:set-variable>
 				<ee:set-variable variableName="clientSecret" ><![CDATA[p('secure::jda.clientSecret')]]></ee:set-variable>
+				<ee:set-variable variableName="transactionId" ><![CDATA[%dw 2.0
+output application/java
+---
+if (attributes.headers.'transaction-id' != null) attributes.headers.'transaction-id' else if (vars.transactionId != null) vars.transactionId else uuid()]]></ee:set-variable>
+				<ee:set-variable variableName="transactionStartTime" ><![CDATA[%dw 2.0
+output application/java
+---
+if (attributes.headers.'transaction-start-time' != null) attributes.headers.'transaction-start-time' as DateTime else if (vars.transactionStartTime != null) vars.transactionStartTime as DateTime else now()]]></ee:set-variable>
 			</ee:variables>
 		</ee:transform>
+		<set-variable value="#[correlationId]" doc:name="Set Message Correlation Id" doc:id="c2add439-7beb-4e55-a646-f789f3db6cec" variableName="messageCorrelationId"/>
 		<flow-ref doc:name="Log Receiver Entry" doc:id="a5724754-50b0-41af-8620-4ea76b72bffb" name="log-receiver-entry-sub-flow"/>
 		<flow-ref doc:name="Audit Receiver Entry" doc:id="82deddf5-5caa-40d1-8dd5-091e9a936e45" name="audit-receiver-entry-sub-flow"/>
-		<flow-ref doc:name="call-s-jda-and-process-to-jda-impl-flow" doc:id="5790c01d-3cd4-42c2-86b2-2d0d1d38da18" name="call-s-jda-and-process-to-jda-impl-flow"/>
+		<flow-ref doc:name="get-manifest-shipment-data-from-jda-and-process-to-d365-sub-flow" doc:id="5790c01d-3cd4-42c2-86b2-2d0d1d38da18" name="get-manifest-shipment-data-from-jda-and-process-to-d365-sub-flow"/>
 		<flow-ref doc:name="Log Dispatcher Exit" doc:id="d57c4250-2708-407e-85d9-dce8a082cda5" name="log-dispatcher-exit-sub-flow"/>
 		<flow-ref doc:name="Audit Dispatcher Exit" doc:id="c104f5b6-72d3-45a6-849c-63fe1d74bc63" name="audit-dispatcher-exit-sub-flow"/>
 	</flow>
-	<flow name="call-s-jda-and-process-to-jda-impl-flow" doc:id="f6fefbac-01da-4e28-864c-b477c028d439">
-		<http:request method="GET" doc:name="Call JDA HTTP Request Configuration" doc:id="84eca6ce-5203-422e-a214-79b809bdadc1" config-ref="JDA_HTTP_Request_configuration" path="${jda.manifestpath}" responseTimeout="${response.timeout}">
-			
-			<http:query-params ><![CDATA[#[output application/java
----
-{
-	"client-id" : vars.clientId,
-	"client-secret" : vars.clientSecret
-}]]]></http:query-params>
-		</http:request>
-		<set-variable value="#[attributes.headers.'has-more-files']" doc:name="Set Has More Files" doc:id="cdeb75e8-dcba-4247-b6c2-dcdbfd7e7814" variableName="hasMoreFiles" />
-		<choice doc:name="Choice" doc:id="eb997aef-0450-46ec-b3c7-17ef2eb36ef7">
-			<when expression="#[payload.manifests.'order-no' != null]">
-				<ee:transform doc:name="Transform To D365" doc:id="3f52b408-ac5e-4cae-964a-6f79fcf2f17d">
-			<ee:message>
-				<ee:set-payload resource="dwl/manifest-jda-to-d365-mapping.dwl" />
-			</ee:message>
-		</ee:transform>
-				<http:request method="PUT" doc:name="Call D365 HTTP Request Configuration" doc:id="fc2267ae-7d3a-4a51-9e48-f720588bde44" config-ref="D365_HTTP_Request_configuration" path="${d365.updateManifestPath}" responseTimeout="${response.timeout}">
-			<http:response-validator>
-				<http:success-status-code-validator values="#[200]" />
-			</http:response-validator>
-		</http:request>
+	
+	<sub-flow name="get-manifest-shipment-data-from-jda-and-process-to-d365-sub-flow" doc:id="3253f4bd-085c-4f6a-a3b6-7dd0840fb5b2" >
+		<set-payload value='{
+  "manifests": [
+    {
+      "route-id": "18825022",
+      "item-id": "4",
+      "barcode": "ASKU023",
+      "carrier-consignment-id": "27486104",
+      "container-id": "MULT27486104C",
+      "site-id": "ROYALMAIL",
+      "location-id": "",
+      "quantity": 10.00,
+      "shipping-date": "07-08-2019",
+      "order-no": "18825022",
+      "carrier-id":"HERMES",
+      "status":""
+    }
+  ]
+}' doc:name="Set Payload" doc:id="21e9a777-74a2-47f4-b924-4f0e0da6e022" mimeType="application/json" />
+		<flow-ref doc:name="check-manifest-shipment-ecom-order-and-process-to-d365-sub-flow" doc:id="1c3d2270-1db7-47b1-b482-9d4419e2e5d3" name="check-manifest-shipment-ecom-order-and-process-to-d365-sub-flow"/>
+		<choice doc:name="Choice" doc:id="5ca0b3f6-6e7d-4575-a2ca-a44fe6a4f07a">
+			<when expression="#[vars.hasMoreFiles == 'true']">
+				<flow-ref doc:name="get-manifest-shipment-data-from-jda-and-process-to-d365-sub-flow" doc:id="97dd8778-2e6f-4bed-ba2c-9791d8cb3283" name="get-manifest-shipment-data-from-jda-and-process-to-d365-sub-flow" />
 			</when>
 			<otherwise>
-				<set-variable value="The record is not an ecom order" doc:name="Set Logging payload" doc:id="52f9feb0-0ac9-4c50-a3f3-b42f7a4b8419" variableName="loggingPayload" />
-				<flow-ref doc:name="Logging Message" doc:id="d6f924fd-a9c6-4d14-b8a1-d054dd2a62d8" name="logging-sub-flow" />
+				<set-variable value="There are no more manifest extract files to process" doc:name="Set Logging Payload" doc:id="03589fa4-19ff-4708-8663-598de0d28fc2" variableName="loggingPayload" />
+				<flow-ref doc:name="Logging Message" doc:id="a22d797f-245f-4729-8246-e2b538aa6755" name="logging-sub-flow"/>
 			</otherwise>
 		</choice>
-		<choice doc:name="Choice" doc:id="e1655a92-484a-4476-8faa-5ead7ba282c8">
-			<when expression="#[vars.hasMoreFiles == true]">
-				<flow-ref doc:name="call-s-jda-and-process-to-jda-impl-flow" doc:id="8a4270e6-54f4-4d00-a55f-04efa95c5f86" name="call-s-jda-and-process-to-jda-impl-flow" />
-			</when>
-			<otherwise>
-				<set-variable value="There are no more manifest extract files to process" doc:name="Set Logging Payload" doc:id="113ffc98-1710-4f87-91ce-7f6ce79867ff" variableName="loggingPayload" />
-				<flow-ref doc:name="Logging Message" doc:id="5886af25-4e7a-497b-89ce-bd2627146b31" name="logging-sub-flow"/>
-			</otherwise>
-		</choice>
-	</flow>
+	</sub-flow>
 	
 </mule>

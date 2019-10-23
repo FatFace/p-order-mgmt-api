@@ -926,9 +926,17 @@ p('error.msg.generic.security')]]></ee:set-variable>
 		<flow-ref doc:name="Log Process Exit" doc:id="aaf5dbc2-ff16-4314-9aa2-ff911e5ee727" name="log-process-exit-sub-flow" />
 	</sub-flow>
 	<sub-flow name="global-prepare-error-response-sub-flow" doc:id="144512c8-8979-4ad1-ad6e-4daef8496754">
-		<ee:transform doc:name="Error Response Transformation" doc:id="b3a71808-796b-4367-ab57-ae97cd08d47a" >
-			<ee:message >
-				<ee:set-payload ><![CDATA[%dw 2.0
+		<choice doc:name="Choice" doc:id="2560548f-5e15-4aad-b70f-6cf98dc681de" >
+			<when expression="#[vars.sendToQueue == 'true']">
+				<flow-ref doc:name="common-queue-processing-sub-flow" doc:id="e8baed0d-4f2b-4f6a-a187-338bc71bf757" name="common-queue-processing-sub-flow"/>
+			</when>
+			<otherwise>
+				<logger level="INFO" doc:name="Logger" doc:id="d5cceaad-2fdd-4677-8d0a-4dfca4913457" message="Not Required to Send Manifest Queue"/>
+			</otherwise>
+		</choice>
+		<ee:transform doc:name="Error Response Transformation" doc:id="b3a71808-796b-4367-ab57-ae97cd08d47a">
+			<ee:message>
+				<ee:set-payload><![CDATA[%dw 2.0
 output application/json
 ---
 {
@@ -942,20 +950,20 @@ output application/json
 }]]></ee:set-payload>
 			</ee:message>
 		</ee:transform>
-		<ee:transform doc:name="Transform Error String" doc:id="295162bd-4f0b-44c3-8cea-2dd4137c0bad" >
-			<ee:message >
-				<ee:set-payload ><![CDATA[%dw 2.0
+		<ee:transform doc:name="Transform Error String" doc:id="295162bd-4f0b-44c3-8cea-2dd4137c0bad">
+			<ee:message>
+				<ee:set-payload><![CDATA[%dw 2.0
 output application/json
 ---
 'Exception Occurred with Error Code: ' ++ payload.error.errorCode ++ ', Error Message: ' ++ payload.error.errorMessage ++ if( vars.finalMessageId != null ) (',  Message ID: ' ++ vars.finalMessageId) else '' ++ if( vars.requestId != null ) (', Request ID: ' ++ vars.requestId) else '' ++  if( vars.additionalInfo != null )  (', Additional Info: ' ++ vars.additionalInfo) else '' ]]></ee:set-payload>
 			</ee:message>
-			<ee:variables >
+			<ee:variables>
 			</ee:variables>
 		</ee:transform>
 		<cloudhub:create-notification doc:name="Create Notification" doc:id="f72d2ba7-c8b3-4155-a0b1-d9e83f0653ed" config-ref="CloudHub_Config" domain="${domain}" priority="ERROR" transactionId="#[vars.transactionId]">
 		</cloudhub:create-notification>
-		<flow-ref doc:name="Log Error" doc:id="9dd62ffe-b77e-40ac-acbf-1ada687d955f" name="log-error-sub-flow"/>
-		<flow-ref doc:name="Audit Error" doc:id="a925d335-5826-401c-8734-fa914caf2f98" name="audit-error-sub-flow"/>
+		<flow-ref doc:name="Log Error" doc:id="9dd62ffe-b77e-40ac-acbf-1ada687d955f" name="log-error-sub-flow" />
+		<flow-ref doc:name="Audit Error" doc:id="a925d335-5826-401c-8734-fa914caf2f98" name="audit-error-sub-flow" />
     </sub-flow>
 </mule>
 	

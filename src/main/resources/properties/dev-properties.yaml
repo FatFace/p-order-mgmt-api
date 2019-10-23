@@ -34,9 +34,11 @@ sqs:
   queue:
     target:
       inventory: "Inventory"
+      manifest: "shipping-manifest-q"
     url: 
       reprocessingQueue: "https://sqs.eu-west-1.amazonaws.com/691628577374/msg-reprocessing-q"
       targetQueueUrl: "https://sqs.eu-west-1.amazonaws.com/691628577374/inventory-q"
+      manifestQueueUrl: "https://sqs.eu-west-1.amazonaws.com/691628577374/shipping-manifest-q"
 smtp:
   host: "![KeuWKLS+razwZT+xkXY1Rt/hZWrufrlP]"
   port: "![JDlJLpEA6Bw=]"
@@ -48,26 +50,23 @@ jda:
   http:
     host: "localhost"
     port: "8091"
-  manifestpath: "/manifestpath"
+  getManifestPath: "/manifestpath"
   clientId: ""
   clientSecret: ""
   
-
 cron:
   expression: 
     manifest: "0 0/10 * 1/1 * ? *"
-    orderextract: "0 0/60 * 1/1 * ? *"
-  
+    orderextract: "0 0/60 * 1/1 * ? *"  
 
 d365:
   host: "ff-sandbox779a0fb324d79bdaaos.cloud.retail.dynamics.com"
   getCustomerGroupPath: "/data/CustomerGroups"
-  updateProductsPath: "/data/products"
+  updateProductsPath: "/data/products"     
   updateManifestPath: "/manifest"
-  updateOrderExtractPath: "/order/extract"     
-    
+  updateOrderExtractPath: "/order/extract"    
+
+send:
+  manifest:
+    queue: "true"
   
-  
-    
-        
-    
