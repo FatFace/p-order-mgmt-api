@@ -62,4 +62,6 @@ error:
       path: "SFTP Illegal Path"
       retry: "SFTP Retry Exhausted"  
       
-      
+system:
+  layer:
+    response: "No Data from System Layer"
