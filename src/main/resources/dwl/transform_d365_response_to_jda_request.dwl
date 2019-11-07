@@ -2,15 +2,16 @@
 output application/json skipNullOn= "everywhere"
 ---
 {
-	orders: payload.'pick-orders' map ( pickorder , indexOfPickorder ) -> {
-		"order-type": pickorder."delivery-mode",
+	orders: vars.originalPayload.'pick-orders' map ( pickorder , indexOfPickorder ) -> {
+		(vars.lookUpValue filter (($."routeId") == pickorder."route-id") map{ 
+		"order-type": pickorder."route-id",
 		"order-date": pickorder."order-date",
 		"pick-id": pickorder."route-id",
 		"ship-by-date": pickorder."delivery-date",
 		"purchase-order": pickorder."order-no",
 		"line-price": sum(pickorder.orderlines.amount) as String + pickorder."net-amount",
 		"delivery-charges": pickorder.charges,
-		"dispatch_method": pickorder."delivery-mode",
+		"dispatch_method": $."lookup-value",
 		"customer-id": pickorder.customer."customer-id",
 		"del-name": pickorder.customer.fullname,
 		"del-contact-email": pickorder.customer.email,
@@ -34,5 +35,7 @@ output application/json skipNullOn= "everywhere"
 			"product-name": orderline."item-name",
 			"internal-sales-order-number": pickorder."shipment-id"
 		}
+	})
 	}
+	
 }
