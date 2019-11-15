@@ -47,10 +47,11 @@ http://www.mulesoft.org/schema/mule/os http://www.mulesoft.org/schema/mule/os/cu
 		<http:request-connection host="${d365.host}" port="${d365.port}" />
 	</http:request-config>
 	<http:request-config name="s_jda_Http_Request_configuration" doc:name="HTTP Request configuration" doc:id="2ed9720e-ec24-4e84-b76c-0ed81b8eb722" basePath="${jda.basepath}">
-		<http:request-connection host="${jda.host}" port="${jda.port}" />
+		<http:request-connection host="${jda.host}" port="${jda.port}" protocol="HTTPS">
+		</http:request-connection>
 	</http:request-config>
 	<os:object-store name="Object_store" doc:name="Object store" doc:id="a2ebd370-24d8-4948-bafb-7b3848ca907f" />
-	<http:request-config name="dbLookup_HTTP_Request_configuration" doc:name="HTTP Request configuration" doc:id="8414566d-3ff0-4d39-998f-65d0abf53a07" basePath="/api" >
-		<http:request-connection host="localhost" port="8092" />
+	<http:request-config name="dbLookup_HTTP_Request_configuration" doc:name="HTTP Request configuration" doc:id="8414566d-3ff0-4d39-998f-65d0abf53a07" basePath="${lookup.basePath}" >
+		<http:request-connection host="${lookup.host}" port="${lookup.port}" />
 	</http:request-config>
 </mule>

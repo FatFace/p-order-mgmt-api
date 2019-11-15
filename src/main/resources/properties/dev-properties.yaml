@@ -52,16 +52,33 @@ d365:
   host: "0.0.0.0"
   port: "8091"
   basepath: "/api"
+  clientId: "1234"
+  clientSecret: "4321"
   getPickOrders: "/pick/orders"
-  updateOrderStatus: "/pick/orders/{route-id}"
+  
   
 jda:
   host: "0.0.0.0"
-  port: "8091"
-  basepath: "/api"
+  port: "80891"
+  basepath: "/api/v1"
   postOrdersPath: "/orders"
+  clientId: "1234"
+  clientSecret: "4321"
+  jks:
+    password: "![bQO6YOBaGgBfhDsXXTHEPw==]"
   
-  
+lookup:
+  host: "0.0.0.0"
+  port: "8091"
+  basePath: "/api"
+  dbLookupPath: "/lookups"
+  key: "ORDER_TYPE-MODE_OF_DELIVERY-D365"
+  clientId: "1234"
+  clientSecret: "4321"
+  queryParam:
+    type: "ORDER_TYPE"
+    catgeory: "MODE_OF_DELIVERY"
+    source: "D365"
     
         
     
