@@ -20,6 +20,10 @@ http://www.mulesoft.org/schema/mule/os http://www.mulesoft.org/schema/mule/os/cu
 output application/json
 ---
 'order-managment-appFlow']]></ee:set-variable>
+				<ee:set-variable variableName="transactionStartDate" ><![CDATA[%dw 2.0
+output application/java
+---
+now() as String {format : "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"}]]></ee:set-variable>
 			</ee:variables>
 		</ee:transform>
 		<flow-ref doc:name="Log Reveiver Entry" doc:id="01c4fa7d-b353-458a-9722-8a3217d8516f" name="log-receiver-entry-sub-flow"/>
@@ -31,7 +35,7 @@ output application/json
 ---
 {
 	"Transaction-Id" : vars.transactionId,
-	"Transaction-Start-Time" : vars.transactionStartTime,
+	"Transaction-Start-Time" : vars.transactionStartDate,
 	"Client-Id" : p('d365.clientId'),
 	"Client-Secret" : p('d365.clientSecret')
 }]]]></http:headers>
@@ -89,16 +93,16 @@ output application/json
 ---
 {
 	"Transaction-Id" : vars.transactionId,
-	"Transaction-Start-Time" : vars.transactionStartTime,
+	"Transaction-Start-Time" : vars.transactionStartDate,
 	"Client-Id" : p('lookup.clientId'),
 	"Client-Secret" : p('lookup.clientSecret')
 }]]]></http:headers>
 					<http:query-params ><![CDATA[#[output application/java
 ---
 {
-	"type" : ${lookup.queryParam.type},
-	"source" : ${lookup.queryParam.source},
-	"category" : ${lookup.queryParam.catgeory}
+	"type" : p('lookup.queryParam.type'),
+	"source" : p('lookup.queryParam.source'),
+	"category" : p('lookup.queryParam.catgeory')
 }]]]></http:query-params>
 				</http:request>
 				<flow-ref doc:name="Audit Process Exit " doc:id="deba3708-cc31-4a44-9e73-0d17ba42b1d3" name="audit-process-exit-sub-flow" />
