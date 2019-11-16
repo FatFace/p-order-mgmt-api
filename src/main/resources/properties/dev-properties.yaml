@@ -1,12 +1,6 @@
-http:
-  basePath: "/api/*"
-  port: "8081"
-  api:
-    p-template-api:
-      basePath: "/"
-      host: ""
-      port: ""
-      path: ""  
+autodiscovery:
+  id: ""
+  flow: "b-order-mgmt-app"
   
 scheduler:
   cron:
@@ -51,21 +45,21 @@ smtp:
 d365:
   host: "0.0.0.0"
   port: "8091"
-  basepath: "/api"
-  clientId: "1234"
-  clientSecret: "4321"
-  getPickOrders: "/pick/orders"
+  basepath: "/api/v1"
+  clientId: "b206a1a7bfbd4e109f591ca5b27631c3"
+  clientSecret: "2Cf50B5970B14FC9a94D5aB48Fad1206"
+  pickOrdersPath: "/pick/orders"
   
   
 jda:
   host: "0.0.0.0"
-  port: "80891"
+  port: "8092"
   basepath: "/api/v1"
-  postOrdersPath: "/orders"
-  clientId: "1234"
-  clientSecret: "4321"
+  ordersPath: "/orders"
+  clientId: "b206a1a7bfbd4e109f591ca5b27631c3"
+  clientSecret: "2Cf50B5970B14FC9a94D5aB48Fad1206"
   jks:
-    password: "![bQO6YOBaGgBfhDsXXTHEPw==]"
+    password: "![yqrYtFIRqm28xrunLqR/2kqfcVd97HqoY0AWEfF+m8M=]"
   
 lookup:
   host: "0.0.0.0"

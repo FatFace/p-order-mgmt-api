@@ -51,6 +51,7 @@
                     </execution>
                 </executions>
                 <configuration>
+					<runtimeVersion>4.2.1-hf4</runtimeVersion>
                     <coverage>
                         <runCoverage>true</runCoverage>
                         <formats>

@@ -30,7 +30,7 @@ now() as String {format : "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"}]]></ee:set-variable>
 		<flow-ref doc:name="Audit Receiver Entry" doc:id="d7f34af9-ed70-48f0-b66f-775e7e1ca35d" name="audit-receiver-entry-sub-flow"/>
 		<flow-ref doc:name="Log Process Entry" doc:id="bde32360-83c3-4bb9-82d5-6a0a2390e60f" name="log-process-entry-sub-flow"/>
 		<flow-ref doc:name="Audit Process Entry" doc:id="7c238d72-7cbb-41e8-baa8-6b8572d19d76" name="audit-process-entry-sub-flow"/>
-		<http:request method="GET" doc:name="Invoke System Layer D365 Api to Get Pic Orders" doc:id="23912345-ad5d-4027-8b56-999893204273" config-ref="s_D365_Http_Request_configuration" path="${d365.getPickOrders}" responseTimeout="${response.timeout}" target="originalPayload">
+		<http:request method="GET" doc:name="Invoke System Layer D365 Api to Get Pic Orders" doc:id="23912345-ad5d-4027-8b56-999893204273" config-ref="s_D365_Http_Request_configuration" path="${d365.pickOrdersPath}" responseTimeout="${response.timeout}" target="originalPayload">
 			<http:headers ><![CDATA[#[output application/java
 ---
 {
@@ -54,7 +54,7 @@ now() as String {format : "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"}]]></ee:set-variable>
 		</ee:transform>
 				<flow-ref doc:name="Log Process Entry" doc:id="0c3d0e86-05a8-48fd-9355-7849e7e45dfd" name="log-process-entry-sub-flow" />
 				<flow-ref doc:name="Audit Process Entry" doc:id="09988aee-0cd6-4706-989e-468edc0cf587" name="audit-process-entry-sub-flow" />
-				<http:request method="POST" doc:name="Invoke System Layer JDA Api to Post Orders" doc:id="1d39c868-a89c-48a5-8d97-9d5cb35a6020" config-ref="s_jda_Http_Request_configuration" path="${jda.postOrdersPath}" responseTimeout="${response.timeout}">
+				<http:request method="POST" doc:name="Invoke System Layer JDA Api to Post Orders" doc:id="1d39c868-a89c-48a5-8d97-9d5cb35a6020" config-ref="s_jda_Http_Request_configuration" path="${jda.ordersPath}" responseTimeout="${response.timeout}">
 			<http:body><![CDATA[#[vars.transformedPayload]]]></http:body>
 					<http:query-params ><![CDATA[#[output application/java
 ---

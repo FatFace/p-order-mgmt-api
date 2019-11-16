@@ -1,16 +1,6 @@
-http:
-  basePath: "/api/*"
-  private:
-    port: "8091"
-  api:
-    p-template-api:
-      basePath: "/"
-      host: ""
-      port: ""
-      path: ""  
 autodiscovery:
   id: ""
-  flow: "x-template-api-main"
+  flow: "b-order-mgmt-app"
   
 scheduler:
   cron:
@@ -25,21 +15,21 @@ cloudhub:
 d365:
   host: "0.0.0.0"
   port: "8091"
-  basepath: "/api"
-  clientId: "1234"
-  clientSecret: "4321"
-  getPickOrders: "/pick/orders"
+  basepath: "/api/v1"
+  clientId: "b206a1a7bfbd4e109f591ca5b27631c3"
+  clientSecret: "2Cf50B5970B14FC9a94D5aB48Fad1206"
+  pickOrdersPath: "/pick/orders"
   
   
 jda:
   host: "0.0.0.0"
-  port: "8081"
+  port: "8092"
   basepath: "/api/v1"
-  postOrdersPath: "/orders"
-  clientId: "1234"
-  clientSecret: "4321"
+  ordersPath: "/orders"
+  clientId: "b206a1a7bfbd4e109f591ca5b27631c3"
+  clientSecret: "2Cf50B5970B14FC9a94D5aB48Fad1206"
   jks:
-    password: "![bQO6YOBaGgBfhDsXXTHEPw==]"
+    password: "![Eiy80pOc3NMdDEvvqf5eTmUuYTIchkvpv2kk4Ge7Xv8=]"
   
 lookup:
   host: "0.0.0.0"

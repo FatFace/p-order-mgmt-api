@@ -48,6 +48,9 @@ http://www.mulesoft.org/schema/mule/os http://www.mulesoft.org/schema/mule/os/cu
 	</http:request-config>
 	<http:request-config name="s_jda_Http_Request_configuration" doc:name="HTTP Request configuration" doc:id="2ed9720e-ec24-4e84-b76c-0ed81b8eb722" basePath="${jda.basepath}">
 		<http:request-connection host="${jda.host}" port="${jda.port}" protocol="HTTPS">
+			<tls:context >
+				<tls:trust-store path="FFTrustStore.ts" password="${secure::jda.jks.password}" type="jks" insecure="true" />
+			</tls:context>
 		</http:request-connection>
 	</http:request-config>
 	<os:object-store name="Object_store" doc:name="Object store" doc:id="a2ebd370-24d8-4948-bafb-7b3848ca907f" />
