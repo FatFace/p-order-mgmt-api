@@ -29,6 +29,10 @@ attributes.transactionStartTime.stringValue
 output application/java
 ---
 attributes.transactionId.stringValue]]></ee:set-variable>
+				<ee:set-variable variableName="count" ><![CDATA[%dw 2.0
+output application/java
+---
+attributes.count.stringValue]]></ee:set-variable>
 			</ee:variables>
 		</ee:transform>
 		<flow-ref doc:name="log Receiver Entry" doc:id="a1639311-61a1-4f5a-9434-54c7fd65ebc5" name="log-receiver-entry-sub-flow" />

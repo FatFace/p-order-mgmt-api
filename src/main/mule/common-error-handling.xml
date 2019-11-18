@@ -888,8 +888,94 @@ p('error.msg.generic.security')]]></ee:set-variable>
 			</ee:transform>
       		<flow-ref doc:name="Global Prepare Error Response Sub Flow" doc:id="ef951fe8-521e-4c3a-b907-a77d766679b5" name="global-prepare-error-response-sub-flow"/>
 		</on-error-continue>
-		
-		
+		<on-error-continue type="COMPRESSION:COULD_NOT_COMPRESS" enableNotifications="true" logException="true" doc:name="On Error Continue" doc:id="ae2d02b3-78d4-499f-9515-d4a2d4cd01a8" >
+			
+      		<ee:transform doc:name="Error Variables" doc:id="dfcf40c4-c553-4728-9a2a-f23cc01a7592" >
+				<ee:message >
+				</ee:message>
+				<ee:variables >
+					<ee:set-variable variableName="httpStatus" ><![CDATA[%dw 2.0
+output application/java
+---
+500]]></ee:set-variable>
+					<ee:set-variable variableName="errorCode" ><![CDATA[%dw 2.0
+output application/java
+---
+500]]></ee:set-variable>
+					<ee:set-variable variableName="errorMessage" ><![CDATA[%dw 2.0
+output application/java
+---
+p('error.msg.compress.notCompress')]]></ee:set-variable>
+				</ee:variables>
+			</ee:transform>
+      		<flow-ref doc:name="Global Prepare Error Response Sub Flow" doc:id="3d1880e8-99f6-4e98-9ff8-1fb6c0107f7a" name="global-prepare-error-response-sub-flow"/>
+		</on-error-continue>
+		<on-error-continue type="COMPRESSION:INVALID_ARCHIVE" enableNotifications="true" logException="true" doc:name="On Error Continue" doc:id="61fe7b9f-efc1-4cfa-95ba-ca0d598258ba" >
+			
+      		<ee:transform doc:name="Error Variables" doc:id="c6870b45-b47b-4374-b5ff-1b4b1e168927" >
+				<ee:message >
+				</ee:message>
+				<ee:variables >
+					<ee:set-variable variableName="httpStatus" ><![CDATA[%dw 2.0
+output application/java
+---
+500]]></ee:set-variable>
+					<ee:set-variable variableName="errorCode" ><![CDATA[%dw 2.0
+output application/java
+---
+500]]></ee:set-variable>
+					<ee:set-variable variableName="errorMessage" ><![CDATA[%dw 2.0
+output application/java
+---
+p('error.msg.compress.invalidFormat')]]></ee:set-variable>
+				</ee:variables>
+			</ee:transform>
+      		<flow-ref doc:name="Global Prepare Error Response Sub Flow" doc:id="2584f46a-2f38-4260-a261-4b667f284a06" name="global-prepare-error-response-sub-flow"/>
+		</on-error-continue>
+		<on-error-continue type="COMPRESSION:TOO_MANY_ENTRIES" enableNotifications="true" logException="true" doc:name="On Error Continue" doc:id="45692549-a186-4c2c-ba4c-58fd605906d8" >
+			
+      		<ee:transform doc:name="Error Variables" doc:id="fd8c01aa-7370-4ee6-afa2-c76f44d2d89a" >
+				<ee:message >
+				</ee:message>
+				<ee:variables >
+					<ee:set-variable variableName="httpStatus" ><![CDATA[%dw 2.0
+output application/java
+---
+500]]></ee:set-variable>
+					<ee:set-variable variableName="errorCode" ><![CDATA[%dw 2.0
+output application/java
+---
+500]]></ee:set-variable>
+					<ee:set-variable variableName="errorMessage" ><![CDATA[%dw 2.0
+output application/java
+---
+p('error.msg.compress.multipleEntry')]]></ee:set-variable>
+				</ee:variables>
+			</ee:transform>
+      		<flow-ref doc:name="Global Prepare Error Response Sub Flow" doc:id="2476d7f6-862d-4f13-bae2-eca73d751e81" name="global-prepare-error-response-sub-flow"/>
+		</on-error-continue>
+		<on-error-continue type="COMPRESSION:COULD_NOT_DECOMPRESS" enableNotifications="true" logException="true" doc:name="On Error Continue" doc:id="f11c698f-2a2a-4485-b171-55142171f15d" >
+			
+      		<ee:transform doc:name="Error Variables" doc:id="137fb75a-ab05-4696-b602-689208605300" >
+				<ee:message >
+				</ee:message>
+				<ee:variables >
+					<ee:set-variable variableName="httpStatus" ><![CDATA[%dw 2.0
+output application/java
+---
+500]]></ee:set-variable>
+					<ee:set-variable variableName="errorCode" ><![CDATA[%dw 2.0
+output application/java
+---
+500]]></ee:set-variable>
+					<ee:set-variable variableName="errorMessage" ><![CDATA[%dw 2.0
+output application/java
+---
+p('error.msg.compress.notDecompress')]]></ee:set-variable>
+				</ee:variables>
+			</ee:transform>
+      		<flow-ref doc:name="Global Prepare Error Response Sub Flow" doc:id="9431dfd7-ae20-4b45-a51c-302dd6776bb4" name="global-prepare-error-response-sub-flow"/>
+		</on-error-continue>
 		<!-- If none of the above matches then handle a the exception using generic handler -->
 		<on-error-continue type="ANY" enableNotifications="true" logException="true" doc:name="On Error Continue" doc:id="40180633-7687-4269-9ac4-b63bbe1ca580">
 			<set-variable value="#[500]" doc:name="Set the HTTP Status - 500" doc:id="0aa8adfb-5692-42e1-9bdd-a6712598d3ac" variableName="httpStatus" />
@@ -927,7 +1013,7 @@ p('error.msg.generic.security')]]></ee:set-variable>
 	</sub-flow>
 	<sub-flow name="global-prepare-error-response-sub-flow" doc:id="144512c8-8979-4ad1-ad6e-4daef8496754">
 		<choice doc:name="Choice" doc:id="2560548f-5e15-4aad-b70f-6cf98dc681de" >
-			<when expression="#[vars.sendToQueue == 'true']">
+			<when expression="#[vars.sendToQueue == 'true' and vars.count !=  8]">
 				<flow-ref doc:name="common-queue-processing-sub-flow" doc:id="e8baed0d-4f2b-4f6a-a187-338bc71bf757" name="common-queue-processing-sub-flow"/>
 			</when>
 			<otherwise>

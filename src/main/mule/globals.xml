@@ -21,13 +21,14 @@ http://www.mulesoft.org/schema/mule/tls http://www.mulesoft.org/schema/mule/tls/
         <http:listener-connection host="0.0.0.0" port="${http.port}" />
     </http:listener-config>
 	<db:config name="Database_Config" doc:name="Database Config" doc:id="b8195697-f573-4c1d-9ebb-faaf0ba86e54" >
-		<db:mssql-connection host="${db.audit.config.host}" user="${secure::db.audit.config.user}" password="${secure::db.audit.config.password}" databaseName="${db.audit.config.database}" />
+		<db:mssql-connection host="${db.audit.config.host}" user="${secure::db.audit.config.user}" password="${secure::db.audit.config.password}" databaseName="${db.audit.config.database}" >
+			<db:pooling-profile maxPoolSize="${db.pool.size.max}" minPoolSize="${db.pool.size.min}" />
+		</db:mssql-connection>
 	</db:config>	
 	<cloudhub:config name="CloudHub_Config" doc:name="CloudHub Config" doc:id="611f09fe-93a3-4f69-ab0a-5693466aeb9a" >
 			<cloudhub:connection username="${secure::cloudhub.username}" password="${secure::cloudhub.password}" environment="${environment.id}"/>
 	</cloudhub:config>
 	<secure-properties:config name="Secure_Properties_Config" doc:name="Secure Properties Config" doc:id="2cbb6432-2d0c-4d01-90aa-70326bc1731e" file="properties/${mule.env}-properties.yaml" key="${encryption.key}">
-		<secure-properties:encrypt algorithm="Blowfish" mode="CBC"/>
 	</secure-properties:config>
 	<configuration doc:name="Configuration" doc:id="54fa0143-7e1d-48e0-b340-a4e48738fc8d" defaultErrorHandler-ref="GlobalExceptionStrategy" />
 	<sftp:config name="SFTP_Config" doc:name="SFTP Config" doc:id="d1857644-27b7-46ba-bb81-15e8b98f626f" >
@@ -43,10 +44,12 @@ http://www.mulesoft.org/schema/mule/tls http://www.mulesoft.org/schema/mule/tls/
 	<tls:context name="TLS_Context" doc:name="TLS Context" doc:id="9b4edc68-4a04-450d-b45c-e7f4ec9cd633" >
 		<tls:trust-store insecure="true" />
 	</tls:context>
-	<http:request-config name="JDA_HTTP_Request_configuration" doc:name="HTTP Request configuration" doc:id="ebcc1d7f-b3b7-442d-a627-0345c2afed19" basePath="/api" >
-		<http:request-connection host="${jda.http.host}" port="${jda.http.port}" />
+	<http:request-config name="JDA_HTTP_Request_configuration" doc:name="HTTP Request configuration" doc:id="ebcc1d7f-b3b7-442d-a627-0345c2afed19" basePath="${http.jda.base.path}" >
+		<http:request-connection host="${http.jda.host}" port="${http.jda.port}" />
 	</http:request-config>
 	<http:request-config name="D365_HTTP_Request_configuration" doc:name="HTTP Request configuration" doc:id="2acc99f7-5dc8-4a7a-b4ca-3e691cd3a4f5" basePath="/api" >
 		<http:request-connection host="localhost" port="8092" />
 	</http:request-config>
+	<global-property doc:name="Global Property" doc:id="11cd1217-3662-4e4e-85e1-27b31319c136" name="mule.env" value="dev" />
+	<global-property doc:name="Global Property" doc:id="7dceb751-4a93-4d4d-b29d-d0c4bf2220aa" name="encryption.key" value="jabdlgue34btiu2s" />
 </mule>

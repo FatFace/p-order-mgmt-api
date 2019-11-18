@@ -3,7 +3,7 @@ output application/json
 ---
 
 {
-  "orders": payload.orders map (orderE, indexOfOrderE) ->
+  "orders": vars.ecommOrders.orders map (orderE, indexOfOrderE) ->
     {
       "route-id": orderE.'route-id',
       "status": orderE.status,

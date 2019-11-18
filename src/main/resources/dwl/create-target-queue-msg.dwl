@@ -11,6 +11,12 @@ output application/java
 		} as Object {
 			class: "org.mule.extension.sqs.api.model.MessageAttributeValue"
 		},
+		"count": {
+			"stringValue" : vars.count,
+			"dataType" : "String.count"
+		} as Object {
+			class: "org.mule.extension.sqs.api.model.MessageAttributeValue"
+		},
 		"targetQueue": {
 			"stringValue" : attributes.targetQueue.stringValue,
 			"dataType" : "String.targetQueue"
