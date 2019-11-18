@@ -7,7 +7,7 @@ output application/json
     {
       "route-id": manifest.'route-id',
       "item-id": manifest.'item-id',
-      "barcode": manifest.barcode,
+      "barcode": Mule::lookup("common-template-check-digit-lookup-flow", manifest.barcode),
       "carrier-consignment-id": manifest.'carrier-consignment-id',
       "container-id": manifest.'container-id',
       "site-id": manifest.'site-id',

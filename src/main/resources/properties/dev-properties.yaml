@@ -49,10 +49,12 @@ sqs:
     target:
       inventory: "Inventory"
       manifest: "shipping-manifest-q"
+      order: "order-extract-q"
     url: 
       reprocessingQueue: "https://sqs.eu-west-1.amazonaws.com/691628577374/msg-reprocessing-q"
       targetQueueUrl: "https://sqs.eu-west-1.amazonaws.com/691628577374/inventory-q"
       manifestQueueUrl: "https://sqs.eu-west-1.amazonaws.com/691628577374/shipping-manifest-q"
+      orderQueueUrl: "https://sqs.eu-west-1.amazonaws.com/691628577374/order-extract-q"
 smtp:
   host: "![rpQtD0vL4qh+Uema8l2LJxRngvgfBbF6l4RD5XEkF7Y=]"
   port: "![jd2yTmc7NHA+FUYVXGfwbQ==]"
@@ -78,8 +80,12 @@ d365:
   getCustomerGroupPath: "/data/CustomerGroups"
   updateProductsPath: "/data/products"     
   updateManifestPath: "/pick/manifests"
-  updateOrderExtractPath: "/pick/orders"    
-
+  updateOrderExtractPath: "/pick/orders"   
+   
+orders:
+  export:
+    sftp:
+      errorfilepath:  "/FatFace/sftp/MuleSoftIntegration/sit/error/outgoing/orderData/jdaOrder"
 send:
   manifest:
     queue: "true"

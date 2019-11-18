@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<mule xmlns:sqs="http://www.mulesoft.org/schema/mule/sqs" xmlns:amqp="http://www.mulesoft.org/schema/mule/amqp"
-	xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
-	xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+<mule xmlns:sftp="http://www.mulesoft.org/schema/mule/sftp" xmlns:sqs="http://www.mulesoft.org/schema/mule/sqs"
+	xmlns:amqp="http://www.mulesoft.org/schema/mule/amqp"
+	xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
 http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
 http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
 http://www.mulesoft.org/schema/mule/amqp http://www.mulesoft.org/schema/mule/amqp/current/mule-amqp.xsd
-http://www.mulesoft.org/schema/mule/sqs http://www.mulesoft.org/schema/mule/sqs/current/mule-sqs.xsd">
+http://www.mulesoft.org/schema/mule/sqs http://www.mulesoft.org/schema/mule/sqs/current/mule-sqs.xsd
+http://www.mulesoft.org/schema/mule/sftp http://www.mulesoft.org/schema/mule/sftp/current/mule-sftp.xsd">
 	<flow name="order-extract-impl-flow" doc:id="23a2590d-f562-46da-a911-2cf2098e8abe" initialState="stopped">
 		<!-- <http:listener doc:name="Test Listener" doc:id="f4a25c17-79af-4c1d-a5cc-381e793ea577" config-ref="x-template-api-httpListenerConfig" path="/test"/> -->
 		<scheduler doc:name="Scheduler" doc:id="18363b90-3733-44b8-b930-913a1be28952" >
@@ -14,7 +15,7 @@ http://www.mulesoft.org/schema/mule/sqs http://www.mulesoft.org/schema/mule/sqs/
 				<cron expression="${cron.expression.orderextract}" />
 			</scheduling-strategy>
 		</scheduler>
-		<ee:transform doc:name="Flow Name" doc:id="02821f9f-729a-4648-b997-59abceff4329" >
+		<ee:transform doc:name="Batch Parameter" doc:id="02821f9f-729a-4648-b997-59abceff4329" >
 			<ee:message >
 			</ee:message>
 			<ee:variables >
@@ -22,6 +23,7 @@ http://www.mulesoft.org/schema/mule/sqs http://www.mulesoft.org/schema/mule/sqs/
 output application/java
 ---
 'order-extract-impl-flow']]></ee:set-variable>
+				<ee:set-variable variableName="orderCount" ><![CDATA[0]]></ee:set-variable>
 			</ee:variables>
 		</ee:transform>
 		
@@ -114,7 +116,7 @@ p('sqs.queue.url.orderQueueUrl')]]></ee:set-variable>
 				<ee:set-variable variableName="sendToQueue" ><![CDATA[%dw 2.0
 output application/java
 ---
-p('send.manifest.queue')]]></ee:set-variable>
+p('send.order.queue')]]></ee:set-variable>
 			</ee:variables>
 			
 		</ee:transform>
@@ -124,7 +126,7 @@ p('send.manifest.queue')]]></ee:set-variable>
 output application/java
 ---
 {
-	orders: payload.orders filter ($."order-no" != null and $.status == 'shipped') map $
+	orders: payload.orders filter ($."order-no" != null and $."order-no" != '' and $.status == 'shipped') map $
 }]]></ee:set-payload>
 			</ee:message>
 			<ee:variables >
@@ -163,13 +165,36 @@ output application/java
 			<when expression="#[payload != null]">
 				<ee:transform doc:name="Transform Message" doc:id="a97d5f0c-3a47-45ae-9428-b2152ff8adca" >
 					<ee:message >
-						<ee:set-payload ><![CDATA[%dw 2.0
-output application/java
----
-{
-}]]></ee:set-payload>
+						<ee:set-payload resource="dwl/filteredOrder.dwl" />
 					</ee:message>
+					<ee:variables >
+						<ee:set-variable resource="dwl/matchedOrderData.dwl" variableName="matchedOrderData" />
+					</ee:variables>
 				</ee:transform>
+				<choice doc:name="Choice" doc:id="7b07bbac-a441-4f75-acca-1444d95908e1" >
+					<when expression="#[vars.matchedOrderData != null and vars.matchedOrderData.orders != []]">
+						<ee:transform doc:name="Transform Message" doc:id="5f7c4ef1-3a24-4ae4-af37-92ac35fc04f2" >
+							<ee:message >
+								<ee:set-payload resource="dwl/create-order-queue-msg.dwl" />
+							</ee:message>
+						</ee:transform>
+						<choice doc:name="Choice" doc:id="5e78b28d-c018-4cb6-ac21-8d73cfb23938" >
+							<when expression="#[vars.orderCount == 8]">
+								<sftp:write doc:name="Write" doc:id="fb2769fe-047a-4b6a-9bae-8f890c9b68fe" config-ref="SFTP_Config" path="${orders.export.sftp.errorfilepath}">
+									<sftp:content ><![CDATA[#[vars.matchedOrderData]]]></sftp:content>
+								</sftp:write>
+							</when>
+							<otherwise >
+								<sqs:send-message doc:name="Send message" doc:id="e3c3f7a7-6559-418d-aa11-b690db70a793" config-ref="Amazon_SQS_Configuration" queueUrl="#[vars.targetQueueUrl]">
+						</sqs:send-message>
+							</otherwise>
+						</choice>
+					</when>
+					<otherwise >
+						<set-variable value="No data matached with manifest Data" doc:name="Set Logging payload" doc:id="db1f4ae4-3344-4574-831c-203ac517cc70" variableName="loggingPayload" />
+				<flow-ref doc:name="Logging Message" doc:id="a4cf82c1-8519-48db-9263-cad23b7cfc5f" name="logging-sub-flow" />
+					</otherwise>
+				</choice>
 			</when>
 			<otherwise >
 				<set-variable value="The record is not an ecom order" doc:name="Set Logging payload" doc:id="73320de0-0bc3-4493-8fe6-27cb1e9777fb" variableName="loggingPayload" />
@@ -194,4 +219,42 @@ output application/java
 		</http:request>
 			<flow-ref doc:name="Log Process Exit" doc:id="f51ef891-c345-4662-be6a-f444b1dd34f5" name="log-process-exit-sub-flow" />
 	</sub-flow>
+		<flow name="receive-order-message-and-retry" doc:id="1a6a1d78-904d-4d4a-9f75-9cb53713fbfc" >
+		<sqs:receivemessages doc:name="Receive Message From Order Queue and Retry" doc:id="9fdd5012-3be6-4c64-a3c6-11edc46a80aa" config-ref="Amazon_SQS_Configuration" queueUrl="${sqs.queue.url.orderQueueUrl}"/>
+		<set-variable value="receive-manifest-message-and-retry" doc:name="Flow Name" doc:id="c45659a1-f003-4182-b7f7-721f14617a45" variableName="flowName"/>
+		<ee:transform doc:name="Queue Parameter" doc:id="17c20d97-f46e-4654-ad9b-1b696ccb4c7f" >
+			<ee:message >
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="correlationId" ><![CDATA[%dw 2.0
+output application/java
+---
+attributes.correlationId.stringValue]]></ee:set-variable>
+				<ee:set-variable variableName="transactionStartTime" ><![CDATA[%dw 2.0
+output application/java
+---
+attributes.transactionStartTime.stringValue
+]]></ee:set-variable>
+				<ee:set-variable variableName="transactionId" ><![CDATA[%dw 2.0
+output application/java
+---
+attributes.transactionId.stringValue]]></ee:set-variable>
+				<ee:set-variable variableName="count" ><![CDATA[%dw 2.0
+output application/java
+---
+attributes.orderCount.stringValue as Number + 1 ]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+		<flow-ref doc:name="log Receiver Entry" doc:id="76b689a0-a28f-42c3-a83c-f54b9733933c" name="log-receiver-entry-sub-flow" />
+		<flow-ref doc:name="Log Process Entry" doc:id="6d734da2-a9f1-4823-b21a-9780eb84c6c4" name="log-process-entry-sub-flow"/>
+		<flow-ref doc:name="Audit Process Entry" doc:id="1627e4cb-058a-426d-9739-39adeea45f91" name="audit-process-entry-sub-flow"/>
+		<set-variable value="#[attributes['sqs.message.receipt.handle']]" doc:name="Set Message Receipt" doc:id="3ce71f45-b4ce-48de-af7e-66eb6714d227" variableName="messageReceipt"/>
+		<async doc:name="Async" doc:id="9983bf7f-1e5e-4f3e-95d0-8742638c8b59">
+					<flow-ref doc:name="order-extract-get-manifest-data" doc:id="a17b2a4a-6aa4-41ea-9a1c-54a37383340d" name="order-extract-get-manifest-data" />
+				</async>
+		<sqs:delete-message doc:name="Delete message" doc:id="2de490be-a0bd-450d-9438-4c37e02235fe" config-ref="Amazon_SQS_Configuration" receiptHandle="#[vars.messageReceipt]" queueUrl="${sqs.queue.url.orderQueueUrl}" />
+		<flow-ref doc:name="Audit Process Exit" doc:id="800441a6-23a5-4388-8fb2-cb5591601a8e" name="audit-process-exit-sub-flow"/>
+		<flow-ref doc:name="Log Process Exit" doc:id="23cdb3a1-8d81-4f3a-9f59-a2da2e15a87a" name="log-process-exit-sub-flow" />
+		
+	</flow>
 </mule>

@@ -2,16 +2,17 @@
 
 
 
-<mule xmlns:email="http://www.mulesoft.org/schema/mule/email"
-	xmlns:sqs="http://www.mulesoft.org/schema/mule/sqs" xmlns:cloudhub="http://www.mulesoft.org/schema/mule/cloudhub"
-	xmlns:common-logging-extension="http://www.mulesoft.org/schema/mule/common-logging-extension"
-	xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:dw="http://www.mulesoft.org/schema/mule/ee/dw" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="
+<mule xmlns:sftp="http://www.mulesoft.org/schema/mule/sftp"
+	xmlns:email="http://www.mulesoft.org/schema/mule/email" xmlns:sqs="http://www.mulesoft.org/schema/mule/sqs"
+	xmlns:cloudhub="http://www.mulesoft.org/schema/mule/cloudhub"
+	xmlns:common-logging-extension="http://www.mulesoft.org/schema/mule/common-logging-extension" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:dw="http://www.mulesoft.org/schema/mule/ee/dw" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="
 http://www.mulesoft.org/schema/mule/ee/dw http://www.mulesoft.org/schema/mule/ee/dw/current/dw.xsd http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
 http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
 http://www.mulesoft.org/schema/mule/common-logging-extension http://www.mulesoft.org/schema/mule/common-logging-extension/current/mule-common-logging-extension.xsd
 http://www.mulesoft.org/schema/mule/cloudhub http://www.mulesoft.org/schema/mule/cloudhub/current/mule-cloudhub.xsd
 http://www.mulesoft.org/schema/mule/sqs http://www.mulesoft.org/schema/mule/sqs/current/mule-sqs.xsd
-http://www.mulesoft.org/schema/mule/email http://www.mulesoft.org/schema/mule/email/current/mule-email.xsd">
+http://www.mulesoft.org/schema/mule/email http://www.mulesoft.org/schema/mule/email/current/mule-email.xsd
+http://www.mulesoft.org/schema/mule/sftp http://www.mulesoft.org/schema/mule/sftp/current/mule-sftp.xsd">
 
 <error-handler name="GlobalExceptionStrategy" doc:id="1f4aed6f-efe4-43e8-925f-23ec154b1a5f">
 
@@ -1013,11 +1014,19 @@ p('error.msg.compress.notDecompress')]]></ee:set-variable>
 	</sub-flow>
 	<sub-flow name="global-prepare-error-response-sub-flow" doc:id="144512c8-8979-4ad1-ad6e-4daef8496754">
 		<choice doc:name="Choice" doc:id="2560548f-5e15-4aad-b70f-6cf98dc681de" >
-			<when expression="#[vars.sendToQueue == 'true' and vars.count !=  8]">
-				<flow-ref doc:name="common-queue-processing-sub-flow" doc:id="e8baed0d-4f2b-4f6a-a187-338bc71bf757" name="common-queue-processing-sub-flow"/>
+			<when expression="#[vars.sendToQueue == 'true' and vars.count != 8]">
+				<flow-ref doc:name="common-queue-processing-sub-flow" doc:id="e8baed0d-4f2b-4f6a-a187-338bc71bf757" name="common-queue-processing-sub-flow" />
 			</when>
 			<otherwise>
-				<logger level="INFO" doc:name="Logger" doc:id="d5cceaad-2fdd-4677-8d0a-4dfca4913457" message="Not Required to Send Manifest Queue"/>
+				<choice doc:name="Choice" doc:id="cd4d5537-c3ae-4e8a-a6ad-422884aa97f7" >
+					<when expression="#[vars.count == 8]">
+						<sftp:write doc:name="Write" doc:id="376ec780-501d-4ce6-9f46-6fcfb07eea2b" config-ref="SFTP_Config" path="${orders.export.sftp.errorfilepath}"/>
+					</when>
+					<otherwise >
+						<set-variable value="No Queue Processing" doc:name="Set Logging payload" doc:id="f34a8e60-8bf2-4d0d-89ea-d609f5c60eeb" variableName="loggingPayload" />
+				<flow-ref doc:name="Logging Message" doc:id="d34519c3-02b5-4eaf-9625-8342e05063ac" name="logging-sub-flow" />
+					</otherwise>
+				</choice>
 			</otherwise>
 		</choice>
 		<ee:transform doc:name="Error Response Transformation" doc:id="b3a71808-796b-4367-ab57-ae97cd08d47a">

@@ -1,19 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<mule xmlns:sqs="http://www.mulesoft.org/schema/mule/sqs" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
-	xmlns:http="http://www.mulesoft.org/schema/mule/http"
-	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+<mule xmlns:java="http://www.mulesoft.org/schema/mule/java" xmlns:sqs="http://www.mulesoft.org/schema/mule/sqs"
+	xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
 http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
 http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
-http://www.mulesoft.org/schema/mule/sqs http://www.mulesoft.org/schema/mule/sqs/current/mule-sqs.xsd">
+http://www.mulesoft.org/schema/mule/sqs http://www.mulesoft.org/schema/mule/sqs/current/mule-sqs.xsd
+http://www.mulesoft.org/schema/mule/java http://www.mulesoft.org/schema/mule/java/current/mule-java.xsd">
 	<flow name="update-shipment-manifest-details-impl-main-flow" doc:id="23a2590d-f562-46da-a911-2cf2098e8abe" >
 		<!-- <http:listener doc:name="Test Listener" doc:id="f4a25c17-79af-4c1d-a5cc-381e793ea577" config-ref="x-template-api-httpListenerConfig" path="/test"/> -->
-		<!-- <scheduler doc:name="Manifest Scheduler" doc:id="159ed4e9-21ba-4dc9-9370-3b7a49e20686" >
+		<scheduler doc:name="Manifest Scheduler" doc:id="159ed4e9-21ba-4dc9-9370-3b7a49e20686" >
 			<scheduling-strategy >
 				<cron expression="${cron.expression.manifest}" />
 			</scheduling-strategy>
-		</scheduler> -->
-		<http:listener doc:name="Listener" doc:id="e2cf1d59-f85f-4f7b-8f2f-ec33955debe7" config-ref="x-template-api-httpListenerConfig" path="/manifest"/>
+		</scheduler> 
+
 		<ee:transform doc:name="Set Parameter" doc:id="29613637-3c1f-4944-8fee-13d71ee46871" >
 			<ee:message >
 			</ee:message>
@@ -32,7 +33,7 @@ output application/java
 		<flow-ref doc:name="Audit Dispatcher Exit" doc:id="c104f5b6-72d3-45a6-849c-63fe1d74bc63" name="audit-dispatcher-exit-sub-flow"/>
 	</flow>
 	
-	<sub-flow name="get-manifest-shipment-data-from-jda-and-process-to-d365-sub-flow" doc:id="3253f4bd-085c-4f6a-a3b6-7dd0840fb5b2" >
+	<flow name="get-manifest-shipment-data-from-jda-and-process-to-d365-sub-flow" doc:id="3253f4bd-085c-4f6a-a3b6-7dd0840fb5b2" >
 		<flow-ref doc:name="Log Process Entry" doc:id="0e629b67-770a-469f-b2e1-a2d3fc07901f" name="log-process-entry-sub-flow"/>
 		<http:request method="GET" doc:name="S-JDA-HTTP-Request-Configuration" doc:id="351d894a-f4b2-42ab-9b97-707aa730e4e7" config-ref="JDA_HTTP_Request_configuration" path="${http.jda.manifests.path}" responseTimeout="${response.timeout}">
 			<http:query-params ><![CDATA[#[output application/java
@@ -62,7 +63,7 @@ output application/java
 				<flow-ref doc:name="Logging Message" doc:id="a22d797f-245f-4729-8246-e2b538aa6755" name="logging-sub-flow"/>
 			</otherwise>
 		</choice>
-	</sub-flow>
+	</flow>
 	<sub-flow name="check-manifest-shipment-ecom-order-and-process-to-d365-sub-flow" doc:id="9dc65fa5-b38e-43b0-b3b2-a7d1f165a916" >
 		<flow-ref doc:name="Log Process Entry" doc:id="0c220953-495b-4cd8-a00c-a79dedac16e9" name="log-process-entry-sub-flow" />
 		<ee:transform doc:name="Set Queue Variables" doc:id="2bcb7010-8f00-46fc-acf9-0ceeffe35540">
@@ -87,10 +88,10 @@ p('send.manifest.queue')]]></ee:set-variable>
 		<ee:transform doc:name="Filtering" doc:id="0b8671a7-bf9c-49ac-a888-983d6a130205" >
 			<ee:message >
 				<ee:set-payload ><![CDATA[%dw 2.0
-output application/java
+output application/json
 ---
 {
-	manifests: payload.manifests filter ($."order-no" != null) map $
+	manifests: payload.manifests filter ($."order-no" != null and $."order-no" != '') map $
 }]]></ee:set-payload>
 			</ee:message>
 		</ee:transform>
@@ -127,21 +128,7 @@ output application/java
 	<sub-flow name="shipment-manifest-auditing-sub-flow" doc:id="e4fa9804-b3ca-48ca-8fb8-c92140e506ee" >
 		<ee:transform doc:name="Transform Message To Audit Details Structure" doc:id="f90eb4ca-9de7-48a4-8213-c6fd0f4a9945" >
 			<ee:message >
-				<ee:set-payload ><![CDATA[%dw 2.0
-output application/java
----
-{
-    "message-correlation-id": vars.messageCorrelationId,
-    "transaction-start-time": vars.transactionStartTime,
-    "lines": payload.manifests map {
-            "primary-key": $.'order-no',
-            "secondary-key": "",
-            "log-payload": {
-            	"content-type": "application/json",
-            	"data": $
-            }
-        }
-}]]></ee:set-payload>
+				<ee:set-payload resource="dwl/auditing-manifest.dwl" />
 			</ee:message>
 		</ee:transform>
 		<flow-ref doc:name="Flow Reference Audit Details Processing" doc:id="c74b2bd4-22b5-44f5-9d61-ab703349ad02" name="audit-details-processing-sub-flow"/>
@@ -183,5 +170,12 @@ attributes.count.stringValue as Number + 1 ]]></ee:set-variable>
 		<flow-ref doc:name="Audit Process Exit" doc:id="6595241f-e8f2-4136-9a9d-fa9b6159ed73" name="audit-process-exit-sub-flow"/>
 		<flow-ref doc:name="Log Process Exit" doc:id="895bb996-e0d6-474d-a47d-30cff6aea9e1" name="log-process-exit-sub-flow" />
 		
+	</flow>
+	<flow name="common-template-check-digit-lookup-flow" doc:id="36d55ac1-5ef7-4bb3-8174-9596c3d115d6" >
+		<java:invoke-static doc:name="Invoke java to calculate check digit" doc:id="d558b5ab-4987-4c3d-a25d-bab511f6970a" class="com.fatface.mule.utils.ProductSKUCheckDigitCal" method="getCheckSum(String)">
+			<java:args ><![CDATA[#[{
+	arg0: payload as String
+}]]]></java:args>
+		</java:invoke-static>
 	</flow>
 </mule>
