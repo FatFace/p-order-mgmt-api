@@ -83,7 +83,6 @@ now() as String {format : "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"}]]></ee:set-variable>
 			<when expression="#[payload ==true]">
 				<os:retrieve doc:name="Retrieve Lookup Data From Object Store" doc:id="4cbf43b7-adb6-47f9-8ff6-61c0b803322a" key="#[vars.vLookUpData]" objectStore="Object_store" />
 				<flow-ref doc:name="Filter Lookup Key" doc:id="4d0ae08b-a0b5-439a-9399-70b929e2fdc0" name="filter-lookup-key-sub-flow"/>
-				<os:clear doc:name="Clear" doc:id="8018297a-5ecf-4df6-ba60-2387258abe5b" objectStore="Object_store"/>
 			</when>
 			<otherwise >
 				<flow-ref doc:name="Log Process Entry" doc:id="86b153ce-55bd-4a65-8fb7-6b0a544e2ea8" name="log-process-entry-sub-flow"/>
