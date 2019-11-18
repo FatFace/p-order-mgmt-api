@@ -46,8 +46,8 @@ d365:
   host: "0.0.0.0"
   port: "8091"
   basepath: "/api/v1"
-  clientId: "b206a1a7bfbd4e109f591ca5b27631c3"
-  clientSecret: "2Cf50B5970B14FC9a94D5aB48Fad1206"
+  clientId: "a1c25cbc41dc4a43a1c5c3ecbf1251c5"
+  clientSecret: "C3a2082C36B54f5bbba606E704e11bDE"
   pickOrdersPath: "/pick/orders"
   
   
@@ -56,8 +56,8 @@ jda:
   port: "8092"
   basepath: "/api/v1"
   ordersPath: "/orders"
-  clientId: "b206a1a7bfbd4e109f591ca5b27631c3"
-  clientSecret: "2Cf50B5970B14FC9a94D5aB48Fad1206"
+  clientId: "a1c25cbc41dc4a43a1c5c3ecbf1251c5"
+  clientSecret: "C3a2082C36B54f5bbba606E704e11bDE"
   jks:
     password: "![yqrYtFIRqm28xrunLqR/2kqfcVd97HqoY0AWEfF+m8M=]"
   
@@ -67,8 +67,8 @@ lookup:
   basePath: "/api/v1"
   dbLookupPath: "/lookups"
   key: "ORDER_TYPE-MODE_OF_DELIVERY-D365"
-  clientId: "1234"
-  clientSecret: "4321"
+  clientId: "a1c25cbc41dc4a43a1c5c3ecbf1251c5"
+  clientSecret: "C3a2082C36B54f5bbba606E704e11bDE"
   queryParam:
     type: "ORDER_TYPE"
     catgeory: "MODE_OF_DELIVERY"

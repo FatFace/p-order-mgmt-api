@@ -57,6 +57,11 @@
                         <formats>
                             <format>html</format>
                         </formats>
+                        <ignoreFiles>
+						    <ignoreFile>common-auditing-framework.xml</ignoreFile>
+						    <ignoreFile>common-error-handling.xml</ignoreFile>
+						    <ignoreFile>common-logging-framework.xml</ignoreFile>
+						</ignoreFiles>
                     </coverage>
                 </configuration>
             </plugin>
