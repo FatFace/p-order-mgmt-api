@@ -63,8 +63,8 @@ jda:
   
 lookup:
   host: "0.0.0.0"
-  port: "8091"
-  basePath: "/api"
+  port: "8094"
+  basePath: "/api/v1"
   dbLookupPath: "/lookups"
   key: "ORDER_TYPE-MODE_OF_DELIVERY-D365"
   clientId: "1234"

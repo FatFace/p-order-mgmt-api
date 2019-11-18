@@ -15,5 +15,14 @@
 	"smtp.user",
 	"smtp.password",
 	"jda.jks.password"
-	]
+	],
+	"classLoaderModelLoaderDescriptor": {
+    "id": "mule",
+    "attributes": {
+    	"exportedPackages":[
+    		"com.fatface.mule.utils",
+    		"com.fatface.mule.exceptions"
+    		]
+    	}
+    }
 }
