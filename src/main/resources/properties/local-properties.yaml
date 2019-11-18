@@ -1,32 +1,78 @@
-http:
-  basePath: "/api/*"
-  private:
-    port: "8081"
-  api:
-    p-template-api:
-      basePath: "/"
-      host: ""
-      port: ""
-      path: ""  
 autodiscovery:
   id: ""
-  flow: "x-template-api-main"
+  flow: "b-order-mgmt-app"
+  
+scheduler:
+  cron:
+    expression: "0 0/15 * 1/1 * ? *"
 
 cloudhub:
-  domain: ""
-  usrname: "![]"
-  password: "![]"
-  environment: ""
+  username: "![Wkd/i0mr4M5DRXGPkpxl3A+qPh6NASJ83cobwz2qfXs=]"
+  password: "![TUOtb96a5rFz9HgwE5GrsA==]"
+
 db:
  audit: 
   config:
-   host: ""
-   port: ""
-   user: "![]"
-   password: "![]"
-   database: "" 
+   host: "mule-sandbox.cm1i2vsjtzdf.eu-west-1.rds.amazonaws.com"
+   port: "1433"
+   user: "![AyD0mBi0zwPqptV8KbEJGkjzeMuTdVHL2AEWiq0N3sQ=]"
+   password: "![PX91DJD02zpJ0MJ3jLRKUw==]"
+   database: "FATFACE_DB" 
+
+sftp:
+  host: "ftp.fatface.com"
+  port: "22"
+  username: "![W49cMbSedB3HHfPcr0pWWyYHk27r5mLh++/a62Nglxg=]"
+  password: "![YoKYhq6QWsR9eW3AVcCh2TRSSvrwrp94baroSAHlBlg=]" 
+  
+sqs:
+  accessKey: "![iKDP0/LYfR1ghGUCOAayKYI5kMT/ieTr3IMibNfn9y8=]"
+  secretKey: "![z8W9r4EBG78ATEDLlzRgrDu8pSr3cf8u0RPGoG/mEyLZSeyc1prL/JqYzbF2CWUY]"
+  region: "![6lleIG6Qoif/fTA7pK+sUA==]"
+  queue:
+    target:
+      inventory: "Inventory"
+    url: 
+      reprocessingQueue: "https://sqs.eu-west-1.amazonaws.com/691628577374/msg-reprocessing-q"
+      targetQueueUrl: "https://sqs.eu-west-1.amazonaws.com/691628577374/inventory-q"
+smtp:
+  host: "![rpQtD0vL4qh+Uema8l2LJxRngvgfBbF6l4RD5XEkF7Y=]"
+  port: "![jd2yTmc7NHA+FUYVXGfwbQ==]"
+  user: "![XImJcfQv4D6cYan0i6XwPZi8Uxv0OkDQvTITnsw/onM=]"
+  password: "![r9f7FSUCH+2adxR8OeswFg==]"
+  subject: "Fatface API Exception"
+        
+d365:
+  host: "0.0.0.0"
+  port: "8091"
+  basepath: "/api/v1"
+  clientId: "b206a1a7bfbd4e109f591ca5b27631c3"
+  clientSecret: "2Cf50B5970B14FC9a94D5aB48Fad1206"
+  pickOrdersPath: "/pick/orders"
   
   
+jda:
+  host: "localhost"
+  port: "8082"
+  basepath: "/api/v1"
+  ordersPath: "/orders"
+  clientId: "b206a1a7bfbd4e109f591ca5b27631c3"
+  clientSecret: "2Cf50B5970B14FC9a94D5aB48Fad1206"
+  jks:
+    password: "![yqrYtFIRqm28xrunLqR/2kqfcVd97HqoY0AWEfF+m8M=]"
+  
+lookup:
+  host: "0.0.0.0"
+  port: "8095"
+  basePath: "/api/v1"
+  dbLookupPath: "/lookups"
+  key: "ORDER_TYPE-MODE_OF_DELIVERY-D365"
+  clientId: "1234"
+  clientSecret: "4321"
+  queryParam:
+    type: "ORDER_TYPE"
+    catgeory: "MODE_OF_DELIVERY"
+    source: "D365"
     
         
     

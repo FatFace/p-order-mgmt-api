@@ -5,7 +5,7 @@ is:
   logging:
     toggle: "OFF"
 
-domain: "common-template-api"
+domain: ""
 environment:
   id: "Development"  
 flow:
@@ -15,6 +15,13 @@ flow:
 retry:
   frequency: "2000"
   attempts: "3"   
+  
+d365:
+  batch:
+    size: "1"
+   
+response:
+  timeout: "30000"
   
 error:
   msg:
@@ -53,6 +60,13 @@ error:
       access: "SFTP Access Denied"
       connection: "SFTP Connectivity error"
       path: "SFTP Illegal Path"
-      retry: "SFTP Retry Exhausted"  
+      retry: "SFTP Retry Exhausted"
+    compress:
+      notCompress: "Not able to compress"
+      invalidFormat: "The given content does not match the format of the configured strategy"
+      multipleEntry: "The archive to be decompressed has more than one entry"
+      notDecompress: "Not able to decompress" 
       
-      
+system:
+  layer:
+    response: "No Data from System Layer"

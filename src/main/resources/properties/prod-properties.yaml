@@ -1,19 +1,45 @@
-http:
-  basePath: "/api/*"
-  private:
-    port: "8091"
-  api:
-    p-template-api:
-      basePath: "/"
-      host: ""
-      port: ""
-      path: ""  
 autodiscovery:
   id: ""
-  flow: "x-template-api-main"
+  flow: "b-order-mgmt-app"
+  
+scheduler:
+  cron:
+    expression: "0 0/15 * 1/1 * ? *"
 
 cloudhub:
   domain: ""
   usrname: ""
   password: ""
   environment: ""
+  
+d365:
+  host: "0.0.0.0"
+  port: "8091"
+  basepath: "/api/v1"
+  clientId: "587f052383c44efbadc76e22201cba19"
+  clientSecret: "544925Ef3b1641c5B56A5a0cB95b2642"
+  pickOrdersPath: "/pick/orders"
+  
+  
+jda:
+  host: "0.0.0.0"
+  port: "8092"
+  basepath: "/api/v1"
+  ordersPath: "/orders"
+  clientId: "587f052383c44efbadc76e22201cba19"
+  clientSecret: "544925Ef3b1641c5B56A5a0cB95b2642"
+  jks:
+    password: "![Eiy80pOc3NMdDEvvqf5eTmUuYTIchkvpv2kk4Ge7Xv8=]"
+  
+lookup:
+  host: "0.0.0.0"
+  port: "8091"
+  basePath: "/api/v1"
+  dbLookupPath: "/lookups"
+  key: "ORDER_TYPE-MODE_OF_DELIVERY-D365"
+  clientId: "587f052383c44efbadc76e22201cba19"
+  clientSecret: "544925Ef3b1641c5B56A5a0cB95b2642"
+  queryParam:
+    type: "ORDER_TYPE"
+    catgeory: "MODE_OF_DELIVERY"
+    source: "D365"

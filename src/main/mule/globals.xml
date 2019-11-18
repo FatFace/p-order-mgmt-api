@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<mule xmlns:tls="http://www.mulesoft.org/schema/mule/tls"
-	xmlns:email="http://www.mulesoft.org/schema/mule/email"
-	xmlns:validation="http://www.mulesoft.org/schema/mule/validation" xmlns:sqs="http://www.mulesoft.org/schema/mule/sqs"
-	xmlns:sftp="http://www.mulesoft.org/schema/mule/sftp"
-	xmlns:secure-properties="http://www.mulesoft.org/schema/mule/secure-properties" xmlns:cloudhub="http://www.mulesoft.org/schema/mule/cloudhub" xmlns:db="http://www.mulesoft.org/schema/mule/db" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:api-gateway="http://www.mulesoft.org/schema/mule/api-gateway" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="
+<mule xmlns:os="http://www.mulesoft.org/schema/mule/os"
+	xmlns:tls="http://www.mulesoft.org/schema/mule/tls"
+	xmlns:email="http://www.mulesoft.org/schema/mule/email" xmlns:validation="http://www.mulesoft.org/schema/mule/validation"
+	xmlns:sqs="http://www.mulesoft.org/schema/mule/sqs"
+	xmlns:sftp="http://www.mulesoft.org/schema/mule/sftp" xmlns:secure-properties="http://www.mulesoft.org/schema/mule/secure-properties" xmlns:cloudhub="http://www.mulesoft.org/schema/mule/cloudhub" xmlns:db="http://www.mulesoft.org/schema/mule/db" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:api-gateway="http://www.mulesoft.org/schema/mule/api-gateway" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="
 http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd 
 http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
 http://www.mulesoft.org/schema/mule/api-gateway http://www.mulesoft.org/schema/mule/api-gateway/current/mule-api-gateway.xsd
@@ -14,11 +14,12 @@ http://www.mulesoft.org/schema/mule/sftp http://www.mulesoft.org/schema/mule/sft
 http://www.mulesoft.org/schema/mule/sqs http://www.mulesoft.org/schema/mule/sqs/current/mule-sqs.xsd
 http://www.mulesoft.org/schema/mule/validation http://www.mulesoft.org/schema/mule/validation/current/mule-validation.xsd
 http://www.mulesoft.org/schema/mule/email http://www.mulesoft.org/schema/mule/email/current/mule-email.xsd
-http://www.mulesoft.org/schema/mule/tls http://www.mulesoft.org/schema/mule/tls/current/mule-tls.xsd">
+http://www.mulesoft.org/schema/mule/tls http://www.mulesoft.org/schema/mule/tls/current/mule-tls.xsd
+http://www.mulesoft.org/schema/mule/os http://www.mulesoft.org/schema/mule/os/current/mule-os.xsd">
 	<configuration-properties doc:name="Configuration properties" doc:id="31655e4d-0651-4ec4-a6ce-965230ec7e76" file="properties/common-properties.yaml" />
 	<configuration-properties doc:name="Configuration properties" doc:id="3b617f7a-4e8a-4201-b997-c85fe04c302e" file="properties/${mule.env}-properties.yaml" />   
-   	<http:listener-config name="x-template-api-httpListenerConfig">
-        <http:listener-connection host="0.0.0.0" port="${http.port}" />
+   	<http:listener-config name="b-order-mgmt-app-httpListenerConfig">
+        <http:listener-connection host="localhost" port="8085" />
     </http:listener-config>
 	<db:config name="Database_Config" doc:name="Database Config" doc:id="b8195697-f573-4c1d-9ebb-faaf0ba86e54" >
 		<db:mssql-connection host="${db.audit.config.host}" user="${secure::db.audit.config.user}" password="${secure::db.audit.config.password}" databaseName="${db.audit.config.database}" />
@@ -27,7 +28,6 @@ http://www.mulesoft.org/schema/mule/tls http://www.mulesoft.org/schema/mule/tls/
 			<cloudhub:connection username="${secure::cloudhub.username}" password="${secure::cloudhub.password}" environment="${environment.id}"/>
 	</cloudhub:config>
 	<secure-properties:config name="Secure_Properties_Config" doc:name="Secure Properties Config" doc:id="2cbb6432-2d0c-4d01-90aa-70326bc1731e" file="properties/${mule.env}-properties.yaml" key="${encryption.key}">
-		<secure-properties:encrypt algorithm="Blowfish" mode="CBC"/>
 	</secure-properties:config>
 	<configuration doc:name="Configuration" doc:id="54fa0143-7e1d-48e0-b340-a4e48738fc8d" defaultErrorHandler-ref="GlobalExceptionStrategy" />
 	<sftp:config name="SFTP_Config" doc:name="SFTP Config" doc:id="d1857644-27b7-46ba-bb81-15e8b98f626f" >
@@ -43,4 +43,18 @@ http://www.mulesoft.org/schema/mule/tls http://www.mulesoft.org/schema/mule/tls/
 	<tls:context name="TLS_Context" doc:name="TLS Context" doc:id="9b4edc68-4a04-450d-b45c-e7f4ec9cd633" >
 		<tls:trust-store insecure="true" />
 	</tls:context>
+	<http:request-config name="s_D365_Http_Request_configuration" doc:name="HTTP Request configuration" doc:id="277afdf2-5f6c-4d0a-b897-ef8e5f936f6b" basePath="${d365.basepath}">
+		<http:request-connection host="${d365.host}" port="${d365.port}" />
+	</http:request-config>
+	<http:request-config name="s_jda_Http_Request_configuration" doc:name="HTTP Request configuration" doc:id="2ed9720e-ec24-4e84-b76c-0ed81b8eb722" basePath="${jda.basepath}">
+		<http:request-connection host="${jda.host}" port="${jda.port}" protocol="HTTPS">
+			<tls:context >
+				<tls:trust-store path="FFTrustStore.ts" password="${secure::jda.jks.password}" type="jks" insecure="true" />
+			</tls:context>
+		</http:request-connection>
+	</http:request-config>
+	<os:object-store name="Object_store" doc:name="Object store" doc:id="a2ebd370-24d8-4948-bafb-7b3848ca907f" />
+	<http:request-config name="dbLookup_HTTP_Request_configuration" doc:name="HTTP Request configuration" doc:id="8414566d-3ff0-4d39-998f-65d0abf53a07" basePath="${lookup.basePath}" >
+		<http:request-connection host="${lookup.host}" port="${lookup.port}" />
+	</http:request-config>
 </mule>

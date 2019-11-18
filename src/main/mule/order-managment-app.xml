@@ -1,5 +1,125 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<mule xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd"></mule>
+<mule xmlns:os="http://www.mulesoft.org/schema/mule/os" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/os http://www.mulesoft.org/schema/mule/os/current/mule-os.xsd">
+	<flow name="order-managment-app-flow" doc:id="e4041d85-5c17-4374-b202-6367cd858318" >
+		<scheduler doc:name="Scheduler" doc:id="fd89417f-b2d5-4c23-8807-82f3eb5d99ee" >
+			<scheduling-strategy >
+				<cron expression="${scheduler.cron.expression}" />
+			</scheduling-strategy>
+		</scheduler>
+		<ee:transform doc:name="Set Attributes" doc:id="4cc14d7e-b523-4a00-9b6b-12a7a72adadd" >
+			<ee:message >
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="flowName" ><![CDATA[%dw 2.0
+output application/json
+---
+'order-managment-appFlow']]></ee:set-variable>
+				<ee:set-variable variableName="transactionStartDate" ><![CDATA[%dw 2.0
+output application/java
+---
+now() as String {format : "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"}]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+		<flow-ref doc:name="Log Reveiver Entry" doc:id="01c4fa7d-b353-458a-9722-8a3217d8516f" name="log-receiver-entry-sub-flow"/>
+		<flow-ref doc:name="Audit Receiver Entry" doc:id="d7f34af9-ed70-48f0-b66f-775e7e1ca35d" name="audit-receiver-entry-sub-flow"/>
+		<flow-ref doc:name="Log Process Entry" doc:id="bde32360-83c3-4bb9-82d5-6a0a2390e60f" name="log-process-entry-sub-flow"/>
+		<flow-ref doc:name="Audit Process Entry" doc:id="7c238d72-7cbb-41e8-baa8-6b8572d19d76" name="audit-process-entry-sub-flow"/>
+		<http:request method="GET" doc:name="Invoke System Layer D365 Api to Get Pic Orders" doc:id="23912345-ad5d-4027-8b56-999893204273" config-ref="s_D365_Http_Request_configuration" path="${d365.pickOrdersPath}" responseTimeout="${response.timeout}" target="originalPayload">
+			<http:headers ><![CDATA[#[output application/java
+---
+{
+	"Transaction-Id" : vars.transactionId,
+	"Transaction-Start-Time" : vars.transactionStartDate,
+	"Client-Id" : p('d365.clientId'),
+	"Client-Secret" : p('d365.clientSecret')
+}]]]></http:headers>
+		</http:request>
+		
+		<flow-ref doc:name="Log Process Exit" doc:id="57488e0a-6786-42d8-b5d8-77779ab8b576" name="log-process-exit-sub-flow"/>
+		<choice doc:name="Choice" doc:id="4e7eece7-2d63-4c82-9228-781a8283cb2d" >
+			<when expression="#[(vars.originalPayload != null) or (isEmpty(vars.originalPayload) == false)]">
+				<flow-ref doc:name="Get Delivery Mode numeric value " doc:id="bb575bb6-3b30-4845-83d0-e069d2755fee" name="get-delivery-mode-from-dblookup-for-pick-orders-sub-flow"/>
+				<ee:transform doc:name="Transform D365 Response to JDA Request" doc:id="cf76c100-3d06-494c-a266-2209c8e73934">
+			<ee:message>
+			</ee:message>
+			<ee:variables>
+						<ee:set-variable resource="dwl/transform_d365_response_to_jda_request.dwl" variableName="transformedPayload" />
+			</ee:variables>
+		</ee:transform>
+				<flow-ref doc:name="Log Process Entry" doc:id="0c3d0e86-05a8-48fd-9355-7849e7e45dfd" name="log-process-entry-sub-flow" />
+				<flow-ref doc:name="Audit Process Entry" doc:id="09988aee-0cd6-4706-989e-468edc0cf587" name="audit-process-entry-sub-flow" />
+				<http:request method="POST" doc:name="Invoke System Layer JDA Api to Post Orders" doc:id="1d39c868-a89c-48a5-8d97-9d5cb35a6020" config-ref="s_jda_Http_Request_configuration" path="${jda.ordersPath}" responseTimeout="${response.timeout}">
+			<http:body><![CDATA[#[vars.transformedPayload]]]></http:body>
+					<http:query-params ><![CDATA[#[output application/java
+---
+{
+	"client_id" : p('jda.clientId'),
+	"client_secret" : p('jda.clientSecret')
+}]]]></http:query-params>
+		</http:request>
+				<flow-ref doc:name="Log Process Exit" doc:id="78baee98-f66e-4843-9bcd-e72a625df755" name="log-process-exit-sub-flow" />
+				<flow-ref doc:name="Log Process Entry" doc:id="e387b50b-1d53-468d-8c62-7af9f168e776" name="log-process-entry-sub-flow" />
+			</when>
+			<otherwise >
+				<logger level="INFO" doc:name="Logger" doc:id="cbef9eaa-40ea-416a-87ee-a08ad0eb2ece" message="$(system.layer.response)"/>
+			</otherwise>
+		</choice>
+		<flow-ref doc:name="Audit Dispatcher Exit" doc:id="aed28708-7f9c-4dd8-8b0c-7f897fd31b2d" name="audit-dispatcher-exit-sub-flow"/>
+		<flow-ref doc:name="Log Dispatcher Exit" doc:id="c445a4b5-389b-404f-a6f0-e886f84c57e4" name="log-dispatcher-exit-sub-flow"/>
+	</flow>
+	<sub-flow name="get-delivery-mode-from-dblookup-for-pick-orders-sub-flow" doc:id="38c64bce-f20c-443d-b122-a749a14d1d7a" >
+		<set-variable value="#['get-delivery-mode-from-dblookup-for-pick-orders-sub-flow']" doc:name="Set Variable" doc:id="19c3baaf-9791-4ab2-bf57-eba051e5b65d" variableName="flowName"/>
+		<flow-ref doc:name="Log Receiver Entry" doc:id="ce4d2752-8b05-4611-988c-dbaa3113a80a" name="log-receiver-entry-sub-flow"/>
+		<flow-ref doc:name="Audit Receiver Entry" doc:id="02ccf700-3e16-491e-b10c-0797c813bfcb" name="audit-receiver-entry-sub-flow"/>
+		<set-variable value="#[p('lookup.key')]" doc:name="Set Key" doc:id="b67098ee-2812-4674-ae81-529d59c2fc98" variableName="vLookUpData"/>
+		<os:contains doc:name="Check for the value in the Object Store" doc:id="7ce24818-d9c7-4de2-9f5a-a7ea66cbe3ae" key="#[vars.vLookUpData]" objectStore="Object_store"/>
+		<choice doc:name="Choice" doc:id="1b15b70f-71dd-4dd4-b4f5-93d40e166124" >
+			<when expression="#[payload ==true]">
+				<os:retrieve doc:name="Retrieve Lookup Data From Object Store" doc:id="4cbf43b7-adb6-47f9-8ff6-61c0b803322a" key="#[vars.vLookUpData]" objectStore="Object_store" />
+				<flow-ref doc:name="Filter Lookup Key" doc:id="4d0ae08b-a0b5-439a-9399-70b929e2fdc0" name="filter-lookup-key-sub-flow"/>
+			</when>
+			<otherwise >
+				<flow-ref doc:name="Log Process Entry" doc:id="86b153ce-55bd-4a65-8fb7-6b0a544e2ea8" name="log-process-entry-sub-flow"/>
+				<flow-ref doc:name="Audit Process Entry" doc:id="c789fa80-1921-4304-a12f-81cf7327558b" name="audit-process-entry-sub-flow"/>
+				<http:request method="GET" doc:name="Invoke System Layer Lookup Api to Get Lookup Key" doc:id="b8ba2b6b-4bcc-484a-8bef-607f812e119a" path="${lookup.dbLookupPath}" responseTimeout="30000" config-ref="dbLookup_HTTP_Request_configuration">
+					<http:headers ><![CDATA[#[output application/java
+---
+{
+	"Transaction-Id" : vars.transactionId,
+	"Transaction-Start-Time" : vars.transactionStartDate,
+	"Client-Id" : p('lookup.clientId'),
+	"Client-Secret" : p('lookup.clientSecret')
+}]]]></http:headers>
+					<http:query-params ><![CDATA[#[output application/java
+---
+{
+	"type" : p('lookup.queryParam.type'),
+	"source" : p('lookup.queryParam.source'),
+	"category" : p('lookup.queryParam.catgeory')
+}]]]></http:query-params>
+				</http:request>
+				<flow-ref doc:name="Audit Process Exit " doc:id="deba3708-cc31-4a44-9e73-0d17ba42b1d3" name="audit-process-exit-sub-flow" />
+				<flow-ref doc:name="Log Process Exit" doc:id="ade53208-bc46-4ad1-9cae-16a7986f9e17" name="log-process-exit-sub-flow" />
+				<os:store doc:name="Store Lookup Data in Object Store" doc:id="f13ccd49-4240-4593-a82a-6edd76c776e8" key="#[vars.vLookUpData]" objectStore="Object_store" />
+				<flow-ref doc:name="Filter Lookup Key" doc:id="efe8f3b1-3afc-44ce-826f-c034e0859c65" name="filter-lookup-key-sub-flow"/>
+			</otherwise>
+		</choice>
+		<flow-ref doc:name="Audit Dispatcher Exist " doc:id="2d180bec-9551-4908-a441-4d3fd88dfd2c" name="audit-dispatcher-exit-sub-flow"/>
+		<flow-ref doc:name="Log Dispatcher Exist" doc:id="3065dd84-82e0-499c-8745-72031d897f48" name="log-dispatcher-exit-sub-flow"/>
+	</sub-flow>
+	<sub-flow name="filter-lookup-key-sub-flow" doc:id="3f9eeb0b-ece4-4b94-ae98-5be4035182f7" >
+		<ee:transform doc:name="Transform Message" doc:id="e2c0bed6-c2c9-4d8a-9e02-aa46e876854b" >
+			<ee:message >
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable resource="dwl/filter_lookup_value_transformation.dwl" variableName="lookUpValue" />
+			</ee:variables>
+		</ee:transform>
+	</sub-flow>
+</mule>
