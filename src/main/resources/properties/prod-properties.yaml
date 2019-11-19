@@ -13,7 +13,7 @@ cloudhub:
   environment: ""
   
 d365:
-  host: "0.0.0.0"
+  host: "mule-worker-internal-s-d365-api.ir-e1.cloudhub.io"
   port: "8091"
   basepath: "/api/v1"
   clientId: "587f052383c44efbadc76e22201cba19"
@@ -22,7 +22,7 @@ d365:
   
   
 jda:
-  host: "0.0.0.0"
+  host: "mule-worker-internal-s-jda-data-int.ir-e1.cloudhub.io"
   port: "8092"
   basepath: "/api/v1"
   ordersPath: "/orders"
@@ -32,7 +32,7 @@ jda:
     password: "![Eiy80pOc3NMdDEvvqf5eTmUuYTIchkvpv2kk4Ge7Xv8=]"
   
 lookup:
-  host: "0.0.0.0"
+  host: "mule-worker-internal-s-dblookup-api.ir-e1.cloudhub.io"
   port: "8091"
   basePath: "/api/v1"
   dbLookupPath: "/lookups"
