@@ -35,12 +35,12 @@ output application/java
 	
 	<flow name="get-manifest-shipment-data-from-jda-and-process-to-d365-sub-flow" doc:id="3253f4bd-085c-4f6a-a3b6-7dd0840fb5b2" >
 		<flow-ref doc:name="Log Process Entry" doc:id="0e629b67-770a-469f-b2e1-a2d3fc07901f" name="log-process-entry-sub-flow"/>
-		<http:request method="GET" doc:name="S-JDA-HTTP-Request-Configuration" doc:id="351d894a-f4b2-42ab-9b97-707aa730e4e7" config-ref="JDA_HTTP_Request_configuration" path="${http.jda.manifests.path}" responseTimeout="${response.timeout}">
+		<http:request method="GET" doc:name="S-JDA-HTTP-Request-Configuration" doc:id="351d894a-f4b2-42ab-9b97-707aa730e4e7" config-ref="JDA_HTTP_Request_configuration" path="${jda.manifests.path}" responseTimeout="${response.timeout}">
 			<http:query-params ><![CDATA[#[output application/java
 ---
 {
-	"client_id" : p('secure::http.jda.clientId'),
-	"client_secret" : p('secure::http.jda.clientSecret')
+	"client_id" : p('jda.clientId'),
+	"client_secret" : p('jda.clientSecret')
 }]]]></http:query-params>
 		</http:request>
 		<flow-ref doc:name="Log Process Exit" doc:id="cfebbc48-7304-446e-9c57-17b80cb8c46d" name="log-process-exit-sub-flow"/>
@@ -109,8 +109,17 @@ output application/json
 			</ee:transform>
 				<flow-ref doc:name="Log Process Entry" doc:id="a261e0aa-579f-4c61-9971-9d3e4123d382" name="log-process-entry-sub-flow" />
 				<http:request method="PUT" doc:name="Call D365 HTTP Request Configuration" doc:id="3ffb8a57-31d9-4ae9-accf-73a215513c16" config-ref="D365_HTTP_Request_configuration" path="${d365.updateManifestPath}" responseTimeout="${response.timeout}">
+				
 				<http:body ><![CDATA[#[vars.originalPayload]]]></http:body>
-						<http:response-validator>
+						<http:headers ><![CDATA[#[output application/java
+---
+{
+	"Transaction-Id" : vars.transactionId,
+	"Transaction-Start-Time" : vars.transactionStartDate,
+	"Client-Id" : p('d365.clientId'),
+	"Client-Secret" : p('d365.clientSecret')
+}]]]></http:headers>
+					<http:response-validator>
 					<http:success-status-code-validator values="#[200]" />
 				</http:response-validator>
 		</http:request>

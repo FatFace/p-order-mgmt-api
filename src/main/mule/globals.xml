@@ -41,11 +41,11 @@ http://www.mulesoft.org/schema/mule/tls http://www.mulesoft.org/schema/mule/tls/
 	<tls:context name="TLS_Context" doc:name="TLS Context" doc:id="9b4edc68-4a04-450d-b45c-e7f4ec9cd633" >
 		<tls:trust-store insecure="true" />
 	</tls:context>
-	<http:request-config name="JDA_HTTP_Request_configuration" doc:name="HTTP Request configuration" doc:id="ebcc1d7f-b3b7-442d-a627-0345c2afed19" basePath="${http.jda.base.path}" >
-		<http:request-connection host="${http.jda.host}" port="${http.jda.port}" />
+	<http:request-config name="JDA_HTTP_Request_configuration" doc:name="HTTP Request configuration" doc:id="ebcc1d7f-b3b7-442d-a627-0345c2afed19" basePath="${jda.basepath}" >
+		<http:request-connection host="${jda.host}" port="${jda.port}" />
 	</http:request-config>
-	<http:request-config name="D365_HTTP_Request_configuration" doc:name="HTTP Request configuration" doc:id="2acc99f7-5dc8-4a7a-b4ca-3e691cd3a4f5" basePath="/api" >
-		<http:request-connection host="localhost" port="8092" />
+	<http:request-config name="D365_HTTP_Request_configuration" doc:name="HTTP Request configuration" doc:id="2acc99f7-5dc8-4a7a-b4ca-3e691cd3a4f5" basePath="${d365.basepath}" >
+		<http:request-connection host="${d365.host}" port="${d365.port}" />
 	</http:request-config>
 	<global-property doc:name="Global Property" doc:id="11cd1217-3662-4e4e-85e1-27b31319c136" name="mule.env" value="dev" />
 	<global-property doc:name="Global Property" doc:id="7dceb751-4a93-4d4d-b29d-d0c4bf2220aa" name="encryption.key" value="jabdlgue34btiu2s" />

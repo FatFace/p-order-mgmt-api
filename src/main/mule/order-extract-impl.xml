@@ -59,12 +59,12 @@ output application/java
 			</ee:variables>
 		</ee:transform>
 		<flow-ref doc:name="Log Process Entry" doc:id="7def573e-e35e-4f59-b8f5-61a7b3ec94c3" name="log-process-entry-sub-flow" />
-		<http:request method="GET" doc:name="S-JDA-HTTP-Request-Configuration" doc:id="32ab8900-4bc9-4e3d-875c-22de403920c5" config-ref="JDA_HTTP_Request_configuration" path="${http.jda.orders.path}" responseTimeout="${response.timeout}">
+		<http:request method="GET" doc:name="S-JDA-HTTP-Request-Configuration" doc:id="32ab8900-4bc9-4e3d-875c-22de403920c5" config-ref="JDA_HTTP_Request_configuration" path="${jda.orders.path}" responseTimeout="${response.timeout}">
 		<http:query-params ><![CDATA[#[output application/java
 ---
 {
-	"client_id" : p('secure::http.jda.clientId'),
-	"client_secret" : p('secure::http.jda.clientSecret')
+	"client_id" : p('jda.clientId'),
+	"client_secret" : p('jda.clientSecret')
 }]]]></http:query-params>
 		</http:request>
 		<flow-ref doc:name="Log Process Exit" doc:id="4cdb440a-5b24-49c1-b372-f37092e1fe01" name="log-process-exit-sub-flow"/>
@@ -212,8 +212,17 @@ output application/java
 	<sub-flow name="order-extract-send-to-d365" doc:id="4e4ac1cb-968c-45d1-b779-dffb242a456d" >
 		<flow-ref doc:name="Log Process Entry" doc:id="50abbf14-8e27-4ba9-b3e0-e776e7c7f8f9" name="log-process-entry-sub-flow" />
 				<http:request method="PUT" doc:name="Call D365 HTTP Request Configuration" doc:id="4e264552-d91e-4f1c-8103-e1cc181d1b0d" config-ref="D365_HTTP_Request_configuration" path="${d365.updateOrderExtractPath}" responseTimeout="${response.timeout}">
+				
 				<http:body ><![CDATA[#[vars.originalPayload]]]></http:body>
-						<http:response-validator>
+						<http:headers ><![CDATA[#[output application/java
+---
+{
+	"Transaction-Id" : vars.transactionId,
+	"Transaction-Start-Time" : vars.transactionStartDate,
+	"Client-Id" : p('d365.clientId'),
+	"Client-Secret" : p('d365.clientSecret')
+}]]]></http:headers>
+			<http:response-validator>
 					<http:success-status-code-validator values="#[200]" />
 				</http:response-validator>
 		</http:request>

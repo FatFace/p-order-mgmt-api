@@ -8,7 +8,7 @@ is:
 response:
   timeout: "30000"
 
-domain: "common-template-api"
+domain: "b-order-mgmt-app"
 environment:
   id: "Development"  
 flow:

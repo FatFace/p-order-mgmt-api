@@ -1,26 +1,29 @@
 http:
   basePath: "/api/*"
   port: "8081"
-  d365:
-    host: "0.0.0.0"
-    port: "8092"
-  jda:
-    host: "0.0.0.0"
-    port: "8091"
-    clientId: "![Mog19rLSb/pWIPMt0eFfmY4fErY72PR8ZB+OjaTkWjBqAtgo/Z3cQRYmeUwN/p7g]"
-    clientSecret: "![0u7bTMuVlHV671RyM4z5tPQCTaF8Ahfgc/RjNCMJhBTKwTSmNHzuDrelJEFGGknW]"
-    orders:
-      path: "/pick/orders"
-    manifests:
-      path: "/pick/manifests"  
-    base:
-      path: "/api/v1"
-  api:
-    p-template-api:
-      basePath: "/"
-      host: ""
-      port: ""
-      path: ""  
+  
+d365:
+  host: "mule-worker-internal-dev-s-d365-api.ir-e1.cloudhub.io"
+  port: "8091"
+  basepath: "/api/v1"
+  clientId: "c1751cc13ad746a8a49c404c966839f7"
+  clientSecret: "7d3aFbC44E8e49048935f06A7A2a099d"
+  etCustomerGroupPath: "/data/CustomerGroups"
+  updateProductsPath: "/data/products"     
+  updateManifestPath: "/pick/manifests"
+  updateOrderExtractPath: "/pick/orders" 
+jda:
+  host: "mule-worker-internal-dev-s-jda-data-int.ir-e1.cloudhub.io"
+  port: "8092"
+  basepath: "/api/v1"
+  clientId: "c1751cc13ad746a8a49c404c966839f7"
+  clientSecret: "7d3aFbC44E8e49048935f06A7A2a099d"
+  jks:
+    password: "![yqrYtFIRqm28xrunLqR/2kqfcVd97HqoY0AWEfF+m8M=]"
+  orders:
+    path: "/pick/orders"
+  manifests:
+    path: "/pick/manifests" 
 
 cloudhub:
   username: "![Wkd/i0mr4M5DRXGPkpxl3A+qPh6NASJ83cobwz2qfXs=]"
@@ -62,25 +65,11 @@ smtp:
   password: "![r9f7FSUCH+2adxR8OeswFg==]"
   subject: "Fatface API Exception"
   
-jda:
-  http:
-    host: "localhost"
-    port: "8091"
-  getManifestPath: "/manifestpath"
-  clientId: ""
-  clientSecret: ""
   
 cron:
   expression: 
     manifest: "0 0/10 * 1/1 * ? *"
-    orderextract: "0 0/60 * 1/1 * ? *"  
-
-d365:
-  host: "ff-sandbox779a0fb324d79bdaaos.cloud.retail.dynamics.com"
-  getCustomerGroupPath: "/data/CustomerGroups"
-  updateProductsPath: "/data/products"     
-  updateManifestPath: "/pick/manifests"
-  updateOrderExtractPath: "/pick/orders"   
+    orderextract: "0 0/60 * 1/1 * ? *"    
    
 orders:
   export:
