@@ -1,22 +1,25 @@
-{"minMuleVersion":"4.1.4",
-"secureProperties":[
-	"anypoint.platform.client_secret",
-	"anypoint.platform.client_id",
-	"cloudhub.username",
-	"cloudhub.password",
-	"db.audit.config.user",
-	"db.audit.config.password",
-	"encryption.key",
-	"sftp.user",
-	"sftp.password",
-	"sqs.accessKey",
-	"sqs.secretKey",
-	"sqs.region",
-	"smtp.user",
-	"smtp.password",
-	"jda.jks.password"
-	],
-	"classLoaderModelLoaderDescriptor": {
+{  
+   "minMuleVersion":"4.1.4",
+   "secureProperties":[  
+      "http.api.p-template-api.host",
+      "http.api.p-template-api.port",
+      "anypoint.platform.client_secret",
+      "anypoint.platform.client_id",
+      "cloudhub.username",
+      "cloudhub.password",
+      "db.audit.config.user",
+      "db.audit.config.password",
+      "encryption.key",
+      "sftp.user",
+      "sftp.password",
+      "sqs.accessKey",
+      "sqs.secretKey",
+      "sqs.region",
+      "smtp.user",
+      "smtp.password",
+	  "jda.jks.password"
+   ],
+   "classLoaderModelLoaderDescriptor": {
     "id": "mule",
     "attributes": {
     	"exportedPackages":[

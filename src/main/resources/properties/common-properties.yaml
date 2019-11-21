@@ -1,11 +1,15 @@
 is: 
   audit:
-    toggle: "ON"
+    toggle: "OFF"
     payload: "ON"
   logging:
     toggle: "OFF"
 
-domain: ""
+response:
+  timeout: "30000"
+
+domain: "b-order-mgmt-app"
+
 environment:
   id: "Development"  
 flow:
@@ -20,9 +24,11 @@ d365:
   batch:
     size: "1"
    
-response:
-  timeout: "30000"
-  
+db:
+  pool:
+    size:
+      max: "35"
+      min: "13"  
 error:
   msg:
     '404': "Resource not found"
@@ -61,6 +67,7 @@ error:
       connection: "SFTP Connectivity error"
       path: "SFTP Illegal Path"
       retry: "SFTP Retry Exhausted"
+
     compress:
       notCompress: "Not able to compress"
       invalidFormat: "The given content does not match the format of the configured strategy"

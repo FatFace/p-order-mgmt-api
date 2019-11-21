@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:java="http://www.mulesoft.org/schema/mule/java" xmlns:sqs="http://www.mulesoft.org/schema/mule/sqs"
+	xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/sqs http://www.mulesoft.org/schema/mule/sqs/current/mule-sqs.xsd
+http://www.mulesoft.org/schema/mule/java http://www.mulesoft.org/schema/mule/java/current/mule-java.xsd">
+<!-- 	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="f2c95055-b101-4a0b-bc30-4b5d1b2e03cb" > -->
+<!-- 		<http:listener-connection host="localhost" port="8081" /> -->
+<!-- 	</http:listener-config> -->
+	<flow name="update-shipment-manifest-details-impl-main-flow" doc:id="23a2590d-f562-46da-a911-2cf2098e8abe" >
+<!-- 		<http:listener doc:name="Test Listener" doc:id="f4a25c17-79af-4c1d-a5cc-381e793ea577" path="/test" config-ref="HTTP_Listener_config"/> -->
+		<scheduler doc:name="Manifest Scheduler" doc:id="159ed4e9-21ba-4dc9-9370-3b7a49e20686" >
+			<scheduling-strategy >
+				<cron expression="${cron.expression.manifest}" />
+			</scheduling-strategy>
+		</scheduler> 
+
+		<ee:transform doc:name="Set Parameter" doc:id="29613637-3c1f-4944-8fee-13d71ee46871" >
+			<ee:message >
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="flowName" ><![CDATA[%dw 2.0
+output application/java
+---
+'shipment-manifest-impl-main-flow']]></ee:set-variable>
+				<ee:set-variable variableName="count" ><![CDATA[0]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+		<flow-ref doc:name="Log Receiver Entry" doc:id="a5724754-50b0-41af-8620-4ea76b72bffb" name="log-receiver-entry-sub-flow"/>
+		<flow-ref doc:name="Audit Receiver Entry" doc:id="82deddf5-5caa-40d1-8dd5-091e9a936e45" name="audit-receiver-entry-sub-flow"/>
+		<flow-ref doc:name="get-manifest-shipment-data-from-jda-and-process-to-d365-sub-flow" doc:id="5790c01d-3cd4-42c2-86b2-2d0d1d38da18" name="get-manifest-shipment-data-from-jda-and-process-to-d365-sub-flow"/>
+		<flow-ref doc:name="Log Dispatcher Exit" doc:id="d57c4250-2708-407e-85d9-dce8a082cda5" name="log-dispatcher-exit-sub-flow"/>
+		<flow-ref doc:name="Audit Dispatcher Exit" doc:id="c104f5b6-72d3-45a6-849c-63fe1d74bc63" name="audit-dispatcher-exit-sub-flow"/>
+	</flow>
+	
+	<flow name="get-manifest-shipment-data-from-jda-and-process-to-d365-sub-flow" doc:id="3253f4bd-085c-4f6a-a3b6-7dd0840fb5b2" >
+		<flow-ref doc:name="Log Process Entry" doc:id="0e629b67-770a-469f-b2e1-a2d3fc07901f" name="log-process-entry-sub-flow"/>
+		<flow-ref doc:name="Log Process Exit" doc:id="cfebbc48-7304-446e-9c57-17b80cb8c46d" name="log-process-exit-sub-flow"/>
+		<http:request method="GET" doc:name="S-JDA-HTTP-Request-Configuration" doc:id="2b54425a-795e-46a9-b5b9-884e2d45a677" config-ref="JDA_HTTP_Request_configuration" path="${jda.manifests.path}" responseTimeout="${response.timeout}">
+			<http:headers ><![CDATA[#[output application/java
+---
+{
+	"vRequestId" : vars.transactionId
+}]]]></http:headers>
+			<http:query-params ><![CDATA[#[output application/java
+---
+{
+	"client_id" : p('jda.clientId'),
+	"client_secret" : p('jda.clientSecret')
+}]]]></http:query-params>
+		</http:request>
+		<set-variable value="#[attributes.headers['has-more-files']]" doc:name="Set Has More Files" doc:id="cbc74585-8e34-4171-86c5-973fa3f73d43" variableName="hasMoreFiles"/>
+		<choice doc:name="Choice" doc:id="63293d61-7ced-43a2-890f-ee0cab87eec7" >
+			<when expression="#[payload != null and payload.manifests != []]">
+				<flow-ref doc:name="check-manifest-shipment-ecom-order-and-process-to-d365-sub-flow" doc:id="1c3d2270-1db7-47b1-b482-9d4419e2e5d3" name="check-manifest-shipment-ecom-order-and-process-to-d365-sub-flow" />
+			</when>
+			<otherwise>
+				<set-variable value="There are no manifest data to process" doc:name="Set Logging Payload" doc:id="e32fb94a-5499-42dd-836d-8d38080564b0" variableName="loggingPayload" />
+				<flow-ref doc:name="Logging Message" doc:id="ef9d980f-ecf4-4104-a15b-177882d53f66" name="logging-sub-flow"/>
+			</otherwise>
+		</choice>
+		<choice doc:name="Choice" doc:id="5ca0b3f6-6e7d-4575-a2ca-a44fe6a4f07a">
+			<when expression="#[vars.hasMoreFiles == true]">
+				<flow-ref doc:name="get-manifest-shipment-data-from-jda-and-process-to-d365-sub-flow" doc:id="97dd8778-2e6f-4bed-ba2c-9791d8cb3283" name="get-manifest-shipment-data-from-jda-and-process-to-d365-sub-flow" />
+			</when>
+			<otherwise>
+				<set-variable value="There are no more manifest extract files to process" doc:name="Set Logging Payload" doc:id="03589fa4-19ff-4708-8663-598de0d28fc2" variableName="loggingPayload" />
+				<flow-ref doc:name="Logging Message" doc:id="a22d797f-245f-4729-8246-e2b538aa6755" name="logging-sub-flow"/>
+			</otherwise>
+		</choice>
+	</flow>
+	<sub-flow name="check-manifest-shipment-ecom-order-and-process-to-d365-sub-flow" doc:id="9dc65fa5-b38e-43b0-b3b2-a7d1f165a916" >
+		<flow-ref doc:name="Log Process Entry" doc:id="0c220953-495b-4cd8-a00c-a79dedac16e9" name="log-process-entry-sub-flow" />
+		<ee:transform doc:name="Set Queue Variables" doc:id="2bcb7010-8f00-46fc-acf9-0ceeffe35540">
+			<ee:message>
+			</ee:message>
+			<ee:variables>
+				<ee:set-variable variableName="targetQueueVar"><![CDATA[%dw 2.0
+output application/java
+---
+p('sqs.queue.target.manifest')]]></ee:set-variable>
+				<ee:set-variable variableName="targetQueueUrl"><![CDATA[%dw 2.0
+output application/java
+---
+p('sqs.queue.url.manifestQueueUrl')]]></ee:set-variable>
+				<ee:set-variable variableName="sendToQueue" ><![CDATA[%dw 2.0
+output application/java
+---
+p('send.manifest.queue')]]></ee:set-variable>
+			</ee:variables>
+			
+		</ee:transform>
+		<ee:transform doc:name="Filtering" doc:id="0b8671a7-bf9c-49ac-a888-983d6a130205" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	manifests: payload.manifests filter ($."order-no" != null and $."order-no" != '') map $
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<async doc:name="Async" doc:id="8ee67d19-311d-4e42-8773-78e1fad678cd" >
+			<flow-ref doc:name="Flow Reference Shipment Manifest Auditing" doc:id="f7b68e25-1622-4037-af82-1283ae9bd74e" name="shipment-manifest-auditing-sub-flow" />
+		</async>
+		<choice doc:name="Choice" doc:id="53224b4c-b857-4095-8533-4a7db3b8c1a5">
+			<when expression="#[payload.manifests != []]">
+				<ee:transform doc:name="Transform To D365" doc:id="0bcabdcc-cb9e-4f31-b6e3-c5eb1548ac89">
+			<ee:message>
+			</ee:message>
+					<ee:variables >
+						<ee:set-variable resource="dwl/manifest-jda-to-d365-mapping.dwl" variableName="originalPayload" />
+					</ee:variables>
+			</ee:transform>
+				<flow-ref doc:name="Log Process Entry" doc:id="a261e0aa-579f-4c61-9971-9d3e4123d382" name="log-process-entry-sub-flow" />
+				<http:request method="PUT" doc:name="Call D365 HTTP Request Configuration" doc:id="3ffb8a57-31d9-4ae9-accf-73a215513c16" config-ref="D365_HTTP_Request_configuration" path="${d365.updateManifestPath}" responseTimeout="${response.timeout}">
+				
+				<http:body ><![CDATA[#[vars.originalPayload]]]></http:body>
+						<http:headers ><![CDATA[#[output application/java
+---
+{
+	"Transaction-Id" : vars.transactionId,
+	"Transaction-Start-Time" : vars.transactionStartDate,
+	"Client-Id" : p('d365.clientId'),
+	"Client-Secret" : p('d365.clientSecret')
+}]]]></http:headers>
+					<http:response-validator>
+					<http:success-status-code-validator values="#[200]" />
+				</http:response-validator>
+		</http:request>
+			<flow-ref doc:name="Log Process Exit" doc:id="c3c671fc-0f1e-4270-a91e-359d085b3666" name="log-process-exit-sub-flow" />
+			</when>
+			
+			<otherwise>
+				<set-variable value="The record is not an ecom order" doc:name="Set Logging payload" doc:id="acf03efc-55c1-4f3a-b353-f5cd9dd4da43" variableName="loggingPayload" />
+				<flow-ref doc:name="Logging Message" doc:id="1547157d-0d58-4fb4-8dbd-6f044d8b221f" name="logging-sub-flow" />
+			</otherwise>
+			
+		</choice>
+		<flow-ref doc:name="Log Process Exit" doc:id="35d61bcb-4bea-4ae2-8b6a-79f3876908e8" name="log-process-exit-sub-flow" />
+	</sub-flow>
+	<sub-flow name="shipment-manifest-auditing-sub-flow" doc:id="e4fa9804-b3ca-48ca-8fb8-c92140e506ee" >
+		<ee:transform doc:name="Transform Message To Audit Details Structure" doc:id="f90eb4ca-9de7-48a4-8213-c6fd0f4a9945" >
+			<ee:message >
+				<ee:set-payload resource="dwl/auditing-manifest.dwl" />
+			</ee:message>
+		</ee:transform>
+		<flow-ref doc:name="Flow Reference Audit Details Processing" doc:id="c74b2bd4-22b5-44f5-9d61-ab703349ad02" name="audit-details-processing-sub-flow"/>
+	</sub-flow>
+	<flow name="receive-manifest-message-and-retry" doc:id="63560399-337d-4fee-afc6-1fa711a066f9" >
+		<sqs:receivemessages doc:name="Receive Message From Manifest and Retry" doc:id="15d45a94-7c2c-42ae-ae08-de1037bbc01b" config-ref="Amazon_SQS_Configuration" queueUrl="${sqs.queue.url.manifestQueueUrl}"/>
+		<set-variable value="receive-manifest-message-and-retry" doc:name="Flow Name" doc:id="2fa015e1-dd82-46e7-84a7-af00ce5448a5" variableName="flowName"/>
+		<ee:transform doc:name="Queue Parameter" doc:id="58f36f19-d604-4d03-aa22-21b8cd77d770" >
+			<ee:message >
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="correlationId" ><![CDATA[%dw 2.0
+output application/java
+---
+attributes.correlationId.stringValue]]></ee:set-variable>
+				<ee:set-variable variableName="transactionStartTime" ><![CDATA[%dw 2.0
+output application/java
+---
+attributes.transactionStartTime.stringValue
+]]></ee:set-variable>
+				<ee:set-variable variableName="transactionId" ><![CDATA[%dw 2.0
+output application/java
+---
+attributes.transactionId.stringValue]]></ee:set-variable>
+				<ee:set-variable variableName="count" ><![CDATA[%dw 2.0
+output application/java
+---
+attributes.count.stringValue as Number + 1 ]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+		<flow-ref doc:name="log Receiver Entry" doc:id="a372355f-fc4d-469d-8a9d-9c3e5741508f" name="log-receiver-entry-sub-flow" />
+		<flow-ref doc:name="Log Process Entry" doc:id="a09e7ed5-8638-4e14-b932-6c48c6a02175" name="log-process-entry-sub-flow"/>
+		<flow-ref doc:name="Audit Process Entry" doc:id="4035c348-3015-4966-83c5-ddb5d5950c95" name="audit-process-entry-sub-flow"/>
+		<set-variable value="#[attributes['sqs.message.receipt.handle']]" doc:name="Set Message Receipt" doc:id="53d9b459-041b-40ee-ad58-e62565bdf912" variableName="messageReceipt"/>
+		<async doc:name="Async" doc:id="5207731f-a9b4-4330-b5d1-96a1a1dd5d7f">
+					<flow-ref doc:name="check-manifest-shipment-ecom-order-and-process-to-d365-sub-flow" doc:id="72142e35-856a-47d2-ac07-ff7d240d3203" name="check-manifest-shipment-ecom-order-and-process-to-d365-sub-flow" />
+				</async>
+		<sqs:delete-message doc:name="Delete message" doc:id="15cb9737-c8cf-4e94-afd5-aba420839306" config-ref="Amazon_SQS_Configuration" receiptHandle="#[vars.messageReceipt]" queueUrl="${sqs.queue.url.manifestQueueUrl}" />
+		<flow-ref doc:name="Audit Process Exit" doc:id="6595241f-e8f2-4136-9a9d-fa9b6159ed73" name="audit-process-exit-sub-flow"/>
+		<flow-ref doc:name="Log Process Exit" doc:id="895bb996-e0d6-474d-a47d-30cff6aea9e1" name="log-process-exit-sub-flow" />
+		
+	</flow>
+	<flow name="common-template-check-digit-lookup-flow" doc:id="36d55ac1-5ef7-4bb3-8174-9596c3d115d6" >
+		<java:invoke-static doc:name="Invoke java to calculate check digit" doc:id="d558b5ab-4987-4c3d-a25d-bab511f6970a" class="com.fatface.mule.utils.ProductSKUCheckDigitCal" method="getCheckSum(String)">
+			<java:args ><![CDATA[#[{
+	arg0: payload as String
+}]]]></java:args>
+		</java:invoke-static>
+	</flow>
+</mule>
