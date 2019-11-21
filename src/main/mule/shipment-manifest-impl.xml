@@ -7,8 +7,11 @@ http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/htt
 http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
 http://www.mulesoft.org/schema/mule/sqs http://www.mulesoft.org/schema/mule/sqs/current/mule-sqs.xsd
 http://www.mulesoft.org/schema/mule/java http://www.mulesoft.org/schema/mule/java/current/mule-java.xsd">
+<!-- 	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="f2c95055-b101-4a0b-bc30-4b5d1b2e03cb" > -->
+<!-- 		<http:listener-connection host="localhost" port="8081" /> -->
+<!-- 	</http:listener-config> -->
 	<flow name="update-shipment-manifest-details-impl-main-flow" doc:id="23a2590d-f562-46da-a911-2cf2098e8abe" >
-		<!-- <http:listener doc:name="Test Listener" doc:id="f4a25c17-79af-4c1d-a5cc-381e793ea577" config-ref="x-template-api-httpListenerConfig" path="/test"/> -->
+<!-- 		<http:listener doc:name="Test Listener" doc:id="f4a25c17-79af-4c1d-a5cc-381e793ea577" path="/test" config-ref="HTTP_Listener_config"/> -->
 		<scheduler doc:name="Manifest Scheduler" doc:id="159ed4e9-21ba-4dc9-9370-3b7a49e20686" >
 			<scheduling-strategy >
 				<cron expression="${cron.expression.manifest}" />
@@ -35,7 +38,13 @@ output application/java
 	
 	<flow name="get-manifest-shipment-data-from-jda-and-process-to-d365-sub-flow" doc:id="3253f4bd-085c-4f6a-a3b6-7dd0840fb5b2" >
 		<flow-ref doc:name="Log Process Entry" doc:id="0e629b67-770a-469f-b2e1-a2d3fc07901f" name="log-process-entry-sub-flow"/>
-		<http:request method="GET" doc:name="S-JDA-HTTP-Request-Configuration" doc:id="351d894a-f4b2-42ab-9b97-707aa730e4e7" config-ref="JDA_HTTP_Request_configuration" path="${jda.manifests.path}" responseTimeout="${response.timeout}">
+		<flow-ref doc:name="Log Process Exit" doc:id="cfebbc48-7304-446e-9c57-17b80cb8c46d" name="log-process-exit-sub-flow"/>
+		<http:request method="GET" doc:name="S-JDA-HTTP-Request-Configuration" doc:id="2b54425a-795e-46a9-b5b9-884e2d45a677" config-ref="JDA_HTTP_Request_configuration" path="${jda.manifests.path}" responseTimeout="${response.timeout}">
+			<http:headers ><![CDATA[#[output application/java
+---
+{
+	"vRequestId" : vars.transactionId
+}]]]></http:headers>
 			<http:query-params ><![CDATA[#[output application/java
 ---
 {
@@ -43,8 +52,7 @@ output application/java
 	"client_secret" : p('jda.clientSecret')
 }]]]></http:query-params>
 		</http:request>
-		<flow-ref doc:name="Log Process Exit" doc:id="cfebbc48-7304-446e-9c57-17b80cb8c46d" name="log-process-exit-sub-flow"/>
-		<set-variable value="#[attributes.headers.has-more-files]" doc:name="Set Has More Files" doc:id="cbc74585-8e34-4171-86c5-973fa3f73d43" variableName="hasMoreFiles"/>
+		<set-variable value="#[attributes.headers['has-more-files']]" doc:name="Set Has More Files" doc:id="cbc74585-8e34-4171-86c5-973fa3f73d43" variableName="hasMoreFiles"/>
 		<choice doc:name="Choice" doc:id="63293d61-7ced-43a2-890f-ee0cab87eec7" >
 			<when expression="#[payload != null and payload.manifests != []]">
 				<flow-ref doc:name="check-manifest-shipment-ecom-order-and-process-to-d365-sub-flow" doc:id="1c3d2270-1db7-47b1-b482-9d4419e2e5d3" name="check-manifest-shipment-ecom-order-and-process-to-d365-sub-flow" />
@@ -55,7 +63,7 @@ output application/java
 			</otherwise>
 		</choice>
 		<choice doc:name="Choice" doc:id="5ca0b3f6-6e7d-4575-a2ca-a44fe6a4f07a">
-			<when expression="#[vars.hasMoreFiles == 'true']">
+			<when expression="#[vars.hasMoreFiles == true]">
 				<flow-ref doc:name="get-manifest-shipment-data-from-jda-and-process-to-d365-sub-flow" doc:id="97dd8778-2e6f-4bed-ba2c-9791d8cb3283" name="get-manifest-shipment-data-from-jda-and-process-to-d365-sub-flow" />
 			</when>
 			<otherwise>
