@@ -123,7 +123,7 @@ output application/json
 ---
 {
 	"Transaction-Id" : vars.transactionId,
-	"Transaction-Start-Time" : vars.transactionStartDate,
+	"Transaction-Start-Time" : vars.transactionStartTime,
 	"Client-Id" : p('d365.clientId'),
 	"Client-Secret" : p('d365.clientSecret')
 }]]]></http:headers>
