@@ -59,7 +59,7 @@ output application/java
 			</ee:variables>
 		</ee:transform>
 		<flow-ref doc:name="Log Process Entry" doc:id="7def573e-e35e-4f59-b8f5-61a7b3ec94c3" name="log-process-entry-sub-flow" />
-		<http:request method="GET" doc:name="S-JDA-HTTP-Request-Configuration" doc:id="2e2372df-6ccb-4ab2-9c51-ce66f3740184" path="${jda.orders.path}" responseTimeout="${response.timeout}" config-ref="s_jda_Http_Request_configuration">
+		<http:request method="GET" doc:name="S-JDA-HTTP-Request-Configuration" doc:id="2e2372df-6ccb-4ab2-9c51-ce66f3740184" path="${jda.orders.path}" responseTimeout="${response.timeout}" config-ref="s_jda_Http_Request_configuration" outputMimeType="application/json">
 				<http:headers ><![CDATA[#[output application/java
 ---
 {

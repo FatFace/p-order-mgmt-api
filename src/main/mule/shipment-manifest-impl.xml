@@ -39,7 +39,7 @@ output application/java
 	<flow name="get-manifest-shipment-data-from-jda-and-process-to-d365-sub-flow" doc:id="3253f4bd-085c-4f6a-a3b6-7dd0840fb5b2" >
 		<flow-ref doc:name="Log Process Entry" doc:id="0e629b67-770a-469f-b2e1-a2d3fc07901f" name="log-process-entry-sub-flow"/>
 		<flow-ref doc:name="Log Process Exit" doc:id="cfebbc48-7304-446e-9c57-17b80cb8c46d" name="log-process-exit-sub-flow"/>
-		<http:request method="GET" doc:name="S-JDA-HTTP-Request-Configuration" doc:id="2b54425a-795e-46a9-b5b9-884e2d45a677" path="${jda.manifests.path}" responseTimeout="${response.timeout}" config-ref="s_jda_Http_Request_configuration">
+		<http:request method="GET" doc:name="S-JDA-HTTP-Request-Configuration" doc:id="2b54425a-795e-46a9-b5b9-884e2d45a677" path="${jda.manifests.path}" responseTimeout="${response.timeout}" config-ref="s_jda_Http_Request_configuration" outputMimeType="application/json">
 			<http:headers ><![CDATA[#[output application/java
 ---
 {
