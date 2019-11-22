@@ -59,7 +59,7 @@ output application/java
 			</ee:variables>
 		</ee:transform>
 		<flow-ref doc:name="Log Process Entry" doc:id="7def573e-e35e-4f59-b8f5-61a7b3ec94c3" name="log-process-entry-sub-flow" />
-		<http:request method="GET" doc:name="S-JDA-HTTP-Request-Configuration" doc:id="2e2372df-6ccb-4ab2-9c51-ce66f3740184" config-ref="JDA_HTTP_Request_configuration" path="${jda.orders.path}" responseTimeout="${response.timeout}">
+		<http:request method="GET" doc:name="S-JDA-HTTP-Request-Configuration" doc:id="2e2372df-6ccb-4ab2-9c51-ce66f3740184" path="${jda.orders.path}" responseTimeout="${response.timeout}" config-ref="s_jda_Http_Request_configuration">
 				<http:headers ><![CDATA[#[output application/java
 ---
 {
@@ -216,7 +216,7 @@ output application/java
 	</sub-flow>
 	<sub-flow name="order-extract-send-to-d365" doc:id="4e4ac1cb-968c-45d1-b779-dffb242a456d" >
 		<flow-ref doc:name="Log Process Entry" doc:id="50abbf14-8e27-4ba9-b3e0-e776e7c7f8f9" name="log-process-entry-sub-flow" />
-				<http:request method="PUT" doc:name="Call D365 HTTP Request Configuration" doc:id="4e264552-d91e-4f1c-8103-e1cc181d1b0d" config-ref="D365_HTTP_Request_configuration" path="${d365.updateOrderExtractPath}" responseTimeout="${response.timeout}">
+				<http:request method="PUT" doc:name="Call D365 HTTP Request Configuration" doc:id="4e264552-d91e-4f1c-8103-e1cc181d1b0d" path="${d365.updateOrderExtractPath}" responseTimeout="${response.timeout}" config-ref="s_D365_Http_Request_configuration">
 				
 				<http:body ><![CDATA[#[vars.originalPayload]]]></http:body>
 						<http:headers ><![CDATA[#[output application/java

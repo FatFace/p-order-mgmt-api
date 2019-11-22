@@ -39,7 +39,7 @@ output application/java
 	<flow name="get-manifest-shipment-data-from-jda-and-process-to-d365-sub-flow" doc:id="3253f4bd-085c-4f6a-a3b6-7dd0840fb5b2" >
 		<flow-ref doc:name="Log Process Entry" doc:id="0e629b67-770a-469f-b2e1-a2d3fc07901f" name="log-process-entry-sub-flow"/>
 		<flow-ref doc:name="Log Process Exit" doc:id="cfebbc48-7304-446e-9c57-17b80cb8c46d" name="log-process-exit-sub-flow"/>
-		<http:request method="GET" doc:name="S-JDA-HTTP-Request-Configuration" doc:id="2b54425a-795e-46a9-b5b9-884e2d45a677" config-ref="JDA_HTTP_Request_configuration" path="${jda.manifests.path}" responseTimeout="${response.timeout}">
+		<http:request method="GET" doc:name="S-JDA-HTTP-Request-Configuration" doc:id="2b54425a-795e-46a9-b5b9-884e2d45a677" path="${jda.manifests.path}" responseTimeout="${response.timeout}" config-ref="s_jda_Http_Request_configuration">
 			<http:headers ><![CDATA[#[output application/java
 ---
 {
@@ -116,7 +116,7 @@ output application/json
 					</ee:variables>
 			</ee:transform>
 				<flow-ref doc:name="Log Process Entry" doc:id="a261e0aa-579f-4c61-9971-9d3e4123d382" name="log-process-entry-sub-flow" />
-				<http:request method="PUT" doc:name="Call D365 HTTP Request Configuration" doc:id="3ffb8a57-31d9-4ae9-accf-73a215513c16" config-ref="D365_HTTP_Request_configuration" path="${d365.updateManifestPath}" responseTimeout="${response.timeout}">
+				<http:request method="PUT" doc:name="Call D365 HTTP Request Configuration" doc:id="3ffb8a57-31d9-4ae9-accf-73a215513c16" path="${d365.updateManifestPath}" responseTimeout="${response.timeout}" config-ref="s_D365_Http_Request_configuration">
 				
 				<http:body ><![CDATA[#[vars.originalPayload]]]></http:body>
 						<http:headers ><![CDATA[#[output application/java
