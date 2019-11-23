@@ -19,7 +19,7 @@ if (attributes.headers.'transaction-id' != null) attributes.headers.'transaction
 				<ee:set-variable variableName="transactionStartTime" ><![CDATA[%dw 2.0
 output application/java
 ---
-if (attributes.headers.'transaction-start-time' != null) attributes.headers.'transaction-start-time' as DateTime else if (vars.transactionStartTime != null) vars.transactionStartTime as DateTime else (now() as String {format : "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"})]]></ee:set-variable>
+if (attributes.headers.'transaction-start-time' != null) attributes.headers.'transaction-start-time' as DateTime else if (vars.transactionStartTime != null) vars.transactionStartTime as DateTime else now()]]></ee:set-variable>
 			</ee:variables>
 		</ee:transform>
 		<set-variable value="#[if(vars.correlationId != null) vars.correlationId else correlationId]" doc:name="Set Message Correlation Id" doc:id="4b33abbd-2392-4bb8-9346-47ebc1315d08" variableName="messageCorrelationId"/>
