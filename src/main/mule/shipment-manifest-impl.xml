@@ -67,7 +67,7 @@ now() as String {format : "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"}]]></ee:set-variable>
 			</otherwise>
 		</choice>
 		<choice doc:name="Choice" doc:id="5ca0b3f6-6e7d-4575-a2ca-a44fe6a4f07a">
-			<when expression="#[vars.hasMoreFiles == true]">
+			<when expression="#[vars.hasMoreFiles == 'true']">
 				<flow-ref doc:name="get-manifest-shipment-data-from-jda-and-process-to-d365-sub-flow" doc:id="97dd8778-2e6f-4bed-ba2c-9791d8cb3283" name="get-manifest-shipment-data-from-jda-and-process-to-d365-sub-flow" />
 			</when>
 			<otherwise>
