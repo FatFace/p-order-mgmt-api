@@ -49,17 +49,25 @@ d365:
   clientId: "a1c25cbc41dc4a43a1c5c3ecbf1251c5"
   clientSecret: "C3a2082C36B54f5bbba606E704e11bDE"
   pickOrdersPath: "/pick/orders"
-  
-  
+  getCustomerGroupPath: "/data/CustomerGroups"
+  updateProductsPath: "/data/products"     
+  updateManifestPath: "/pick/manifests"
+  updateOrderExtractPath: "/pick/orders"  
+    
 jda:
-  host: "mule-worker-internal-sit-s-jda-data-int.ir-e1.cloudhub.io"
+  host: "mule-worker-internal-dev-s-jda-data-int.ir-e1.cloudhub.io"
   port: "8092"
   basepath: "/api/v1"
-  ordersPath: "/orders"
-  clientId: "a1c25cbc41dc4a43a1c5c3ecbf1251c5"
-  clientSecret: "C3a2082C36B54f5bbba606E704e11bDE"
+  clientId: "c1751cc13ad746a8a49c404c966839f7"
+  clientSecret: "7d3aFbC44E8e49048935f06A7A2a099d"
   jks:
     password: "![yqrYtFIRqm28xrunLqR/2kqfcVd97HqoY0AWEfF+m8M=]"
+  ordersPath: "/orders"
+  orders:
+    path: "/pick/orders"
+  manifests:
+    path: "/pick/manifests"
+
   
 lookup:
   host: "mule-worker-internal-sit-s-dblookup-api.ir-e1.cloudhub.io"
@@ -73,6 +81,17 @@ lookup:
     type: "ORDER_TYPE"
     catgeory: "MODE_OF_DELIVERY"
     source: "D365"
-    
-        
-    
+   
+cron:
+  expression: 
+    manifest: "0 0/10 * 1/1 * ? *"
+    orderextract: "0 0 * ? * * *"  
+   
+   
+orders:
+  export:
+    sftp:
+      errorfilepath:  "/FatFace/sftp/MuleSoftIntegration/sit/error/outgoing/orderData/jdaOrder"
+send:
+  manifest:
+    queue: "true"
