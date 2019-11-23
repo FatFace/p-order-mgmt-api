@@ -8,11 +8,11 @@ http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/
 http://www.mulesoft.org/schema/mule/amqp http://www.mulesoft.org/schema/mule/amqp/current/mule-amqp.xsd
 http://www.mulesoft.org/schema/mule/sqs http://www.mulesoft.org/schema/mule/sqs/current/mule-sqs.xsd
 http://www.mulesoft.org/schema/mule/sftp http://www.mulesoft.org/schema/mule/sftp/current/mule-sftp.xsd">
-	<flow name="order-extract-impl-flow" doc:id="23a2590d-f562-46da-a911-2cf2098e8abe" initialState="stopped">
+	<flow name="order-extract-impl-flow" doc:id="23a2590d-f562-46da-a911-2cf2098e8abe">
 <!-- 	<http:listener doc:name="Test Listener" doc:id="4c06bde2-d4f6-487b-8db8-643daa0ddb3f" path="/test" config-ref="HTTP_Listener_config"/> -->
-		<scheduler doc:name="Scheduler" doc:id="18363b90-3733-44b8-b930-913a1be28952" >
+		<scheduler doc:name="Order Extract Scheduler" doc:id="eca94fad-53ee-49b6-9284-4fc0759165a2" >
 			<scheduling-strategy >
-				<cron expression="${cron.expression.orderextract}" />
+				<cron expression="${cron.expression.orderextract}"/>
 			</scheduling-strategy>
 		</scheduler>
 		<ee:transform doc:name="Batch Parameter" doc:id="02821f9f-729a-4648-b997-59abceff4329" >
