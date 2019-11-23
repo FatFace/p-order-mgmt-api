@@ -132,10 +132,10 @@ p('send.order.queue')]]></ee:set-variable>
 		<ee:transform doc:name="Filtering" doc:id="3a23d39e-deaf-4e03-ab52-a34254baa3a7" >
 			<ee:message >
 				<ee:set-payload ><![CDATA[%dw 2.0
-output application/java
+output application/json
 ---
 {
-	orders: payload.orders filter ($."order-no" != null and $."order-no" != '' and $.status == 'shipped') map $
+	orders: payload.orders filter ($."order-no" != null and $."order-no" != '' and $.status != 'shipped') map $
 }]]></ee:set-payload>
 			</ee:message>
 			<ee:variables >
@@ -171,7 +171,8 @@ output application/java
 			<reconnect frequency="${retry.frequency}" count="${retry.attempts}"/>
 		</sqs:read>
 		<choice doc:name="Choice" doc:id="e84144a6-44ff-4e08-8268-7ba143b34c0d" >
-			<when expression="#[payload != null]">
+			<when expression="#[vars.manifestData != null and vars.manifestData != []]">
+				
 				<ee:transform doc:name="Transform Message" doc:id="a97d5f0c-3a47-45ae-9428-b2152ff8adca" >
 					<ee:message >
 						<ee:set-payload resource="dwl/filteredOrder.dwl" />
@@ -206,7 +207,7 @@ output application/java
 				</choice>
 			</when>
 			<otherwise >
-				<set-variable value="The record is not an ecom order" doc:name="Set Logging payload" doc:id="73320de0-0bc3-4493-8fe6-27cb1e9777fb" variableName="loggingPayload" />
+				<set-variable value="Queue doesn't have any data" doc:name="Set Logging payload" doc:id="73320de0-0bc3-4493-8fe6-27cb1e9777fb" variableName="loggingPayload" />
 				<flow-ref doc:name="Logging Message" doc:id="648243e9-2db8-4a80-9518-de124bcc936c" name="logging-sub-flow" />
 			</otherwise>
 		</choice>
@@ -215,14 +216,13 @@ output application/java
 						<ee:set-payload resource="dwl/order-extract-jda-to-d365-mapping.dwl" />
 			</ee:message>
 		</ee:transform>
+<!-- 		<logger level="INFO" doc:name="Logger" doc:id="73b59a37-7b74-4a6c-a420-32ac29ff5d65" message="#['kishan3' ++ write(payload, &quot;application/json&quot;)]" /> -->
 		<flow-ref doc:name="Flow Reference send to d365" doc:id="9691c83f-6d2f-480d-b302-4adb884962ed" name="order-extract-send-to-d365" />
 		<flow-ref doc:name="Log Process Exit" doc:id="c330e731-9780-48c2-b596-be1e7effebcc" name="log-process-exit-sub-flow" />
 	</sub-flow>
 	<sub-flow name="order-extract-send-to-d365" doc:id="4e4ac1cb-968c-45d1-b779-dffb242a456d" >
 		<flow-ref doc:name="Log Process Entry" doc:id="50abbf14-8e27-4ba9-b3e0-e776e7c7f8f9" name="log-process-entry-sub-flow" />
-				<http:request method="PUT" doc:name="Call D365 HTTP Request Configuration" doc:id="4e264552-d91e-4f1c-8103-e1cc181d1b0d" path="${d365.updateOrderExtractPath}" responseTimeout="${response.timeout}" config-ref="s_D365_Http_Request_configuration">
-				
-				<http:body ><![CDATA[#[vars.originalPayload]]]></http:body>
+				<http:request method="PUT" doc:name="Call D365 HTTP Request Configuration" doc:id="4e264552-d91e-4f1c-8103-e1cc181d1b0d" path="${d365.updateOrderExtractPath}" responseTimeout="${response.timeout}" config-ref="s_D365_Http_Request_configuration" outputMimeType="application/json">
 						<http:headers ><![CDATA[#[output application/java
 ---
 {

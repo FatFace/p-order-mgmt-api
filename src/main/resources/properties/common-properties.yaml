@@ -1,6 +1,6 @@
 is: 
   audit:
-    toggle: "OFF"
+    toggle: "ON"
     payload: "ON"
   logging:
     toggle: "OFF"
