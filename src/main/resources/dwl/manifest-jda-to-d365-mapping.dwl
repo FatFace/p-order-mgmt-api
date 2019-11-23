@@ -13,15 +13,9 @@ output application/json
       "site-id": manifest.'site-id',
       "location-id": manifest.'location-id',
       "quantity": manifest.quantity,
-      "shipping-date": manifest.'shipping-date',
+      "shipping-date": (manifest.'shipping-date') as LocalDateTime {format: "yyyyMMddHHmmss"} as String {format: "yyyy-MM-dd'T'HH:mm:ss"},
       "order-no": manifest.'order-no',
       "carrier-id": manifest.'carrier-id',
       "status": manifest.status
-    }
-  
+    } 
 }
-
- 
-
-
- 

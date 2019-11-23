@@ -7,7 +7,7 @@ output application/json
     {
       "route-id": orderE.'route-id',
       "status": orderE.status,
-      "shipping-date": orderE.'shipping-date',
+      "shipping-date": (orderE.'shipping-date') as LocalDateTime {format: "yyyyMMddHHmmss"} as String {format: "yyyy-MM-dd'T'HH:mm:ss"},
       "order-no": orderE.'order-no',
       "order_lines": orderE map (orderL, indexOfOrderL) -> 
         {
