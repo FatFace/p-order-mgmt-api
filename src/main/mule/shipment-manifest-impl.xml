@@ -10,7 +10,7 @@ http://www.mulesoft.org/schema/mule/java http://www.mulesoft.org/schema/mule/jav
 <!-- 	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="f2c95055-b101-4a0b-bc30-4b5d1b2e03cb" > -->
 <!-- 		<http:listener-connection host="localhost" port="8081" /> -->
 <!-- 	</http:listener-config> -->
-	<flow name="update-shipment-manifest-details-impl-main-flow" doc:id="23a2590d-f562-46da-a911-2cf2098e8abe" >
+	<flow name="shipment-manifest-impl-flow" doc:id="23a2590d-f562-46da-a911-2cf2098e8abe" >
 <!-- 		<http:listener doc:name="Test Listener" doc:id="f4a25c17-79af-4c1d-a5cc-381e793ea577" path="/test" config-ref="HTTP_Listener_config"/> -->
 		<scheduler doc:name="Manifest Scheduler" doc:id="159ed4e9-21ba-4dc9-9370-3b7a49e20686" >
 			<scheduling-strategy >
