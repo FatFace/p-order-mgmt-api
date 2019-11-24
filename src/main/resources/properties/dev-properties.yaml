@@ -102,3 +102,7 @@ orders:
 send:
   manifest:
     queue: "true"
+    
+pick:
+  orders:
+    orderType: "WEB"
