@@ -75,11 +75,10 @@ smtp:
   user: "![XImJcfQv4D6cYan0i6XwPZi8Uxv0OkDQvTITnsw/onM=]"
   password: "![r9f7FSUCH+2adxR8OeswFg==]"
   subject: "Fatface API Exception"
-
-
+  
 lookup:
-  host: "mule-worker-internal-dev-s-dblookup-api.ir-e1.cloudhub.io"
-  port: "8091"
+  host: "localhost"
+  port: "8095"
   basePath: "/api/v1"
   dbLookupPath: "/lookups"
   key: "ORDER_TYPE-MODE_OF_DELIVERY-D365"
