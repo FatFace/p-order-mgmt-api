@@ -60,7 +60,8 @@ now() as String {format : "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"}]]></ee:set-variable>
 ---
 {
 	"client_id" : p('jda.clientId'),
-	"client_secret" : p('jda.clientSecret')
+	"client_secret" : p('jda.clientSecret'),
+	"vRequestId" : vars.transactionId
 }]]]></http:query-params>
 		</http:request>
 				<flow-ref doc:name="Log Process Exit" doc:id="78baee98-f66e-4843-9bcd-e72a625df755" name="log-process-exit-sub-flow" />

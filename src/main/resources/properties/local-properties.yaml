@@ -11,7 +11,7 @@ http:
   port: "8081"
   
 d365:
-  host: "mule-worker-internal-dev-s-d365-api.ir-e1.cloudhub.io"
+  host: "localhost"
   port: "8091"
   basepath: "/api/v1"
   clientId: "c1751cc13ad746a8a49c404c966839f7"
@@ -23,8 +23,8 @@ d365:
   pickOrdersPath: "/pick/orders"
   
 jda:
-  host: "mule-worker-internal-dev-s-jda-data-int.ir-e1.cloudhub.io"
-  port: "8092"
+  host: "localhost"
+  port: "8082"
   basepath: "/api/v1"
   clientId: "c1751cc13ad746a8a49c404c966839f7"
   clientSecret: "7d3aFbC44E8e49048935f06A7A2a099d"
