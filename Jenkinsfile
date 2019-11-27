@@ -19,7 +19,6 @@ pipeline {
         
         string(name: 'MULE_CLOUDHUB_RUNTIME', defaultValue: '4.2.1', description: 'Mule runtime')
         string(name: 'MULE_APPLICATION_NAME', defaultValue: 'dev-order-mgmt-app', description: 'Unique name of the application [mule artifact] while deploying Anypoint platform')
-	string(name: 'MULE_ENV', defaultValue: 'dev', description: 'Enviroment setting for Mule app/api artifact')
         string(name: 'MULE_ENV', defaultValue: 'dev', description: 'Enviroment setting for Mule app/api artifact')
         string(name: 'ENCRYPTION_KEY', defaultValue: 'secure key', description: 'Encryption key needed for only to run munit run')
 	    
