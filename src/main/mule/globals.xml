@@ -19,7 +19,7 @@ http://www.mulesoft.org/schema/mule/os http://www.mulesoft.org/schema/mule/os/cu
 	<configuration-properties doc:name="Configuration properties" doc:id="31655e4d-0651-4ec4-a6ce-965230ec7e76" file="properties/common-properties.yaml" />
 	<configuration-properties doc:name="Configuration properties" doc:id="3b617f7a-4e8a-4201-b997-c85fe04c302e" file="properties/${mule.env}-properties.yaml" />   
    	<http:listener-config name="b-order-mgmt-app-httpListenerConfig">
-        <http:listener-connection host="localhost" port="8085" />
+        <http:listener-connection host="localhost" port="8082" />
     </http:listener-config>
 	<db:config name="Database_Config" doc:name="Database Config" doc:id="b8195697-f573-4c1d-9ebb-faaf0ba86e54" >
 		<db:mssql-connection host="${db.audit.config.host}" user="${secure::db.audit.config.user}" password="${secure::db.audit.config.password}" databaseName="${db.audit.config.database}" />
@@ -56,5 +56,8 @@ http://www.mulesoft.org/schema/mule/os http://www.mulesoft.org/schema/mule/os/cu
 	<os:object-store name="Object_store" doc:name="Object store" doc:id="a2ebd370-24d8-4948-bafb-7b3848ca907f" />
 	<http:request-config name="dbLookup_HTTP_Request_configuration" doc:name="HTTP Request configuration" doc:id="8414566d-3ff0-4d39-998f-65d0abf53a07" basePath="${lookup.basePath}" >
 		<http:request-connection host="${lookup.host}" port="${lookup.port}" />
+	</http:request-config>
+	<http:request-config name="S_Aptos_Http_Request_Configuration" doc:name="HTTP Request configuration" doc:id="488aa33a-ab3d-48a2-9602-c61921b49351" basePath="${aptos.basepath}">
+		<http:request-connection host="${aptos.host}" port="${aptos.port}" />
 	</http:request-config>
 </mule>

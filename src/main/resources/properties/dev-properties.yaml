@@ -66,6 +66,9 @@ lookup:
   port: "8091"
   basePath: "/api/v1"
   dbLookupPath: "/lookups"
+  aptos:
+    modeOfDelivery:
+      key: "MODE_OF_DELIVERY-DEPT-APTOS"
   key: "ORDER_TYPE-MODE_OF_DELIVERY-D365"
   clientId: "c1751cc13ad746a8a49c404c966839f7"
   clientSecret: "7d3aFbC44E8e49048935f06A7A2a099d"
@@ -74,5 +77,12 @@ lookup:
     catgeory: "MODE_OF_DELIVERY"
     source: "D365"
     
-        
+   
     
+aptos:
+  host: "mule-worker-internal-dev-s-aptos-api.ir-e1.cloudhub.io"
+  port: "8091"
+  basepath: "/api/v1"
+  clientId: "c1751cc13ad746a8a49c404c966839f7"
+  clientSecret: "7d3aFbC44E8e49048935f06A7A2a099d"
+  getOrdersPath: "/orders"

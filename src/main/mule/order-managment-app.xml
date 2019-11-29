@@ -6,7 +6,7 @@
 http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
 http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
 http://www.mulesoft.org/schema/mule/os http://www.mulesoft.org/schema/mule/os/current/mule-os.xsd">
-	<flow name="order-managment-app-flow" doc:id="e4041d85-5c17-4374-b202-6367cd858318" >
+	<flow name="order-managment-app-flow" doc:id="e4041d85-5c17-4374-b202-6367cd858318" initialState="stopped">
 		<scheduler doc:name="Scheduler" doc:id="fd89417f-b2d5-4c23-8807-82f3eb5d99ee" >
 			<scheduling-strategy >
 				<cron expression="${scheduler.cron.expression}" />
