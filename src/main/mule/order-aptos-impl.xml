@@ -6,143 +6,118 @@
 http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
 http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
 http://www.mulesoft.org/schema/mule/os http://www.mulesoft.org/schema/mule/os/current/mule-os.xsd">
-	<flow name="order-aptos-app-flow" doc:id="87e455f3-7f8d-4733-af8c-46d3c419e6f5" >
-		<http:listener doc:name="Listener" doc:id="832488fe-63da-44b4-b8b7-338d9983e2e1" config-ref="b-order-mgmt-app-httpListenerConfig" path="/aptos"/>
-		<ee:transform doc:name="Set Attributes" doc:id="793080ff-40b3-424f-9f42-1cef21c19619" >
-			<ee:message >
+	
+	<flow name="create-order-details-from-aptos-to-d365-main-flow" doc:id="87e455f3-7f8d-4733-af8c-46d3c419e6f5" >
+		<!-- <http:listener doc:name="Listener" doc:id="832488fe-63da-44b4-b8b7-338d9983e2e1" config-ref="b-order-mgmt-app-httpListenerConfig" path="/aptos" allowedMethods="POST" /> -->
+		<scheduler doc:name="Scheduler" doc:id="fd04f5be-0c95-4448-afc5-f48edec560be" >
+			<scheduling-strategy >
+				<cron expression="${scheduler.cron.expression}" />
+			</scheduling-strategy>
+		</scheduler>
+		<ee:transform doc:name="Set Flow Name and Transaction Start Date" doc:id="793080ff-40b3-424f-9f42-1cef21c19619">
+			<ee:message>
 			</ee:message>
-			<ee:variables >
-				<ee:set-variable variableName="flowName" ><![CDATA[%dw 2.0
+			<ee:variables>
+				<ee:set-variable variableName="flowName"><![CDATA[%dw 2.0
 output application/java
 ---
 
-'order-aptos-app-flow']]></ee:set-variable>
-				<ee:set-variable variableName="transactionStartDate" ><![CDATA[%dw 2.0
+'create-order-details-from-aptos-to-d365-main-flow']]></ee:set-variable>
+				<ee:set-variable variableName="transactionStartDate"><![CDATA[%dw 2.0
 output application/java
 ---
 now() as String {format : "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"}]]></ee:set-variable>
 			</ee:variables>
 		</ee:transform>
-		<!-- <http:request method="GET" doc:name="Call Aptos HTTP Request Configuration" doc:id="6dae4e5c-1e05-498d-8d63-6a797bc11730" config-ref="S_Aptos_Http_Request_Configuration" path="${aptos.getOrdersPath}" target="aptosOriginalPayload">
-			<http:headers ><![CDATA[#[output application/java
-
-{
-	"Transaction-Id" : vars.transactionId,
-	"Transaction-Start-Time" : vars.transactionStartDate,
-	"Client-Id" : p('aptos.clientId'),
-	"Client-Secret" : p('aptos.clientSecret')
-}]]]></http:headers>
-		</http:request> -->
-		<ee:transform doc:name="Set Header and Smaple Json" doc:id="536d738e-1acc-42a4-9f9f-ab58319ff756" >
-			<ee:message >
+		<flow-ref doc:name="Call Aptos To D365 Impl Sub Flow" doc:id="31570d8a-5151-4e8e-8e37-8c2328f19ef5" name="aptos-to-d365-impl-flow"/>
+		
+	</flow>
+	<sub-flow name="aptos-to-d365-impl-flow" doc:id="d278a3b5-d6b8-45b8-8ba9-cbc56e0954c7" >
+		
+		<set-variable value="#['aptos-to-d365-impl-flow']" doc:name="Set Flow Name" doc:id="f1034d0e-4f80-47f7-b761-48bb51f78366" variableName="flowName"/>
+		<flow-ref doc:name="Call Aptos Http Request Configuration" doc:id="a0df90ee-f8e5-4732-b716-8e1933d8fc3c" name="s-aptos-api-call-retry-sub-flow"/>
+		
+		<ee:transform doc:name="Set Header Has More Files and Input Payload" doc:id="69945192-6aa6-45bb-864c-90f13f6f948b">
+			<ee:message>
 			</ee:message>
-			<ee:variables >
-				<ee:set-variable variableName="hasMoreFiles" ><![CDATA[%dw 2.0
+			<ee:variables>
+				<ee:set-variable variableName="hasMoreFiles"><![CDATA[%dw 2.0
 output application/java
 ---
 
 (if (attributes.headers.'has-more-files' != null) attributes.headers.'has-more-files' else "" )]]></ee:set-variable>
-				<ee:set-variable variableName="aptosOriginalPayload" ><![CDATA[%dw 2.0
+				<ee:set-variable variableName="aptosOriginalPayload"><![CDATA[%dw 2.0
 output application/json
 ---
 
-{
-	"orders": [{
-		"order-no": "28759577",
-		"order-date": "2019-10-03T18:25:43.200Z",
-		"currency": "GBP",
-		"language": "en-gb",
-		"source": "APTOS",
-		"delivery-mode": "1",
-		"legal-entity": "1FFL",
-		"store": {
-			"store-id": "70257"
-		},
-		"customer": {
-			"customer-id": "9991331068",
-			"fullname": "Nicola Carbis",
-			"first-name": "Nicola",
-			"last-name": "Carbis",
-			"telephone": "07905339295",
-			"email": "carbis1@btinternet.com",
-			"shipping-address": {
-				"address-1": "14 Park Close",
-				"address-2": "Coveney",
-				"address-3": "Cambridgeshire",
-				"address-4": "Great Britain",
-				"state": "Ely",
-				"postcode": "CB6 2DH"
-			}
-		},
-		"orderlines": [{
-			"item-id": "1",
-			"item-name": "RUBY LEAF SCHIFFLEY LONGLINE WHT-WHITE 6 9EWA",
-			"sales-price": "39.5",
-			"barcode": "5052751553606",
-			"quantity": "1.0",
-			"amount": "39.5",
-			"tax-amount": "1.98",
-			"tax-rate": "20.0101"
-		}],
-		"payments": [{
-			"amount": "39.5",
-			"payment-mode": "creditcard",
-			"payment-mode-card": {
-				"card-number": "******0000000795"
-			}
-		}]
-	}]
-}]]></ee:set-variable>
+payload]]></ee:set-variable>
 			</ee:variables>
 		</ee:transform>
-		<choice doc:name="Choice" doc:id="0a519c61-8d05-4e88-9b00-52c3079fd326" >
+		<choice doc:name="Choice" doc:id="5641cc72-6e78-4405-b2cc-fd647e9ef533" >
 			<when expression="#[(vars.aptosOriginalPayload != null) or (isEmpty(vars.aptosOriginalPayload) == false)]">
-				<flow-ref doc:name="Call DB Lookup API For Key Values" doc:id="75eb32ab-3ae1-4114-a671-3e97ff68a2b2" name="get-mode-of-delivery-and-sales-of-origin-from-dblookup-for-create-order-sub-flow"/>
-				<flow-ref doc:name="get-sales-of-origin-from-dblookup-for-create-order-sub-flow" doc:id="f7c8e3a7-bec6-43f8-a8fc-5ac30d59a207" name="get-sales-of-origin-from-dblookup-for-create-order-sub-flow"/>
-				<logger level="INFO" doc:name="Logger" doc:id="460a991a-cc88-45c7-8543-a9bf0a31fe4a" message="#[payload]"/>
-				<ee:transform doc:name="Set d365 Input Payload" doc:id="cc9e4edf-fea3-4edd-bc81-e1cbe2865e57">
+				<flow-ref doc:name="Get Key Values For Delivery Mode" doc:id="17ca0096-800d-4012-b189-a71df4afcac3" name="get-mode-of-delivery-key-values-from-dblookup-sub-flow"/>
+				<flow-ref doc:name="Get Key Values For Sales Origin" doc:id="d6df6c36-1ef3-4c80-bb97-c27777e40d9d" name="get-sales-of-origin-key-values-from-dblookup-sub-flow"/>
+				<async doc:name="Async" doc:id="2b870c4f-c65f-4ef9-ab9e-bfdc6c7f376f" >
+					<ee:transform doc:name="Input For Report DB" doc:id="8e659a69-da22-4a6f-b991-a5209e7238c5">
+					<ee:message>
+					</ee:message>
+					<ee:variables>
+						<ee:set-variable resource="dwl/order_create_from_aptos_to_reportdb.dwl" variableName="reportdbInputPayload" />
+					</ee:variables>
+				</ee:transform>
+					<http:request method="POST" doc:name="Call Report DB Http Request Configuration" doc:id="c10190f5-c4f2-45fa-b5ea-e4054f259c65" path="${report.ordersPath}" responseTimeout="${response.timeout}" config-ref="S_Report_Http_Request_Configuration">
+						<http:body ><![CDATA[#[vars.reportdbInputPayload]]]></http:body>
+											<http:headers><![CDATA[#[output application/java
+---
+{
+	"Transaction-Id" : vars.transactionId,
+	"Transaction-Start-Time" : vars.transactionStartDate,
+	"Client-Id" : p('report.clientId'),
+	"Client-Secret" : p('report.clientSecret')
+}]]]></http:headers>
+					
+					</http:request>
+				</async>
+				<ee:transform doc:name="Set d365 Input Payload" doc:id="5d89f5b1-7d9c-456f-be6a-bdd0f993bc9d">
 					<ee:message>
 					</ee:message>
 					<ee:variables>
 						<ee:set-variable resource="dwl/order_create_from_aptos_d365.dwl" variableName="d365InputPayload" />
 					</ee:variables>
 				</ee:transform>
-				<ee:transform doc:name="Input For Report DB" doc:id="0df8860a-13b2-45d5-afb0-5c28cfc56fe1" >
-					<ee:message >
-					</ee:message>
-					<ee:variables >
-						<ee:set-variable resource="dwl/order_create_from_aptos_to_reportdb.dwl" variableName="reportdbInputPayload" />
-					</ee:variables>
-				</ee:transform>
-				<logger level="INFO" doc:name="Logger" doc:id="ca491096-fdfc-4dcc-b8da-d5c45a269cf1" message="Final payload:: #[payload]"/>
-				<!-- <http:request method="POST" doc:name="Request" doc:id="f14b05ae-203a-4b54-b0f8-76b6dcc259ba" config-ref="s_D365_Http_Request_configuration" path="/products">
-			<http:headers><![CDATA[#[output application/java
-
+				<http:request method="POST" doc:name="Call D365 Http Request Configuration" doc:id="c1119184-6b74-4aea-891c-82c49922f420" config-ref="s_D365_Http_Request_configuration" path="${d365.webOrdersPath}" responseTimeout="${response.timeout}">
+			<http:body ><![CDATA[#[vars.d365InputPayload]]]></http:body>
+					<http:headers><![CDATA[#[output application/java
+---
 {
 	"Transaction-Id" : vars.transactionId,
 	"Transaction-Start-Time" : vars.transactionStartDate,
 	"Client-Id" : p('d365.clientId'),
 	"Client-Secret" : p('d365.clientSecret')
 }]]]></http:headers>
-		</http:request> -->
-			</when>
+					
+		</http:request>
+				<flow-ref doc:name="Chech Has More Files In Aptos" doc:id="bf6988a0-ad8c-4639-874f-bcb13d947a05" name="check-has-more-files-sub-flow"/>
+			
+</when>
 			<otherwise >
-				<logger level="INFO" doc:name="No Data Receieved" doc:id="d760569f-8971-4c4d-884b-8f7b021ba7b6" message="${system.layer.response}"/>
+				<logger level="INFO" doc:name="No Data Receieved" doc:id="8c26ed45-ff3a-4312-9ee0-7b140649358a" message="${system.layer.response}"/>
 			</otherwise>
 		</choice>
-	</flow>
-	<sub-flow name="get-mode-of-delivery-and-sales-of-origin-from-dblookup-for-create-order-sub-flow" doc:id="b3f886d8-1f34-4ebd-a34f-4d02c8774b1e" >
-		<set-variable value="#['get-mode-of-delivery-and-sales-of-origin-from-dblookup-for-create-order-sub-flow']" doc:name="Flow Name" doc:id="abe34bec-e8ba-4fe9-a741-e573afd14400" variableName="flowName"/>
+	
+	</sub-flow>
+	<sub-flow name="get-mode-of-delivery-key-values-from-dblookup-sub-flow" doc:id="b3f886d8-1f34-4ebd-a34f-4d02c8774b1e" >
+		<set-variable value="#['get-mode-of-delivery-key-values-from-dblookup-sub-flow']" doc:name="Flow Name" doc:id="abe34bec-e8ba-4fe9-a741-e573afd14400" variableName="flowName"/>
 		<set-variable value="#[p('lookup.aptos.modeOfDelivery.key')]" doc:name="Set Lookup Key" doc:id="c4c2e3df-47b1-42a1-8df0-2b81cc1a611c" variableName="modeOfDeliveryKey"/>
 		<os:contains doc:name="Contains" doc:id="446be61a-f981-4b30-968d-f11404e01b21" key="#[vars.modeOfDeliveryKey]" objectStore="Object_store"/>
 		<choice doc:name="Choice" doc:id="88263750-46ad-428b-b4e3-d4e14f3ea66c" >
 			<when expression="#[payload ==true]">
 				<os:retrieve doc:name="Retrieve" doc:id="bfd16d13-fb28-4c14-a47a-9ae494bc6dc3" key="#[vars.modeOfDeliveryKey]" objectStore="Object_store"/>
 				<logger level="INFO" doc:name="Logger" doc:id="d79ef3e7-ee8b-4fe9-b97b-e193886762e3" message="object store :::  #[payload]"/>
-				<flow-ref doc:name="get-dblookup-key-value-for-modeofdelivery-sub-flow" doc:id="7d7d8713-1984-45b4-a7a0-13a6bf392094" name="get-dblookup-key-value-for-modeofdelivery-sub-flow"/>
+				<flow-ref doc:name="Map Mode Of Delivery Value" doc:id="7d7d8713-1984-45b4-a7a0-13a6bf392094" name="filter-mode-of-delivery"/>
 			</when>
 			<otherwise >
-				<http:request method="GET" doc:name="Invoke System Layer Lookup Api to Get Lookup Key" doc:id="0d0d85db-42af-470c-beb4-5515b907962f" path="${lookup.dbLookupPath}" responseTimeout="900000" config-ref="dbLookup_HTTP_Request_configuration">
+				<http:request method="GET" doc:name="Call DB Lookup Http Request Configuration" doc:id="0d0d85db-42af-470c-beb4-5515b907962f" path="${lookup.dbLookupPath}" responseTimeout="900000" config-ref="dbLookup_HTTP_Request_configuration">
 					<http:headers ><![CDATA[#[output application/java
 ---
 {
@@ -160,23 +135,22 @@ output application/json
 }]]]></http:query-params>
 				</http:request>
 				<os:store doc:name="Store" doc:id="08fbf23a-ce28-4df3-b451-2da4fe008f00" key="#[vars.modeOfDeliveryKey]" objectStore="Object_store"/>
-				<flow-ref doc:name="get-dblookup-key-value-for-modeofdelivery-sub-flow" doc:id="dd362dd9-8bf9-4d95-84fe-1fff64577793" name="get-dblookup-key-value-for-modeofdelivery-sub-flow"/>
+				<flow-ref doc:name="Map Mode Of Delivery Value" doc:id="dd362dd9-8bf9-4d95-84fe-1fff64577793" name="filter-mode-of-delivery"/>
 			</otherwise>
 		</choice>
 	</sub-flow>
-	<sub-flow name="get-sales-of-origin-from-dblookup-for-create-order-sub-flow" doc:id="ba6585e8-5178-4ff7-9b78-9050d6785c95">
+	<sub-flow name="get-sales-of-origin-key-values-from-dblookup-sub-flow" doc:id="ba6585e8-5178-4ff7-9b78-9050d6785c95">
 	<set-variable value="#['get-sales-of-origin-from-dblookup-for-create-order-sub-flow']" doc:name="Flow Name" doc:id="c40b1d1a-8ea5-4387-9e0d-ac4104419c62" variableName="flowName"/>
 		<set-variable value="#[p('lookup.aptos.salesOfOrigin.key')]" doc:name="Set SalesOfOrigin Lookup Key" doc:id="35ea9718-0d86-476d-a06f-85f346fa04d1" variableName="salesOfOriginKey"/>
 		<os:contains doc:name="Contains" doc:id="2bdfef22-e962-49ba-8c14-1c31b19327c5" key="#[vars.salesOfOriginKey]" objectStore="Object_store"/>
 		<choice doc:name="Choice" doc:id="cffd7802-4916-4bd2-9cda-fab15395864c" >
 			<when expression="#[payload ==true]">
 				<os:retrieve doc:name="Retrieve" doc:id="a7a4e689-3c16-4add-a9ca-7e3eb2fc5866" key="#[vars.salesOfOriginKey]" objectStore="Object_store"/>
-				<logger level="INFO" doc:name="Logger" doc:id="45691b2a-9691-4548-b66e-2b6fb2af248b" message="sales of origin key object store :::  #[payload]"/>
-				<flow-ref doc:name="get-dblookup-key-value-for-salesOfOrigin-sub-flow" doc:id="11b88397-0a41-410e-90bb-5ce225ff72df" name="get-dblookup-key-value-for-salesOfOrigin-sub-flow"/>
+				<flow-ref doc:name="Map Sales Of Origin Value" doc:id="11b88397-0a41-410e-90bb-5ce225ff72df" name="filter-sales-of-origin"/>
 			
 </when>
 			<otherwise >
-				<http:request method="GET" doc:name="Invoke System Layer Lookup Api to Get Lookup Key" doc:id="f971441d-1f38-4463-8c07-983d12dcfb6a" path="${lookup.dbLookupPath}" responseTimeout="900000" config-ref="dbLookup_HTTP_Request_configuration">
+				<http:request method="GET" doc:name="Call DB Lookup Http Request Configuration" doc:id="f971441d-1f38-4463-8c07-983d12dcfb6a" path="${lookup.dbLookupPath}" responseTimeout="900000" config-ref="dbLookup_HTTP_Request_configuration">
 					<http:headers ><![CDATA[#[output application/java
 ---
 {
@@ -194,13 +168,13 @@ output application/json
 }]]]></http:query-params>
 				</http:request>
 				<os:store doc:name="Store" doc:id="9cf4d56f-5f83-4296-acf4-e7044978e7b9" key="#[vars.salesOfOriginKey]" objectStore="Object_store"/>
-				<flow-ref doc:name="get-dblookup-key-value-for-salesOfOrigin-sub-flow" doc:id="a8b3c263-5d86-488d-9306-20270b975917" name="get-dblookup-key-value-for-salesOfOrigin-sub-flow"/>
+				<flow-ref doc:name="Map Sales Of Origin Value" doc:id="a8b3c263-5d86-488d-9306-20270b975917" name="filter-sales-of-origin"/>
 			
 </otherwise>
 		</choice>
 	</sub-flow>
-	<sub-flow name="get-dblookup-key-value-for-modeofdelivery-sub-flow" doc:id="382d3b9f-a9d8-4f1c-8d36-999496de41dd" >
-		<ee:transform doc:name="Delivery Modey Lokkup Value" doc:id="3b839c23-4a13-494e-8485-51b06eadd218" >
+	<sub-flow name="filter-mode-of-delivery" doc:id="382d3b9f-a9d8-4f1c-8d36-999496de41dd" >
+		<ee:transform doc:name="Map Key Value For Delivery Mode" doc:id="3b839c23-4a13-494e-8485-51b06eadd218" >
 			<ee:message >
 			</ee:message>
 			<ee:variables >
@@ -220,8 +194,8 @@ vars.aptosOriginalPayload.'orders' map (value) ->{
 			</ee:variables>
 		</ee:transform>
 	</sub-flow>
-	<sub-flow name="get-dblookup-key-value-for-salesOfOrigin-sub-flow" doc:id="63a1ff1a-40cd-4ee0-b1e8-029f4ef94965" >
-		<ee:transform doc:name="Sales Origin Lookip value" doc:id="5613b63f-ec86-418f-ad02-062e982cd54d" >
+	<sub-flow name="filter-sales-of-origin" doc:id="63a1ff1a-40cd-4ee0-b1e8-029f4ef94965" >
+		<ee:transform doc:name="Map Key Value For Sales Origin" doc:id="5613b63f-ec86-418f-ad02-062e982cd54d" >
 			<ee:message >
 			</ee:message>
 			<ee:variables >
@@ -241,5 +215,52 @@ vars.dmLookupValue map (value) ->{
 ]]></ee:set-variable>
 			</ee:variables>
 		</ee:transform>
+	</sub-flow>
+	<sub-flow name="check-has-more-files-sub-flow" doc:id="f4dff73b-490e-4f98-be6a-f62294e3e447" >
+		<choice doc:name="Choice" doc:id="7333a2aa-e87e-41b8-bd99-55b7431e189a" >
+			<when expression="#[vars.hasMoreFiles == 'true']">
+				<flow-ref doc:name="Aptos To D365 Impl Sub Flow" doc:id="d4f44a9f-a1e5-4c2b-8e7d-32ab63dd26cf" name="aptos-to-d365-impl-flow"/>
+			</when>
+			<otherwise >
+				<logger level="INFO" doc:name="No FIles To Process From Aptos" doc:id="373b5c33-475c-440d-8dfd-2b775de3a9cd" message="#['No Files In Aptos To Process']"/>
+			</otherwise>
+		</choice>
+	</sub-flow>
+		<sub-flow name="s-aptos-api-call-retry-sub-flow" doc:id="aa059c13-20c5-4467-b0a5-7edab0babd81" >
+		<try doc:name="Try" doc:id="2c8cde9f-5888-4690-8ea1-084bcf5f5ada">
+				<flow-ref doc:name="D365 HTTP Try Block" doc:id="3aa441dc-97ba-4010-b853-cb7bdce2c016" name="s-aptos-api-call-http-retry-sub-flow" />
+				<error-handler>
+				<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="588b3123-d3ba-4cf7-ae59-db9a9bbefa81" type="MULE:RETRY_EXHAUSTED,HTTP:RETRY_EXHAUSTED,HTTP:BAD_REQUEST, HTTP:CLIENT_SECURITY, HTTP:CONNECTIVITY, HTTP:FORBIDDEN, HTTP:INTERNAL_SERVER_ERROR, HTTP:METHOD_NOT_ALLOWED, HTTP:NOT_ACCEPTABLE, HTTP:NOT_FOUND, HTTP:PARSING, HTTP:SECURITY, HTTP:SERVICE_UNAVAILABLE, HTTP:TIMEOUT, HTTP:TOO_MANY_REQUESTS, HTTP:UNAUTHORIZED, HTTP:UNSUPPORTED_MEDIA_TYPE, EXPRESSION, STREAM_MAXIMUM_SIZE_EXCEEDED,EXPRESSION">
+					<flow-ref doc:name="Log Error Flow" doc:id="83036206-6ddc-4d14-92e2-e6dd3f25b5bb" name="log-error-sub-flow" />
+					<flow-ref doc:name="Audit Error Flow" doc:id="f788a214-4302-4bdd-9304-ce1558a47ad9" name="audit-error-sub-flow"/>
+				</on-error-propagate>
+				</error-handler>
+			</try>
+	</sub-flow>
+	<sub-flow name="s-aptos-api-call-http-retry-sub-flow" doc:id="719f1f4f-d10d-4cad-aff0-6313deacaeb8" >
+		<until-successful maxRetries="${retry.attempts}" doc:name="Until Successful" doc:id="94b46337-52f4-4791-b876-efa5693f7f3e" millisBetweenRetries="${retry.frequency}">
+			<try doc:name="Try" doc:id="862162c6-5237-4afb-ba2c-7d7d1df1c037" >
+				<http:request method="GET" doc:name="Call Aptos Http Request Configuration" doc:id="9e8de8be-835a-434c-a89d-7846c0d73f4e" config-ref="S_Aptos_Http_Request_Configuration" path="${aptos.getOrdersPath}" target="aptosOriginalPayload" responseTimeout="${response.timeout}">
+			<http:headers ><![CDATA[#[output application/java
+---
+{
+	"Transaction-Id" : vars.transactionId,
+	"Transaction-Start-Time" : vars.transactionStartDate,
+	"Client-Id" : p('aptos.clientId'),
+	"Client-Secret" : p('aptos.clientSecret')
+}]]]></http:headers>
+		</http:request>
+				
+				
+				<error-handler >
+					<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="a5e1eadd-f3cf-4b4f-9a7e-57069af19105" type="HTTP:BAD_REQUEST, HTTP:CLIENT_SECURITY, HTTP:CONNECTIVITY, HTTP:FORBIDDEN, HTTP:INTERNAL_SERVER_ERROR, HTTP:METHOD_NOT_ALLOWED, HTTP:NOT_ACCEPTABLE, HTTP:NOT_FOUND, HTTP:PARSING, HTTP:SECURITY, HTTP:SERVICE_UNAVAILABLE, HTTP:TIMEOUT, HTTP:TOO_MANY_REQUESTS, HTTP:UNAUTHORIZED, HTTP:UNSUPPORTED_MEDIA_TYPE, EXPRESSION, STREAM_MAXIMUM_SIZE_EXCEEDED">
+						<flow-ref doc:name="Log Error Flow" doc:id="0a1f68d2-d868-4c79-af40-7189b6544320" name="log-error-sub-flow" />
+						<flow-ref doc:name="Audit Error Flow" doc:id="62774a1a-e24d-49c4-a942-b02f57f654a0" name="audit-error-sub-flow"/>
+						
+					
+					</on-error-propagate>
+				</error-handler>
+			</try>
+		</until-successful>
 	</sub-flow>
 </mule>

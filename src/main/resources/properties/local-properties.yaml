@@ -44,11 +44,12 @@ smtp:
         
 d365:
   host: "0.0.0.0"
-  port: "8091"
+  port: "80"
   basepath: "/api/v1"
   clientId: "b206a1a7bfbd4e109f591ca5b27631c3"
   clientSecret: "2Cf50B5970B14FC9a94D5aB48Fad1206"
   pickOrdersPath: "/pick/orders"
+  webOrdersPath: "/web/orders"
   
   
 jda:
@@ -90,10 +91,18 @@ lookup:
     
 
 aptos:
-  host: "mule-worker-internal-dev-s-aptos-api.ir-e1.cloudhub.io"
+  host: "localhost"
   port: "8091"
   basepath: "/api/v1"
   clientId: "c1751cc13ad746a8a49c404c966839f7"
   clientSecret: "7d3aFbC44E8e49048935f06A7A2a099d"
-  getOrdersPath: "/orders"       
+  getOrdersPath: "/orders"
+  
+report:
+  host: "localhost"
+  port: "8089"
+  basepath: "/api/v1"
+  clientId: "c1751cc13ad746a8a49c404c966839f7"
+  clientSecret: "7d3aFbC44E8e49048935f06A7A2a099d"
+  ordersPath: "/orders"
     

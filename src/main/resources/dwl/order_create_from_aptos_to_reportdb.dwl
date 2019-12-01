@@ -1,20 +1,22 @@
 %dw 2.0
-output application/json
+output application/json skipNullOn ='everywhere'
 ---
 {
-	"orders": vars.aptosOriginalPayload.orders map (rep, indOfRep)  -> {
+	'orders': vars.aptosOriginalPayload.orders map (rep, indOfRep)  -> {
+		(vars.soLookupValue filter (($."order-no") == rep."order-no") map {
 		'order-no': rep.'order-no',
-		'order-date': rep."order-date" as DateTime,
+		'order-date': if (rep.'order-date' != null) rep.'order-date' else "" as DateTime,
 		'currency': rep.currency,
-		'legal-entity': rep.'legal-entity',
+		'legal-entity': rep.'legal-entity' as String,
 		'language': rep.language,
 		'source': rep.source,
-		'delivery-mode': rep.'delivery-mode',
+		'delivery-mode': $."lookup-key",
 		'store': {
-			'store-id': rep.store."store-id"
+			'store-id': rep.store.'store-id',
+			'store-code': $."lookup-value"
 		},
 		customer: {
-			'customer-id': rep.customer."customer-id",
+			'customer-id': rep.customer.'customer-id',
 			'fullname': rep.customer.fullname,
 			'first-name': rep.customer.'first-name',
 			'last-name': rep.customer.'last-name',
@@ -37,7 +39,11 @@ output application/json
 			'quantity': ordl.quantity,
 			'amount': ordl.amount,
 			'tax-amount': ordl.'tax-amount',
-			'tax-rate': ordl.'tax-rate'
+			'tax-rate': ordl.'tax-rate',
+			promotions: {
+				'promotion-id': if (ordl.promotions.'promotion-id' != null) ordl.promotions.'promotion-id' else "",
+				discount: if (ordl.promotions.discount != null) ordl.promotions.discount else ""
+			} 
 		},
 		payments: rep.payments map (pay, indOfPay) -> {
 			'amount': pay.amount,
@@ -45,6 +51,10 @@ output application/json
 			'payment-mode-card': {
 				'card-number': pay.'payment-mode-card'.'card-number'
 			}
-		}
+		},
+		'tender': {
+        'authorisation': rep.tender.authorisation
+      	}
+		})
 	}
 }
