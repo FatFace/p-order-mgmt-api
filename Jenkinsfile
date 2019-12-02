@@ -18,7 +18,7 @@ pipeline {
         )
         
         string(name: 'MULE_CLOUDHUB_RUNTIME', defaultValue: '4.2.1', description: 'Mule runtime')
-        string(name: 'MULE_APPLICATION_NAME', defaultValue: 'dev-order-mgmt-app', description: 'Unique name of the application [mule artifact] while deploying Anypoint platform')
+        string(name: 'MULE_APPLICATION_NAME', defaultValue: 'dev-b-order-mgmt-app', description: 'Unique name of the application [mule artifact] while deploying Anypoint platform')
         string(name: 'MULE_ENV', defaultValue: 'dev', description: 'Enviroment setting for Mule app/api artifact')
         string(name: 'ENCRYPTION_KEY', defaultValue: 'secure key', description: 'Encryption key needed for only to run munit run')
 	    
@@ -30,8 +30,8 @@ pipeline {
     }
     
  	environment {
-		GITHUB_CREDENTIAL_ID = '0555ce8aa4c346c4234f4f88a69c62c389150e60'
-		GITHUB_REPO_URL = 'https://0555ce8aa4c346c4234f4f88a69c62c389150e60@github.com/FatFace/b-order-mgmt-app.git'		
+		GITHUB_CREDENTIAL_ID = 'd4a78ae8a3204d33df996b54c34237034f8073b7'
+		GITHUB_REPO_URL = 'https://${GITHUB_CREDENTIAL_ID}@github.com/FatFace/b-order-mgmt-app.git'		
  		MULE_CLOUDHUB_URI = 'https://anypoint.mulesoft.com'
  		MULE_CLOUDHUB_USER = 'jenkins@fatface.com'
  		MULE_CLOUDHUB_PASSWORD = 'jenkins123'
@@ -189,7 +189,7 @@ pipeline {
 									git config --global user.name Jenkins-FatFace
 									"""
 	                            				echo  "Performing maven release..."
-	                                 			sh 'mvn clean --batch-mode release:prepare release:perform'
+	                                 			sh 'mvn clean --batch-mode -Dmule.env="${MULE_ENV}" -Dencryption.key="${ENCRYPTION_KEY}" release:prepare release:perform'
 	                        			
 								 
 	                         			}
