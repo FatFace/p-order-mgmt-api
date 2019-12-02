@@ -1,7 +1,7 @@
 is: 
   audit:
-    toggle: "ON"
-    payload: "ON"
+    toggle: "OFF"
+    payload: "OFF"
   logging:
     toggle: "OFF"
 
@@ -21,7 +21,7 @@ d365:
     size: "1"
    
 response:
-  timeout: "30000"
+  timeout: "3000000"
   
 error:
   msg:
