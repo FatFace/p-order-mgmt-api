@@ -1,0 +1,12 @@
+#%RAML 1.0 Trait
+
+usage: Apply this to any method that needs to be overriden in terms of HTTP method that is orginally intended to satisfy use case
+headers:
+  HTTP-Method-Override:  
+    description: |
+      The header property is being set when the intended behaviour of the HTTP method is being overridden to satisfy a business requirement
+    displayName: HTTP-Method-Override
+    enum: ['GET', 'POST', 'PUT', 'DELETE']
+    type: string
+    example: GET
+    required: <<required>>

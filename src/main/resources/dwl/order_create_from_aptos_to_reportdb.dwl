@@ -39,11 +39,7 @@ output application/json skipNullOn ='everywhere'
 			'quantity': ordl.quantity,
 			'amount': ordl.amount,
 			'tax-amount': ordl.'tax-amount',
-			'tax-rate': ordl.'tax-rate',
-			promotions: {
-				'promotion-id': if (ordl.promotions.'promotion-id' != null) ordl.promotions.'promotion-id' else "",
-				discount: if (ordl.promotions.discount != null) ordl.promotions.discount else ""
-			} 
+			'tax-rate': ordl.'tax-rate'
 		},
 		payments: rep.payments map (pay, indOfPay) -> {
 			'amount': pay.amount,

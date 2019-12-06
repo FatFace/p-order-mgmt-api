@@ -17,15 +17,6 @@ http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/
 	<import doc:name="Import" doc:id="eed43ac1-b113-4d2f-8f1a-56620d723652" file="order-aptos-impl.xml" />
 	<munit:test name="order-aptos-impl-test-suite-create-order-details-from-aptos-to-d365-main-flowTest" description="Test" doc:id="8c77df98-b9bf-44b8-85ba-055b4bdf4cf4" >
 		<munit:behavior >
-			<munit-tools:mock-when doc:name="Mock Aptos Http Requester" doc:id="60c3315d-6294-4847-875f-d9bb57c4233b" processor="http:request">
-				<munit-tools:with-attributes >
-					<munit-tools:with-attribute attributeName="doc:name" whereValue="Call Aptos Http Request Configuration" />
-					<munit-tools:with-attribute attributeName="doc:name" whereValue="Call Aptos Http Request Configuration" />
-				</munit-tools:with-attributes>
-				<munit-tools:then-return >
-					<munit-tools:payload value='#[MunitTools::getResourceAsString("sample_data/s-aptos-get-order-response.json")]' mediaType="application/json"/>
-				</munit-tools:then-return>
-			</munit-tools:mock-when>
 			<munit-tools:mock-when doc:name="Mock Report DB Http Requester" doc:id="02a28410-127a-49ee-b9c8-dfc4db60018b" processor="http:request">
 				<munit-tools:with-attributes >
 					<munit-tools:with-attribute attributeName="doc:name" whereValue="Call Report DB Http Request Configuration" />
@@ -56,6 +47,7 @@ http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/
 			</munit-tools:mock-when>
 		</munit:behavior>
 		<munit:execution >
+			<set-payload value='#[MunitTools::getResourceAsString("sample_data/s-aptos-get-order-request.json"]' doc:name="Set Payload" doc:id="51dec41f-0d2e-4e04-bfa0-7b20bbe9d0a3" />
 			<ee:transform doc:name="Transform Message" doc:id="a0c956f7-fb3a-4e1d-9795-228b12232175" >
 				<ee:message >
 					<ee:set-attributes ><![CDATA[%dw 2.0
@@ -190,7 +182,7 @@ output application/json
 }]]></ee:set-variable>
 				</ee:variables>
 			</ee:transform>
-			<flow-ref doc:name="Flow-ref to create-order-details-from-aptos-to-d365-main-flow" doc:id="61232f70-d1d7-4a0c-8baa-252057f6b820" name="create-order-details-from-aptos-to-d365-main-flow"/>
+			<flow-ref doc:name="Flow-ref to create-order-details-from-aptos-to-d365-main-flow" doc:id="61232f70-d1d7-4a0c-8baa-252057f6b820" name="post:\orders:application\json:p-order-mgmt-api-config" />
 		</munit:execution>
 		<munit:validation >
 			<munit-tools:assert-that doc:name="Assert that" doc:id="a4c72831-335a-4d1e-b29d-2b63e1c2d9c3" is="#[MunitTools::notNullValue()]" expression="#[payload]"/>

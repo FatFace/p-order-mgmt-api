@@ -1,6 +1,14 @@
+http:
+  basePath: "/api/v1/*"
+  host: "0.0.0.0"
+  private:
+    port: "8091"
+  consolePath: "/console/*"
+
+
 autodiscovery:
   id: ""
-  flow: "b-order-mgmt-app"
+  flow: "p-order-mgmt-api"
   
 scheduler:
   cron:

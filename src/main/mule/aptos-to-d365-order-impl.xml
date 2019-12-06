@@ -6,64 +6,13 @@
 http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
 http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
 http://www.mulesoft.org/schema/mule/os http://www.mulesoft.org/schema/mule/os/current/mule-os.xsd">
-	
-	<flow name="create-order-details-from-aptos-to-d365-main-flow" doc:id="87e455f3-7f8d-4733-af8c-46d3c419e6f5" >
-		<!-- <http:listener doc:name="Listener" doc:id="832488fe-63da-44b4-b8b7-338d9983e2e1" config-ref="b-order-mgmt-app-httpListenerConfig" path="/aptos" allowedMethods="POST" /> -->
-		<scheduler doc:name="Scheduler" doc:id="fd04f5be-0c95-4448-afc5-f48edec560be" >
-			<scheduling-strategy >
-				<cron expression="${createorder.cron.expression}" />
-			</scheduling-strategy>
-		</scheduler>
-		<ee:transform doc:name="Set Flow Name and Transaction Start Date" doc:id="793080ff-40b3-424f-9f42-1cef21c19619">
-			<ee:message>
-			</ee:message>
-			<ee:variables>
-				<ee:set-variable variableName="flowName"><![CDATA[%dw 2.0
-output application/java
----
-
-'create-order-details-from-aptos-to-d365-main-flow']]></ee:set-variable>
-				<ee:set-variable variableName="transactionStartDate"><![CDATA[%dw 2.0
-output application/java
----
-now() as String {format : "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"}]]></ee:set-variable>
-			</ee:variables>
-		</ee:transform>
-		<flow-ref doc:name="Log Receiver Entry" doc:id="f9b3b7c6-4540-46f8-8ff5-729b4ecc0b18" name="log-receiver-entry-sub-flow"/>
-		<flow-ref doc:name="Audit Receiver Entry" doc:id="a2023f50-fa3f-43db-9bc1-59269bb00786" name="audit-receiver-entry-sub-flow"/>
-		<flow-ref doc:name="Call Aptos To D365 Impl Sub Flow" doc:id="31570d8a-5151-4e8e-8e37-8c2328f19ef5" name="aptos-to-d365-impl-flow"/>
-		<flow-ref doc:name="Log Dispatcher Exit" doc:id="66c9ecc1-6f5d-4f22-9270-c9a8b666e05c" name="log-dispatcher-exit-sub-flow"/>
-		<flow-ref doc:name="Audit Dispatcher Exit" doc:id="eeb0d946-cb6c-47a3-808f-6742f0c53e9a" name="audit-dispatcher-exit-sub-flow"/>
-		
-	</flow>
 	<sub-flow name="aptos-to-d365-impl-flow" doc:id="d278a3b5-d6b8-45b8-8ba9-cbc56e0954c7" >
 		
 		<set-variable value="#['aptos-to-d365-impl-flow']" doc:name="Set Flow Name" doc:id="f1034d0e-4f80-47f7-b761-48bb51f78366" variableName="flowName"/>
-		<flow-ref doc:name="Log Process Entry" doc:id="78129e6c-1002-4aa5-8e16-c743b3053a70" name="log-process-entry-sub-flow"/>
-		<flow-ref doc:name="Audit Process Entry" doc:id="56273a1e-e716-4330-b964-dbbdffd68116" name="audit-process-entry-sub-flow"/>
-		<until-successful maxRetries="${retry.attempts}" doc:name="Until Successful" doc:id="c658ef81-344c-488a-8840-6f4415cfed83" millisBetweenRetries="${retry.frequency}">
-			<http:request method="GET" doc:name="Call Aptos Http Request Configuration" doc:id="3853c84f-21e6-480e-8611-a00d39c0913d" config-ref="S_Aptos_Http_Request_Configuration" path="${aptos.getOrdersPath}" target="aptosOriginalPayload" responseTimeout="${response.timeout}">
-			<http:headers><![CDATA[#[output application/java
----
-{
-	"Transaction-Id" : vars.transactionId,
-	"Transaction-Start-Time" : vars.transactionStartDate,
-	"Client-Id" : p('aptos.clientId'),
-	"Client-Secret" : p('aptos.clientSecret')
-}]]]></http:headers>
-		</http:request>
-		</until-successful>
-		<flow-ref doc:name="Audit Process Exit" doc:id="78de0b85-4965-4e42-8bd1-784fe2da922c" name="audit-process-exit-sub-flow"/>
-		<flow-ref doc:name="Log Process Exit" doc:id="b6f2064b-3061-4bc1-8077-71e16ddfc6d9" name="log-process-exit-sub-flow"/>
-		<ee:transform doc:name="Set Header Has More Files and Input Payload" doc:id="69945192-6aa6-45bb-864c-90f13f6f948b">
+		<ee:transform doc:name="Set Input Payload" doc:id="69945192-6aa6-45bb-864c-90f13f6f948b">
 			<ee:message>
 			</ee:message>
 			<ee:variables>
-				<ee:set-variable variableName="hasMoreFiles"><![CDATA[%dw 2.0
-output application/java
----
-
-(if (attributes.headers.'has-more-files' != null) attributes.headers.'has-more-files' else "" )]]></ee:set-variable>
 				<ee:set-variable variableName="aptosOriginalPayload"><![CDATA[%dw 2.0
 output application/json
 ---
@@ -110,13 +59,13 @@ payload]]></ee:set-variable>
 						<ee:set-variable resource="dwl/order_create_from_aptos_d365.dwl" variableName="d365InputPayload" />
 					</ee:variables>
 				</ee:transform>
-				<!-- <flow-ref doc:name="Log Process Entry" doc:id="4af958a0-2719-4bd8-9749-e1dbf49f2df6" name="log-process-entry-sub-flow"/>
+				<flow-ref doc:name="Log Process Entry" doc:id="4af958a0-2719-4bd8-9749-e1dbf49f2df6" name="log-process-entry-sub-flow"/>
 				<flow-ref doc:name="Audit Process Entry" doc:id="6177ca9e-227e-4e64-8f50-d74c96fc1010" name="audit-process-entry-sub-flow"/>
 				<until-successful maxRetries="${retry.attempts}" doc:name="Until Successful" doc:id="2f77d7f8-8044-44b9-9caf-2c267a1b2b18" millisBetweenRetries="${retry.frequency}">
 					<http:request method="POST" doc:name="Call D365 Http Request Configuration" doc:id="c1119184-6b74-4aea-891c-82c49922f420" config-ref="s_D365_Http_Request_configuration" path="${d365.webOrdersPath}" responseTimeout="${response.timeout}">
 			<http:body><![CDATA[#[vars.d365InputPayload]]]></http:body>
 					<http:headers><![CDATA[#[output application/java
-
+---
 {
 	"Transaction-Id" : vars.transactionId,
 	"Transaction-Start-Time" : vars.transactionStartDate,
@@ -127,8 +76,7 @@ payload]]></ee:set-variable>
 		</http:request>
 				</until-successful>
 				<flow-ref doc:name="Log Process Exit" doc:id="c1e82877-eccf-4a5c-b18b-23cc801cd900" name="log-process-exit-sub-flow"/>
-				<flow-ref doc:name="Audit Process Exit" doc:id="d73f8908-5b76-4554-8e2e-f1ab0c83592a" name="audit-process-exit-sub-flow"/> -->
-				<flow-ref doc:name="Chech Has More Files In Aptos" doc:id="bf6988a0-ad8c-4639-874f-bcb13d947a05" name="check-has-more-files-sub-flow"/>
+				<flow-ref doc:name="Audit Process Exit" doc:id="d73f8908-5b76-4554-8e2e-f1ab0c83592a" name="audit-process-exit-sub-flow"/>
 			
 </when>
 			<otherwise >
@@ -257,27 +205,5 @@ vars.dmLookupValue map (value) ->{
 ]]></ee:set-variable>
 			</ee:variables>
 		</ee:transform>
-	</sub-flow>
-	<sub-flow name="check-has-more-files-sub-flow" doc:id="f4dff73b-490e-4f98-be6a-f62294e3e447" >
-		<choice doc:name="Choice" doc:id="7333a2aa-e87e-41b8-bd99-55b7431e189a" >
-			<when expression="#[vars.hasMoreFiles == 'true']">
-				<flow-ref doc:name="Aptos To D365 Impl Sub Flow" doc:id="d4f44a9f-a1e5-4c2b-8e7d-32ab63dd26cf" name="aptos-to-d365-impl-flow"/>
-			</when>
-			<otherwise >
-				<logger level="INFO" doc:name="No FIles To Process From Aptos" doc:id="373b5c33-475c-440d-8dfd-2b775de3a9cd" message="#['No Files In Aptos To Process']"/>
-				<ee:transform doc:name="Set Status Message" doc:id="4b803f18-0fc5-4bea-95f4-40f049d47e28" >
-					<ee:message >
-						<ee:set-payload ><![CDATA[%dw 2.0
-output application/json
----
-
-{
-	responseCode: attributes.statusCode,
-	responseText: "SUCCESS"
-}]]></ee:set-payload>
-					</ee:message>
-				</ee:transform>
-			</otherwise>
-		</choice>
 	</sub-flow>
 </mule>

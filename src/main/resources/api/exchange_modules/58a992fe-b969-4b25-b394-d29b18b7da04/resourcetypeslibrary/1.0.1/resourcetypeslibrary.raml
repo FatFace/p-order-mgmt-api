@@ -1,0 +1,57 @@
+#%RAML 1.0 Library
+usage: This library encapsulates all resource types and provides a standard, common format 
+uses: 
+  commonResponse: responseslibrary.raml
+resourceTypes: 
+  collection:
+    description: A collection of <<resourcePathName>>
+    is: [commonResponse.HTTP-400, commonResponse.HTTP-500]   
+    post?:
+      is: [commonResponse.HTTP-200, commonResponse.HTTP-201, commonResponse.HTTP-202]
+      description: This method is used to create a new <<resourcePathName | !singularize>>
+      body: 
+        application/json:
+          type: object
+          # example: <<example>>
+          
+    get?:
+      is: [commonResponse.HTTP-200]
+      description: This method is used to get the list of <<resourcePathName>>
+      responses: 
+        200:
+          body: 
+            application/json:
+              # example: <<example>>
+
+  member:
+    description: A single member of a <<resourcePathName | !singularize>>
+    is: [commonResponse.HTTP-400, commonResponse.HTTP-500]
+    delete?:
+      is: [commonResponse.HTTP-200, commonResponse.HTTP-202, commonResponse.HTTP-204]
+      description: This method is used to delete the <<resourcePathName>> data
+      responses: 
+        200:
+          body: 
+            application/json:
+              example: |
+                { "response" : 0 }           
+    put?:
+      is: [commonResponse.HTTP-200, commonResponse.HTTP-201, commonResponse.HTTP-204]
+      description: This method is used to update the <<resourcePathName>>
+      body: 
+        application/json:
+          # example: <<example>>
+      responses: 
+        200:
+          body: 
+            application/json:
+              example: |
+                { "response" : 0 }              
+    get?:
+      is: [commonResponse.HTTP-200]
+      description: This method is used to get the a <<resourcePathName | !singularize>>
+      responses: 
+        200:
+          body: 
+            application/json:
+              # example: <<example>>

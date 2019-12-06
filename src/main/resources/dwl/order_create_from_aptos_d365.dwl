@@ -46,11 +46,7 @@ output application/json
 				'tax-rate': if (ordl.'tax-rate' != null) ordl.'tax-rate' else '',
 				'sales-price': ordl.'sales-price',
 				'barcode': if(ordl.barcode != null) ordl.barcode else '',
-				'quantity': ordl.quantity,
-				promotions: {
-					'promotion-id': if (ordl.promotions.'promotion-id' != null) ordl.promotions.'promotion-id' else '',
-					discount: if (ordl.proomotions.discount != null) ordl.promotions.discount else ''
-				}
+				'quantity': ordl.quantity
 			},
 			payments: ord.payments map (pay, indOfPay) -> {
 				'amount': if (pay.amount != null) pay.amount else '',
