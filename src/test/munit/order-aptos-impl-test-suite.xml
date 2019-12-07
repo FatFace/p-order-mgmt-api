@@ -14,7 +14,8 @@ http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/
 	<import doc:name="Import" doc:id="55afe77f-e635-48a2-952e-9b280cac8914" file="common-logging-framework.xml" />
 	<import doc:name="Import" doc:id="661b8ddd-f2d7-4a9b-ab7e-35187d393b2b" file="globals.xml" />
 	<import doc:name="Import" doc:id="764e4fc6-6e27-427c-89c7-bce7ac59fe17" file="order-managment-app.xml" />
-	<import doc:name="Import" doc:id="eed43ac1-b113-4d2f-8f1a-56620d723652" file="order-aptos-impl.xml" />
+	<import doc:name="Import" doc:id="eed43ac1-b113-4d2f-8f1a-56620d723652" file="p-order-mgmt-api.xml" />
+	<import doc:name="Import" doc:id="a5f6ebf3-d20f-4b3f-9813-39fa10a2cceb" file="aptos-to-d365-order-impl.xml" />
 	<munit:test name="order-aptos-impl-test-suite-create-order-details-from-aptos-to-d365-main-flowTest" description="Test" doc:id="8c77df98-b9bf-44b8-85ba-055b4bdf4cf4" >
 		<munit:behavior >
 			<munit-tools:mock-when doc:name="Mock Report DB Http Requester" doc:id="02a28410-127a-49ee-b9c8-dfc4db60018b" processor="http:request">
@@ -47,9 +48,92 @@ http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/
 			</munit-tools:mock-when>
 		</munit:behavior>
 		<munit:execution >
-			<set-payload value='#[MunitTools::getResourceAsString("sample_data/s-aptos-get-order-request.json"]' doc:name="Set Payload" doc:id="51dec41f-0d2e-4e04-bfa0-7b20bbe9d0a3" />
 			<ee:transform doc:name="Transform Message" doc:id="a0c956f7-fb3a-4e1d-9795-228b12232175" >
 				<ee:message >
+					<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+
+{
+  "orders": [
+    {
+      "legal-entity": "1FFL",
+      "order-no": "110697408",
+      "order-date": "2019-10-09T00:00:00",
+      "source": "APTOS",
+      "currency": null,
+      "language": "en-gb",
+      "delivery-mode": "5",
+      "store": {
+        "store-id": "70012"
+      },
+      "customer": {
+        "customer-id": "9991701786",
+        "fullname": "MrRobertFlux",
+        "first-name": "Robert",
+        "last-name": "Flux",
+        "telephone": "07717276819",
+        "email": "robflux@hotmail.com",
+        "shipping-address": {
+          "state": "East Cowes",
+          "postcode": "PO32 6RX",
+          "street": "14 Osborne RoadIsleOfWight",
+          "city": null,
+          "country": "East Cowes"
+        },
+        "billing-address": {
+          "street": "14 Osborne RoadIsleOfWight",
+          "city": null,
+          "postcode": "PO32 6RX",
+          "country": "GBR",
+          "state": "East Cowes"
+        }
+      },
+      "orderlines": [
+        {
+          "item-id": "1",
+          "item-name": "BELLA JUMPER PPL-DEEP BERRY 10 9FWA",
+          "sales-price": "49.5",
+          "barcode": "946160",
+          "quantity": "1",
+          "amount": "19.8",
+          "tax-amount": "3.3",
+          "tax-rate": "20",
+          "promotions": {
+            "promotion-id": "Staff Discount 60%",
+            "discount": "-29.7"
+          }
+        },
+        {
+          "item-id": "2",
+          "item-name": "Pickup Delivery",
+          "sales-price": "0",
+          "barcode": null,
+          "quantity": "1",
+          "amount": "0",
+          "tax-amount": "0",
+          "tax-rate": "0",
+          "promotions": {
+            "promotion-id": "Staff Discount 60%",
+            "discount": "0"
+          }
+        }
+      ],
+      "payments": [
+        {
+          "amount": "19.8",
+          "payment-mode": "Visa Debit",
+          "payment-mode-card": {
+            "card-number": "******0000005492"
+          }
+        }
+      ],
+      "tender": {
+        "authorisation": "009831"
+      }
+    }
+  ]
+}]]></ee:set-payload>
 					<ee:set-attributes ><![CDATA[%dw 2.0
 output application/json
 ---
@@ -179,6 +263,89 @@ output application/json
         'authorisation': "63456fghjghfg"
       	}
 	}]
+}]]></ee:set-variable>
+					<ee:set-variable variableName="aptosOriginalPayload" ><![CDATA[%dw 2.0
+output application/json
+---
+{
+  "orders": [
+    {
+      "legal-entity": "1FFL",
+      "order-no": "110697408",
+      "order-date": "2019-10-09T00:00:00",
+      "source": "APTOS",
+      "currency": null,
+      "language": "en-gb",
+      "delivery-mode": "5",
+      "store": {
+        "store-id": "70012"
+      },
+      "customer": {
+        "customer-id": "9991701786",
+        "fullname": "MrRobertFlux",
+        "first-name": "Robert",
+        "last-name": "Flux",
+        "telephone": "07717276819",
+        "email": "robflux@hotmail.com",
+        "shipping-address": {
+          "state": "East Cowes",
+          "postcode": "PO32 6RX",
+          "street": "14 Osborne RoadIsleOfWight",
+          "city": null,
+          "country": "East Cowes"
+        },
+        "billing-address": {
+          "street": "14 Osborne RoadIsleOfWight",
+          "city": null,
+          "postcode": "PO32 6RX",
+          "country": "GBR",
+          "state": "East Cowes"
+        }
+      },
+      "orderlines": [
+        {
+          "item-id": "1",
+          "item-name": "BELLA JUMPER PPL-DEEP BERRY 10 9FWA",
+          "sales-price": "49.5",
+          "barcode": "946160",
+          "quantity": "1",
+          "amount": "19.8",
+          "tax-amount": "3.3",
+          "tax-rate": "20",
+          "promotions": {
+            "promotion-id": "Staff Discount 60%",
+            "discount": "-29.7"
+          }
+        },
+        {
+          "item-id": "2",
+          "item-name": "Pickup Delivery",
+          "sales-price": "0",
+          "barcode": null,
+          "quantity": "1",
+          "amount": "0",
+          "tax-amount": "0",
+          "tax-rate": "0",
+          "promotions": {
+            "promotion-id": "Staff Discount 60%",
+            "discount": "0"
+          }
+        }
+      ],
+      "payments": [
+        {
+          "amount": "19.8",
+          "payment-mode": "Visa Debit",
+          "payment-mode-card": {
+            "card-number": "******0000005492"
+          }
+        }
+      ],
+      "tender": {
+        "authorisation": "009831"
+      }
+    }
+  ]
 }]]></ee:set-variable>
 				</ee:variables>
 			</ee:transform>
