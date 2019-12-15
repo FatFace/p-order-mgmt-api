@@ -35,7 +35,7 @@ output application/json skipNullOn ='everywhere'
 			'item-id': ordl.'item-id',
 			'item-name': ordl.'item-name',
 			'sales-price': ordl.'sales-price',
-			'barcode': ordl.barcode,
+			'barcode': Mule::lookup("common-template-check-digit-lookup-flow", ordl.barcode),
 			'quantity': ordl.quantity,
 			'amount': ordl.amount,
 			'tax-amount': ordl.'tax-amount',

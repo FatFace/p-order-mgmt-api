@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<mule xmlns:os="http://www.mulesoft.org/schema/mule/os" xmlns:http="http://www.mulesoft.org/schema/mule/http"
-	xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
-	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+<mule xmlns:java="http://www.mulesoft.org/schema/mule/java" xmlns:os="http://www.mulesoft.org/schema/mule/os"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
 http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
 http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
-http://www.mulesoft.org/schema/mule/os http://www.mulesoft.org/schema/mule/os/current/mule-os.xsd">
+http://www.mulesoft.org/schema/mule/os http://www.mulesoft.org/schema/mule/os/current/mule-os.xsd
+http://www.mulesoft.org/schema/mule/java http://www.mulesoft.org/schema/mule/java/current/mule-java.xsd">
 	<sub-flow name="aptos-to-d365-impl-flow" doc:id="d278a3b5-d6b8-45b8-8ba9-cbc56e0954c7" >
 		
 		<set-variable value="#['aptos-to-d365-impl-flow']" doc:name="Set Flow Name" doc:id="f1034d0e-4f80-47f7-b761-48bb51f78366" variableName="flowName"/>
@@ -206,4 +207,11 @@ vars.dmLookupValue map (value) ->{
 			</ee:variables>
 		</ee:transform>
 	</sub-flow>
+	<flow name="common-template-check-digit-lookup-flow" doc:id="97b5a794-12b6-4e8d-b482-f770a65f6e81" >
+		<java:invoke-static doc:name="Invoke java to calculate check digit" doc:id="5de7fb5c-dc94-488a-a1c6-5ec6fe0960e3" class="com.fatface.mule.utils.ProductSKUCheckDigitCal" method="getCheckSum(String)">
+			<java:args ><![CDATA[#[{
+	arg0: payload as String
+}]]]></java:args>
+		</java:invoke-static>
+	</flow>
 </mule>

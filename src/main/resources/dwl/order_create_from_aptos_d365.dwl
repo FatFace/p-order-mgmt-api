@@ -45,7 +45,7 @@ output application/json
 				'item-name': if (ordl.'item-name' != null) ordl.'item-name' else '',
 				'tax-rate': if (ordl.'tax-rate' != null) ordl.'tax-rate' else '',
 				'sales-price': ordl.'sales-price',
-				'barcode': if(ordl.barcode != null) ordl.barcode else '',
+				'barcode': Mule::lookup("common-template-check-digit-lookup-flow", ordl.barcode),
 				'quantity': ordl.quantity
 			},
 			payments: ord.payments map (pay, indOfPay) -> {
