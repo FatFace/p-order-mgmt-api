@@ -56,6 +56,10 @@ d365:
   basepath: "/api/v1"
   clientId: "c1751cc13ad746a8a49c404c966839f7"
   clientSecret: "7d3aFbC44E8e49048935f06A7A2a099d"
+  getCustomerGroupPath: "/data/CustomerGroups"
+  updateProductsPath: "/data/products"
+  updateManifestPath: "/pick/manifests"
+  updateOrderExtractPath: "/pick/orders"
   pickOrdersPath: "/pick/orders"
   webOrdersPath: "/web/orders"
 
@@ -95,6 +99,23 @@ lookup:
         type: "SALES_ORIGIN"
         category: "MODE_OF_DELIVERY"
         source: "APTOS"
+
+cron:
+  expression: 
+    manifest: "0 0/10 * 1/1 * ? *"
+    orderextract: "0 0 * ? * * *"    
+   
+orders:
+  export:
+    sftp:
+      errorfilepath:  "/FatFace/sftp/MuleSoftIntegration/sit/error/outgoing/orderData/jdaOrder"
+send:
+  manifest:
+    queue: "true"
+
+pick:
+  orders:
+    orderType: "WEB"
   
 report:
   host: "mule-worker-internal-dev-s-reportdb-api.ir-e1.cloudhub.io"

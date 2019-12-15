@@ -106,7 +106,23 @@ lookup:
         type: "SALES_ORIGIN"
         category: "MODE_OF_DELIVERY"
         source: "APTOS"
-  
+cron:
+  expression: 
+    manifest: "0 0/10 * 1/1 * ? *"
+    orderextract: "0 0 * ? * * *"    
+   
+orders:
+  export:
+    sftp:
+      errorfilepath:  "/FatFace/sftp/MuleSoftIntegration/sit/error/outgoing/orderData/jdaOrder"
+send:
+  manifest:
+    queue: "true"
+
+pick:
+  orders:
+    orderType: "WEB"
+    
 report:
   host: "mule-worker-internal-sit-s-reportdb-api.ir-e1.cloudhub.io"
   port: "8091"
