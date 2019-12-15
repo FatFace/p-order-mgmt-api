@@ -13,10 +13,6 @@ autodiscovery:
 scheduler:
   cron:
     expression: "0 0/15 * 1/1 * ? *"
-    
-createorder:
-  cron:
-    expression: " 0 0/5 * 1/1 * ? *"
 
 cloudhub:
   username: "![Wkd/i0mr4M5DRXGPkpxl3A+qPh6NASJ83cobwz2qfXs=]"

@@ -1,6 +1,6 @@
 autodiscovery:
   id: ""
-  flow: "b-order-mgmt-app"
+  flow: "p-order-mgmt-api"
   
 scheduler:
   cron:
@@ -43,36 +43,66 @@ smtp:
   subject: "Fatface API Exception"
         
 d365:
-  host: "mule-worker-internal-sit-s-d365-api.ir-e1.cloudhub.io"
+  host: "mule-worker-internal-dev-s-d365-api.ir-e1.cloudhub.io"
   port: "8091"
   basepath: "/api/v1"
-  clientId: "a1c25cbc41dc4a43a1c5c3ecbf1251c5"
-  clientSecret: "C3a2082C36B54f5bbba606E704e11bDE"
+  clientId: "c1751cc13ad746a8a49c404c966839f7"
+  clientSecret: "7d3aFbC44E8e49048935f06A7A2a099d"
   pickOrdersPath: "/pick/orders"
+  webOrdersPath: "/web/orders"
   
   
 jda:
-  host: "mule-worker-internal-sit-s-jda-data-int.ir-e1.cloudhub.io"
+  host: "mule-worker-internal-dev-s-jda-data-int.ir-e1.cloudhub.io"
   port: "8092"
   basepath: "/api/v1"
   ordersPath: "/orders"
-  clientId: "a1c25cbc41dc4a43a1c5c3ecbf1251c5"
-  clientSecret: "C3a2082C36B54f5bbba606E704e11bDE"
+  clientId: "c1751cc13ad746a8a49c404c966839f7"
+  clientSecret: "7d3aFbC44E8e49048935f06A7A2a099d"
   jks:
     password: "![yqrYtFIRqm28xrunLqR/2kqfcVd97HqoY0AWEfF+m8M=]"
-  
+
+
 lookup:
-  host: "mule-worker-internal-sit-s-dblookup-api.ir-e1.cloudhub.io"
-  port: "8091"
+  host: "sit-s-dblookup-api.ir-e1.cloudhub.io"
+  port: "80"
   basePath: "/api/v1"
   dbLookupPath: "/lookups"
+  aptos:
+    modeOfDelivery:
+      key: "MODE_OF_DELIVERY-DEPT-APTOS"
+    salesOfOrigin:
+      key: "SALES_ORIGIN-MODE_OF_DELIVERY-APTOS"
   key: "ORDER_TYPE-MODE_OF_DELIVERY-D365"
-  clientId: "a1c25cbc41dc4a43a1c5c3ecbf1251c5"
-  clientSecret: "C3a2082C36B54f5bbba606E704e11bDE"
+  clientId: "1234"
+  clientSecret: "4321"
   queryParam:
     type: "ORDER_TYPE"
     catgeory: "MODE_OF_DELIVERY"
     source: "D365"
+    aptos:
+      modeOfDelivery:
+        type: "MODE_OF_DELIVERY"
+        category: "DEPT"
+        source: "APTOS"
+      salesOfOrigin:
+        type: "SALES_ORIGIN"
+        category: "MODE_OF_DELIVERY"
+        source: "APTOS"
     
-        
-    
+
+aptos:
+  host: "sit-s-aptos-api.ir-e1.cloudhub.io"
+  port: "8091"
+  basepath: "/api/v1"
+  clientId: "c1751cc13ad746a8a49c404c966839f7"
+  clientSecret: "7d3aFbC44E8e49048935f06A7A2a099d"
+  getOrdersPath: "/orders"
+  
+report:
+  host: "sit-s-reportdb-api.ir-e1.cloudhub.io"
+  port: "8097"
+  basepath: "/api/v1"
+  clientId: "c1751cc13ad746a8a49c404c966839f7"
+  clientSecret: "7d3aFbC44E8e49048935f06A7A2a099d"
+  ordersPath: "/orders"

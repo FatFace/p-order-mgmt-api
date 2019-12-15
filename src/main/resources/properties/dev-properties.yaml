@@ -1,6 +1,6 @@
 autodiscovery:
   id: ""
-  flow: "b-order-mgmt-app"
+  flow: "p-order-mgmt-api"
   
 scheduler:
   cron:
@@ -49,6 +49,7 @@ d365:
   clientId: "c1751cc13ad746a8a49c404c966839f7"
   clientSecret: "7d3aFbC44E8e49048935f06A7A2a099d"
   pickOrdersPath: "/pick/orders"
+  webOrdersPath: "/web/orders"
   
   
 jda:
@@ -60,29 +61,48 @@ jda:
   clientSecret: "7d3aFbC44E8e49048935f06A7A2a099d"
   jks:
     password: "![yqrYtFIRqm28xrunLqR/2kqfcVd97HqoY0AWEfF+m8M=]"
-  
+
+
 lookup:
-  host: "mule-worker-internal-dev-s-dblookup-api.ir-e1.cloudhub.io"
-  port: "8091"
+  host: "dev-s-dblookup-api.ir-e1.cloudhub.io"
+  port: "80"
   basePath: "/api/v1"
   dbLookupPath: "/lookups"
   aptos:
     modeOfDelivery:
       key: "MODE_OF_DELIVERY-DEPT-APTOS"
+    salesOfOrigin:
+      key: "SALES_ORIGIN-MODE_OF_DELIVERY-APTOS"
   key: "ORDER_TYPE-MODE_OF_DELIVERY-D365"
-  clientId: "c1751cc13ad746a8a49c404c966839f7"
-  clientSecret: "7d3aFbC44E8e49048935f06A7A2a099d"
+  clientId: "1234"
+  clientSecret: "4321"
   queryParam:
     type: "ORDER_TYPE"
     catgeory: "MODE_OF_DELIVERY"
     source: "D365"
+    aptos:
+      modeOfDelivery:
+        type: "MODE_OF_DELIVERY"
+        category: "DEPT"
+        source: "APTOS"
+      salesOfOrigin:
+        type: "SALES_ORIGIN"
+        category: "MODE_OF_DELIVERY"
+        source: "APTOS"
     
-   
-    
+
 aptos:
-  host: "mule-worker-internal-dev-s-aptos-api.ir-e1.cloudhub.io"
+  host: "dev-s-aptos-api.ir-e1.cloudhub.io"
   port: "8091"
   basepath: "/api/v1"
   clientId: "c1751cc13ad746a8a49c404c966839f7"
   clientSecret: "7d3aFbC44E8e49048935f06A7A2a099d"
   getOrdersPath: "/orders"
+  
+report:
+  host: "dev-s-reportdb-api.ir-e1.cloudhub.io"
+  port: "8097"
+  basepath: "/api/v1"
+  clientId: "c1751cc13ad746a8a49c404c966839f7"
+  clientSecret: "7d3aFbC44E8e49048935f06A7A2a099d"
+  ordersPath: "/orders"
