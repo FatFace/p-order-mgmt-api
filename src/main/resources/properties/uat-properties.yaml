@@ -9,7 +9,6 @@ api:
   discovery:
     id: ""
   
-  
 scheduler:
   cron:
     expression: "0 0/15 * 1/1 * ? *"
@@ -40,9 +39,13 @@ sqs:
   queue:
     target:
       inventory: "Inventory"
+      manifest: "shipping-manifest-q"
+      order: "order-extract-q"
     url: 
       reprocessingQueue: "https://sqs.eu-west-1.amazonaws.com/691628577374/msg-reprocessing-q"
       targetQueueUrl: "https://sqs.eu-west-1.amazonaws.com/691628577374/inventory-q"
+      manifestQueueUrl: "https://sqs.eu-west-1.amazonaws.com/691628577374/shipping-manifest-q"
+      orderQueueUrl: "https://sqs.eu-west-1.amazonaws.com/691628577374/order-extract-q"
 smtp:
   host: "![rpQtD0vL4qh+Uema8l2LJxRngvgfBbF6l4RD5XEkF7Y=]"
   port: "![jd2yTmc7NHA+FUYVXGfwbQ==]"
@@ -56,24 +59,37 @@ d365:
   basepath: "/api/v1"
   clientId: "a1c25cbc41dc4a43a1c5c3ecbf1251c5"
   clientSecret: "C3a2082C36B54f5bbba606E704e11bDE"
+  getCustomerGroupPath: "/data/CustomerGroups"
+  updateProductsPath: "/data/products"     
+  updateManifestPath: "/pick/manifests"
+  updateOrderExtractPath: "/pick/orders" 
   pickOrdersPath: "/pick/orders"
-  
-  
+  webOrdersPath: "/web/orders"
+
 jda:
   host: "mule-worker-internal-sit-s-jda-data-int.ir-e1.cloudhub.io"
   port: "8092"
   basepath: "/api/v1"
-  ordersPath: "/orders"
   clientId: "a1c25cbc41dc4a43a1c5c3ecbf1251c5"
   clientSecret: "C3a2082C36B54f5bbba606E704e11bDE"
+
   jks:
     password: "![yqrYtFIRqm28xrunLqR/2kqfcVd97HqoY0AWEfF+m8M=]"
-  
+  orders:
+    path: "/pick/orders"
+  ordersPath: "/orders"  
+  manifests:
+    path: "/pick/manifests" 
 lookup:
   host: "mule-worker-internal-sit-s-dblookup-api.ir-e1.cloudhub.io"
   port: "8091"
   basePath: "/api/v1"
   dbLookupPath: "/lookups"
+  aptos:
+    modeOfDelivery:
+      key: "MODE_OF_DELIVERY-DEPT-APTOS"
+    salesOfOrigin:
+      key: "SALES_ORIGIN-MODE_OF_DELIVERY-APTOS"
   key: "ORDER_TYPE-MODE_OF_DELIVERY-D365"
   clientId: "a1c25cbc41dc4a43a1c5c3ecbf1251c5"
   clientSecret: "C3a2082C36B54f5bbba606E704e11bDE"
@@ -81,6 +97,20 @@ lookup:
     type: "ORDER_TYPE"
     catgeory: "MODE_OF_DELIVERY"
     source: "D365"
-    
-        
-    
+    aptos:
+      modeOfDelivery:
+        type: "MODE_OF_DELIVERY"
+        category: "DEPT"
+        source: "APTOS"
+      salesOfOrigin:
+        type: "SALES_ORIGIN"
+        category: "MODE_OF_DELIVERY"
+        source: "APTOS"
+  
+report:
+  host: "mule-worker-internal-sit-s-reportdb-api.ir-e1.cloudhub.io"
+  port: "8091"
+  basepath: "/api/v1"
+  clientId: "a1c25cbc41dc4a43a1c5c3ecbf1251c5"
+  clientSecret: "C3a2082C36B54f5bbba606E704e11bDE"
+  ordersPath: "/orders"

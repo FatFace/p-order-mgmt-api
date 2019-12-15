@@ -80,8 +80,8 @@ lookup:
     salesOfOrigin:
       key: "SALES_ORIGIN-MODE_OF_DELIVERY-APTOS"
   key: "ORDER_TYPE-MODE_OF_DELIVERY-D365"
-  clientId: "1234"
-  clientSecret: "4321"
+  clientId: "c1751cc13ad746a8a49c404c966839f7"
+  clientSecret: "7d3aFbC44E8e49048935f06A7A2a099d"
   queryParam:
     type: "ORDER_TYPE"
     catgeory: "MODE_OF_DELIVERY"

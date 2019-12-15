@@ -16,11 +16,24 @@ types:
   stores:
     type: array
     items: !include dataTypes//store.raml
+  warehouses:
+    type: array
+    items: !include dataTypes//warehouse.raml
   manifests:
     type: array
     items: !include dataTypes//manifest.raml
   orders:
     type: array
-    items: !include dataTypes//order.raml      
-
-  
+    items: !include dataTypes//order.raml
+  inventories:
+    type: array
+    items: !include dataTypes//inventory.raml
+  store-inventories:
+    type: array
+    items: !include dataTypes//store-inventory.raml
+  web-inventories:
+    type: array
+    items: !include dataTypes//web-inventory.raml
+  sales-orders:
+    type: array
+    items: !include dataTypes//sales-order.raml

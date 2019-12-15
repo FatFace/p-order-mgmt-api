@@ -4,8 +4,14 @@ displayName: store
 properties:
   store-id?: string
   name?: string
+  store-code?: string
   store-address?:
     type: !include address.raml
+  #skus field needs to be replaced by products based impact analysis with existing usage  
+  skus?:
+    displayName: List of SKUs
+    type: array
+    items: !include sku.raml
   click-and-collect?: boolean
   store-fulfillment?: boolean
   longitude?: string

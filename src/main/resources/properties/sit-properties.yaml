@@ -39,10 +39,13 @@ sqs:
   queue:
     target:
       inventory: "Inventory"
+      manifest: "shipping-manifest-q"
+      order: "order-extract-q"
     url: 
       reprocessingQueue: "https://sqs.eu-west-1.amazonaws.com/691628577374/msg-reprocessing-q"
       targetQueueUrl: "https://sqs.eu-west-1.amazonaws.com/691628577374/inventory-q"
-
+      manifestQueueUrl: "https://sqs.eu-west-1.amazonaws.com/691628577374/shipping-manifest-q"
+      orderQueueUrl: "https://sqs.eu-west-1.amazonaws.com/691628577374/order-extract-q"
 smtp:
   host: "![rpQtD0vL4qh+Uema8l2LJxRngvgfBbF6l4RD5XEkF7Y=]"
   port: "![jd2yTmc7NHA+FUYVXGfwbQ==]"
@@ -54,8 +57,12 @@ d365:
   host: "mule-worker-internal-sit-s-d365-api.ir-e1.cloudhub.io"
   port: "8091"
   basepath: "/api/v1"
-  clientId: "c1751cc13ad746a8a49c404c966839f7"
-  clientSecret: "7d3aFbC44E8e49048935f06A7A2a099d"
+  clientId: "a1c25cbc41dc4a43a1c5c3ecbf1251c5"
+  clientSecret: "C3a2082C36B54f5bbba606E704e11bDE"
+  getCustomerGroupPath: "/data/CustomerGroups"
+  updateProductsPath: "/data/products"     
+  updateManifestPath: "/pick/manifests"
+  updateOrderExtractPath: "/pick/orders" 
   pickOrdersPath: "/pick/orders"
   webOrdersPath: "/web/orders"
 
@@ -63,12 +70,16 @@ jda:
   host: "mule-worker-internal-sit-s-jda-data-int.ir-e1.cloudhub.io"
   port: "8092"
   basepath: "/api/v1"
-  ordersPath: "/orders"
-  clientId: "c1751cc13ad746a8a49c404c966839f7"
-  clientSecret: "7d3aFbC44E8e49048935f06A7A2a099d"
+  clientId: "a1c25cbc41dc4a43a1c5c3ecbf1251c5"
+  clientSecret: "C3a2082C36B54f5bbba606E704e11bDE"
+
   jks:
     password: "![yqrYtFIRqm28xrunLqR/2kqfcVd97HqoY0AWEfF+m8M=]"
-
+  orders:
+    path: "/pick/orders"
+  ordersPath: "/orders"  
+  manifests:
+    path: "/pick/manifests" 
 lookup:
   host: "mule-worker-internal-sit-s-dblookup-api.ir-e1.cloudhub.io"
   port: "8091"
@@ -80,8 +91,8 @@ lookup:
     salesOfOrigin:
       key: "SALES_ORIGIN-MODE_OF_DELIVERY-APTOS"
   key: "ORDER_TYPE-MODE_OF_DELIVERY-D365"
-  clientId: "1234"
-  clientSecret: "4321"
+  clientId: "a1c25cbc41dc4a43a1c5c3ecbf1251c5"
+  clientSecret: "C3a2082C36B54f5bbba606E704e11bDE"
   queryParam:
     type: "ORDER_TYPE"
     catgeory: "MODE_OF_DELIVERY"
@@ -100,6 +111,6 @@ report:
   host: "mule-worker-internal-sit-s-reportdb-api.ir-e1.cloudhub.io"
   port: "8091"
   basepath: "/api/v1"
-  clientId: "c1751cc13ad746a8a49c404c966839f7"
-  clientSecret: "7d3aFbC44E8e49048935f06A7A2a099d"
+  clientId: "a1c25cbc41dc4a43a1c5c3ecbf1251c5"
+  clientSecret: "C3a2082C36B54f5bbba606E704e11bDE"
   ordersPath: "/orders"

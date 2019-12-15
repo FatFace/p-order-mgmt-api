@@ -1,0 +1,38 @@
+#%RAML 1.0 DataType
+type: object
+displayName: orderline
+properties:
+  item-id?: string
+  line-id?: number
+  item-name?: string
+  quantity?: number
+  tax-amount?: number
+  tax-rate?: number
+  amount?: number
+  sales-price?: number
+  gross-price?: number
+  position?: number
+  base-price?: number
+  personalize-text?: string
+  personalize-text-color?: string
+  invent-trans-id?: string
+  cancelled-quantity?: number
+  created-date?: datetime-only
+  delivered-quantity?: number
+  delivery-remainder?: number
+  invoice-remainder?: number
+  item-group-id?: string
+  modified-date?: datetime-only
+  ordered-quantity?: number
+  return-status?: string
+  promotions?: 
+    displayName: promotions and discounts offered
+    type: array
+    items: !include promotion.raml
+  product?: !include product.raml
+  warehouse?: !include warehouse.raml
+  custom-attributes?:
+    displayName: custom-attributes
+    type: array
+    items: 
+      type: !include custom-attribute.raml

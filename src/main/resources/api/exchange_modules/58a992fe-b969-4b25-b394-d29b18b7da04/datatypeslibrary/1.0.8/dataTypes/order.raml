@@ -1,0 +1,66 @@
+#%RAML 1.0 DataType
+type: object
+displayName: order
+properties:
+  order-no?: string
+  order-date?: datetime
+  sales-date?: date-only
+  delivery-date?: date-only
+  shipping-date?: datetime-only
+  route-id?: string
+  pick-status?: boolean
+  delivery-mode?: string
+  shipment-id?: string
+  language?: string
+  source?: string
+  legal-entity?: string
+  created-by?: string
+  modified-date?: datetime-only
+  order-type?: string
+  orginal-sales-order-id?: string
+  sales-pool?: string
+  return-status?: string
+  rma-no?: string
+  sales-status?: string
+  transaction-id?: string
+  customer?: 
+    displayName: customer details
+    type: !include customer.raml
+  payments?: 
+    displayName: payment details
+    type: array
+    items: !include payment.raml
+  currency?: string  
+  charges?: number
+  net-amount?: number
+  vat-amount?: number
+  product-line-items?:
+    displayName: Product line items
+    type: array
+    items: 
+      type: !include product-line-item.raml
+  shipping-line-items?:
+    displayName: Shipping line items
+    type: array
+    items: 
+      type: !include shipping-line-item.raml  
+  shipments?: 
+    displayName: Shipment details
+    type: array
+    items:
+      type: !include shipment.raml 
+  totals?: 
+    displayName: totals details
+    type: !include totals.raml
+   
+  store?: 
+    displayName: store details
+    type: !include store.raml
+  tender?: 
+    displayName: tender details
+    type: !include tender.raml 
+  orderlines?:
+    displayName: orderlines
+    type: array
+    items: 
+      type: !include orderline.raml
