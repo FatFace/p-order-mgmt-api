@@ -6,7 +6,7 @@ output application/json
 		(vars.soLookupValue filter (($.'order-no') == ord.'order-no') map {
 			'legal-entity': ord.'legal-entity' as String,
 			'order-no': ord.'order-no' as String,
-			'order-date': if (ord.'order-date' != null) 'order-date' else '' as DateTime,
+			'order-date': if (ord.'order-date' != null) ord.'order-date'  else '' as DateTime ,
 			'source': ord.source as String,
 			'currency': if (ord.currency != null) ord.currency else '',
 			'delivery-mode': $.'lookup-key',

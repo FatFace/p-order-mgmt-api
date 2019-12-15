@@ -21,7 +21,7 @@ d365:
     size: "1"
    
 response:
-  timeout: "3000000"
+  timeout: "300000"
   
 error:
   msg:

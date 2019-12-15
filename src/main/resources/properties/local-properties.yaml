@@ -1,15 +1,14 @@
 http:
   basePath: "/api/v1/*"
-  host: "0.0.0.0"
+  host: "localhost"
   private:
     port: "8091"
   consolePath: "/console/*"
-
-
-autodiscovery:
-  id: ""
-  flow: "p-order-mgmt-api"
   
+api:
+  discovery:
+    id: ""
+
 scheduler:
   cron:
     expression: "0 0/15 * 1/1 * ? *"
@@ -43,6 +42,7 @@ sqs:
     url: 
       reprocessingQueue: "https://sqs.eu-west-1.amazonaws.com/691628577374/msg-reprocessing-q"
       targetQueueUrl: "https://sqs.eu-west-1.amazonaws.com/691628577374/inventory-q"
+      
 smtp:
   host: "![rpQtD0vL4qh+Uema8l2LJxRngvgfBbF6l4RD5XEkF7Y=]"
   port: "![jd2yTmc7NHA+FUYVXGfwbQ==]"
@@ -51,14 +51,13 @@ smtp:
   subject: "Fatface API Exception"
         
 d365:
-  host: "0.0.0.0"
+  host: "dev-s-d365-api.ir-e1.cloudhub.io"
   port: "80"
   basepath: "/api/v1"
-  clientId: "b206a1a7bfbd4e109f591ca5b27631c3"
-  clientSecret: "2Cf50B5970B14FC9a94D5aB48Fad1206"
+  clientId: "3ddbd94c96c04aa2a0febb7603e12r4c2"
+  clientSecret: "3ddbd94c96c04aa2a0febb7603e12r4c2"
   pickOrdersPath: "/pick/orders"
   webOrdersPath: "/web/orders"
-  
   
 jda:
   host: "localhost"
@@ -96,19 +95,10 @@ lookup:
         type: "SALES_ORIGIN"
         category: "MODE_OF_DELIVERY"
         source: "APTOS"
-    
 
-aptos:
-  host: "10.0.3.121"
-  port: "8091"
-  basepath: "/api/v1"
-  clientId: "c1751cc13ad746a8a49c404c966839f7"
-  clientSecret: "7d3aFbC44E8e49048935f06A7A2a099d"
-  getOrdersPath: "/orders"
-  
 report:
-  host: "10.0.3.121"
-  port: "8097"
+  host: "localhost"
+  port: "8086"
   basepath: "/api/v1"
   clientId: "c1751cc13ad746a8a49c404c966839f7"
   clientSecret: "7d3aFbC44E8e49048935f06A7A2a099d"

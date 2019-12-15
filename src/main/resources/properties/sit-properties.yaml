@@ -1,6 +1,13 @@
-autodiscovery:
-  id: ""
-  flow: "p-order-mgmt-api"
+http:
+  basePath: "/api/v1/*"
+  host: "0.0.0.0"
+  private:
+    port: "8091"
+  consolePath: "/console/*"
+  
+api:
+  discovery:
+    id: ""
   
 scheduler:
   cron:
@@ -35,6 +42,7 @@ sqs:
     url: 
       reprocessingQueue: "https://sqs.eu-west-1.amazonaws.com/691628577374/msg-reprocessing-q"
       targetQueueUrl: "https://sqs.eu-west-1.amazonaws.com/691628577374/inventory-q"
+
 smtp:
   host: "![rpQtD0vL4qh+Uema8l2LJxRngvgfBbF6l4RD5XEkF7Y=]"
   port: "![jd2yTmc7NHA+FUYVXGfwbQ==]"
@@ -43,17 +51,16 @@ smtp:
   subject: "Fatface API Exception"
         
 d365:
-  host: "mule-worker-internal-dev-s-d365-api.ir-e1.cloudhub.io"
+  host: "mule-worker-internal-sit-s-d365-api.ir-e1.cloudhub.io"
   port: "8091"
   basepath: "/api/v1"
   clientId: "c1751cc13ad746a8a49c404c966839f7"
   clientSecret: "7d3aFbC44E8e49048935f06A7A2a099d"
   pickOrdersPath: "/pick/orders"
   webOrdersPath: "/web/orders"
-  
-  
+
 jda:
-  host: "mule-worker-internal-dev-s-jda-data-int.ir-e1.cloudhub.io"
+  host: "mule-worker-internal-sit-s-jda-data-int.ir-e1.cloudhub.io"
   port: "8092"
   basepath: "/api/v1"
   ordersPath: "/orders"
@@ -62,10 +69,9 @@ jda:
   jks:
     password: "![yqrYtFIRqm28xrunLqR/2kqfcVd97HqoY0AWEfF+m8M=]"
 
-
 lookup:
-  host: "sit-s-dblookup-api.ir-e1.cloudhub.io"
-  port: "80"
+  host: "mule-worker-internal-sit-s-dblookup-api.ir-e1.cloudhub.io"
+  port: "8091"
   basePath: "/api/v1"
   dbLookupPath: "/lookups"
   aptos:
@@ -89,19 +95,10 @@ lookup:
         type: "SALES_ORIGIN"
         category: "MODE_OF_DELIVERY"
         source: "APTOS"
-    
-
-aptos:
-  host: "sit-s-aptos-api.ir-e1.cloudhub.io"
-  port: "8091"
-  basepath: "/api/v1"
-  clientId: "c1751cc13ad746a8a49c404c966839f7"
-  clientSecret: "7d3aFbC44E8e49048935f06A7A2a099d"
-  getOrdersPath: "/orders"
   
 report:
-  host: "sit-s-reportdb-api.ir-e1.cloudhub.io"
-  port: "8097"
+  host: "mule-worker-internal-sit-s-reportdb-api.ir-e1.cloudhub.io"
+  port: "8091"
   basepath: "/api/v1"
   clientId: "c1751cc13ad746a8a49c404c966839f7"
   clientSecret: "7d3aFbC44E8e49048935f06A7A2a099d"

@@ -98,7 +98,7 @@ payload]]></ee:set-variable>
 				<flow-ref doc:name="Log Process Entry" doc:id="838f347d-9aae-4bb3-bbe0-9a6469e00b95" name="log-process-entry-sub-flow"/>
 				<flow-ref doc:name="Audit Process Entry" doc:id="ea177514-4e5b-40b1-a084-2f6f963e2349" name="audit-process-entry-sub-flow"/>
 				<until-successful maxRetries="${retry.attempts}" doc:name="Until Successful" doc:id="f53175a9-10e1-4710-b042-ddf3e4e6439f" millisBetweenRetries="${retry.frequency}">
-					<http:request method="GET" doc:name="Call DB DM Lookup Http Request Configuration" doc:id="0d0d85db-42af-470c-beb4-5515b907962f" path="${lookup.dbLookupPath}" responseTimeout="900000" config-ref="dbLookup_HTTP_Request_configuration">
+					<http:request method="GET" doc:name="Call DB DM Lookup Http Request Configuration" doc:id="0d0d85db-42af-470c-beb4-5515b907962f" path="${lookup.dbLookupPath}" responseTimeout="${response.timeout}" config-ref="dbLookup_HTTP_Request_configuration">
 					<http:headers><![CDATA[#[output application/java
 ---
 {
@@ -137,7 +137,7 @@ payload]]></ee:set-variable>
 				<flow-ref doc:name="Log Process Entry" doc:id="5bd0692e-cf0e-44f1-9efe-19c789cc961a" name="log-process-entry-sub-flow"/>
 				<flow-ref doc:name="Audit Process Entry" doc:id="2d2b8fe9-a79b-4aaa-a380-b264529772cd" name="audit-process-entry-sub-flow"/>
 				<until-successful maxRetries="${retry.attempts}" doc:name="Until Successful" doc:id="8d8b7290-5788-448f-b2db-68cc5b7e8330" millisBetweenRetries="${retry.frequency}">
-					<http:request method="GET" doc:name="Call DB SO Lookup Http Request Configuration" doc:id="f971441d-1f38-4463-8c07-983d12dcfb6a" path="${lookup.dbLookupPath}" responseTimeout="900000" config-ref="dbLookup_HTTP_Request_configuration">
+					<http:request method="GET" doc:name="Call DB SO Lookup Http Request Configuration" doc:id="f971441d-1f38-4463-8c07-983d12dcfb6a" path="${lookup.dbLookupPath}" responseTimeout="${response.timeout}" config-ref="dbLookup_HTTP_Request_configuration">
 					<http:headers><![CDATA[#[output application/java
 ---
 {

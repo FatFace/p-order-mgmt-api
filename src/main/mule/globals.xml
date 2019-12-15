@@ -57,10 +57,9 @@ http://www.mulesoft.org/schema/mule/os http://www.mulesoft.org/schema/mule/os/cu
 	<http:request-config name="dbLookup_HTTP_Request_configuration" doc:name="HTTP Request configuration" doc:id="8414566d-3ff0-4d39-998f-65d0abf53a07" basePath="${lookup.basePath}" >
 		<http:request-connection host="${lookup.host}" port="${lookup.port}" />
 	</http:request-config>
-	<http:request-config name="S_Aptos_Http_Request_Configuration" doc:name="HTTP Request configuration" doc:id="488aa33a-ab3d-48a2-9602-c61921b49351" basePath="${aptos.basepath}">
-		<http:request-connection host="${aptos.host}" port="${aptos.port}" />
-	</http:request-config>
+	
 	<http:request-config name="S_Report_Http_Request_Configuration" doc:name="HTTP Request configuration" doc:id="586f0cda-aea1-4e59-bd00-028ea91387aa" basePath="${report.basepath}">
 		<http:request-connection host="${report.host}" port="${report.port}"/>
 	</http:request-config>
+	<api-gateway:autodiscovery apiId="${api.discovery.id}" doc:name="API Autodiscovery" doc:id="e6c5790c-2da6-4cb6-9656-86ae1f224214" flowRef="p-order-mgmt-api-main" />
 </mule>

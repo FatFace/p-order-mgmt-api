@@ -1,6 +1,14 @@
-autodiscovery:
-  id: ""
-  flow: "b-order-mgmt-app"
+http:
+  basePath: "/api/v1/*"
+  host: "0.0.0.0"
+  private:
+    port: "8091"
+  consolePath: "/console/*"
+  
+api:
+  discovery:
+    id: ""
+  
   
 scheduler:
   cron:
