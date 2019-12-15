@@ -2,27 +2,32 @@ is:
   audit:
     toggle: "ON"
     payload: "ON"
+    details:
+      toggle: "ON"
   logging:
-    toggle: "ON"
+    toggle: "OFF"
 
-domain: ""
+domain: "p-order-mgmt-api"
 environment:
   id: "Development"  
 flow:
   name:
     undefined: "Flow Name not Defined"
     
-retry:
-  frequency: "2000"
-  attempts: "3"   
-  
 d365:
   batch:
     size: "1"
    
 response:
   timeout: "300000"
-  
+      
+retry:
+  frequency: "2000"
+  attempts: "3"
+    
+shipment:
+  labelImageFormat: "PNG"  
+
 error:
   msg:
     '404': "Resource not found"
