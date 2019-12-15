@@ -1,9 +1,9 @@
 is: 
   audit:
-    toggle: "OFF"
-    payload: "OFF"
+    toggle: "ON"
+    payload: "ON"
   logging:
-    toggle: "OFF"
+    toggle: "ON"
 
 domain: ""
 environment:
