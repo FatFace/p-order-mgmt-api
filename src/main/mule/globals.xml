@@ -19,10 +19,12 @@ http://www.mulesoft.org/schema/mule/os http://www.mulesoft.org/schema/mule/os/cu
 	<configuration-properties doc:name="Configuration properties" doc:id="31655e4d-0651-4ec4-a6ce-965230ec7e76" file="properties/common-properties.yaml" />
 	<configuration-properties doc:name="Configuration properties" doc:id="3b617f7a-4e8a-4201-b997-c85fe04c302e" file="properties/${mule.env}-properties.yaml" />   
    	<http:listener-config name="p-order-mgmt-api-httpListenerConfig">
-        <http:listener-connection host="${http.host}" port="${http.private.port}" />
-    </http:listener-config>
+      	  <http:listener-connection host="${http.host}" port="${http.private.port}" />
+   	</http:listener-config>
 	<db:config name="Database_Config" doc:name="Database Config" doc:id="b8195697-f573-4c1d-9ebb-faaf0ba86e54" >
-		<db:mssql-connection host="${db.audit.config.host}" user="${secure::db.audit.config.user}" password="${secure::db.audit.config.password}" databaseName="${db.audit.config.database}" />
+		<db:mssql-connection host="${db.audit.config.host}" user="${secure::db.audit.config.user}" password="${secure::db.audit.config.password}" databaseName="${db.audit.config.database}" port="${db.audit.config.port}">
+			<db:pooling-profile maxPoolSize="${db.pool.size.max}" minPoolSize="${db.pool.size.min}" />
+		</db:mssql-connection>
 	</db:config>	
 	<cloudhub:config name="CloudHub_Config" doc:name="CloudHub Config" doc:id="611f09fe-93a3-4f69-ab0a-5693466aeb9a" >
 			<cloudhub:connection username="${secure::cloudhub.username}" password="${secure::cloudhub.password}" environment="${environment.id}"/>

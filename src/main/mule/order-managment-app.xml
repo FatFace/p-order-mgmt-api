@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<mule xmlns:batch="http://www.mulesoft.org/schema/mule/batch" xmlns:os="http://www.mulesoft.org/schema/mule/os"
-	xmlns:http="http://www.mulesoft.org/schema/mule/http"
-	xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+<mule xmlns:os="http://www.mulesoft.org/schema/mule/os" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
 http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
 http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
-http://www.mulesoft.org/schema/mule/os http://www.mulesoft.org/schema/mule/os/current/mule-os.xsd
-http://www.mulesoft.org/schema/mule/batch http://www.mulesoft.org/schema/mule/batch/current/mule-batch.xsd">
-	<flow name="order-managment-app-flow" doc:id="e4041d85-5c17-4374-b202-6367cd858318" initialState="stopped">
+http://www.mulesoft.org/schema/mule/os http://www.mulesoft.org/schema/mule/os/current/mule-os.xsd">
+	<flow name="order-managment-app-flow" doc:id="e4041d85-5c17-4374-b202-6367cd858318" >
 		<scheduler doc:name="Scheduler" doc:id="fd89417f-b2d5-4c23-8807-82f3eb5d99ee" >
 			<scheduling-strategy >
 				<cron expression="${scheduler.cron.expression}" />
@@ -31,7 +30,7 @@ now() as String {format : "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"}]]></ee:set-variable>
 		<flow-ref doc:name="Audit Receiver Entry" doc:id="d7f34af9-ed70-48f0-b66f-775e7e1ca35d" name="audit-receiver-entry-sub-flow"/>
 		<flow-ref doc:name="Log Process Entry" doc:id="bde32360-83c3-4bb9-82d5-6a0a2390e60f" name="log-process-entry-sub-flow"/>
 		<flow-ref doc:name="Audit Process Entry" doc:id="7c238d72-7cbb-41e8-baa8-6b8572d19d76" name="audit-process-entry-sub-flow"/>
-		<http:request method="GET" doc:name="Invoke System Layer D365 Api to Get Pic Orders" doc:id="23912345-ad5d-4027-8b56-999893204273" config-ref="s_D365_Http_Request_configuration" path="${d365.pickOrdersPath}" responseTimeout="${response.timeout}" target="originalPayload">
+		<http:request method="GET" doc:name="Invoke System Layer D365 Api to Get Pic Orders" doc:id="23912345-ad5d-4027-8b56-999893204273" config-ref="s_D365_Http_Request_configuration" path="${d365.pickOrdersPath}" responseTimeout="${response.timeout}">
 			<http:headers ><![CDATA[#[output application/java
 ---
 {
@@ -41,10 +40,11 @@ now() as String {format : "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"}]]></ee:set-variable>
 	"Client-Secret" : p('d365.clientSecret')
 }]]]></http:headers>
 		</http:request>
-		
+		<set-variable value="#[payload]" doc:name="Set Variable" doc:id="b63136f8-1f56-46cb-a72a-bf19b3787815" variableName="originalPayload"/>
 		<flow-ref doc:name="Log Process Exit" doc:id="57488e0a-6786-42d8-b5d8-77779ab8b576" name="log-process-exit-sub-flow"/>
+		<flow-ref doc:name="Audit Process Exit" doc:id="316bb697-e0ff-45da-8c6c-b2f2d9d2338b" name="audit-process-exit-sub-flow"/>
 		<choice doc:name="Choice" doc:id="4e7eece7-2d63-4c82-9228-781a8283cb2d" >
-			<when expression="#[(vars.originalPayload != null) or (isEmpty(vars.originalPayload) == false)]">
+			<when expression="#[(payload != null and payload.'pick-orders' != [])]">
 				<flow-ref doc:name="Get Delivery Mode numeric value " doc:id="bb575bb6-3b30-4845-83d0-e069d2755fee" name="get-delivery-mode-from-dblookup-for-pick-orders-sub-flow"/>
 				<ee:transform doc:name="Transform D365 Response to JDA Request" doc:id="cf76c100-3d06-494c-a266-2209c8e73934">
 			<ee:message>
@@ -61,14 +61,16 @@ now() as String {format : "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"}]]></ee:set-variable>
 ---
 {
 	"client_id" : p('jda.clientId'),
-	"client_secret" : p('jda.clientSecret')
+	"client_secret" : p('jda.clientSecret'),
+	"vRequestId" : vars.transactionId
 }]]]></http:query-params>
 		</http:request>
 				<flow-ref doc:name="Log Process Exit" doc:id="78baee98-f66e-4843-9bcd-e72a625df755" name="log-process-exit-sub-flow" />
 				<flow-ref doc:name="Log Process Entry" doc:id="e387b50b-1d53-468d-8c62-7af9f168e776" name="log-process-entry-sub-flow" />
 			</when>
 			<otherwise >
-				<logger level="INFO" doc:name="Logger" doc:id="cbef9eaa-40ea-416a-87ee-a08ad0eb2ece" message="$(system.layer.response)"/>
+				<set-variable value="No data received" doc:name="Set Logging Payload" doc:id="f3badf1e-22b0-45ab-8902-a77066b46bd2" variableName="loggingPayload"/>
+				<flow-ref doc:name="Logging Sub Flow Reference" doc:id="7487388f-381d-4345-aee7-17efe04f650b" name="logging-sub-flow"/>
 			</otherwise>
 		</choice>
 		<flow-ref doc:name="Audit Dispatcher Exit" doc:id="aed28708-7f9c-4dd8-8b0c-7f897fd31b2d" name="audit-dispatcher-exit-sub-flow"/>
@@ -83,6 +85,14 @@ now() as String {format : "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"}]]></ee:set-variable>
 		<choice doc:name="Choice" doc:id="1b15b70f-71dd-4dd4-b4f5-93d40e166124" >
 			<when expression="#[payload ==true]">
 				<os:retrieve doc:name="Retrieve Lookup Data From Object Store" doc:id="4cbf43b7-adb6-47f9-8ff6-61c0b803322a" key="#[vars.vLookUpData]" objectStore="Object_store" />
+				<ee:transform doc:name="Transform Message" doc:id="dbe54386-8279-4d19-a16b-487bbb271c4d">
+					<ee:message>
+						<ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+payload]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
 				<flow-ref doc:name="Filter Lookup Key" doc:id="4d0ae08b-a0b5-439a-9399-70b929e2fdc0" name="filter-lookup-key-sub-flow"/>
 			</when>
 			<otherwise >

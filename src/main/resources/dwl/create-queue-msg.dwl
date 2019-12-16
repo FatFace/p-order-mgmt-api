@@ -13,6 +13,12 @@ var messageMT = messageQ.^['mimeType']
 		} as Object {
 			class: "org.mule.extension.sqs.api.model.MessageAttributeValue"
 		},
+		"count": {
+			"stringValue" : vars.count,
+			"dataType" : "String.count"
+		} as Object {
+			class: "org.mule.extension.sqs.api.model.MessageAttributeValue"
+		},
 		"targetQueue": {
 			"stringValue" : vars.targetQueueVar,
 			"dataType" : "String.targetQueue"
