@@ -207,11 +207,4 @@ vars.dmLookupValue map (value) ->{
 			</ee:variables>
 		</ee:transform>
 	</sub-flow>
-	<flow name="common-template-check-digit-lookup-flow" doc:id="97b5a794-12b6-4e8d-b482-f770a65f6e81" >
-		<java:invoke-static doc:name="Invoke java to calculate check digit" doc:id="5de7fb5c-dc94-488a-a1c6-5ec6fe0960e3" class="com.fatface.mule.utils.ProductSKUCheckDigitCal" method="getCheckSum(String)">
-			<java:args ><![CDATA[#[{
-	arg0: payload as String
-}]]]></java:args>
-		</java:invoke-static>
-	</flow>
 </mule>
