@@ -97,7 +97,15 @@ lookup:
     type: "ORDER_TYPE"
     catgeory: "MODE_OF_DELIVERY"
     source: "D365"
-    
+    aptos:
+      modeOfDelivery:
+        type: "MODE_OF_DELIVERY"
+        category: "DEPT"
+        source: "APTOS"
+      salesOfOrigin:
+        type: "SALES_ORIGIN"
+        category: "MODE_OF_DELIVERY"
+        source: "APTOS"
 cron:
   expression: 
     manifest: "0 0/10 * 1/1 * ? *"
@@ -114,15 +122,6 @@ send:
 pick:
   orders:
     orderType: "WEB"
-    aptos:
-      modeOfDelivery:
-        type: "MODE_OF_DELIVERY"
-        category: "DEPT"
-        source: "APTOS"
-      salesOfOrigin:
-        type: "SALES_ORIGIN"
-        category: "MODE_OF_DELIVERY"
-        source: "APTOS"
   
 report:
   host: "mule-worker-internal-sit-s-reportdb-api.ir-e1.cloudhub.io"

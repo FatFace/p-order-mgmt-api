@@ -35,31 +35,6 @@ jda:
   clientSecret: "7d3aFbC44E8e49048935f06A7A2a099d"
   jks:
     password: "![yqrYtFIRqm28xrunLqR/2kqfcVd97HqoY0AWEfF+m8M=]"
-
-http:
-  basePath: "/api/*"
-  port: "8081"
-  
-d365:
-  host: "mule-worker-internal-dev-s-d365-api.ir-e1.cloudhub.io"
-  port: "8091"
-  basepath: "/api/v1"
-  clientId: "c1751cc13ad746a8a49c404c966839f7"
-  clientSecret: "7d3aFbC44E8e49048935f06A7A2a099d"
-  getCustomerGroupPath: "/data/CustomerGroups"
-  updateProductsPath: "/data/products"     
-  updateManifestPath: "/pick/manifests"
-  updateOrderExtractPath: "/pick/orders" 
-  pickOrdersPath: "/pick/orders"
-  webOrdersPath: "/web/orders"
-jda:
-  host: "mule-worker-internal-dev-s-jda-data-int.ir-e1.cloudhub.io"
-  port: "8092"
-  basepath: "/api/v1"
-  clientId: "c1751cc13ad746a8a49c404c966839f7"
-  clientSecret: "7d3aFbC44E8e49048935f06A7A2a099d"
-  jks:
-    password: "![yqrYtFIRqm28xrunLqR/2kqfcVd97HqoY0AWEfF+m8M=]"
   orders:
     path: "/pick/orders"
   ordersPath: "/orders"  
@@ -108,8 +83,8 @@ smtp:
 
 
 lookup:
-  host: "dev-s-dblookup-api.ir-e1.cloudhub.io"
-  port: "80"
+  host: "mule-worker-internal-dev-s-dblookup-api.ir-e1.cloudhub.io"
+  port: "8091"
   basePath: "/api/v1"
   dbLookupPath: "/lookups"
   aptos:
@@ -146,7 +121,7 @@ orders:
 send:
   manifest:
     queue: "true"
-
+    
 pick:
   orders:
     orderType: "WEB"
