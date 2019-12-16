@@ -1,0 +1,24 @@
+{
+    "lookups": [
+        {
+            "lookup_id": 6,
+            "lookup-key": "standardGBP",
+            "lookup-value": "OIS-STD"
+        },
+        {
+            "lookup_id": 6,
+            "lookup-key": "nextdayGBP",
+            "lookup-value": "OIS-ND"
+        },
+        {
+            "lookup_id": 6,
+            "lookup-key": "delivertostoreGBP",
+            "lookup-value": "OIS-DTS"
+        },
+        {
+            "lookup_id": 6,
+            "lookup-key": "overseasGBP",
+            "lookup-value": "OIS-INT"
+        }
+    ]
+}

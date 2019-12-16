@@ -18,6 +18,9 @@ http://www.mulesoft.org/schema/mule/tls http://www.mulesoft.org/schema/mule/tls/
 http://www.mulesoft.org/schema/mule/os http://www.mulesoft.org/schema/mule/os/current/mule-os.xsd">
 	<configuration-properties doc:name="Configuration properties" doc:id="31655e4d-0651-4ec4-a6ce-965230ec7e76" file="properties/common-properties.yaml" />
 	<configuration-properties doc:name="Configuration properties" doc:id="3b617f7a-4e8a-4201-b997-c85fe04c302e" file="properties/${mule.env}-properties.yaml" />   
+   	<http:listener-config name="p-order-mgmt-api-httpListenerConfig">
+      	  <http:listener-connection host="${http.host}" port="${http.private.port}" />
+   	</http:listener-config>
 	<db:config name="Database_Config" doc:name="Database Config" doc:id="b8195697-f573-4c1d-9ebb-faaf0ba86e54" >
 		<db:mssql-connection host="${db.audit.config.host}" user="${secure::db.audit.config.user}" password="${secure::db.audit.config.password}" databaseName="${db.audit.config.database}" port="${db.audit.config.port}">
 			<db:pooling-profile maxPoolSize="${db.pool.size.max}" minPoolSize="${db.pool.size.min}" />
@@ -56,4 +59,9 @@ http://www.mulesoft.org/schema/mule/os http://www.mulesoft.org/schema/mule/os/cu
 	<http:request-config name="dbLookup_HTTP_Request_configuration" doc:name="HTTP Request configuration" doc:id="8414566d-3ff0-4d39-998f-65d0abf53a07" basePath="${lookup.basePath}" >
 		<http:request-connection host="${lookup.host}" port="${lookup.port}" />
 	</http:request-config>
+	
+	<http:request-config name="S_Report_Http_Request_Configuration" doc:name="HTTP Request configuration" doc:id="586f0cda-aea1-4e59-bd00-028ea91387aa" basePath="${report.basepath}">
+		<http:request-connection host="${report.host}" port="${report.port}"/>
+	</http:request-config>
+	<api-gateway:autodiscovery apiId="${api.discovery.id}" doc:name="API Autodiscovery" doc:id="e6c5790c-2da6-4cb6-9656-86ae1f224214" flowRef="p-order-mgmt-api-main" />
 </mule>

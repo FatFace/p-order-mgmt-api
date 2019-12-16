@@ -1,10 +1,40 @@
-autodiscovery:
-  id: ""
-  flow: "b-order-mgmt-app"
+http:
+  basePath: "/api/v1/*"
+  host: "0.0.0.0"
+  private:
+    port: "8091"
+  consolePath: "/console/*"
+  
+api:
+  discovery:
+    id: ""
   
 scheduler:
   cron:
     expression: "0 0/15 * 1/1 * ? *"
+        
+d365:
+  host: "mule-worker-internal-dev-s-d365-api.ir-e1.cloudhub.io"
+  port: "8091"
+  basepath: "/api/v1"
+  clientId: "c1751cc13ad746a8a49c404c966839f7"
+  clientSecret: "7d3aFbC44E8e49048935f06A7A2a099d"
+  getCustomerGroupPath: "/data/CustomerGroups"
+  updateProductsPath: "/data/products"
+  updateManifestPath: "/pick/manifests"
+  updateOrderExtractPath: "/pick/orders"
+  pickOrdersPath: "/pick/orders"
+  webOrdersPath: "/web/orders"
+
+jda:
+  host: "mule-worker-internal-dev-s-jda-data-int.ir-e1.cloudhub.io"
+  port: "8092"
+  basepath: "/api/v1"
+  ordersPath: "/orders"
+  clientId: "c1751cc13ad746a8a49c404c966839f7"
+  clientSecret: "7d3aFbC44E8e49048935f06A7A2a099d"
+  jks:
+    password: "![yqrYtFIRqm28xrunLqR/2kqfcVd97HqoY0AWEfF+m8M=]"
 
 http:
   basePath: "/api/*"
@@ -21,7 +51,7 @@ d365:
   updateManifestPath: "/pick/manifests"
   updateOrderExtractPath: "/pick/orders" 
   pickOrdersPath: "/pick/orders"
-  
+  webOrdersPath: "/web/orders"
 jda:
   host: "mule-worker-internal-dev-s-jda-data-int.ir-e1.cloudhub.io"
   port: "8092"
@@ -78,10 +108,15 @@ smtp:
 
 
 lookup:
-  host: "mule-worker-internal-dev-s-dblookup-api.ir-e1.cloudhub.io"
-  port: "8091"
+  host: "dev-s-dblookup-api.ir-e1.cloudhub.io"
+  port: "80"
   basePath: "/api/v1"
   dbLookupPath: "/lookups"
+  aptos:
+    modeOfDelivery:
+      key: "MODE_OF_DELIVERY-DEPT-APTOS"
+    salesOfOrigin:
+      key: "SALES_ORIGIN-MODE_OF_DELIVERY-APTOS"
   key: "ORDER_TYPE-MODE_OF_DELIVERY-D365"
   clientId: "c1751cc13ad746a8a49c404c966839f7"
   clientSecret: "7d3aFbC44E8e49048935f06A7A2a099d"
@@ -89,7 +124,16 @@ lookup:
     type: "ORDER_TYPE"
     catgeory: "MODE_OF_DELIVERY"
     source: "D365"
-    
+    aptos:
+      modeOfDelivery:
+        type: "MODE_OF_DELIVERY"
+        category: "DEPT"
+        source: "APTOS"
+      salesOfOrigin:
+        type: "SALES_ORIGIN"
+        category: "MODE_OF_DELIVERY"
+        source: "APTOS"
+
 cron:
   expression: 
     manifest: "0 0/10 * 1/1 * ? *"
@@ -102,7 +146,15 @@ orders:
 send:
   manifest:
     queue: "true"
-    
+
 pick:
   orders:
     orderType: "WEB"
+  
+report:
+  host: "mule-worker-internal-dev-s-reportdb-api.ir-e1.cloudhub.io"
+  port: "8097"
+  basepath: "/api/v1"
+  clientId: "c1751cc13ad746a8a49c404c966839f7"
+  clientSecret: "7d3aFbC44E8e49048935f06A7A2a099d"
+  ordersPath: "/orders"

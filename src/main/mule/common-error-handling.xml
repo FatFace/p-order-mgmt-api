@@ -980,9 +980,6 @@ p('error.msg.compress.notDecompress')]]></ee:set-variable>
 		<!-- If none of the above matches then handle a the exception using generic handler -->
 		<on-error-continue type="ANY" enableNotifications="true" logException="true" doc:name="On Error Continue" doc:id="40180633-7687-4269-9ac4-b63bbe1ca580">
 			<set-variable value="#[500]" doc:name="Set the HTTP Status - 500" doc:id="0aa8adfb-5692-42e1-9bdd-a6712598d3ac" variableName="httpStatus" />
-		
-			<flow-ref doc:name="SMTP Flow Reference" doc:id="0abd7e0a-5326-4fff-9bcd-655c62dad9e1" name="common-smtp-sub-flow"/>
-			<flow-ref doc:name="Common Queue Processing Sub Flow" doc:id="3444ae0c-4ed9-47ca-9a99-ddc9b3b3039e" name="common-queue-processing-sub-flow" />
 			<flow-ref doc:name="Global Prepare Error Response Sub Flow" doc:id="ef951fe8-521e-4c3a-b907-a77d766679b5" name="global-prepare-error-response-sub-flow"/>
 		</on-error-continue>
 	</error-handler>

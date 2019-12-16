@@ -1,0 +1,80 @@
+{
+  "orders": [
+    {
+      "legal-entity": "1FFL",
+      "order-no": "110697408",
+      "order-date": "2019-10-09T00:00:00",
+      "source": "APTOS",
+      "currency": null,
+      "language": "en-gb",
+      "delivery-mode": "5",
+      "store": {
+        "store-id": "70012"
+      },
+      "customer": {
+        "customer-id": "9991701786",
+        "fullname": "MrRobertFlux",
+        "first-name": "Robert",
+        "last-name": "Flux",
+        "telephone": "07717276819",
+        "email": "robflux@hotmail.com",
+        "shipping-address": {
+          "state": "East Cowes",
+          "postcode": "PO32 6RX",
+          "street": "14 Osborne RoadIsleOfWight",
+          "city": null,
+          "country": "East Cowes"
+        },
+        "billing-address": {
+          "street": "14 Osborne RoadIsleOfWight",
+          "city": null,
+          "postcode": "PO32 6RX",
+          "country": "GBR",
+          "state": "East Cowes"
+        }
+      },
+      "orderlines": [
+        {
+          "item-id": "1",
+          "item-name": "BELLA JUMPER PPL-DEEP BERRY 10 9FWA",
+          "sales-price": "49.5",
+          "barcode": "946160",
+          "quantity": "1",
+          "amount": "19.8",
+          "tax-amount": "3.3",
+          "tax-rate": "20",
+          "promotions": {
+            "promotion-id": "Staff Discount 60%",
+            "discount": "-29.7"
+          }
+        },
+        {
+          "item-id": "2",
+          "item-name": "Pickup Delivery",
+          "sales-price": "0",
+          "barcode": null,
+          "quantity": "1",
+          "amount": "0",
+          "tax-amount": "0",
+          "tax-rate": "0",
+          "promotions": {
+            "promotion-id": "Staff Discount 60%",
+            "discount": "0"
+          }
+        }
+      ],
+      "payments": [
+        {
+          "amount": "19.8",
+          "payment-mode": "Visa Debit",
+          "payment-mode-card": {
+            "card-number": "******0000005492"
+          }
+        }
+      ],
+      "tender": {
+        "authorisation": "009831"
+      }
+    }
+  ]
+}
