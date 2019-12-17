@@ -124,7 +124,7 @@ pick:
     orderType: "WEB"
     
 report:
-  host: "mule-worker-internal-sit-s-reportdb-api.ir-e1.cloudhub.io"
+  host: "mule-worker-internal-sit-s-report-db-api.ir-e1.cloudhub.io"
   port: "8091"
   basepath: "/api/v1"
   clientId: "a1c25cbc41dc4a43a1c5c3ecbf1251c5"

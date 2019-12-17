@@ -1,5 +1,5 @@
 %dw 2.0
-output application/json
+output application/json skipNullOn ='everywhere'
 ---
 {
 	'orders': vars.aptosOriginalPayload.orders map (ord, indOford)  -> {
@@ -46,7 +46,8 @@ output application/json
 				'tax-rate': if (ordl.'tax-rate' != null) ordl.'tax-rate' else '',
 				'sales-price': ordl.'sales-price',
 				'barcode': Mule::lookup("common-template-check-digit-lookup-flow", ordl.barcode),
-				'quantity': ordl.quantity
+				'quantity': ordl.quantity,
+				'line-item-number': ordl.'line-item-number'
 			},
 			payments: ord.payments map (pay, indOfPay) -> {
 				'amount': if (pay.amount != null) pay.amount else '',
