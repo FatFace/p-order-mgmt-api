@@ -39,7 +39,8 @@ output application/json skipNullOn ='everywhere'
 			'quantity': ordl.quantity,
 			'amount': ordl.amount,
 			'tax-amount': ordl.'tax-amount',
-			'tax-rate': ordl.'tax-rate'
+			'tax-rate': ordl.'tax-rate',
+			'line-item-number': ordl.'line-item-number'
 		},
 		payments: rep.payments map (pay, indOfPay) -> {
 			'amount': pay.amount,
