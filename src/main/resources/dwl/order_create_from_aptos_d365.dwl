@@ -47,7 +47,11 @@ output application/json skipNullOn ='everywhere'
 				'sales-price': ordl.'sales-price',
 				'barcode': Mule::lookup("common-template-check-digit-lookup-flow", ordl.barcode),
 				'quantity': ordl.quantity,
-				'line-item-number': ordl.'line-item-number'
+				'line-item-number': ordl.'line-item-number',
+				'promotions': ordl.promotions map (prm, iprm) -> {
+					'promotion-id': prm.'promotion-id' default '',
+					'discount': prm.discount default ''
+					}
 			},
 			payments: ord.payments map (pay, indOfPay) -> {
 				'amount': if (pay.amount != null) pay.amount else '',
