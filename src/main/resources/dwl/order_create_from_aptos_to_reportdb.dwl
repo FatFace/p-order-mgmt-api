@@ -23,7 +23,7 @@ output application/json skipNullOn ='everywhere'
 			'telephone': rep.customer.telephone,
 			'email': rep.customer.email,
 			'shipping-address': {
-				'address-1': rep.customer.'shipping-address'.street,
+				'street': rep.customer.'shipping-address'.street,
 				'city': rep.customer.'shipping-address'.city,
 				'postcode': rep.customer.'shipping-address'.postcode,
 				'county': rep.customer.'shipping-address'.county,
