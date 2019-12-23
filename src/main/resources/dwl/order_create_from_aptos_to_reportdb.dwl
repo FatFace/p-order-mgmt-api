@@ -1,19 +1,19 @@
 %dw 2.0
 output application/json skipNullOn ='everywhere'
+fun getMode(ordno) = vars.soLookupValue filter (($."order-no") == ordno) map $ 
 ---
 {
 	'orders': vars.aptosOriginalPayload.orders map (rep, indOfRep)  -> {
-		(vars.soLookupValue filter (($."order-no") == rep."order-no") map {
 		'order-no': rep.'order-no',
 		'order-date': if (rep.'order-date' != null) rep.'order-date' else "" as DateTime,
 		'currency': rep.currency,
 		'legal-entity': rep.'legal-entity' as String,
 		'language': rep.language,
 		'source': rep.source,
-		'delivery-mode': $."lookup-key",
+		'delivery-mode': if(getMode(rep."order-no") != null) getMode(rep."order-no")."lookup-key" else '',
 		'store': {
 			'store-id': rep.store.'store-id',
-			'store-code': $."lookup-value"
+			'store-code': if(getMode(rep."order-no") != null) getMode(rep."order-no")."lookup-value" else ''
 		},
 		customer: {
 			'customer-id': rep.customer.'customer-id',
@@ -56,6 +56,5 @@ output application/json skipNullOn ='everywhere'
 		'tender': {
         'authorisation': rep.tender.authorisation
       	}
-		})
 	}
 }

@@ -36,7 +36,7 @@ http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/
 output application/java
 ---
 
-'create-order-details-from-aptos-to-d365-main-flow']]></ee:set-variable>
+'post:\orders:application\json:p-order-mgmt-api-config']]></ee:set-variable>
 				<ee:set-variable variableName="transactionStartDate"><![CDATA[%dw 2.0
 output application/java
 

@@ -81,7 +81,8 @@ payload]]></ee:set-variable>
 			
 </when>
 			<otherwise >
-				<logger level="INFO" doc:name="No Data Receieved" doc:id="8c26ed45-ff3a-4312-9ee0-7b140649358a" message="${system.layer.response}"/>
+				<set-variable value="#['No data received']" doc:name="Set Variable" doc:id="9bfa5df8-8d89-4a3b-908d-13b096a66f5c" variableName="loggingPayload"/>
+				<flow-ref doc:name="Logging SubFlow" doc:id="5f3baea7-a25f-43b6-8d7e-ac09ee2de395" name="logging-sub-flow"/>
 			</otherwise>
 		</choice>
 	
