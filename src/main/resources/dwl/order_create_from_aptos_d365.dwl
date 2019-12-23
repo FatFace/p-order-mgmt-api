@@ -50,7 +50,7 @@ output application/json skipNullOn ='everywhere'
 				'line-item-number': ordl.'line-item-number',
 				'promotions': ordl.promotions map (prm, iprm) -> {
 					'promotion-id': prm.'promotion-id' default '',
-					'discount': prm.discount default ''
+					'discount': abs(prm.discount) default ''
 					}
 			},
 			payments: ord.payments map (pay, indOfPay) -> {
