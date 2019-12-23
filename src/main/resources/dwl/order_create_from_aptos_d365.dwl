@@ -1,6 +1,6 @@
 %dw 2.0
 output application/json skipNullOn ='everywhere'
-fun getMode(ordno) = vars.soLookupValue filter (($."order-no") == ordno) map $ 
+fun getMode(ordno) = vars.soLookupValue filter (($."order-no") == ordno) map $
 ---
 {
 	'orders': vars.aptosOriginalPayload.orders map (ord, indOford)  -> {	
@@ -9,11 +9,11 @@ fun getMode(ordno) = vars.soLookupValue filter (($."order-no") == ordno) map $
 			'order-date': if (ord.'order-date' != null) ord.'order-date'  else '' as DateTime ,
 			'source': ord.source as String,
 			'currency': if (ord.currency != null) ord.currency else '',
-			'delivery-mode': if(getMode(ord."order-no") != null) getMode(ord."order-no")."lookup-key" else '',
+			'delivery-mode': if(getMode(ord."order-no") != null) (getMode(ord."order-no")."lookup-key" reduce $) else '' ,
 			'language': ord.language,
 			'store': {
 				'store-id': ord.store.'store-id',
-				'store-code': if(getMode(ord."order-no") != null) getMode(ord."order-no").'lookup-value' else ''
+				'store-code': if(getMode(ord."order-no") != null) (getMode(ord."order-no").'lookup-value' reduce $) else ''
 			},
 			customer: {
 				'customer-id': if (ord.customer.'customer-id' != null)ord.customer.'customer-id' else '',

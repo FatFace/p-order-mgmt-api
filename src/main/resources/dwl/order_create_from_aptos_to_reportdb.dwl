@@ -1,6 +1,6 @@
 %dw 2.0
 output application/json skipNullOn ='everywhere'
-fun getMode(ordno) = vars.soLookupValue filter (($."order-no") == ordno) map $ 
+fun getMode(ordno) = vars.soLookupValue filter (($."order-no") == ordno) map $
 ---
 {
 	'orders': vars.aptosOriginalPayload.orders map (rep, indOfRep)  -> {
@@ -10,10 +10,10 @@ fun getMode(ordno) = vars.soLookupValue filter (($."order-no") == ordno) map $
 		'legal-entity': rep.'legal-entity' as String,
 		'language': rep.language,
 		'source': rep.source,
-		'delivery-mode': if(getMode(rep."order-no") != null) getMode(rep."order-no")."lookup-key" else '',
+		'delivery-mode': if(getMode(rep."order-no") != null) (getMode(rep."order-no")."lookup-key" reduce $) else '',
 		'store': {
 			'store-id': rep.store.'store-id',
-			'store-code': if(getMode(rep."order-no") != null) getMode(rep."order-no")."lookup-value" else ''
+			'store-code': if(getMode(rep."order-no") != null) (getMode(rep."order-no")."lookup-value" reduce $) else ''
 		},
 		customer: {
 			'customer-id': rep.customer.'customer-id',
