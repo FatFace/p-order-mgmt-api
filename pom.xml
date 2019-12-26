@@ -79,6 +79,18 @@
 	</build>
 
 	<dependencies>
+		<dependency>
+            <groupId>com.fatface.mule.extensions</groupId>
+            <artifactId>mule-module-common-logger</artifactId>
+            <version>1.0.0-SNAPSHOT</version>
+            <classifier>mule-plugin</classifier>
+        </dependency>
+        <dependency>
+		  <groupId>com.fatface.mule</groupId>
+		  <artifactId>common-framework-handler</artifactId>
+		  <version>1.0.0-SNAPSHOT</version>
+		  <classifier>mule-plugin</classifier>
+		</dependency>
         <dependency>
             <groupId>org.mule.connectors</groupId>
             <artifactId>mule-http-connector</artifactId>
@@ -97,12 +109,6 @@
             <version>1.1.9</version>
             <classifier>mule-plugin</classifier>
         </dependency>
-       	<dependency>
-		  <groupId>com.fatface.mule.extensions</groupId>
-		  <artifactId>mule-module-common-logger</artifactId>
-		  <version>1.0.0-SNAPSHOT</version>
-		  <classifier>mule-plugin</classifier>
-		</dependency>
     	<dependency>
             <groupId>com.mulesoft.connectors</groupId>
             <artifactId>mule-cloudhub-connector</artifactId>
@@ -127,14 +133,6 @@
             <version>1.0.2</version>
             <classifier>mule-plugin</classifier>
         </dependency>
-        
-    	<dependency>
-            <groupId>org.mule.modules</groupId>
-            <artifactId>mule-scripting-module</artifactId>
-            <version>1.1.6</version>
-            <classifier>mule-plugin</classifier>
-        </dependency>
-		
     	<dependency>
             <groupId>com.microsoft.sqlserver</groupId>
             <artifactId>mssql-jdbc</artifactId>
@@ -159,18 +157,6 @@
             <version>2.1.5</version>
             <classifier>mule-plugin</classifier>
             <scope>test</scope>
-        </dependency>
-    	<dependency>
-            <groupId>org.mule.modules</groupId>
-            <artifactId>mule-validation-module</artifactId>
-            <version>1.4.0</version>
-            <classifier>mule-plugin</classifier>
-        </dependency>
-    	<dependency>
-            <groupId>org.mule.connectors</groupId>
-            <artifactId>mule-email-connector</artifactId>
-            <version>1.1.6</version>
-            <classifier>mule-plugin</classifier>
         </dependency>
         <dependency>
 		    <groupId>org.apache.pdfbox</groupId>
@@ -217,12 +203,6 @@
             <artifactId>mule-objectstore-connector</artifactId>
             <version>1.1.3</version>
 			<classifier>mule-plugin</classifier>
-        </dependency>
-    	<dependency>
-            <groupId>com.mulesoft.connectors</groupId>
-            <artifactId>mule-amqp-connector</artifactId>
-            <version>1.4.5</version>
-            <classifier>mule-plugin</classifier>
         </dependency>
     </dependencies>
 	<distributionManagement>

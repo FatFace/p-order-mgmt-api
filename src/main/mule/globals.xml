@@ -18,6 +18,10 @@ http://www.mulesoft.org/schema/mule/tls http://www.mulesoft.org/schema/mule/tls/
 http://www.mulesoft.org/schema/mule/os http://www.mulesoft.org/schema/mule/os/current/mule-os.xsd">
 	<configuration-properties doc:name="Configuration properties" doc:id="31655e4d-0651-4ec4-a6ce-965230ec7e76" file="properties/common-properties.yaml" />
 	<configuration-properties doc:name="Configuration properties" doc:id="3b617f7a-4e8a-4201-b997-c85fe04c302e" file="properties/${mule.env}-properties.yaml" />   
+   	<import doc:name="Import" doc:id="71ce683d-0093-4829-a0c9-4156163ca939" file="common-auditing-framework.xml" />
+	<import doc:name="Import" doc:id="f6491dfd-1ee2-4948-a051-b03eb5a48760" file="common-logging-framework.xml" />
+	<import doc:name="Import" doc:id="5fac976a-bf7a-4d2a-a47b-73027614fb9b" file="common-reprocessing-framework.xml" />
+	<import doc:name="Import" doc:id="63ef4caf-4029-4fa8-8b23-501abc4a6387" file="common-error-handling.xml" />
    	<http:listener-config name="p-order-mgmt-api-httpListenerConfig">
       	  <http:listener-connection host="${http.host}" port="${http.private.port}" />
    	</http:listener-config>
@@ -38,13 +42,6 @@ http://www.mulesoft.org/schema/mule/os http://www.mulesoft.org/schema/mule/os/cu
 	<sqs:config name="Amazon_SQS_Configuration" doc:name="Amazon SQS Configuration" doc:id="2b1b5722-42da-4e24-b1b0-e12becbd5d65">
 		<sqs:basic-connection accessKey="${secure::sqs.accessKey}" secretKey="${secure::sqs.secretKey}" region="${secure::sqs.region}"/>
 	</sqs:config>
-	<validation:config name="Validation_Config" doc:name="Validation Config" doc:id="986f0321-73a5-4b21-9bb0-2a5eb020c7f9" />
-	<email:smtp-config name="Email_SMTP" doc:name="Email SMTP" doc:id="5adafb79-4340-4a30-8061-3bda81394ea1" >
-		<email:smtps-connection host="${secure::smtp.host}" user="${secure::smtp.user}"  tlsContext="TLS_Context" password="${secure::smtp.password}" port="${secure::smtp.port}"/>
-	</email:smtp-config>
-	<tls:context name="TLS_Context" doc:name="TLS Context" doc:id="9b4edc68-4a04-450d-b45c-e7f4ec9cd633" >
-		<tls:trust-store insecure="true" />
-	</tls:context>
 	<http:request-config name="s_D365_Http_Request_configuration" doc:name="HTTP Request configuration" doc:id="277afdf2-5f6c-4d0a-b897-ef8e5f936f6b" basePath="${d365.basepath}">
 		<http:request-connection host="${d365.host}" port="${d365.port}" />
 	</http:request-config>
