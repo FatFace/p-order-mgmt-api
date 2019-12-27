@@ -147,12 +147,16 @@ output application/json
 		<flow-ref doc:name="Log Process Exit" doc:id="35d61bcb-4bea-4ae2-8b6a-79f3876908e8" name="log-process-exit-sub-flow" />
 	</sub-flow>
 	<sub-flow name="shipment-manifest-auditing-sub-flow" doc:id="e4fa9804-b3ca-48ca-8fb8-c92140e506ee" >
+		<set-variable value="Auditing details of Manifest data" doc:name="Set Logging payload" doc:id="7873f2af-252c-49ff-bfc5-1015dec7fd61" variableName="loggingPayload" />
+		<flow-ref doc:name="Logging Message" doc:id="1ef0440a-feab-4a5b-9d4f-426d512ad90a" name="logging-sub-flow" />
 		<ee:transform doc:name="Transform Message To Audit Details Structure" doc:id="f90eb4ca-9de7-48a4-8213-c6fd0f4a9945" >
 			<ee:message >
 				<ee:set-payload resource="dwl/auditing-manifest.dwl" />
 			</ee:message>
 		</ee:transform>
 		<flow-ref doc:name="Flow Reference Audit Details Processing" doc:id="c74b2bd4-22b5-44f5-9d61-ab703349ad02" name="audit-details-processing-sub-flow"/>
+		<set-variable value="Manifest data pushed in Audit Table" doc:name="Set Logging payload" doc:id="486a5b31-96f6-4e89-a8c7-c58504b29001" variableName="loggingPayload" />
+		<flow-ref doc:name="Logging Message" doc:id="077baa4a-6242-4991-9b09-e443f7befd6e" name="logging-sub-flow" />
 	</sub-flow>
 	<flow name="receive-manifest-message-and-retry" doc:id="63560399-337d-4fee-afc6-1fa711a066f9" >
 		<sqs:receivemessages doc:name="Receive Message From Manifest and Retry" doc:id="15d45a94-7c2c-42ae-ae08-de1037bbc01b" config-ref="Amazon_SQS_Configuration" queueUrl="${sqs.queue.url.manifestQueueUrl}"/>
