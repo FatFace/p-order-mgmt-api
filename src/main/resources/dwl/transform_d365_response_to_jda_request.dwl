@@ -1,5 +1,6 @@
 %dw 2.0
-output application/json 
+output application/json
+fun getDeliveryMode(orderno) =  vars.lookUpValue filter (($."routeId") == orderno)
 ---
 {
 	orders: vars.originalPayload.'pick-orders' map ( pickorder , indexOfPickorder ) -> {
@@ -11,7 +12,7 @@ output application/json
 		"purchase-order": if((pickorder."order-no") != null) (if(sizeOf(pickorder."order-no")>=30) ((pickorder."order-no")[0 to 29]) else (pickorder."order-no")) else " ",
 		"line-price": if(sizeOf(sum(pickorder.orderlines.amount + pickorder."net-amount")as String)>= 30) ((sum(pickorder.orderlines.amount + pickorder."net-amount")as String )[0 to 29]) else (sum(pickorder.orderlines.amount + pickorder."net-amount")as String),
 		"delivery-charges": if((pickorder.charges) != null) (if(sizeOf(pickorder.charges)>=15) ((pickorder.charges)[0 to 14]) else (pickorder.charges)) else " ",
-		"dispatch_method": $."lookup-value",
+		"dispatch_method": if(getDeliveryMode(pickorder."route-id") != []) (getDeliveryMode(pickorder."route-id") reduce $) else "",
 		"customer-id": if((pickorder.customer."customer-id") != null) (if(sizeOf(pickorder.customer."customer-id")>=15) ((pickorder.customer."customer-id")[0 to 14]) else (pickorder.customer."customer-id")) else " ",
 		"del-name": if((pickorder.customer."billing-address".fullname)!= null) (if(sizeOf(pickorder.customer."billing-address".fullname)>= 50) ((pickorder.customer."billing-address".fullname)[0 to 49]) else (pickorder.customer."billing-address".fullname)) else " ",
 		"del-contact-email": if((pickorder.customer.email) != null) (if(sizeOf(pickorder.customer.email)>=256) ((pickorder.customer.email)[0 to 255]) else (pickorder.customer.email)) else " ",

@@ -1,18 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
-	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="
-http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd ">
+<mule xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation=" http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd ">
     <apikit:config name="p-order-mgmt-api-config" raml="p-order-mgmt-api.raml" outboundHeadersMapName="outboundHeaders" httpStatusVarName="httpStatus" />
     <flow name="p-order-mgmt-api-main">
         <http:listener config-ref="p-order-mgmt-api-httpListenerConfig" path="${http.basePath}">
-            <http:response statusCode="#[vars.httpStatus default 200]">
-            </http:response>
+            <http:response statusCode="#[vars.httpStatus default 200]" />
             <http:error-response statusCode="#[vars.httpStatus default 500]">
                 <http:body><![CDATA[#[payload]]]></http:body>
             </http:error-response>
         </http:listener>
         <apikit:router config-ref="p-order-mgmt-api-config" />
-       
     </flow>
     <flow name="p-order-mgmt-api-console">
         <http:listener config-ref="p-order-mgmt-api-httpListenerConfig" path="/console/*">
@@ -25,29 +21,44 @@ http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/
             </http:error-response>
         </http:listener>
         <apikit:console config-ref="p-order-mgmt-api-config" />
-        
     </flow>
     <flow name="post:\orders:application\json:p-order-mgmt-api-config">
         <ee:transform doc:name="Set Flow Name and Transaction Start Date" doc:id="2a4aa031-cc3f-4d05-8444-f16d9bf13427">
-			<ee:message>
-			</ee:message>
-			<ee:variables>
-				<ee:set-variable variableName="flowName"><![CDATA[%dw 2.0
+            <ee:message />
+            <ee:variables>
+                <ee:set-variable variableName="flowName"><![CDATA[%dw 2.0
 output application/java
 ---
 
 'post:\orders:application\json:p-order-mgmt-api-config']]></ee:set-variable>
-				<ee:set-variable variableName="transactionStartDate"><![CDATA[%dw 2.0
+                <ee:set-variable variableName="transactionStartDate"><![CDATA[%dw 2.0
 output application/java
 
 ---
 now() as String {format : "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"}]]></ee:set-variable>
+            </ee:variables>
+        </ee:transform>
+        <flow-ref doc:name="Log Receiver Entry" doc:id="37bd2986-6250-4505-9938-c0dd77beacd3" name="log-receiver-entry-sub-flow" />
+        <flow-ref doc:name="Audit Receiver Entry" doc:id="fc46dc04-5331-4e97-a0e2-b6d1bcf464dc" name="audit-receiver-entry-sub-flow" />
+        <flow-ref doc:name="Call Aptos To D365 Impl Sub Flow" doc:id="0c3dcaab-cfa6-482b-8177-35c2ee418eed" name="aptos-to-d365-impl-flow" />
+        <flow-ref doc:name="Log Dispatcher Exit" doc:id="e975b617-d94e-4f99-99ba-f1fe8f1578de" name="log-dispatcher-exit-sub-flow" />
+        <flow-ref doc:name="Audit Dispatcher Exit" doc:id="d574d36d-151f-40bf-995f-347b5ec96fb2" name="audit-dispatcher-exit-sub-flow" />
+    </flow>
+    <flow name="post:\pick\orders:application\json:p-order-mgmt-api-config">
+        <ee:transform doc:name="Transform Message" doc:id="fbd162ae-d632-4615-a11b-0dc171753057" >
+			<ee:message >
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="flowName" ><![CDATA[%dw 2.0
+output application/java
+---
+'post:\pick\orders:application\json:p-order-mgmt-api-config']]></ee:set-variable>
 			</ee:variables>
 		</ee:transform>
-		<flow-ref doc:name="Log Receiver Entry" doc:id="37bd2986-6250-4505-9938-c0dd77beacd3" name="log-receiver-entry-sub-flow"/>
-		<flow-ref doc:name="Audit Receiver Entry" doc:id="fc46dc04-5331-4e97-a0e2-b6d1bcf464dc" name="audit-receiver-entry-sub-flow"/>
-		<flow-ref doc:name="Call Aptos To D365 Impl Sub Flow" doc:id="0c3dcaab-cfa6-482b-8177-35c2ee418eed" name="aptos-to-d365-impl-flow"/>
-		<flow-ref doc:name="Log Dispatcher Exit" doc:id="e975b617-d94e-4f99-99ba-f1fe8f1578de" name="log-dispatcher-exit-sub-flow"/>
-		<flow-ref doc:name="Audit Dispatcher Exit" doc:id="d574d36d-151f-40bf-995f-347b5ec96fb2" name="audit-dispatcher-exit-sub-flow"/>
+		 <flow-ref doc:name="Log Receiver Entry" doc:id="b46abfd0-4f6c-490f-a414-092add15fb89" name="log-receiver-entry-sub-flow" />
+        <flow-ref doc:name="Audit Receiver Entry" doc:id="e0c503c1-943d-463b-beca-082c598e7a03" name="audit-receiver-entry-sub-flow" />
+        <flow-ref doc:name="Call Pick Orders Flow" doc:id="8ac2ebd4-8a55-4ab6-82fd-a488fffaac95" name="order-managment-app-flow" />
+        <flow-ref doc:name="Log Dispatcher Exit" doc:id="d881dd94-e15b-4322-9bc9-8dc2da693b17" name="log-dispatcher-exit-sub-flow" />
+        <flow-ref doc:name="Audit Dispatcher Exit" doc:id="4a89b19a-bc1b-4755-ad9f-ae19df699a99" name="audit-dispatcher-exit-sub-flow" />
     </flow>
 </mule>

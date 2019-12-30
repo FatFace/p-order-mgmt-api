@@ -12,23 +12,25 @@ api:
 scheduler:
   cron:
     expression: "0 0/15 * 1/1 * ? *"
-
-http:
-  basePath: "/api/*"
-  port: "8081"
+  frequency : "15"
   
 d365:
-  host: "mule-worker-internal-dev-s-d365-api.ir-e1.cloudhub.io"
-  port: "8091"
+  host: "localhost"
+  port: "8092"
   basepath: "/api/v1"
   clientId: "c1751cc13ad746a8a49c404c966839f7"
   clientSecret: "7d3aFbC44E8e49048935f06A7A2a099d"
   getCustomerGroupPath: "/data/CustomerGroups"
   updateProductsPath: "/data/products"     
   updateManifestPath: "/pick/manifests"
-  updateOrderExtractPath: "/pick/orders" 
-  pickOrdersPath: "/pick/orders"
-  
+  updateOrderExtractPath: "/pick/orders"
+  webOrdersPath: "/web/orders"
+  dmf: 
+    path: "/dmf/export"
+    pick:
+      create:
+        definitionGroupId: "IDD009-PickRequest-Export"
+        packageName: "Pick-Create-"
 jda:
   host: "mule-worker-internal-dev-s-jda-data-int.ir-e1.cloudhub.io"
   port: "8092"
@@ -85,8 +87,8 @@ smtp:
   subject: "Fatface API Exception"
   
 lookup:
-  host: "dev-s-dblookup-api.ir-e1.cloudhub.io"
-  port: "80"
+  host: "localhost"
+  port: "8095"
   basePath: "/api/v1"
   dbLookupPath: "/lookups"
   aptos:

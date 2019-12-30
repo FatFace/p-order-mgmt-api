@@ -6,40 +6,7 @@
 http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
 http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
 http://www.mulesoft.org/schema/mule/os http://www.mulesoft.org/schema/mule/os/current/mule-os.xsd">
-	<flow name="order-managment-app-flow" doc:id="e4041d85-5c17-4374-b202-6367cd858318" >
-		<scheduler doc:name="Scheduler" doc:id="fd89417f-b2d5-4c23-8807-82f3eb5d99ee" >
-			<scheduling-strategy >
-				<cron expression="${scheduler.cron.expression}" />
-			</scheduling-strategy>
-		</scheduler>
-		<ee:transform doc:name="Set Attributes" doc:id="4cc14d7e-b523-4a00-9b6b-12a7a72adadd" >
-			<ee:message >
-			</ee:message>
-			<ee:variables >
-				<ee:set-variable variableName="flowName" ><![CDATA[%dw 2.0
-output application/json
----
-'order-managment-appFlow']]></ee:set-variable>
-				<ee:set-variable variableName="transactionStartDate" ><![CDATA[%dw 2.0
-output application/java
----
-now() as String {format : "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"}]]></ee:set-variable>
-			</ee:variables>
-		</ee:transform>
-		<flow-ref doc:name="Log Reveiver Entry" doc:id="01c4fa7d-b353-458a-9722-8a3217d8516f" name="log-receiver-entry-sub-flow"/>
-		<flow-ref doc:name="Audit Receiver Entry" doc:id="d7f34af9-ed70-48f0-b66f-775e7e1ca35d" name="audit-receiver-entry-sub-flow"/>
-		<flow-ref doc:name="Log Process Entry" doc:id="bde32360-83c3-4bb9-82d5-6a0a2390e60f" name="log-process-entry-sub-flow"/>
-		<flow-ref doc:name="Audit Process Entry" doc:id="7c238d72-7cbb-41e8-baa8-6b8572d19d76" name="audit-process-entry-sub-flow"/>
-		<http:request method="GET" doc:name="Invoke System Layer D365 Api to Get Pic Orders" doc:id="23912345-ad5d-4027-8b56-999893204273" config-ref="s_D365_Http_Request_configuration" path="${d365.pickOrdersPath}" responseTimeout="${response.timeout}">
-			<http:headers ><![CDATA[#[output application/java
----
-{
-	"Transaction-Id" : vars.transactionId,
-	"Transaction-Start-Time" : vars.transactionStartDate,
-	"Client-Id" : p('d365.clientId'),
-	"Client-Secret" : p('d365.clientSecret')
-}]]]></http:headers>
-		</http:request>
+	<sub-flow name="order-managment-app-flow" doc:id="e4041d85-5c17-4374-b202-6367cd858318" >
 		<set-variable value="#[payload]" doc:name="Set Variable" doc:id="b63136f8-1f56-46cb-a72a-bf19b3787815" variableName="originalPayload"/>
 		<flow-ref doc:name="Log Process Exit" doc:id="57488e0a-6786-42d8-b5d8-77779ab8b576" name="log-process-exit-sub-flow"/>
 		<flow-ref doc:name="Audit Process Exit" doc:id="316bb697-e0ff-45da-8c6c-b2f2d9d2338b" name="audit-process-exit-sub-flow"/>
@@ -48,15 +15,14 @@ now() as String {format : "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"}]]></ee:set-variable>
 				<flow-ref doc:name="Get Delivery Mode numeric value " doc:id="bb575bb6-3b30-4845-83d0-e069d2755fee" name="get-delivery-mode-from-dblookup-for-pick-orders-sub-flow"/>
 				<ee:transform doc:name="Transform D365 Response to JDA Request" doc:id="cf76c100-3d06-494c-a266-2209c8e73934">
 			<ee:message>
+						<ee:set-payload resource="dwl/transform_d365_response_to_jda_request.dwl" />
 			</ee:message>
 			<ee:variables>
-						<ee:set-variable resource="dwl/transform_d365_response_to_jda_request.dwl" variableName="transformedPayload" />
 			</ee:variables>
 		</ee:transform>
 				<flow-ref doc:name="Log Process Entry" doc:id="0c3d0e86-05a8-48fd-9355-7849e7e45dfd" name="log-process-entry-sub-flow" />
 				<flow-ref doc:name="Audit Process Entry" doc:id="09988aee-0cd6-4706-989e-468edc0cf587" name="audit-process-entry-sub-flow" />
 				<http:request method="POST" doc:name="Invoke System Layer JDA Api to Post Orders" doc:id="1d39c868-a89c-48a5-8d97-9d5cb35a6020" config-ref="s_jda_Http_Request_configuration" path="${jda.ordersPath}" responseTimeout="${response.timeout}">
-			<http:body><![CDATA[#[vars.transformedPayload]]]></http:body>
 					<http:query-params ><![CDATA[#[output application/java
 ---
 {
@@ -75,7 +41,7 @@ now() as String {format : "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"}]]></ee:set-variable>
 		</choice>
 		<flow-ref doc:name="Audit Dispatcher Exit" doc:id="aed28708-7f9c-4dd8-8b0c-7f897fd31b2d" name="audit-dispatcher-exit-sub-flow"/>
 		<flow-ref doc:name="Log Dispatcher Exit" doc:id="c445a4b5-389b-404f-a6f0-e886f84c57e4" name="log-dispatcher-exit-sub-flow"/>
-	</flow>
+	</sub-flow>
 	<sub-flow name="get-delivery-mode-from-dblookup-for-pick-orders-sub-flow" doc:id="38c64bce-f20c-443d-b122-a749a14d1d7a" >
 		<set-variable value="#['get-delivery-mode-from-dblookup-for-pick-orders-sub-flow']" doc:name="Set Variable" doc:id="19c3baaf-9791-4ab2-bf57-eba051e5b65d" variableName="flowName"/>
 		<flow-ref doc:name="Log Receiver Entry" doc:id="ce4d2752-8b05-4611-988c-dbaa3113a80a" name="log-receiver-entry-sub-flow"/>

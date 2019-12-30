@@ -12,6 +12,7 @@ api:
 scheduler:
   cron:
     expression: "0 0/15 * 1/1 * ? *"
+  frequency : "15"
         
 d365:
   host: "mule-worker-internal-dev-s-d365-api.ir-e1.cloudhub.io"
@@ -23,8 +24,13 @@ d365:
   updateProductsPath: "/data/products"
   updateManifestPath: "/pick/manifests"
   updateOrderExtractPath: "/pick/orders"
-  pickOrdersPath: "/pick/orders"
   webOrdersPath: "/web/orders"
+  dmf: 
+    path: "/dmf/export"
+    pick:
+      create:
+        definitionGroupId: "IDD009-PickRequest-Export"
+        packageName: "Pick-Create-"
 
 jda:
   host: "mule-worker-internal-dev-s-jda-data-int.ir-e1.cloudhub.io"
