@@ -6,7 +6,7 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="
 http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
 http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
-	<flow name="d365-scheduler-flow" doc:id="0be848f7-d42c-4b5f-9f67-29c845fad4af" initialState="started">
+	<flow name="pick-orders-scheduler-flow" doc:id="0be848f7-d42c-4b5f-9f67-29c845fad4af">
 		<scheduler doc:name="Scheduler" doc:id="23ec0722-9862-4bc8-a084-dda881603654" >
 			<scheduling-strategy >
 				<fixed-frequency frequency="${scheduler.frequency}" timeUnit="MINUTES"/>
