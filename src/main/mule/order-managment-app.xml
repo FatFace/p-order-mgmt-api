@@ -6,6 +6,7 @@
 http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
 http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
 http://www.mulesoft.org/schema/mule/os http://www.mulesoft.org/schema/mule/os/current/mule-os.xsd">
+
 	<sub-flow name="order-managment-app-flow" doc:id="e4041d85-5c17-4374-b202-6367cd858318" >
 		<set-variable value="#[payload]" doc:name="Set Variable" doc:id="b63136f8-1f56-46cb-a72a-bf19b3787815" variableName="originalPayload"/>
 		<flow-ref doc:name="Log Process Exit" doc:id="57488e0a-6786-42d8-b5d8-77779ab8b576" name="log-process-exit-sub-flow"/>
@@ -31,7 +32,7 @@ http://www.mulesoft.org/schema/mule/os http://www.mulesoft.org/schema/mule/os/cu
 	"vRequestId" : vars.transactionId
 }]]]></http:query-params>
 		</http:request>
-				<flow-ref doc:name="Log Process Exit" doc:id="78baee98-f66e-4843-9bcd-e72a625df755" name="log-process-exit-sub-flow" />
+				<flow-ref doc:name="Audit Process Exit" doc:id="78baee98-f66e-4843-9bcd-e72a625df755" name="audit-process-exit-sub-flow" />
 				<flow-ref doc:name="Log Process Entry" doc:id="e387b50b-1d53-468d-8c62-7af9f168e776" name="log-process-entry-sub-flow" />
 			</when>
 			<otherwise >
@@ -39,8 +40,8 @@ http://www.mulesoft.org/schema/mule/os http://www.mulesoft.org/schema/mule/os/cu
 				<flow-ref doc:name="Logging Sub Flow Reference" doc:id="7487388f-381d-4345-aee7-17efe04f650b" name="logging-sub-flow"/>
 			</otherwise>
 		</choice>
-		<flow-ref doc:name="Audit Dispatcher Exit" doc:id="aed28708-7f9c-4dd8-8b0c-7f897fd31b2d" name="audit-dispatcher-exit-sub-flow"/>
-		<flow-ref doc:name="Log Dispatcher Exit" doc:id="c445a4b5-389b-404f-a6f0-e886f84c57e4" name="log-dispatcher-exit-sub-flow"/>
+			<flow-ref doc:name="Audit Process Exit" doc:id="c9063383-53a9-45fe-af16-e2814c6204d4" name="audit-process-exit-sub-flow" />
+			<flow-ref doc:name="Log Process Entry" doc:id="132d9531-b08e-4913-a9ac-ba0c14ed0040" name="log-process-entry-sub-flow" />
 	</sub-flow>
 	<sub-flow name="get-delivery-mode-from-dblookup-for-pick-orders-sub-flow" doc:id="38c64bce-f20c-443d-b122-a749a14d1d7a" >
 		<set-variable value="#['get-delivery-mode-from-dblookup-for-pick-orders-sub-flow']" doc:name="Set Variable" doc:id="19c3baaf-9791-4ab2-bf57-eba051e5b65d" variableName="flowName"/>
@@ -69,15 +70,15 @@ payload]]></ee:set-payload>
 ---
 {
 	"Transaction-Id" : vars.transactionId,
-	"Transaction-Start-Time" : vars.transactionStartDate,
 	"Client-Id" : p('lookup.clientId'),
-	"Client-Secret" : p('lookup.clientSecret')
+	"Client-Secret" : p('lookup.clientSecret'),
+	"Transaction-Start-Time" : vars.transactionStartDate
 }]]]></http:headers>
 					<http:query-params ><![CDATA[#[output application/java
 ---
 {
-	"type" : p('lookup.queryParam.type'),
 	"source" : p('lookup.queryParam.source'),
+	"type" : p('lookup.queryParam.type'),
 	"category" : p('lookup.queryParam.catgeory')
 }]]]></http:query-params>
 				</http:request>

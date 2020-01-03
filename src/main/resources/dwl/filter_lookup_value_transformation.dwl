@@ -1,12 +1,9 @@
 %dw 2.0
 output application/json skipNullOn = "everywhere"
+fun lookupdata(data) = payload.lookups filter (($."lookup-key") == data."delivery-mode") reduce $$
 ---
 
 vars.originalPayload.'pick-orders' map (value) ->{
-(payload.lookups filter (($."lookup-key") == value."delivery-mode") map {
-
 	"routeId" : value."route-id",
-	"lookup-value" : $."lookup-value"
-} reduce $$)
-
+	"lookup-value" : if(lookupdata(value) != null and isEmpty(lookupdata(value)) != true) lookupdata(value)."lookup-value" else ''
 }
