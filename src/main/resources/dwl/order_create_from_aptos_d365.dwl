@@ -1,6 +1,7 @@
 %dw 2.0
 output application/json skipNullOn ='everywhere'
 fun getMode(ordno) = vars.soLookupValue filter (($."order-no") == ordno) map $
+fun getBarcode(barCode) = vars.sbLookupValue filter ($."barcode" == barCode) map $."lookup-value"
 ---
 {
 	'orders': vars.aptosOriginalPayload.orders map (ord, indOford)  -> {	
@@ -10,10 +11,11 @@ fun getMode(ordno) = vars.soLookupValue filter (($."order-no") == ordno) map $
 			'source': ord.source as String,
 			'currency': if (ord.currency != null) ord.currency else '',
 			'delivery-mode': if(getMode(ord."order-no") != null) (getMode(ord."order-no")."lookup-key" reduce $) else '' ,
+			'sales-pool': if(getMode(ord."order-no") != null) (getMode(ord."order-no").'lookup-value' reduce $) else '',
 			'language': ord.language,
 			'store': {
 				'store-id': ord.store.'store-id',
-				'store-code': if(getMode(ord."order-no") != null) (getMode(ord."order-no").'lookup-value' reduce $) else ''
+				'store-code': ord.store.'store-code'
 			},
 			customer: {
 				'customer-id': if (ord.customer.'customer-id' != null)ord.customer.'customer-id' else '',
@@ -45,7 +47,7 @@ fun getMode(ordno) = vars.soLookupValue filter (($."order-no") == ordno) map $
 				'item-name': if (ordl.'item-name' != null) ordl.'item-name' else '',
 				'tax-rate': if (ordl.'tax-rate' != null) ordl.'tax-rate' else '',
 				'sales-price': ordl.'sales-price',
-				'barcode': Mule::lookup("common-template-check-digit-lookup-flow", ordl.barcode),
+				'barcode': (if (ordl.'item-name' != null) (if (lower(ordl.'item-name') contains "delivery") (getBarcode(ordl.barcode) reduce $) else Mule::lookup("common-template-check-digit-lookup-flow", ordl.barcode)) else ""),
 				'quantity': ordl.quantity,
 				'line-item-number': ordl.'line-item-number',
 				'promotions': ordl.promotions map (prm, iprm) -> {

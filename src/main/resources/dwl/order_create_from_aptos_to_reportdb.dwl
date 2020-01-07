@@ -1,6 +1,7 @@
 %dw 2.0
 output application/json skipNullOn ='everywhere'
 fun getMode(ordno) = vars.soLookupValue filter (($."order-no") == ordno) map $
+fun getBarcode(barCode) = vars.sbLookupValue filter ($."barcode" == barCode) map $."lookup-value"
 ---
 {
 	'orders': vars.aptosOriginalPayload.orders map (rep, indOfRep)  -> {
@@ -11,9 +12,10 @@ fun getMode(ordno) = vars.soLookupValue filter (($."order-no") == ordno) map $
 		'language': rep.language,
 		'source': rep.source,
 		'delivery-mode': if(getMode(rep."order-no") != null) (getMode(rep."order-no")."lookup-key" reduce $) else '',
+		'sales-pool': if(getMode(rep."order-no") != null) (getMode(rep."order-no").'lookup-value' reduce $) else '',
 		'store': {
 			'store-id': rep.store.'store-id',
-			'store-code': if(getMode(rep."order-no") != null) (getMode(rep."order-no")."lookup-value" reduce $) else ''
+			'store-code': rep.store.'store-code'
 		},
 		customer: {
 			'customer-id': rep.customer.'customer-id',
@@ -35,7 +37,7 @@ fun getMode(ordno) = vars.soLookupValue filter (($."order-no") == ordno) map $
 			'item-id': ordl.'item-id',
 			'item-name': ordl.'item-name',
 			'sales-price': ordl.'sales-price',
-			'barcode': Mule::lookup("common-template-check-digit-lookup-flow", ordl.barcode),
+			'barcode': (if (ordl.'item-name' != null) (if (lower(ordl.'item-name') contains "delivery") (getBarcode(ordl.barcode) reduce $) else Mule::lookup("common-template-check-digit-lookup-flow", ordl.barcode)) else ""),
 			'quantity': ordl.quantity,
 			'amount': ordl.amount,
 			'tax-amount': ordl.'tax-amount',

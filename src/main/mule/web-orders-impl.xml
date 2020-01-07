@@ -25,6 +25,7 @@ payload]]></ee:set-variable>
 			<when expression="#[(vars.aptosOriginalPayload != null) or (isEmpty(vars.aptosOriginalPayload) == false)]">
 				<flow-ref doc:name="Get Key Values For Delivery Mode" doc:id="17ca0096-800d-4012-b189-a71df4afcac3" name="get-mode-of-delivery-key-values-from-dblookup-sub-flow"/>
 				<flow-ref doc:name="Get Key Values For Sales Origin" doc:id="d6df6c36-1ef3-4c80-bb97-c27777e40d9d" name="get-sales-of-origin-key-values-from-dblookup-sub-flow"/>
+				<flow-ref doc:name="Get Key Values For Shipping Barcode" doc:id="0fb8265d-878a-46c1-9c95-b415daaa3be1" name="get-shipping-barcode-key-values-from-dblookup-flow"/>
 				<async doc:name="Async" doc:id="2b870c4f-c65f-4ef9-ab9e-bfdc6c7f376f" >
 					<ee:transform doc:name="Input For Report DB" doc:id="8e659a69-da22-4a6f-b991-a5209e7238c5">
 					<ee:message>
@@ -69,9 +70,9 @@ payload]]></ee:set-variable>
 ---
 {
 	"Transaction-Id" : vars.transactionId,
-	"Transaction-Start-Time" : vars.transactionStartDate,
 	"Client-Id" : p('d365.clientId'),
-	"Client-Secret" : p('d365.clientSecret')
+	"Client-Secret" : p('d365.clientSecret'),
+	"Transaction-Start-Time" : vars.transactionStartDate
 }]]]></http:headers>
 					
 		</http:request>
@@ -165,6 +166,47 @@ payload]]></ee:set-variable>
 </otherwise>
 		</choice>
 	</sub-flow>
+	<flow name="get-shipping-barcode-key-values-from-dblookup-flow" doc:id="a3cb24b4-8c38-489e-9fb9-3849e29d146f">
+	<set-variable value="#['get-shipping-barcode-key-values-from-dblookup-sub-flow']" doc:name="Flow Name" doc:id="3e970437-038d-4daa-9785-03f2a31d06a8" variableName="flowName"/>
+		<!-- <set-variable value="#[payload]" doc:name="Set Request BarCode Key" doc:id="1a7b7547-2d66-49b0-90cc-a71687cf6d80" variableName="vRequestBarCodeKey"/> -->
+		<set-variable value="#[p('lookup.aptos.shippingBarcode.key')]" doc:name="Set Shipping Barcode Lookup Key" doc:id="f8bdf6cd-9c24-45d6-a88a-356223929dab" variableName="shippingBarcodeKey"/>
+		<os:contains doc:name="Contains" doc:id="4769969f-c1b5-4af3-8fb1-ed167c6dd721" key="#[vars.shippingBarcodeKey]" objectStore="Object_store"/>
+		<choice doc:name="Choice" doc:id="cec9c378-e7be-4a77-817f-513f8d9df79b" >
+			<when expression="#[payload ==true]">
+				<os:retrieve doc:name="Retrieve" doc:id="e261ad96-fe0e-46a3-96a6-4e0f4c94417d" key="#[vars.shippingBarcodeKey]" objectStore="Object_store"/>
+				<flow-ref doc:name="Map Shipping Barcode Value" doc:id="39822f06-2f90-4a2a-bbc0-ab5f9c46efdd" name="filter-shipping-barcode"/>
+			
+</when>
+			<otherwise >
+				<flow-ref doc:name="Log Process Entry" doc:id="4a58812f-7da4-417c-9345-9f087efba62f" name="log-process-entry-sub-flow"/>
+				<flow-ref doc:name="Audit Process Entry" doc:id="0b962d40-de13-471e-8d63-dc4db4c390c0" name="audit-process-entry-sub-flow"/>
+				<until-successful maxRetries="${retry.attempts}" doc:name="Until Successful" doc:id="d0cb5dc9-841f-4a7b-b9d4-2fdce06af838" millisBetweenRetries="${retry.frequency}">
+					<http:request method="GET" doc:name="Call DB SO Lookup Http Request Configuration" doc:id="242a7a58-954f-40d5-b3cf-d66f81a658c2" path="${lookup.dbLookupPath}" responseTimeout="${response.timeout}" config-ref="dbLookup_HTTP_Request_configuration">
+					<http:headers><![CDATA[#[output application/java
+---
+{
+	"Transaction-Id" : vars.transactionId,
+	"Client-Id" : p('lookup.clientId'),
+	"Client-Secret" : p('lookup.clientSecret'),
+	"Transaction-Start-Time" : vars.transactionStartDate
+}]]]></http:headers>
+					<http:query-params><![CDATA[#[output application/java
+---
+{
+	"source" : p('lookup.queryParam.aptos.shippingBarcode.source'),
+	"type" : p('lookup.queryParam.aptos.shippingBarcode.type'),
+	"category" : p('lookup.queryParam.aptos.shippingBarcode.category')
+}]]]></http:query-params>
+				</http:request>
+				</until-successful>
+				<flow-ref doc:name="Log Process Exit" doc:id="9921860b-7cec-4605-b146-7bb2788c132a" name="log-process-exit-sub-flow"/>
+				<flow-ref doc:name="Audit Process Exit" doc:id="3c398308-c1e7-4cee-bb8d-6ee05f56e5f0" name="audit-process-exit-sub-flow"/>
+				<os:store doc:name="Store" doc:id="3f779e7b-a6f2-49ae-8ed0-12dd1074f451" key="#[vars.shippingBarcodeKey]" objectStore="Object_store"/>
+				<flow-ref doc:name="Map Shipping Barcode Value" doc:id="8764f845-2b37-4d54-ad03-892d5bda0040" name="filter-shipping-barcode"/>
+			
+</otherwise>
+		</choice>
+	</flow>
 	<sub-flow name="filter-mode-of-delivery" doc:id="382d3b9f-a9d8-4f1c-8d36-999496de41dd" >
 		<ee:transform doc:name="Map Key Value For Delivery Mode" doc:id="3b839c23-4a13-494e-8485-51b06eadd218" >
 			<ee:message >
@@ -205,6 +247,28 @@ vars.dmLookupValue map (value) ->{
 
 }
 ]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+	</sub-flow>
+	<sub-flow name="filter-shipping-barcode" doc:id="58fc7bdc-693f-4b93-8477-5de3506a81e9" >
+		<ee:transform doc:name="Map Key Value For Shipping Barcode" doc:id="836b848d-f878-4906-81b6-dbc1ed8884dc" >
+			<ee:message >
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="sbLookupValue" ><![CDATA[%dw 2.0
+output application/json skipNullOn = "everywhere"
+---
+
+(vars.aptosOriginalPayload.'orders' map (value) ->{
+	data:(value.'orderlines' map (ol) ->{
+(payload.lookups filter (($."lookup-key") == ol.barcode) map {
+
+	"order-no" : value."order-no",
+	"barcode": ol.barcode,
+	"lookup-value" : $."lookup-value"
+}) })
+
+}).data reduce $$]]></ee:set-variable>
 			</ee:variables>
 		</ee:transform>
 	</sub-flow>

@@ -96,6 +96,8 @@ lookup:
       key: "MODE_OF_DELIVERY-DEPT-APTOS"
     salesOfOrigin:
       key: "SALES_ORIGIN-MODE_OF_DELIVERY-APTOS"
+    shippingBarcode:
+      key: "SHIPPING_BAR_CODE-ORDERITEM_NUMSTR-APTOS"
   key: "ORDER_TYPE-MODE_OF_DELIVERY-D365"
   clientId: "a1c25cbc41dc4a43a1c5c3ecbf1251c5"
   clientSecret: "C3a2082C36B54f5bbba606E704e11bDE"
@@ -111,6 +113,10 @@ lookup:
       salesOfOrigin:
         type: "SALES_ORIGIN"
         category: "MODE_OF_DELIVERY"
+        source: "APTOS"
+      shippingBarcode:
+        type: "SHIPPING_BAR_CODE"
+        category: "ORDERITEM_NUMSTR"
         source: "APTOS"
 cron:
   expression: 
