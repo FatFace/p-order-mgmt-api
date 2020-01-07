@@ -43,9 +43,9 @@ payload]]></ee:set-variable>
 ---
 {
 	"Transaction-Id" : vars.transactionId,
-	"Transaction-Start-Time" : vars.transactionStartDate,
 	"Client-Id" : p('report.clientId'),
-	"Client-Secret" : p('report.clientSecret')
+	"Client-Secret" : p('report.clientSecret'),
+	"Transaction-Start-Time" : vars.transactionStartDate
 }]]]></http:headers>
 					
 					</http:request>

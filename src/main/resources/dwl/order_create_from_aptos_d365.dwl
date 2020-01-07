@@ -47,7 +47,7 @@ fun getBarcode(barCode) = vars.sbLookupValue filter ($."barcode" == barCode) map
 				'item-name': if (ordl.'item-name' != null) ordl.'item-name' else '',
 				'tax-rate': if (ordl.'tax-rate' != null) ordl.'tax-rate' else '',
 				'sales-price': ordl.'sales-price',
-				'barcode': (if (ordl.'item-name' != null) (if (lower(ordl.'item-name') contains "delivery") (getBarcode(ordl.barcode) reduce $) else Mule::lookup("common-template-check-digit-lookup-flow", ordl.barcode)) else ""),
+				'barcode': (if (ordl.'item-name' != null) (if (lower(ordl.'item-name') contains "delivery") (getBarcode(ordl.barcode) reduce $) else ordl.barcode) else ""),
 				'quantity': ordl.quantity,
 				'line-item-number': ordl.'line-item-number',
 				'promotions': ordl.promotions map (prm, iprm) -> {
