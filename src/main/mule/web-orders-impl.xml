@@ -43,9 +43,9 @@ payload]]></ee:set-variable>
 ---
 {
 	"Transaction-Id" : vars.transactionId,
+	"Transaction-Start-Time" : vars.transactionStartDate,
 	"Client-Id" : p('report.clientId'),
-	"Client-Secret" : p('report.clientSecret'),
-	"Transaction-Start-Time" : vars.transactionStartTime
+	"Client-Secret" : p('report.clientSecret')
 }]]]></http:headers>
 					
 					</http:request>
@@ -72,7 +72,7 @@ payload]]></ee:set-variable>
 	"Transaction-Id" : vars.transactionId,
 	"Client-Id" : p('d365.clientId'),
 	"Client-Secret" : p('d365.clientSecret'),
-	"Transaction-Start-Time" : vars.transactionStartTime
+	"Transaction-Start-Time" : vars.transactionStartDate
 }]]]></http:headers>
 					
 		</http:request>
@@ -106,15 +106,15 @@ payload]]></ee:set-variable>
 ---
 {
 	"Transaction-Id" : vars.transactionId,
+	"Transaction-Start-Time" : vars.transactionStartDate,
 	"Client-Id" : p('lookup.clientId'),
-	"Client-Secret" : p('lookup.clientSecret'),
-	"Transaction-Start-Time" : vars.transactionStartTime
+	"Client-Secret" : p('lookup.clientSecret')
 }]]]></http:headers>
 					<http:query-params><![CDATA[#[output application/java
 ---
 {
-	"source" : p('lookup.queryParam.aptos.modeOfDelivery.source'),
 	"type" : p('lookup.queryParam.aptos.modeOfDelivery.type'),
+	"source" : p('lookup.queryParam.aptos.modeOfDelivery.source'),
 	"category" : p('lookup.queryParam.aptos.modeOfDelivery.category')
 }]]]></http:query-params>
 				</http:request>
@@ -145,15 +145,15 @@ payload]]></ee:set-variable>
 ---
 {
 	"Transaction-Id" : vars.transactionId,
+	"Transaction-Start-Time" : vars.transactionStartDate,
 	"Client-Id" : p('lookup.clientId'),
-	"Client-Secret" : p('lookup.clientSecret'),
-	"Transaction-Start-Time" : vars.transactionStartTime
+	"Client-Secret" : p('lookup.clientSecret')
 }]]]></http:headers>
 					<http:query-params><![CDATA[#[output application/java
 ---
 {
-	"source" : p('lookup.queryParam.aptos.salesOfOrigin.source'),
 	"type" : p('lookup.queryParam.aptos.salesOfOrigin.type'),
+	"source" : p('lookup.queryParam.aptos.salesOfOrigin.source'),
 	"category" : p('lookup.queryParam.aptos.salesOfOrigin.category')
 }]]]></http:query-params>
 				</http:request>
@@ -188,7 +188,7 @@ payload]]></ee:set-variable>
 	"Transaction-Id" : vars.transactionId,
 	"Client-Id" : p('lookup.clientId'),
 	"Client-Secret" : p('lookup.clientSecret'),
-	"Transaction-Start-Time" : vars.transactionStartTime
+	"Transaction-Start-Time" : vars.transactionStartDate
 }]]]></http:headers>
 					<http:query-params><![CDATA[#[output application/java
 ---
