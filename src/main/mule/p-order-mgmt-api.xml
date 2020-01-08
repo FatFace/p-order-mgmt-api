@@ -53,12 +53,6 @@ now() as String {format : "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"}]]></ee:set-variable>
 output application/java
 ---
 'post:\pick\orders:application\json:p-order-mgmt-api-config']]></ee:set-variable>
-			
-			                <ee:set-variable variableName="transactionStartDate"><![CDATA[%dw 2.0
-output application/java
-
----
-now() as String {format : "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"}]]></ee:set-variable>
             </ee:variables>
 		</ee:transform>
 		 <flow-ref doc:name="Log Receiver Entry" doc:id="b46abfd0-4f6c-490f-a414-092add15fb89" name="log-receiver-entry-sub-flow" />

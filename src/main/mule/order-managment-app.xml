@@ -27,9 +27,9 @@ http://www.mulesoft.org/schema/mule/os http://www.mulesoft.org/schema/mule/os/cu
 					<http:query-params ><![CDATA[#[output application/java
 ---
 {
-	"client_id" : p('jda.clientId'),
 	"client_secret" : p('jda.clientSecret'),
-	"vRequestId" : vars.transactionId
+	"vRequestId" : vars.transactionId,
+	"client_id" : p('jda.clientId')
 }]]]></http:query-params>
 		</http:request>
 				<flow-ref doc:name="Audit Process Exit" doc:id="78baee98-f66e-4843-9bcd-e72a625df755" name="audit-process-exit-sub-flow" />
@@ -72,7 +72,7 @@ payload]]></ee:set-payload>
 	"Transaction-Id" : vars.transactionId,
 	"Client-Id" : p('lookup.clientId'),
 	"Client-Secret" : p('lookup.clientSecret'),
-	"Transaction-Start-Time" : vars.transactionStartDate
+	"Transaction-Start-Time" : vars.transactionStartTime
 }]]]></http:headers>
 					<http:query-params ><![CDATA[#[output application/java
 ---
