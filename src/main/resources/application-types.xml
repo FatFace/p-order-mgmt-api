@@ -33,4 +33,5 @@ type manifest = {|
   </types:enrichment>
   <types:enrichment select="#cf76c100-3d06-494c-a266-2209c8e73934"/>
   <types:enrichment select="#4cc14d7e-b523-4a00-9b6b-12a7a72adadd"/>
+  <types:enrichment select="#2bcb7010-8f00-46fc-acf9-0ceeffe35540"/>
 </types:mule>
