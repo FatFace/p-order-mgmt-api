@@ -71,13 +71,15 @@ error:
       connection: "SFTP Connectivity error"
       path: "SFTP Illegal Path"
       retry: "SFTP Retry Exhausted"
-
     compress:
       notCompress: "Not able to compress"
       invalidFormat: "The given content does not match the format of the configured strategy"
       multipleEntry: "The archive to be decompressed has more than one entry"
       notDecompress: "Not able to decompress" 
-      
+    reprocessing:
+      level2retry: "Level 2 Retry Mechanism Processing"
+    cloudhub:
+      alert: "Sending alert to Help Desk"   
 system:
   layer:
     response: "No Data from System Layer"

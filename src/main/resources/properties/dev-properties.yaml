@@ -129,7 +129,7 @@ cron:
 orders:
   export:
     sftp:
-      errorfilepath:  "/FatFace/sftp/MuleSoftIntegration/sit/error/outgoing/orderData/jdaOrder"
+      errorfilepath:  "/FatFace/sftp/MuleSoftIntegration/dev/error/outgoing/orderData/jdaOrder"
 send:
   manifest:
     queue: "true"

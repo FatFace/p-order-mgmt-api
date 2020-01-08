@@ -20,7 +20,7 @@ http://www.mulesoft.org/schema/mule/os http://www.mulesoft.org/schema/mule/os/cu
 	<configuration-properties doc:name="Configuration properties" doc:id="3b617f7a-4e8a-4201-b997-c85fe04c302e" file="properties/${mule.env}-properties.yaml" />   
    	<import doc:name="Import" doc:id="71ce683d-0093-4829-a0c9-4156163ca939" file="common-auditing-framework.xml" />
 	<import doc:name="Import" doc:id="f6491dfd-1ee2-4948-a051-b03eb5a48760" file="common-logging-framework.xml" />
-	<import doc:name="Import" doc:id="5fac976a-bf7a-4d2a-a47b-73027614fb9b" file="common-reprocessing-framework.xml" />
+<!-- 	<import doc:name="Import" doc:id="5fac976a-bf7a-4d2a-a47b-73027614fb9b" file="common-reprocessing-framework.xml" /> -->
 	<import doc:name="Import" doc:id="63ef4caf-4029-4fa8-8b23-501abc4a6387" file="common-error-handling.xml" />
    	<http:listener-config name="p-order-mgmt-api-httpListenerConfig">
       	  <http:listener-connection host="${http.host}" port="${http.private.port}" />
