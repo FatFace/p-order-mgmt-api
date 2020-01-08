@@ -33,6 +33,9 @@ response:
 shipment:
   labelImageFormat: "PNG"  
 
+reprocessing:
+  attempts: "8"
+
 error:
   msg:
     '404': "Resource not found"

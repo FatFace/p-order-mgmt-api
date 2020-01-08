@@ -39,12 +39,9 @@ sqs:
   region: "![6lleIG6Qoif/fTA7pK+sUA==]"
   queue:
     target:
-      inventory: "Inventory"
       manifest: "shipping-manifest-q"
       order: "order-extract-q"
     url: 
-      reprocessingQueue: "https://sqs.eu-west-1.amazonaws.com/691628577374/msg-reprocessing-q"
-      targetQueueUrl: "https://sqs.eu-west-1.amazonaws.com/691628577374/inventory-q"
       manifestQueueUrl: "https://sqs.eu-west-1.amazonaws.com/691628577374/shipping-manifest-q"
       orderQueueUrl: "https://sqs.eu-west-1.amazonaws.com/691628577374/order-extract-q"
 smtp:
@@ -126,7 +123,7 @@ cron:
 orders:
   export:
     sftp:
-      errorfilepath:  "/FatFace/sftp/MuleSoftIntegration/sit/error/outgoing/orderData/jdaOrder"
+      errorfilepath:  "/FatFace/sftp/MuleSoftIntegration/sit/error/outgoing/orderData/jdaOrder/"
 send:
   manifest:
     queue: "true"

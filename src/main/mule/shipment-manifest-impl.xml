@@ -90,11 +90,11 @@ now() as String {format : "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"}]]></ee:set-variable>
 		<ee:transform doc:name="Filtering" doc:id="28c79170-2e09-4a2b-9e1e-614a20ca60a4" >
 					<ee:message >
 						<ee:set-payload ><![CDATA[%dw 2.0
-		output application/json
-		---
-		{
-			manifests: payload.manifests filter ($."order-no" != null and $."order-no" != '') map $
-		}]]></ee:set-payload>
+output application/json
+---
+{
+	manifests: payload.manifests filter ($."order-no" != null and $."order-no" != '') map $
+}]]></ee:set-payload>
 			</ee:message>
 		</ee:transform>
 		<async doc:name="Async" doc:id="d9d51de7-6341-424c-bae5-4b6333112125" >
@@ -193,16 +193,16 @@ attributes.transactionId.stringValue]]></ee:set-variable>
 				<ee:set-variable variableName="count" ><![CDATA[%dw 2.0
 output application/java
 ---
-attributes.count.stringValue as Number + 1 ]]></ee:set-variable>
+attributes.reprocessingCount.stringValue as Number + 1 ]]></ee:set-variable>
 				<ee:set-variable variableName="fileName" ><![CDATA[%dw 2.0
 output application/java
 ---
-attributes.fileName.stringValue]]></ee:set-variable>
+attributes.transactionFileName.stringValue]]></ee:set-variable>
 			</ee:variables>
 		</ee:transform>
 		<flow-ref doc:name="log Receiver Entry" doc:id="a372355f-fc4d-469d-8a9d-9c3e5741508f" name="log-receiver-entry-sub-flow" />
 		<flow-ref doc:name="Audit Receiver Entry" doc:id="4035c348-3015-4966-83c5-ddb5d5950c95" name="audit-receiver-entry-sub-flow"/>
-		<logger level="INFO" doc:name="Retry Number Logging" doc:id="22005141-ec1b-494e-8274-81619b61baca" message="#['count is' ++ write(vars.count,'application/json')]"/>
+		<logger level="INFO" doc:name="Retry Number Logging" doc:id="5a8f7c11-c2d7-41d2-a156-045f1e032ef8" message="#['count is' ++ write(vars.count,'application/json')]"/>
 		<set-variable value="#[attributes['sqs.message.receipt.handle']]" doc:name="Set Message Receipt" doc:id="53d9b459-041b-40ee-ad58-e62565bdf912" variableName="messageReceipt"/>
 		<sqs:delete-message doc:name="Delete message" doc:id="15cb9737-c8cf-4e94-afd5-aba420839306" config-ref="Amazon_SQS_Configuration" receiptHandle="#[vars.messageReceipt]" queueUrl="${sqs.queue.url.manifestQueueUrl}" target="tempDelete"/>
 		<ee:transform doc:name="Transform Message" doc:id="492a8dd7-c0a2-44db-814d-13e316f4c8d2">
@@ -214,7 +214,7 @@ read(payload,'application/json')]]></ee:set-payload>
 					</ee:message>
 				</ee:transform>
 		<choice doc:name="Choice" doc:id="91bd8f90-e0cd-44ad-87d0-a36ce85b1c7b" >
-			<when expression="#[vars.count &lt; 8]">
+			<when expression="#[vars.count &lt; p('reprocessing.attempts')]">
 				<flow-ref doc:name="Call D365 Flow" doc:id="72142e35-856a-47d2-ac07-ff7d240d3203" name="shipment-manifest-D365-call-sub-flow" />
 			</when>
 			<otherwise >
@@ -227,7 +227,7 @@ read(payload,'application/json')]]></ee:set-payload>
 						<ee:set-variable variableName="filePath" ><![CDATA[%dw 2.0
 output application/java
 ---
-p(orders.export.sftp.errorfilepath) ++ write(vars.fileName, 'application/java')]]></ee:set-variable>
+p('orders.export.sftp.errorfilepath') ++ vars.fileName]]></ee:set-variable>
 					</ee:variables>
 				</ee:transform>
 				<until-successful maxRetries="${retry.attempts}" doc:name="Until Successful" doc:id="ccd4922c-e3f1-41c1-a193-ecd1249820a6" millisBetweenRetries="${retry.frequency}">
