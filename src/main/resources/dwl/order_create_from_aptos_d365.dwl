@@ -42,7 +42,7 @@ fun getBarcode(barCode) = vars.sbLookupValue filter ($."barcode" == barCode) map
 			orderlines: ord.orderlines map (ordl, indOfOrdl) -> {
 				'tax-amount': if (ordl.'tax-amount' != null) ordl.'tax-amount' else '',
 				'amount': if (ordl.amount != null) ordl.amount else '',
-				'item-id': if (ordl.'item-id' != null) ordl.'item-id' else '',
+				'item-id': if (ordl.'item-id' != null) ordl.'item-id' else null,
 				'item-name': if (ordl.'item-name' != null) ordl.'item-name' else '',
 				'tax-rate': if (ordl.'tax-rate' != null) ordl.'tax-rate' else '',
 				'sales-price': ordl.'sales-price',
