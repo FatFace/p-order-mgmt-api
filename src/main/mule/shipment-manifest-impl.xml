@@ -24,10 +24,6 @@ output application/java
 ---
 'shipment-manifest-impl-main-flow']]></ee:set-variable>
 				<ee:set-variable variableName="count" ><![CDATA[0]]></ee:set-variable>
-				<ee:set-variable variableName="transactionStartDate" ><![CDATA[%dw 2.0
-output application/java
----
-now() as String {format : "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"}]]></ee:set-variable>
 			</ee:variables>
 		</ee:transform>
 		<flow-ref doc:name="Log Receiver Entry" doc:id="a5724754-50b0-41af-8620-4ea76b72bffb" name="log-receiver-entry-sub-flow"/>
@@ -148,7 +144,7 @@ p('sqs.queue.url.manifestQueueUrl')]]></ee:set-variable>
 	"Transaction-Id" : vars.transactionId,
 	"Client-Id" : p('d365.clientId'),
 	"Client-Secret" : p('d365.clientSecret'),
-	"Transaction-Start-Time" : vars.transactionStartDate
+	"Transaction-Start-Time" : vars.transactionStartTime
 }]]]></http:headers>
 					<http:response-validator>
 					<http:success-status-code-validator values="#[200]" />
@@ -202,7 +198,7 @@ attributes.transactionFileName.stringValue]]></ee:set-variable>
 		</ee:transform>
 		<flow-ref doc:name="log Receiver Entry" doc:id="a372355f-fc4d-469d-8a9d-9c3e5741508f" name="log-receiver-entry-sub-flow" />
 		<flow-ref doc:name="Audit Receiver Entry" doc:id="4035c348-3015-4966-83c5-ddb5d5950c95" name="audit-receiver-entry-sub-flow"/>
-		<logger level="INFO" doc:name="Retry Number Logging" doc:id="5a8f7c11-c2d7-41d2-a156-045f1e032ef8" message="#['count is' ++ write(vars.count,'application/json')]"/>
+		<logger level="INFO" doc:name="Retry Number Logging" doc:id="5a8f7c11-c2d7-41d2-a156-045f1e032ef8" message="#['Reprocessing Count is: ' ++ write(vars.count,'application/json')]"/>
 		<set-variable value="#[attributes['sqs.message.receipt.handle']]" doc:name="Set Message Receipt" doc:id="53d9b459-041b-40ee-ad58-e62565bdf912" variableName="messageReceipt"/>
 		<sqs:delete-message doc:name="Delete message" doc:id="15cb9737-c8cf-4e94-afd5-aba420839306" config-ref="Amazon_SQS_Configuration" receiptHandle="#[vars.messageReceipt]" queueUrl="${sqs.queue.url.manifestQueueUrl}" target="tempDelete"/>
 		<ee:transform doc:name="Transform Message" doc:id="492a8dd7-c0a2-44db-814d-13e316f4c8d2">
