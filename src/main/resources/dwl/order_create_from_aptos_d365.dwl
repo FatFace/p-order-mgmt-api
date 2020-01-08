@@ -12,7 +12,6 @@ fun getBarcode(barCode) = vars.sbLookupValue filter ($."barcode" == barCode) map
 			'currency': if (ord.currency != null) ord.currency else '',
 			'delivery-mode': if(getMode(ord."order-no") != null) (getMode(ord."order-no")."lookup-key" reduce $) else '' ,
 			'sales-pool': if(getMode(ord."order-no") != null) (getMode(ord."order-no").'lookup-value' reduce $) else '',
-			'language': ord.language,
 			'store': {
 				'store-id': ord.store.'store-id',
 				'store-code': ord.store.'store-code'
