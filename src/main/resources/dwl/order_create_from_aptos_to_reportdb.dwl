@@ -1,5 +1,6 @@
 %dw 2.0
 output application/json skipNullOn ='everywhere'
+fun getDmMode(ordno) = vars.dmLookupValue filter (($."order-no") == ordno) map $
 fun getMode(ordno) = vars.soLookupValue filter (($."order-no") == ordno) map $
 fun getBarcode(barCode) = vars.sbLookupValue filter ($."barcode" == barCode) map $."lookup-value"
 ---
@@ -10,8 +11,8 @@ fun getBarcode(barCode) = vars.sbLookupValue filter ($."barcode" == barCode) map
 		'currency': rep.currency,
 		'legal-entity': rep.'legal-entity' as String,
 		'source': rep.source,
-		'delivery-mode': if(getMode(rep."order-no") != null) (getMode(rep."order-no")."lookup-key" reduce $) else '',
-		'sales-pool': if(getMode(rep."order-no") != null) (getMode(rep."order-no").'lookup-value' reduce $) else '',
+		'delivery-mode': if (getDmMode(rep."order-no") != []) (if(getDmMode(rep."order-no") != null) (getDmMode(rep."order-no").'lookup-value' reduce $) else '') else "nextdayGBP",
+		'sales-pool':if(getMode(rep."order-no") != []) (if(getMode(rep."order-no") != null) (getMode(rep."order-no").'lookup-value' reduce $) else '') else '',
 		'store': {
 			'store-id': rep.store.'store-id',
 			'store-code': rep.store.'store-code'
