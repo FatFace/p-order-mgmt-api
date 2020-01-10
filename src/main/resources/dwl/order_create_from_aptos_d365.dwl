@@ -1,6 +1,5 @@
 %dw 2.0
 output application/json skipNullOn ='everywhere'
-fun getDmMode(ordno) = vars.dmLookupValue filter (($."order-no") == ordno) map $
 fun getMode(ordno) = vars.soLookupValue filter (($."order-no") == ordno) map $
 fun getBarcode(barCode) = vars.sbLookupValue filter ($."barcode" == barCode) map $."lookup-value"
 ---
@@ -11,8 +10,8 @@ fun getBarcode(barCode) = vars.sbLookupValue filter ($."barcode" == barCode) map
 			'order-date': if (ord.'order-date' != null) ord.'order-date'  else '' as DateTime ,
 			'source': ord.source as String,
 			'currency': if (ord.currency != null) ord.currency else '',
-			'delivery-mode': if (getDmMode(ord."order-no") != []) (if(getDmMode(ord."order-no") != null) (getDmMode(ord."order-no").'lookup-value' reduce $) else '') else "nextdayGBP",
-			'sales-pool':if(getMode(ord."order-no") != []) (if(getMode(ord."order-no") != null) (getMode(ord."order-no").'lookup-value' reduce $) else '') else '',
+			'delivery-mode': if (getMode(ord."order-no") != []) (if(getMode(ord."order-no") != null) (getMode(ord."order-no").'lookup-key' reduce $) else '') else 'nextdayGBP',
+			'sales-pool':if(getMode(ord."order-no") != []) (if(getMode(ord."order-no") != null) (getMode(ord."order-no").'lookup-value' reduce $) else '') else 'OIS-ND',
 			'store': {
 				'store-id': ord.store.'store-id',
 				'store-code': ord.store.'store-code'

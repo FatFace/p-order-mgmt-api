@@ -92,7 +92,7 @@ lookup:
   dbLookupPath: "/lookups"
   aptos:
     modeOfDelivery:
-      key: "MODE_OF_DELIVERY-DEPT-APTOS"
+      key: "MODE_OF_DELIVERY-NUMSTR-APTOS"
     salesOfOrigin:
       key: "SALES_ORIGIN-MODE_OF_DELIVERY-APTOS"
     shippingBarcode:
@@ -107,7 +107,7 @@ lookup:
     aptos:
       modeOfDelivery:
         type: "MODE_OF_DELIVERY"
-        category: "DEPT"
+        category: "NUMSTR"
         source: "APTOS"
       salesOfOrigin:
         type: "SALES_ORIGIN"
