@@ -73,10 +73,10 @@ sqs:
   queue:
     target:
       manifest: "dev-shipping-manifest-q"
-      order: "order-extract-q"
+      order: "dev-order-extract-q"
     url:
       manifestQueueUrl: "https://sqs.eu-west-1.amazonaws.com/691628577374/dev-shipping-manifest-q"
-      orderQueueUrl: "https://sqs.eu-west-1.amazonaws.com/691628577374/order-extract-q"
+      orderQueueUrl: "https://sqs.eu-west-1.amazonaws.com/691628577374/dev-order-extract-q"
 smtp:
   host: "![rpQtD0vL4qh+Uema8l2LJxRngvgfBbF6l4RD5XEkF7Y=]"
   port: "![jd2yTmc7NHA+FUYVXGfwbQ==]"
