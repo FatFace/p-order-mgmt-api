@@ -175,7 +175,7 @@ payload]]></ee:set-variable>
 			<when expression="#[payload ==true]">
 				<os:retrieve doc:name="Retrieve" doc:id="e261ad96-fe0e-46a3-96a6-4e0f4c94417d" key="#[vars.shippingBarcodeKey]" objectStore="Object_store"/>
 				<flow-ref doc:name="Map Shipping Barcode Value" doc:id="39822f06-2f90-4a2a-bbc0-ab5f9c46efdd" name="filter-shipping-barcode"/>
-				<flow-ref doc:name="Map Mode Of Delivery Value" doc:id="3de6c498-0aef-4165-97bd-796d42cee118" name="filter-mode-of-delivery"/>
+				<!-- <flow-ref doc:name="Map Mode Of Delivery Value" doc:id="3de6c498-0aef-4165-97bd-796d42cee118" name="filter-mode-of-delivery"/> -->
 			
 </when>
 			<otherwise >
@@ -204,7 +204,7 @@ payload]]></ee:set-variable>
 				<flow-ref doc:name="Audit Process Exit" doc:id="3c398308-c1e7-4cee-bb8d-6ee05f56e5f0" name="audit-process-exit-sub-flow"/>
 				<os:store doc:name="Store" doc:id="3f779e7b-a6f2-49ae-8ed0-12dd1074f451" key="#[vars.shippingBarcodeKey]" objectStore="Object_store"/>
 				<flow-ref doc:name="Map Shipping Barcode Value" doc:id="8764f845-2b37-4d54-ad03-892d5bda0040" name="filter-shipping-barcode"/>
-				<flow-ref doc:name="Map Mode Of Delivery Value" doc:id="b9c61d2b-f7ac-4ef6-bbb7-f7ee726d6ea6" name="filter-mode-of-delivery"/>
+				<!-- <flow-ref doc:name="Map Mode Of Delivery Value" doc:id="b9c61d2b-f7ac-4ef6-bbb7-f7ee726d6ea6" name="filter-mode-of-delivery"/> -->
 			
 </otherwise>
 		</choice>
