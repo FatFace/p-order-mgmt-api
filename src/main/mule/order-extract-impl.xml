@@ -142,7 +142,7 @@ output application/java
 		<flow-ref doc:name="Log Process Entry" doc:id="ad500094-a464-4579-b726-34dd567c0620" name="log-process-entry-sub-flow"/>
 		<flow-ref doc:name="Audit Process Entry" doc:id="fe5ba2d5-3930-4c69-a8e3-c9011ea4be1a" name="audit-process-entry-sub-flow"/>
 		<set-variable value="#[payload]" doc:name="Set order data to variable" doc:id="57665150-d14c-4c13-b611-4774d2a582f7" variableName="orderPayload"/>
-		<sqs:read doc:name="Read" doc:id="a6b83910-f629-40f3-a33f-98d3d37a86b9" config-ref="Amazon_SQS_Configuration" queueUrl="#[p('sqs.queue.url.manifestQueueUrl')]" maxNumberOfMessages="1">
+		<sqs:read doc:name="Read" doc:id="a6b83910-f629-40f3-a33f-98d3d37a86b9" config-ref="Amazon_SQS_Configuration" queueUrl="#[p('sqs.queue.url.manifestQueueUrl')]" maxNumberOfMessages="#[6]">
 			<reconnect frequency="${retry.frequency}" count="${retry.attempts}" />
 		</sqs:read>
 		<flow-ref doc:name="Log Process Exit" doc:id="1884a941-55c9-4a4a-a2df-a6d4b43e3479" name="log-process-exit-sub-flow" />
@@ -260,7 +260,7 @@ output application/java
 					<set-variable value="#['Error received from D365, Writing order data to SFTP error folder' ++ write(vars.orderErrorFilePath,'application/json')]" doc:name="Set Variable" doc:id="934a41fd-4b71-445a-baff-e4ad81301593" variableName="loggingPayload"/>
 					<flow-ref doc:name="Flow Logging Sub Flow" doc:id="d59792c0-0779-491a-b1f8-5537ce942651" name="logging-sub-flow"/>
 					<until-successful maxRetries="${retry.attempts}" doc:name="Until Successful" doc:id="99037333-7795-4793-9196-fae242ae9139" millisBetweenRetries="${retry.frequency}">
-						<sftp:write doc:name="Write" doc:id="88952ead-06bf-4ae4-9b92-ca2802e2a884" config-ref="SFTP_Config" path="#[vars.filePath]">
+						<sftp:write doc:name="Write" doc:id="88952ead-06bf-4ae4-9b92-ca2802e2a884" config-ref="SFTP_Config" path="#[vars.orderErrorFilePath]">
 						</sftp:write>
 					</until-successful>
 				</on-error-propagate>
