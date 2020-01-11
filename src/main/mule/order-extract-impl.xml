@@ -147,7 +147,7 @@ output application/java
 		</sqs:read>
 		<flow-ref doc:name="Log Process Exit" doc:id="1884a941-55c9-4a4a-a2df-a6d4b43e3479" name="log-process-exit-sub-flow" />
 		<flow-ref doc:name="Audit Process Exit" doc:id="9971effb-f88d-4b84-8a87-8b21c24c7814" name="audit-process-exit-sub-flow" />
-		<logger level="INFO" doc:name="Logger" doc:id="82db6798-e471-477b-a429-2a8e3f0c124e" message="#[payload[0].body]" />
+<!-- 		<logger level="INFO" doc:name="Logger" doc:id="82db6798-e471-477b-a429-2a8e3f0c124e" message="#[payload[0].body]" /> -->
 		<set-variable value="#[payload[0].body]" doc:name="Set Variable" doc:id="f4fcd1be-b995-4244-89cc-745e07423dc6" variableName="manifestData"/>
 		<set-payload value="#[vars.orderPayload]" doc:name="Set Payload" doc:id="a7fbc890-2d04-4b9d-b03e-693c16f4ac1d" />
 		<choice doc:name="Choice" doc:id="e84144a6-44ff-4e08-8268-7ba143b34c0d" >
@@ -170,7 +170,7 @@ read(vars.manifestData,'application/json')]]></ee:set-variable>
 						<ee:set-variable resource="dwl/matchedOrderData.dwl" variableName="matchedOrderData" />
 					</ee:variables>
 				</ee:transform>
-				<logger level="INFO" doc:name="Logger" doc:id="2ae8566d-23b3-4672-8909-6741d4f01bf9" message="#['Filtered Order Data : '++ write(payload,'application/json')]" />
+<!-- 				<logger level="INFO" doc:name="Logger" doc:id="2ae8566d-23b3-4672-8909-6741d4f01bf9" message="#['Filtered Order Data : '++ write(payload,'application/json')]" /> -->
 				<async doc:name="Async" doc:id="7dfad758-7b2d-4c7c-9582-8dedf46761a5" >
 					<flow-ref doc:name="Matched Data Handling Flow Call" doc:id="bf8f815a-730d-42fe-b29d-f3eae1903a6e" name="order-extract-matched-data-handling-flow" />
 				</async>
@@ -185,7 +185,7 @@ read(vars.manifestData,'application/json')]]></ee:set-variable>
 				<ee:set-payload resource="dwl/order-extract-jda-to-d365-mapping.dwl" />
 			</ee:message>
 		</ee:transform>
-		<logger level="INFO" doc:name="Logger" doc:id="73b59a37-7b74-4a6c-a420-32ac29ff5d65" message="#['Data sending to D365' ++ write(payload, &quot;application/json&quot;)]" />
+<!-- 		<logger level="INFO" doc:name="Logger" doc:id="73b59a37-7b74-4a6c-a420-32ac29ff5d65" message="#['Data sending to D365' ++ write(payload, &quot;application/json&quot;)]" /> -->
 		<flow-ref doc:name="Flow Reference send to d365" doc:id="9691c83f-6d2f-480d-b302-4adb884962ed" name="order-extract-send-to-d365" />
 		<flow-ref doc:name="Audit Process Exit" doc:id="eeaf5f15-ab44-461f-b5ea-1a7e7224af56" name="audit-process-exit-sub-flow"/>
 		<flow-ref doc:name="Log Process Exit" doc:id="f529bc55-ce3d-4900-a866-36c15af7d0c3" name="log-process-exit-sub-flow"/>
@@ -206,7 +206,7 @@ output application/java
 		<flow-ref doc:name="Audit Process Entry" doc:id="96cbcba1-39b2-40f9-8054-2811c1a2f90c" name="audit-process-entry-sub-flow"/>
 		<choice doc:name="Choice" doc:id="2ae17774-f257-46a2-9eeb-bac9266de16a" >
 			<when expression="#[vars.matchedOrderData != null and isEmpty(vars.matchedOrderData.orders) != true]">
-				<logger level="INFO" doc:name="Logger" doc:id="8dbaabd3-a975-44d0-bb3a-0e756481567b" message="#['Matched Data is: ' ++ write(vars.matchedOrderData,'application/json')]"/>
+<!-- 				<logger level="INFO" doc:name="Logger" doc:id="8dbaabd3-a975-44d0-bb3a-0e756481567b" message="#['Matched Data is: ' ++ write(vars.matchedOrderData,'application/json')]"/> -->
 				<set-variable value="#[payload]" doc:name="Set Original Payload" doc:id="9f683db3-6cb2-4755-b506-d38a1b00cf8c" variableName="originalPayload" />
 				<ee:transform doc:name="Transform Message" doc:id="740e7811-0be4-49a1-940c-ac86c580843e" >
 					<ee:message >
