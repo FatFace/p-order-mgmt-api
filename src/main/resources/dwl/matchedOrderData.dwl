@@ -2,4 +2,6 @@
 output application/json
 var manifestOrderNoArray = vars.manifestData.manifests map $.'order-no'
 ---
-payload.orders filter (manifestOrderNoArray contains $.'order-no') map $
+{
+	orders: payload.orders filter (manifestOrderNoArray contains $.'order-no') map $
+}

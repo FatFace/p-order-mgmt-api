@@ -166,7 +166,7 @@ p('sqs.queue.url.manifestQueueUrl')]]></ee:set-variable>
 		<set-variable value="Manifest data pushed in Audit Table" doc:name="Set Logging payload" doc:id="486a5b31-96f6-4e89-a8c7-c58504b29001" variableName="loggingPayload" />
 		<flow-ref doc:name="Logging Message" doc:id="077baa4a-6242-4991-9b09-e443f7befd6e" name="logging-sub-flow" />
 	</sub-flow>
-	<flow name="receive-manifest-message-and-retry" doc:id="63560399-337d-4fee-afc6-1fa711a066f9" >
+	<flow name="receive-manifest-message-and-retry" doc:id="63560399-337d-4fee-afc6-1fa711a066f9">
 		<sqs:receivemessages doc:name="Receive Message From Manifest and Retry" doc:id="15d45a94-7c2c-42ae-ae08-de1037bbc01b" config-ref="Amazon_SQS_Configuration" queueUrl="${sqs.queue.url.manifestQueueUrl}"/>
 		<set-variable value="receive-manifest-message-and-retry" doc:name="Flow Name" doc:id="2fa015e1-dd82-46e7-84a7-af00ce5448a5" variableName="flowName"/>
 		<ee:transform doc:name="Queue Parameter" doc:id="58f36f19-d604-4d03-aa22-21b8cd77d770" >
@@ -214,18 +214,18 @@ read(payload,'application/json')]]></ee:set-payload>
 				<flow-ref doc:name="Call D365 Flow" doc:id="72142e35-856a-47d2-ac07-ff7d240d3203" name="shipment-manifest-D365-call-sub-flow" />
 			</when>
 			<otherwise >
-				<set-variable value="#['8 times retries done, Data will be moved to SFTP folder']" doc:name="Set Variable" doc:id="b16aa762-c639-40a8-b2d4-637d81471dc5" variableName="loggingPayload"/>
-				<flow-ref doc:name="Flow Logging Sub Flow" doc:id="25c26890-cdec-4cf4-b23a-ed9ed0f35e10" name="logging-sub-flow"/>
 				<ee:transform doc:name="File Path" doc:id="c81a65bd-f74e-46d0-b8b1-b90e1a69dcd4">
 					<ee:message>
 					</ee:message>
-					<ee:variables >
-						<ee:set-variable variableName="filePath" ><![CDATA[%dw 2.0
+					<ee:variables>
+						<ee:set-variable variableName="filePath"><![CDATA[%dw 2.0
 output application/java
 ---
 p('orders.export.sftp.errorfilepath') ++ vars.fileName]]></ee:set-variable>
 					</ee:variables>
 				</ee:transform>
+				<set-variable value="#['8 times retries done, Data will be moved to SFTP folder with path ' ++ write(vars.filePath, 'application/json')]" doc:name="Set Variable" doc:id="b16aa762-c639-40a8-b2d4-637d81471dc5" variableName="loggingPayload"/>
+				<flow-ref doc:name="Flow Logging Sub Flow" doc:id="25c26890-cdec-4cf4-b23a-ed9ed0f35e10" name="logging-sub-flow"/>
 				<until-successful maxRetries="${retry.attempts}" doc:name="Until Successful" doc:id="ccd4922c-e3f1-41c1-a193-ecd1249820a6" millisBetweenRetries="${retry.frequency}">
 					<sftp:write doc:name="Write" doc:id="21f081c0-2fb1-4399-9bdd-003dbe3b88c1" config-ref="SFTP_Config" path="#[vars.filePath]">
 					</sftp:write>
