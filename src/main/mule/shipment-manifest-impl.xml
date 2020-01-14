@@ -224,7 +224,7 @@ output application/java
 p('orders.export.sftp.errorfilepath') ++ vars.fileName]]></ee:set-variable>
 					</ee:variables>
 				</ee:transform>
-				<set-variable value="#[p('reprocessing.attempts') ++ 'times retries done, Data will be moved to SFTP folder with path ' ++ write(vars.filePath, 'application/json')]" doc:name="Set Variable" doc:id="b16aa762-c639-40a8-b2d4-637d81471dc5" variableName="loggingPayload"/>
+				<set-variable value="#[p('reprocessing.attempts') ++ ' times retries done, Data will be moved to SFTP folder with path ' ++ write(vars.filePath, 'application/json')]" doc:name="Set Variable" doc:id="b16aa762-c639-40a8-b2d4-637d81471dc5" variableName="loggingPayload"/>
 				<flow-ref doc:name="Flow Logging Sub Flow" doc:id="25c26890-cdec-4cf4-b23a-ed9ed0f35e10" name="logging-sub-flow"/>
 				<until-successful maxRetries="${retry.attempts}" doc:name="Until Successful" doc:id="ccd4922c-e3f1-41c1-a193-ecd1249820a6" millisBetweenRetries="${retry.frequency}">
 					<sftp:write doc:name="Write" doc:id="21f081c0-2fb1-4399-9bdd-003dbe3b88c1" config-ref="SFTP_Config" path="#[vars.filePath]">
