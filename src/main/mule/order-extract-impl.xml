@@ -78,11 +78,11 @@ output application/java
 			</otherwise>
 		</choice>
 		<choice doc:name="Choice" doc:id="0af6e8e1-cb61-4991-854f-f88169c6946a">
-			<when expression="#[vars.hasMoreFiles == true]">
-				<flow-ref doc:name="call-s-jda-and-process-to-d365-impl-flow" doc:id="9aee2451-507f-4599-ba8f-86835f0b407e" name="get-manifest-shipment-data-from-jda-and-process-to-d365-sub-flow" />
+			<when expression="#[vars.hasMoreFiles]">
+				<flow-ref doc:name="call-s-jda-and-process-to-d365-impl-flow" doc:id="9aee2451-507f-4599-ba8f-86835f0b407e" name="call-s-jda-and-process-to-d365-impl-flow" />
 			</when>
 			<otherwise>
-				<set-variable value="There are no more manifest extract files to process" doc:name="Set Logging Payload" doc:id="cca705f5-3f2e-4eda-8876-505b9cb4fc35" variableName="loggingPayload" />
+				<set-variable value="No Order Extract Files Available " doc:name="Set Logging Payload" doc:id="cca705f5-3f2e-4eda-8876-505b9cb4fc35" variableName="loggingPayload" />
 				<flow-ref doc:name="Logging Message" doc:id="2f4ea948-7ce7-483e-ac6b-dd9e72a7252c" name="logging-sub-flow"/>
 			</otherwise>
 		</choice>
@@ -331,7 +331,7 @@ output application/java
 p('orders.export.sftp.errorfilepath') ++ vars.fileName]]></ee:set-variable>
 					</ee:variables>
 				</ee:transform>
-				<set-variable value="#['8 times retries done, Data will be moved to SFTP folder with path ' ++ write(vars.filePath, 'application/json')]" doc:name="Set Variable" doc:id="a4379467-fb40-475f-9098-57b64415e4bf" variableName="loggingPayload"/>
+				<set-variable value="#[p('reprocessing.attempts') ++ 'times retries done, Data will be moved to SFTP folder with path ' ++ write(vars.filePath, 'application/json')]" doc:name="Set Variable" doc:id="a4379467-fb40-475f-9098-57b64415e4bf" variableName="loggingPayload"/>
 				<flow-ref doc:name="Flow Logging Sub Flow" doc:id="9cde173f-469f-4a01-a72a-d66bb438266e" name="logging-sub-flow"/>
 				<until-successful maxRetries="${retry.attempts}" doc:name="Until Successful" doc:id="df5ef63b-9856-4a22-8034-cf54d1bef453" millisBetweenRetries="${retry.frequency}">
 					<sftp:write doc:name="Write" doc:id="1a462f7a-f843-437f-9359-1b789f1fee73" config-ref="SFTP_Config" path="#[vars.filePath]">
