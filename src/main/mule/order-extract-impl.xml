@@ -78,7 +78,7 @@ output application/java
 			</otherwise>
 		</choice>
 		<choice doc:name="Choice" doc:id="0af6e8e1-cb61-4991-854f-f88169c6946a">
-			<when expression="#[vars.hasMoreFiles == 'true']">
+			<when expression="#[vars.hasMoreFiles == true]">
 				<flow-ref doc:name="call-s-jda-and-process-to-d365-impl-flow" doc:id="9aee2451-507f-4599-ba8f-86835f0b407e" name="get-manifest-shipment-data-from-jda-and-process-to-d365-sub-flow" />
 			</when>
 			<otherwise>
