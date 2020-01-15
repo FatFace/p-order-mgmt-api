@@ -9,8 +9,8 @@ http://www.mulesoft.org/schema/mule/amqp http://www.mulesoft.org/schema/mule/amq
 http://www.mulesoft.org/schema/mule/sqs http://www.mulesoft.org/schema/mule/sqs/current/mule-sqs.xsd
 http://www.mulesoft.org/schema/mule/sftp http://www.mulesoft.org/schema/mule/sftp/current/mule-sftp.xsd">
 
-	<flow name="order-extract-impl-flow" doc:id="23a2590d-f562-46da-a911-2cf2098e8abe">
-		<scheduler doc:name="Order Extract Scheduler" doc:id="18363b90-3733-44b8-b930-913a1be28952" >
+	<flow name="JDA-order-extract-flow" doc:id="23a2590d-f562-46da-a911-2cf2098e8abe">
+		<scheduler doc:name="Scheduler" doc:id="18363b90-3733-44b8-b930-913a1be28952" >
 			<scheduling-strategy >
 				<cron expression="${cron.expression.orderextract}" />
 			</scheduling-strategy>
