@@ -21,12 +21,7 @@ output application/json
 payload]]></ee:set-variable>
 			</ee:variables>
 		</ee:transform>
-		<ee:transform doc:name="Transform Message To Audit Details Structure" doc:id="13b65c25-313a-4a86-b4a6-0bc84e9cd6aa" >
-			<ee:message >
-				<ee:set-payload resource="dwl/auditing-web-orders.dwl" />
-			</ee:message>
-		</ee:transform>
-		<flow-ref doc:name="Audit Details Processing" doc:id="a977b1bd-2a00-46cd-8efa-4b8882baa6f2" name="audit-details-processing-sub-flow"/>
+		<flow-ref doc:name="Audit Details Flow call" doc:id="a977b1bd-2a00-46cd-8efa-4b8882baa6f2" name="aptos-orders-auditing-sub-flow"/>
 		<choice doc:name="Choice" doc:id="5641cc72-6e78-4405-b2cc-fd647e9ef533" >
 			<when expression="#[(vars.aptosOriginalPayload != null) or (isEmpty(vars.aptosOriginalPayload) == false)]">
 				<flow-ref doc:name="Get Key Values For Delivery Mode" doc:id="17ca0096-800d-4012-b189-a71df4afcac3" name="get-mode-of-delivery-key-values-from-dblookup-sub-flow"/>
@@ -93,6 +88,19 @@ payload]]></ee:set-variable>
 			</otherwise>
 		</choice>
 	
+	</sub-flow>
+	<sub-flow name="aptos-orders-auditing-sub-flow" doc:id="9f858b77-a105-408b-828f-9ea4188a2b83" >
+		<set-variable value="#['aptos-orders-auditing-sub-flow']" doc:name="Set Flow Name" doc:id="f1507160-5f02-4b3a-8a12-9fd0b7a26a82" variableName="flowName"/>
+		<set-variable value="Auditing details of aptos order data" doc:name="Set Logging payload" doc:id="8657c9a5-a6d2-440d-9fe8-db4deee85fd3" variableName="loggingPayload" />
+		<flow-ref doc:name="Logging Message" doc:id="882f65e0-cdca-46c7-bf43-1f679b2f698c" name="logging-sub-flow" />
+		<ee:transform doc:name="Transform Message To Audit Details Structure" doc:id="046c071f-f0cc-4a26-9b89-1aee54b8fe03" >
+			<ee:message >
+				<ee:set-payload resource="dwl/auditing-web-orders.dwl" />
+			</ee:message>
+		</ee:transform>
+		<flow-ref doc:name="Audit Details Processing" doc:id="3f15696e-a967-47ed-a493-665b64df098f" name="audit-details-processing-sub-flow"/>
+		<set-variable value="Order data pushed in Audit Table" doc:name="Set Logging payload" doc:id="b4227c09-3327-4f1a-8750-4c1321eb2a3b" variableName="loggingPayload" />
+		<flow-ref doc:name="Logging Message" doc:id="aca7d137-09ac-495b-b4b9-3bd7dac216cc" name="logging-sub-flow" />
 	</sub-flow>
 	<sub-flow name="get-mode-of-delivery-key-values-from-dblookup-sub-flow" doc:id="b3f886d8-1f34-4ebd-a34f-4d02c8774b1e" >
 		<set-variable value="#['get-mode-of-delivery-key-values-from-dblookup-sub-flow']" doc:name="Flow Name" doc:id="abe34bec-e8ba-4fe9-a741-e573afd14400" variableName="flowName"/>
