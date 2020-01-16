@@ -8,8 +8,8 @@ http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/
 http://www.mulesoft.org/schema/mule/sqs http://www.mulesoft.org/schema/mule/sqs/current/mule-sqs.xsd
 http://www.mulesoft.org/schema/mule/java http://www.mulesoft.org/schema/mule/java/current/mule-java.xsd
 http://www.mulesoft.org/schema/mule/sftp http://www.mulesoft.org/schema/mule/sftp/current/mule-sftp.xsd">
-	<flow name="shipment-manifest-impl-flow" doc:id="23a2590d-f562-46da-a911-2cf2098e8abe" >
-		<scheduler doc:name="Manifest Scheduler" doc:id="159ed4e9-21ba-4dc9-9370-3b7a49e20686" >
+	<flow name="JDA-shipment-manifest-flow" doc:id="23a2590d-f562-46da-a911-2cf2098e8abe" >
+		<scheduler doc:name="Scheduler" doc:id="159ed4e9-21ba-4dc9-9370-3b7a49e20686" >
 			<scheduling-strategy >
 				<cron expression="${cron.expression.manifest}" />
 			</scheduling-strategy>
@@ -68,11 +68,11 @@ output application/java
 			</otherwise>
 		</choice>
 		<choice doc:name="Choice" doc:id="5ca0b3f6-6e7d-4575-a2ca-a44fe6a4f07a">
-			<when expression="#[vars.hasMoreFiles == true]">
+			<when expression="#[vars.hasMoreFiles]">
 				<flow-ref doc:name="get-manifest-shipment-data-from-jda-and-process-to-d365-sub-flow" doc:id="97dd8778-2e6f-4bed-ba2c-9791d8cb3283" name="get-manifest-shipment-data-from-jda-and-process-to-d365-sub-flow" />
 			</when>
 			<otherwise>
-				<set-variable value="There are no more manifest extract files to process" doc:name="Set Logging Payload" doc:id="03589fa4-19ff-4708-8663-598de0d28fc2" variableName="loggingPayload" />
+				<set-variable value="No Shipping Manifest Files Available" doc:name="Set Logging Payload" doc:id="03589fa4-19ff-4708-8663-598de0d28fc2" variableName="loggingPayload" />
 				<flow-ref doc:name="Logging Message" doc:id="a22d797f-245f-4729-8246-e2b538aa6755" name="logging-sub-flow"/>
 			</otherwise>
 		</choice>
@@ -224,7 +224,7 @@ output application/java
 p('orders.export.sftp.errorfilepath') ++ vars.fileName]]></ee:set-variable>
 					</ee:variables>
 				</ee:transform>
-				<set-variable value="#['8 times retries done, Data will be moved to SFTP folder with path ' ++ write(vars.filePath, 'application/json')]" doc:name="Set Variable" doc:id="b16aa762-c639-40a8-b2d4-637d81471dc5" variableName="loggingPayload"/>
+				<set-variable value="#[p('reprocessing.attempts') ++ ' times retries done, Data will be moved to SFTP folder with path ' ++ write(vars.filePath, 'application/json')]" doc:name="Set Variable" doc:id="b16aa762-c639-40a8-b2d4-637d81471dc5" variableName="loggingPayload"/>
 				<flow-ref doc:name="Flow Logging Sub Flow" doc:id="25c26890-cdec-4cf4-b23a-ed9ed0f35e10" name="logging-sub-flow"/>
 				<until-successful maxRetries="${retry.attempts}" doc:name="Until Successful" doc:id="ccd4922c-e3f1-41c1-a193-ecd1249820a6" millisBetweenRetries="${retry.frequency}">
 					<sftp:write doc:name="Write" doc:id="21f081c0-2fb1-4399-9bdd-003dbe3b88c1" config-ref="SFTP_Config" path="#[vars.filePath]">
