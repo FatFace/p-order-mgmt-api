@@ -21,6 +21,12 @@ output application/json
 payload]]></ee:set-variable>
 			</ee:variables>
 		</ee:transform>
+		<ee:transform doc:name="Transform Message To Audit Details Structure" doc:id="13b65c25-313a-4a86-b4a6-0bc84e9cd6aa" >
+			<ee:message >
+				<ee:set-payload resource="dwl/auditing-web-orders.dwl" />
+			</ee:message>
+		</ee:transform>
+		<flow-ref doc:name="Audit Details Processing" doc:id="a977b1bd-2a00-46cd-8efa-4b8882baa6f2" name="audit-details-processing-sub-flow"/>
 		<choice doc:name="Choice" doc:id="5641cc72-6e78-4405-b2cc-fd647e9ef533" >
 			<when expression="#[(vars.aptosOriginalPayload != null) or (isEmpty(vars.aptosOriginalPayload) == false)]">
 				<flow-ref doc:name="Get Key Values For Delivery Mode" doc:id="17ca0096-800d-4012-b189-a71df4afcac3" name="get-mode-of-delivery-key-values-from-dblookup-sub-flow"/>
