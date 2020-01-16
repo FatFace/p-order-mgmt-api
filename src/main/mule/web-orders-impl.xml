@@ -21,6 +21,12 @@ output application/json
 payload]]></ee:set-variable>
 			</ee:variables>
 		</ee:transform>
+		<ee:transform doc:name="Transform Message To Audit Details Structure" doc:id="13b65c25-313a-4a86-b4a6-0bc84e9cd6aa" >
+			<ee:message >
+				<ee:set-payload resource="dwl/auditing-web-orders.dwl" />
+			</ee:message>
+		</ee:transform>
+		<flow-ref doc:name="Audit Details Processing" doc:id="a977b1bd-2a00-46cd-8efa-4b8882baa6f2" name="audit-details-processing-sub-flow"/>
 		<choice doc:name="Choice" doc:id="5641cc72-6e78-4405-b2cc-fd647e9ef533" >
 			<when expression="#[(vars.aptosOriginalPayload != null) or (isEmpty(vars.aptosOriginalPayload) == false)]">
 				<flow-ref doc:name="Get Key Values For Delivery Mode" doc:id="17ca0096-800d-4012-b189-a71df4afcac3" name="get-mode-of-delivery-key-values-from-dblookup-sub-flow"/>
@@ -45,7 +51,7 @@ payload]]></ee:set-variable>
 	"Transaction-Id" : vars.transactionId,
 	"Client-Id" : p('report.clientId'),
 	"Client-Secret" : p('report.clientSecret'),
-	"Transaction-Start-Time" : vars.transactionStartDate
+	"Transaction-Start-Time" : vars.transactionStartTime
 }]]]></http:headers>
 					
 					</http:request>
@@ -72,7 +78,7 @@ payload]]></ee:set-variable>
 	"Transaction-Id" : vars.transactionId,
 	"Client-Id" : p('d365.clientId'),
 	"Client-Secret" : p('d365.clientSecret'),
-	"Transaction-Start-Time" : vars.transactionStartDate
+	"Transaction-Start-Time" : vars.transactionStartTime
 }]]]></http:headers>
 					
 		</http:request>
@@ -106,15 +112,15 @@ payload]]></ee:set-variable>
 ---
 {
 	"Transaction-Id" : vars.transactionId,
-	"Transaction-Start-Time" : vars.transactionStartDate,
 	"Client-Id" : p('lookup.clientId'),
-	"Client-Secret" : p('lookup.clientSecret')
+	"Client-Secret" : p('lookup.clientSecret'),
+	"Transaction-Start-Time" : vars.transactionStartTime
 }]]]></http:headers>
 					<http:query-params><![CDATA[#[output application/java
 ---
 {
-	"type" : p('lookup.queryParam.aptos.modeOfDelivery.type'),
 	"source" : p('lookup.queryParam.aptos.modeOfDelivery.source'),
+	"type" : p('lookup.queryParam.aptos.modeOfDelivery.type'),
 	"category" : p('lookup.queryParam.aptos.modeOfDelivery.category')
 }]]]></http:query-params>
 				</http:request>
@@ -147,7 +153,7 @@ payload]]></ee:set-variable>
 	"Transaction-Id" : vars.transactionId,
 	"Client-Id" : p('lookup.clientId'),
 	"Client-Secret" : p('lookup.clientSecret'),
-	"Transaction-Start-Time" : vars.transactionStartDate
+	"Transaction-Start-Time" : vars.transactionStartTime
 }]]]></http:headers>
 					<http:query-params><![CDATA[#[output application/java
 ---
@@ -189,7 +195,7 @@ payload]]></ee:set-variable>
 	"Transaction-Id" : vars.transactionId,
 	"Client-Id" : p('lookup.clientId'),
 	"Client-Secret" : p('lookup.clientSecret'),
-	"Transaction-Start-Time" : vars.transactionStartDate
+	"Transaction-Start-Time" : vars.transactionStartTime
 }]]]></http:headers>
 					<http:query-params><![CDATA[#[output application/java
 ---
