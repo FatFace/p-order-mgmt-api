@@ -21,7 +21,9 @@ output application/json
 payload]]></ee:set-variable>
 			</ee:variables>
 		</ee:transform>
-		<flow-ref doc:name="Audit Details Flow call" doc:id="a977b1bd-2a00-46cd-8efa-4b8882baa6f2" name="aptos-orders-auditing-sub-flow"/>
+		<async doc:name="Async" doc:id="a964c7c2-50e1-4b26-b200-52d43d2abfdb" >
+			<flow-ref doc:name="Audit Details Flow call" doc:id="a977b1bd-2a00-46cd-8efa-4b8882baa6f2" name="aptos-orders-auditing-sub-flow" />
+		</async>
 		<choice doc:name="Choice" doc:id="5641cc72-6e78-4405-b2cc-fd647e9ef533" >
 			<when expression="#[(vars.aptosOriginalPayload != null) or (isEmpty(vars.aptosOriginalPayload) == false)]">
 				<flow-ref doc:name="Get Key Values For Delivery Mode" doc:id="17ca0096-800d-4012-b189-a71df4afcac3" name="get-mode-of-delivery-key-values-from-dblookup-sub-flow"/>
