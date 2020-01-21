@@ -10,7 +10,7 @@ fun getDeliveryMode(orderno) =  vars.lookUpValue filter (($."routeId") == ordern
 		"pick-id": if((pickorder."route-id") != null) (if(sizeOf(pickorder."route-id")>=20) ((pickorder."route-id")[0 to 19]) else (pickorder."route-id")) else " ",
 		"ship-by-date": if((pickorder."delivery-date" as Date) != null ) (if(sizeOf(pickorder."delivery-date" as Date)>=14) ((pickorder."delivery-date" as Date)[0 to 13]) else (pickorder."delivery-date" as Date)) else " " as Date,
 		"purchase-order": if((pickorder."order-no") != null) (if(sizeOf(pickorder."order-no")>=30) ((pickorder."order-no")[0 to 29]) else (pickorder."order-no")) else " ",
-		"line-price": if(sizeOf(sum(pickorder.orderlines.amount + pickorder."net-amount")as String)>= 30) ((sum(pickorder.orderlines.amount + pickorder."net-amount")as Number as String {format : ".##"} )[0 to 29]) else (sum(pickorder.orderlines.amount + pickorder."net-amount")as Number as String {format : ".##"}),
+		"line-price": if(pickorder.orderlines[0].amount != null and pickorder."net-amount" != null) (if(sizeOf((pickorder.orderlines[0].amount + pickorder."net-amount")as String)>= 30) (((pickorder.orderlines[0].amount + pickorder."net-amount")as Number as String {format : ".##"} )[0 to 29]) else ((pickorder.orderlines[0].amount + pickorder."net-amount")as Number as String {format : ".##"})) else " ",
 		"delivery-charges": if((pickorder.charges) != null) (if(sizeOf(pickorder.charges)>=15) ((pickorder.charges)[0 to 14]) else (pickorder.charges)) else " ",
 		"dispatch_method": $."lookup-value",
 		"customer-id": if((pickorder.customer."customer-id") != null) (if(sizeOf(pickorder.customer."customer-id")>=15) ((pickorder.customer."customer-id")[0 to 14]) else (pickorder.customer."customer-id")) else " ",
