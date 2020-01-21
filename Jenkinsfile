@@ -18,7 +18,7 @@ pipeline {
         )
         
         string(name: 'MULE_CLOUDHUB_RUNTIME', defaultValue: '4.2.1', description: 'Mule runtime')
-        string(name: 'MULE_APPLICATION_NAME', defaultValue: 'dev-b-order-mgmt-app', description: 'Unique name of the application [mule artifact] while deploying Anypoint platform')
+        string(name: 'MULE_APPLICATION_NAME', defaultValue: 'dev-p-order-mgmt-api', description: 'Unique name of the application [mule artifact] while deploying Anypoint platform')
         string(name: 'MULE_ENV', defaultValue: 'dev', description: 'Enviroment setting for Mule app/api artifact')
         string(name: 'ENCRYPTION_KEY', defaultValue: 'secure key', description: 'Encryption key needed for only to run munit run')
 	    
@@ -30,8 +30,8 @@ pipeline {
     }
     
  	environment {
-		GITHUB_CREDENTIAL_ID = 'd4a78ae8a3204d33df996b54c34237034f8073b7'
-		GITHUB_REPO_URL = 'https://${GITHUB_CREDENTIAL_ID}@github.com/FatFace/b-order-mgmt-app.git'		
+		GITHUB_CREDENTIAL_ID = '7db7a4338f3897424ddce567a8c97a25d1b7f2a1'
+		GITHUB_REPO_URL = 'https://7db7a4338f3897424ddce567a8c97a25d1b7f2a1@github.com/FatFace/p-order-mgmt-api.git'		
  		MULE_CLOUDHUB_URI = 'https://anypoint.mulesoft.com'
  		MULE_CLOUDHUB_USER = 'jenkins@fatface.com'
  		MULE_CLOUDHUB_PASSWORD = 'jenkins123'
@@ -49,7 +49,7 @@ pipeline {
 	
     tools {
             maven 'maven-3.5.4'
-	          jdk 'jdk1.8.0_181'
+	    jdk 'jdk8u172-b11'
     }
 	
     stages {
