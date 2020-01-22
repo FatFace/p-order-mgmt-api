@@ -31,7 +31,7 @@ pipeline {
  	environment {
 		GITHUB_CREDENTIAL_ID = credentials('Jenkins-Fatface-id')
 		GITHUB_REPO_URL = 'https://$GITHUB_CREDENTIAL_ID@github.com/FatFace/p-order-mgmt-api.git'
-		ENCRYPTION_KEY=credentials('mule-encryption-key')
+		ENCRYPTION_KEY = credentials('mule-encryption-key')
  		MULE_CLOUDHUB_URI = 'https://anypoint.mulesoft.com'
  		MULE_CLOUDHUB_USER = 'jenkins@fatface.com'
  		MULE_CLOUDHUB_PASSWORD = 'jenkins123'
