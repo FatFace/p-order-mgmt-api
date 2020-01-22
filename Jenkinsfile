@@ -30,7 +30,7 @@ pipeline {
     }
     
  	environment {
-		GITHUB_CREDENTIAL_ID = credential('blueocean-github-domain')
+		GITHUB_CREDENTIAL_ID = credentials('blueocean-github-domain')
 		GITHUB_REPO_URL = 'https://"${GITHUB_CREDENTIAL_ID}"@github.com/FatFace/p-order-mgmt-api.git'		
  		MULE_CLOUDHUB_URI = 'https://anypoint.mulesoft.com'
  		MULE_CLOUDHUB_USER = 'jenkins@fatface.com'
