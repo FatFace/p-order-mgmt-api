@@ -20,8 +20,7 @@ pipeline {
         string(name: 'MULE_CLOUDHUB_RUNTIME', defaultValue: '4.2.1', description: 'Mule runtime')
         string(name: 'MULE_APPLICATION_NAME', defaultValue: 'dev-p-order-mgmt-api', description: 'Unique name of the application [mule artifact] while deploying Anypoint platform')
         string(name: 'MULE_ENV', defaultValue: 'dev', description: 'Enviroment setting for Mule app/api artifact')
-        string(name: 'ENCRYPTION_KEY', defaultValue: 'secure key', description: 'Encryption key needed for only to run munit run')
-	    
+ 	    
         gitParameter name: 'BRANCH_TAG',
                      type: 'PT_BRANCH_TAG',
                      defaultValue: 'develop',
@@ -30,8 +29,9 @@ pipeline {
     }
     
  	environment {
-		GITHUB_CREDENTIAL_ID = credential('blueocean-github-domain')
-		GITHUB_REPO_URL = 'https://${'GITHUB_CREDENTIAL_ID'}@github.com/FatFace/p-order-mgmt-api.git'		
+		GITHUB_CREDENTIAL_ID = credentials('Jenkins-Fatface-id')
+		GITHUB_REPO_URL = 'https://$GITHUB_CREDENTIAL_ID@github.com/FatFace/p-order-mgmt-api.git'
+		ENCRYPTION_KEY = credentials('mule-encryption-key')
  		MULE_CLOUDHUB_URI = 'https://anypoint.mulesoft.com'
  		MULE_CLOUDHUB_USER = 'jenkins@fatface.com'
  		MULE_CLOUDHUB_PASSWORD = 'jenkins123'
@@ -75,7 +75,7 @@ pipeline {
             } 
             steps {
                 script {               
-			    		def lastCommit = sh returnStdout: true, script: 'git log -1'
+			def lastCommit = sh returnStdout: true, script: 'git log -1'
 	                if (lastCommit.contains("[maven-release-plugin]")){
 	                    echo  "Deployment skipped because it has been managed by release plugin"
 	                } else {
