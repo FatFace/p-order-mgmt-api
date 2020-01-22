@@ -30,8 +30,8 @@ pipeline {
     }
     
  	environment {
-		GITHUB_CREDENTIAL_ID = '101474dbf1b4e275f3a15f1ab5410c6cd175bcbf'
-		GITHUB_REPO_URL = 'https://101474dbf1b4e275f3a15f1ab5410c6cd175bcbf@github.com/FatFace/p-order-mgmt-api.git'		
+		GITHUB_CREDENTIAL_ID = '1c3526ce3da505502189b20a02684859e7c15762'
+		GITHUB_REPO_URL = 'https://1c3526ce3da505502189b20a02684859e7c15762@github.com/FatFace/p-order-mgmt-api.git'		
  		MULE_CLOUDHUB_URI = 'https://anypoint.mulesoft.com'
  		MULE_CLOUDHUB_USER = 'jenkins@fatface.com'
  		MULE_CLOUDHUB_PASSWORD = 'jenkins123'
