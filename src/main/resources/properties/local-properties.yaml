@@ -32,7 +32,7 @@ d365:
         definitionGroupId: "IDD009-PickRequest-Export"
         packageName: "Pick-Create-"
 jda:
-  host: "mule-worker-internal-dev-s-jda-data-int.ir-e1.cloudhub.io"
+  host: "localhost"
   port: "8092"
   basepath: "/api/v1"
   clientId: "c1751cc13ad746a8a49c404c966839f7"
