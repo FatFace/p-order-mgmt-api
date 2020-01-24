@@ -14,11 +14,18 @@ scheduler:
     expression: "0 0/15 * 1/1 * ? *"
   frequency : "15"
   
+#----Common Block---No change Needed----      
 cloudhub:
-  domain: ""
-  usrname: ""
-  password: ""
-  environment: ""
+  username: "![5/w01nYmhxyvgHVC8Uh0yvTYk/WLHWBP2ZU+9DMOSnw=]"
+  password: "![ae5QSfiTACKaB08EZlg0AA==]"
+  
+smtp:
+  host: "mail.fatface.net"
+  port: "465"
+  user: "![5/w01nYmhxyvgHVC8Uh0yvTYk/WLHWBP2ZU+9DMOSnw=]"
+  password: "![ae5QSfiTACKaB08EZlg0AA==]"
+  subject: "Fatface API Exception"
+#----Common Block---No change Needed----
   
 d365:
   host: "mule-worker-internal-s-d365-api.ir-e1.cloudhub.io"

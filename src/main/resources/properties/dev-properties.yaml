@@ -47,9 +47,18 @@ jda:
   manifests:
     path: "/pick/manifests" 
 
+#----Common Block---No change Needed----      
 cloudhub:
   username: "![Wkd/i0mr4M5DRXGPkpxl3A+qPh6NASJ83cobwz2qfXs=]"
   password: "![TUOtb96a5rFz9HgwE5GrsA==]"
+  
+smtp:
+  host: "mail.fatface.net"
+  port: "465"
+  user: "![XImJcfQv4D6cYan0i6XwPZi8Uxv0OkDQvTITnsw/onM=]"
+  password: "![r9f7FSUCH+2adxR8OeswFg==]"
+  subject: "Fatface API Exception"
+#----Common Block---No change Needed----
 
 db:
  audit: 
@@ -77,13 +86,6 @@ sqs:
     url:
       manifestQueueUrl: "https://sqs.eu-west-1.amazonaws.com/691628577374/dev-shipping-manifest-q"
       orderQueueUrl: "https://sqs.eu-west-1.amazonaws.com/691628577374/dev-order-extract-q"
-smtp:
-  host: "![rpQtD0vL4qh+Uema8l2LJxRngvgfBbF6l4RD5XEkF7Y=]"
-  port: "![jd2yTmc7NHA+FUYVXGfwbQ==]"
-  user: "![XImJcfQv4D6cYan0i6XwPZi8Uxv0OkDQvTITnsw/onM=]"
-  password: "![r9f7FSUCH+2adxR8OeswFg==]"
-  subject: "Fatface API Exception"
-
 
 lookup:
   host: "mule-worker-internal-dev-s-dblookup-api.ir-e1.cloudhub.io"

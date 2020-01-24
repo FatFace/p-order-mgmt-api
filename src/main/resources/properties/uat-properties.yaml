@@ -14,9 +14,18 @@ scheduler:
     expression: "0 0/15 * 1/1 * ? *"
   frequency : "15"
   
+#----Common Block---No change Needed----      
 cloudhub:
   username: "![Wkd/i0mr4M5DRXGPkpxl3A+qPh6NASJ83cobwz2qfXs=]"
   password: "![TUOtb96a5rFz9HgwE5GrsA==]"
+  
+smtp:
+  host: "mail.fatface.net"
+  port: "465"
+  user: "![XImJcfQv4D6cYan0i6XwPZi8Uxv0OkDQvTITnsw/onM=]"
+  password: "![r9f7FSUCH+2adxR8OeswFg==]"
+  subject: "Fatface API Exception"
+#----Common Block---No change Needed----
 
 db:
  audit: 
@@ -44,12 +53,6 @@ sqs:
     url: 
       manifestQueueUrl: "https://sqs.eu-west-1.amazonaws.com/691628577374/shipping-manifest-q"
       orderQueueUrl: "https://sqs.eu-west-1.amazonaws.com/691628577374/order-extract-q"
-smtp:
-  host: "![rpQtD0vL4qh+Uema8l2LJxRngvgfBbF6l4RD5XEkF7Y=]"
-  port: "![jd2yTmc7NHA+FUYVXGfwbQ==]"
-  user: "![XImJcfQv4D6cYan0i6XwPZi8Uxv0OkDQvTITnsw/onM=]"
-  password: "![r9f7FSUCH+2adxR8OeswFg==]"
-  subject: "Fatface API Exception"
         
 d365:
   host: "mule-worker-internal-sit-s-d365-api.ir-e1.cloudhub.io"
