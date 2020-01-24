@@ -19,7 +19,7 @@ d365:
   port: "8091"
   basepath: "/api/v1"
   clientId: "c1751cc13ad746a8a49c404c966839f7"
-  clientSecret: "7d3aFbC44E8e49048935f06A7A2a099d"
+  clientSecret: "![Uve1NAvt5zaIs55ecLLnd6rhKY81uIy0j5/clihbaHvBkxed9l+lipNeE/ztkCnm]"
   getCustomerGroupPath: "/data/CustomerGroups"
   updateProductsPath: "/data/products"
   updateManifestPath: "/pick/manifests"
@@ -38,7 +38,7 @@ jda:
   basepath: "/api/v1"
   ordersPath: "/orders"
   clientId: "c1751cc13ad746a8a49c404c966839f7"
-  clientSecret: "7d3aFbC44E8e49048935f06A7A2a099d"
+  clientSecret: "![Uve1NAvt5zaIs55ecLLnd6rhKY81uIy0j5/clihbaHvBkxed9l+lipNeE/ztkCnm]"
   jks:
     password: "![yqrYtFIRqm28xrunLqR/2kqfcVd97HqoY0AWEfF+m8M=]"
   orders:
@@ -99,7 +99,7 @@ lookup:
       key: "SHIPPING_BAR_CODE-ORDERITEM_NUMSTR-APTOS"
   key: "ORDER_TYPE-MODE_OF_DELIVERY-D365"
   clientId: "c1751cc13ad746a8a49c404c966839f7"
-  clientSecret: "7d3aFbC44E8e49048935f06A7A2a099d"
+  clientSecret: "![Uve1NAvt5zaIs55ecLLnd6rhKY81uIy0j5/clihbaHvBkxed9l+lipNeE/ztkCnm]"
   queryParam:
     type: "ORDER_TYPE"
     catgeory: "MODE_OF_DELIVERY"
@@ -140,5 +140,5 @@ report:
   port: "8091"
   basepath: "/api/v1"
   clientId: "c1751cc13ad746a8a49c404c966839f7"
-  clientSecret: "7d3aFbC44E8e49048935f06A7A2a099d"
+  clientSecret: "![Uve1NAvt5zaIs55ecLLnd6rhKY81uIy0j5/clihbaHvBkxed9l+lipNeE/ztkCnm]"
   ordersPath: "/orders"

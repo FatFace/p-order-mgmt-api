@@ -25,7 +25,7 @@ d365:
   port: "8091"
   basepath: "/api/v1"
   clientId: "587f052383c44efbadc76e22201cba19"
-  clientSecret: "544925Ef3b1641c5B56A5a0cB95b2642"
+  clientSecret: "![+6LrbmEe+njbAiXUXZX1+7Nq1IMTLZTmBBLwyUF89jr5yQxXx6ydvM5v0UczJCgE]"
   dmf: 
     path: "/dmf/export"
     pick:
@@ -40,7 +40,7 @@ jda:
   basepath: "/api/v1"
   ordersPath: "/orders"
   clientId: "587f052383c44efbadc76e22201cba19"
-  clientSecret: "544925Ef3b1641c5B56A5a0cB95b2642"
+  clientSecret: "![+6LrbmEe+njbAiXUXZX1+7Nq1IMTLZTmBBLwyUF89jr5yQxXx6ydvM5v0UczJCgE]"
   jks:
     password: "![Eiy80pOc3NMdDEvvqf5eTmUuYTIchkvpv2kk4Ge7Xv8=]"
 
@@ -57,8 +57,8 @@ lookup:
     shippingBarcode:
       key: "SHIPPING_BAR_CODE-ORDERITEM_NUMSTR-APTOS"
   key: "ORDER_TYPE-MODE_OF_DELIVERY-D365"
-  clientId: "a1c25cbc41dc4a43a1c5c3ecbf1251c5"
-  clientSecret: "C3a2082C36B54f5bbba606E704e11bDE"
+  clientId: "587f052383c44efbadc76e22201cba19"
+  clientSecret: "![+6LrbmEe+njbAiXUXZX1+7Nq1IMTLZTmBBLwyUF89jr5yQxXx6ydvM5v0UczJCgE]"
   queryParam:
     type: "ORDER_TYPE"
     catgeory: "MODE_OF_DELIVERY"
@@ -77,6 +77,27 @@ lookup:
         category: "ORDERITEM_NUMSTR"
         source: "APTOS"
     
+cron:
+  expression: 
+    manifest: "0 0/10 * 1/1 * ? *"
+    orderextract: "0 0 * ? * * *"    
+   
+orders:
+  export:
+    sftp:
+      errorfilepath:  "/FatFace/sftp/MuleSoftIntegration/sit/error/outgoing/orderData/jdaOrder"
+send:
+  manifest:
+    queue: "true"
+
 pick:
   orders:
-    orderType: "WEB" 
+    orderType: "WEB"
+  
+report:
+  host: "mule-worker-internal-sit-s-reportdb-api.ir-e1.cloudhub.io"
+  port: "8091"
+  basepath: "/api/v1"
+  clientId: "587f052383c44efbadc76e22201cba19"
+  clientSecret: "![+6LrbmEe+njbAiXUXZX1+7Nq1IMTLZTmBBLwyUF89jr5yQxXx6ydvM5v0UczJCgE]"
+  ordersPath: "/orders"
