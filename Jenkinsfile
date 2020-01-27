@@ -29,8 +29,7 @@ pipeline {
     }
     
  	environment {
-		GITHUB_CREDENTIAL_ID = credentials('github')
-		GITHUB_REPO_URL = 'https://$GITHUB_CREDENTIAL_ID@github.com/FatFace/p-order-mgmt-api.git'
+		GITHUB_CREDENTIAL_ID = credentials('Jenkins-Fatface-Pat')
 		ENCRYPTION_KEY = credentials('mule-encryption-key')
  		MULE_CLOUDHUB_URI = 'https://anypoint.mulesoft.com'
  		MULE_CLOUDHUB_USER = 'jenkins@fatface.com'
@@ -62,7 +61,7 @@ pipeline {
           					[$class: 'LocalBranch', localBranch: "${params.BRANCH_TAG}"]],
 	                          gitTool: 'Default',
 	                          submoduleCfg: [],
-	                          userRemoteConfigs: [[url: "${GITHUB_REPO_URL}", credentialsId: "${GITHUB_CREDENTIAL_ID}"]]
+	                          userRemoteConfigs: [[url: "https://$GITHUB_CREDENTIAL_ID@github.com/FatFace/p-order-mgmt-api.git", credentialsId: "${GITHUB_CREDENTIAL_ID}"]]
 	                        ])
 			}
 		}
