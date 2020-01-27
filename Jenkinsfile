@@ -1,59 +1,3 @@
-pipeline {
-    agent any 
- 
-    parameters {
-        booleanParam(name: 'IS_MAVEN_RELEASE',
-                defaultValue: false,
-                description: 'Enable if you would like to build maven release candidate.'
-        )
-	
-	booleanParam(name: 'IS_PUBLISH_REQUIRED',
-                defaultValue: false,
-                description: 'Enable if you would like to publish into maven repo.'
-        )
-        
-	booleanParam(name: 'IS_MULE_DEPLOYMENT_REQUIRED',
-		defaultValue: false,
-		description: 'Enable if you would like to deploy into Mule runtime.'
-        )
-        
-        string(name: 'MULE_CLOUDHUB_RUNTIME', defaultValue: '4.2.1', description: 'Mule runtime')
-        string(name: 'MULE_APPLICATION_NAME', defaultValue: 'dev-p-order-mgmt-api', description: 'Unique name of the application [mule artifact] while deploying Anypoint platform')
-        string(name: 'MULE_ENV', defaultValue: 'dev', description: 'Enviroment setting for Mule app/api artifact')
- 	    
-        gitParameter name: 'BRANCH_TAG',
-                     type: 'PT_BRANCH_TAG',
-                     defaultValue: 'develop',
-                     description: 'Choose a git branch to start CI/CD pipeline.'	
-    	
-    }
-    
- 	environment {
-		GITHUB_CREDENTIAL_ID = credentials('github')
-		GITHUB_REPO_URL = 'https://$GITHUB_CREDENTIAL_ID@github.com/FatFace/p-order-mgmt-api.git'
-		ENCRYPTION_KEY = credentials('mule-encryption-key')
- 		MULE_CLOUDHUB_URI = 'https://anypoint.mulesoft.com'
- 		MULE_CLOUDHUB_USER = 'jenkins@fatface.com'
- 		MULE_CLOUDHUB_PASSWORD = 'jenkins123'
- 		MULE_CLOUDHUB_BUSINESS_GROUP = 'fatface'
- 		MULE_CLOUDHUB_REGION = 'eu-west-1'
- 		MULE_CLOUDHUB_WORKER_TYPE = 'Micro'
- 		MULE_CLOUDHUB_WORKERS = '1'
-
- 	}
- 
-    triggers {
-            pollSCM('0 7,16 * * *')
-    }
-	
-	
-    tools {
-            maven 'maven-3.5.4'
-	    jdk 'jdk8u172-b11'
-    }
-	
-    stages {
-		stage ('Prepare: Git checkout') {
 			steps {	
 				checkout([$class: 'GitSCM',
 	                          branches: [[name: "${params.BRANCH_TAG}"]],
@@ -62,7 +6,7 @@ pipeline {
           					[$class: 'LocalBranch', localBranch: "${params.BRANCH_TAG}"]],
 	                          gitTool: 'Default',
 	                          submoduleCfg: [],
-	                          userRemoteConfigs: [[url: "${GITHUB_REPO_URL}", credentialsId: "${GITHUB_CREDENTIAL_ID}"]]
+	                          userRemoteConfigs: [[url: "https://$GITHUB_CREDENTIAL_ID@github.com/FatFace/p-order-mgmt-api.git", credentialsId: "${GITHUB_CREDENTIAL_ID}"]]
 	                        ])
 			}
 		}
