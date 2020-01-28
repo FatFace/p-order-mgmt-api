@@ -46,8 +46,8 @@ output application/java
 			<http:query-params ><![CDATA[#[output application/java
 ---
 {
-	"client_id" : p('jda.clientId'),
-	"client_secret" : p('jda.clientSecret')
+	"client_secret" : p('secure::jda.clientSecret'),
+	"client_id" : p('jda.clientId')
 }]]]></http:query-params>
 		</http:request>
 		<ee:transform doc:name="JDA Response Attribute" doc:id="7a845f75-2791-4185-bc74-2d5307dfdffd">
@@ -143,7 +143,7 @@ p('sqs.queue.url.manifestQueueUrl')]]></ee:set-variable>
 {
 	"Transaction-Id" : vars.transactionId,
 	"Client-Id" : p('d365.clientId'),
-	"Client-Secret" : p('d365.clientSecret'),
+	"Client-Secret" : p('secure::d365.clientSecret'),
 	"Transaction-Start-Time" : vars.transactionStartTime
 }]]]></http:headers>
 					<http:response-validator>

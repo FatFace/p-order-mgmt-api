@@ -37,7 +37,7 @@ p('d365.dmf.pick.create.packageName') ++ now() as String {format: "ddMMyyyyhhms"
 {
 	"Transaction-Id" : vars.transactionId,
 	"Client-Id" : p('d365.clientId'),
-	"Client-Secret" : p('d365.clientSecret'),
+	"Client-Secret" : p('secure::d365.clientSecret'),
 	"Transaction-Start-Time" : vars.transactionStartTime
 }]]]></http:headers>
 			<http:query-params ><![CDATA[#[output application/java

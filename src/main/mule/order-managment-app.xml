@@ -27,7 +27,7 @@ http://www.mulesoft.org/schema/mule/os http://www.mulesoft.org/schema/mule/os/cu
 					<http:query-params ><![CDATA[#[output application/java
 ---
 {
-	"client_secret" : p('jda.clientSecret'),
+	"client_secret" : p('secure::jda.clientSecret'),
 	"vRequestId" : vars.transactionId,
 	"client_id" : p('jda.clientId')
 }]]]></http:query-params>
@@ -71,7 +71,7 @@ payload]]></ee:set-payload>
 {
 	"Transaction-Id" : vars.transactionId,
 	"Client-Id" : p('lookup.clientId'),
-	"Client-Secret" : p('lookup.clientSecret'),
+	"Client-Secret" : p('secure::lookup.clientSecret'),
 	"Transaction-Start-Time" : vars.transactionStartTime
 }]]]></http:headers>
 					<http:query-params ><![CDATA[#[output application/java

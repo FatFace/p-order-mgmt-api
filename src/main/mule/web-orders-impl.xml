@@ -47,7 +47,7 @@ payload]]></ee:set-variable>
 {
 	"Transaction-Id" : vars.transactionId,
 	"Client-Id" : p('report.clientId'),
-	"Client-Secret" : p('report.clientSecret'),
+	"Client-Secret" : p('secure::report.clientSecret'),
 	"Transaction-Start-Time" : vars.transactionStartTime
 }]]]></http:headers>
 					
@@ -74,7 +74,7 @@ payload]]></ee:set-variable>
 {
 	"Transaction-Id" : vars.transactionId,
 	"Client-Id" : p('d365.clientId'),
-	"Client-Secret" : p('d365.clientSecret'),
+	"Client-Secret" : p('secure::d365.clientSecret'),
 	"Transaction-Start-Time" : vars.transactionStartTime
 }]]]></http:headers>
 					
@@ -123,7 +123,7 @@ payload]]></ee:set-variable>
 {
 	"Transaction-Id" : vars.transactionId,
 	"Client-Id" : p('lookup.clientId'),
-	"Client-Secret" : p('lookup.clientSecret'),
+	"Client-Secret" : p('secure::lookup.clientSecret'),
 	"Transaction-Start-Time" : vars.transactionStartTime
 }]]]></http:headers>
 					<http:query-params><![CDATA[#[output application/java
@@ -162,7 +162,7 @@ payload]]></ee:set-variable>
 {
 	"Transaction-Id" : vars.transactionId,
 	"Client-Id" : p('lookup.clientId'),
-	"Client-Secret" : p('lookup.clientSecret'),
+	"Client-Secret" : p('secure::lookup.clientSecret'),
 	"Transaction-Start-Time" : vars.transactionStartTime
 }]]]></http:headers>
 					<http:query-params><![CDATA[#[output application/java
@@ -204,7 +204,7 @@ payload]]></ee:set-variable>
 {
 	"Transaction-Id" : vars.transactionId,
 	"Client-Id" : p('lookup.clientId'),
-	"Client-Secret" : p('lookup.clientSecret'),
+	"Client-Secret" : p('secure::lookup.clientSecret'),
 	"Transaction-Start-Time" : vars.transactionStartTime
 }]]]></http:headers>
 					<http:query-params><![CDATA[#[output application/java
