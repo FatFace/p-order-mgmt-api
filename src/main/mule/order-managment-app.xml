@@ -23,7 +23,7 @@ http://www.mulesoft.org/schema/mule/os http://www.mulesoft.org/schema/mule/os/cu
 		</ee:transform>
 				<flow-ref doc:name="Log Process Entry" doc:id="0c3d0e86-05a8-48fd-9355-7849e7e45dfd" name="log-process-entry-sub-flow" />
 				<flow-ref doc:name="Audit Process Entry" doc:id="09988aee-0cd6-4706-989e-468edc0cf587" name="audit-process-entry-sub-flow" />
-				<http:request method="POST" doc:name="Invoke System Layer JDA Api to Post Orders" doc:id="1d39c868-a89c-48a5-8d97-9d5cb35a6020" config-ref="s_jda_Http_Request_configuration" path="${jda.ordersPath}" responseTimeout="${response.timeout}">
+				<http:request method="POST" doc:name="Invoke System Layer JDA Api to Post Orders" doc:id="1d39c868-a89c-48a5-8d97-9d5cb35a6020" config-ref="s_jda_Http_Request_configuration" path="${jda.ordersPath}" responseTimeout="${response.timeout.system.jda.orderManagment}">
 					<http:query-params ><![CDATA[#[output application/java
 ---
 {
@@ -65,7 +65,7 @@ payload]]></ee:set-payload>
 			<otherwise >
 				<flow-ref doc:name="Log Process Entry" doc:id="86b153ce-55bd-4a65-8fb7-6b0a544e2ea8" name="log-process-entry-sub-flow"/>
 				<flow-ref doc:name="Audit Process Entry" doc:id="c789fa80-1921-4304-a12f-81cf7327558b" name="audit-process-entry-sub-flow"/>
-				<http:request method="GET" doc:name="Invoke System Layer Lookup Api to Get Lookup Key" doc:id="b8ba2b6b-4bcc-484a-8bef-607f812e119a" path="${lookup.dbLookupPath}" responseTimeout="30000" config-ref="dbLookup_HTTP_Request_configuration">
+				<http:request method="GET" doc:name="Invoke System Layer Lookup Api to Get Lookup Key" doc:id="b8ba2b6b-4bcc-484a-8bef-607f812e119a" path="${lookup.dbLookupPath}" responseTimeout="${response.timeout.system.dblookup.orderManagment}" config-ref="dbLookup_HTTP_Request_configuration">
 					<http:headers ><![CDATA[#[output application/java
 ---
 {

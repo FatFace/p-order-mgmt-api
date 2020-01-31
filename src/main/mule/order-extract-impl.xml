@@ -45,7 +45,7 @@ output application/java
 		</ee:transform>
 		<flow-ref doc:name="Log Process Entry" doc:id="cfce3e1e-0396-429e-8d85-cd27a2e4708c" name="log-process-entry-sub-flow"/>
 		<flow-ref doc:name="Audit Process Entry" doc:id="dd1639ad-1b7e-4735-adc4-fd1d81d79b31" name="audit-process-entry-sub-flow"/>
-		<http:request method="GET" doc:name="S-JDA-HTTP-Request-Configuration" doc:id="2e2372df-6ccb-4ab2-9c51-ce66f3740184" path="${jda.orders.path}" responseTimeout="${response.timeout}" config-ref="s_jda_Http_Request_configuration" outputMimeType="application/json">
+		<http:request method="GET" doc:name="S-JDA-HTTP-Request-Configuration" doc:id="2e2372df-6ccb-4ab2-9c51-ce66f3740184" path="${jda.orders.path}" responseTimeout="${response.timeout.system.jda.orderExtract}" config-ref="s_jda_Http_Request_configuration" outputMimeType="application/json">
 				<http:headers ><![CDATA[#[output application/java
 ---
 {
@@ -232,7 +232,7 @@ output application/java
 		<flow-ref doc:name="Log Process Entry" doc:id="966dce08-77ce-4137-85cf-b0388e7e486b" name="log-process-entry-sub-flow"/>
 		<flow-ref doc:name="Audit Process Entry" doc:id="357d8942-066b-4ce5-9b62-735760d30983" name="audit-process-entry-sub-flow"/>
 		<try doc:name="Try" doc:id="b38bc115-8ef3-42c1-9bc0-3bece479be1c" >
-			<http:request method="PUT" doc:name="Call D365 HTTP Request Configuration" doc:id="4e264552-d91e-4f1c-8103-e1cc181d1b0d" path="${d365.updateOrderExtractPath}" responseTimeout="${response.timeout}" config-ref="s_D365_Http_Request_configuration" outputMimeType="application/json">
+			<http:request method="PUT" doc:name="Call D365 HTTP Request Configuration" doc:id="4e264552-d91e-4f1c-8103-e1cc181d1b0d" path="${d365.updateOrderExtractPath}" responseTimeout="${response.timeout.system.d365.orderExtract}" config-ref="s_D365_Http_Request_configuration" outputMimeType="application/json">
 			<http:headers><![CDATA[#[output application/java
 ---
 {
