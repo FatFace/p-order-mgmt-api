@@ -35,10 +35,10 @@ response:
         orderExtract: "600000"
       jda:
         orderExtract: "600000"
-        orderManagment : "600000"
+        pickOrders : "600000"
         manifest : "600000"
       dblookup: 
-        orderManagment: "600000"
+        pickOrders: "600000"
         webOrders: "600000"
       reportdb:
         webOrders: "600000"
