@@ -31,8 +31,6 @@ db:
 response:
   timeout:
     system:
-      d365:
-        orderExtract: "60000"
       jda:
         orderExtract: "60000"
         pickOrders : "60000"
@@ -46,6 +44,7 @@ response:
         pickOrders: "60000"
         manifest : "60000"
         webOrders: "60000"
+        orderExtract: "60000"
 shipment:
   labelImageFormat: "PNG"  
 
