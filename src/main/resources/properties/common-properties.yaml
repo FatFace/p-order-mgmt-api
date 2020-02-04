@@ -32,20 +32,20 @@ response:
   timeout:
     system:
       d365:
-        orderExtract: "600000"
+        orderExtract: "60000"
       jda:
-        orderExtract: "600000"
-        pickOrders : "600000"
-        manifest : "600000"
+        orderExtract: "60000"
+        pickOrders : "60000"
+        manifest : "60000"
       dblookup: 
-        pickOrders: "600000"
-        webOrders: "600000"
+        pickOrders: "60000"
+        webOrders: "60000"
       reportdb:
-        webOrders: "600000"
+        webOrders: "60000"
       d365:
-        pickOrders: "600000"
-        manifest : "600000"
-        webOrders: "600000"
+        pickOrders: "60000"
+        manifest : "60000"
+        webOrders: "60000"
 shipment:
   labelImageFormat: "PNG"  
 
