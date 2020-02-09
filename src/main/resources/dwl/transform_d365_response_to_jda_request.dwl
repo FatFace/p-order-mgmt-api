@@ -1,12 +1,11 @@
 %dw 2.0
 output application/json
-fun getDeliveryMode(orderno) =  vars.lookUpValue filter (($."routeId") == orderno)
+fun getDeliveryMode(orderno) =  vars.lookUpValue filter (($."routeId") == orderno) reduce $$
 
 fun getLinePrice(amount, netAmount) = (amount + netAmount)as Number as String {format : ".##"}
 ---
 {
 	orders: vars.originalPayload.'pick-orders' map ( pickorder , indexOfPickorder ) -> {
-		(vars.lookUpValue filter (($."routeId") == pickorder."route-id") map{ 
 		"order-type": p('pick.orders.orderType'),
 		"order-date": if((pickorder."order-date" as Date) != null) (if(sizeOf(pickorder."order-date" as Date)>=14) ((pickorder."order-date" as Date)[0 to 13]) else (pickorder."order-date" as Date)) else " " as Date,
 		"pick-id": if((pickorder."route-id") != null) (if(sizeOf(pickorder."route-id")>=20) ((pickorder."route-id")[0 to 19]) else (pickorder."route-id")) else " ",
@@ -14,7 +13,7 @@ fun getLinePrice(amount, netAmount) = (amount + netAmount)as Number as String {f
 		"purchase-order": if((pickorder."order-no") != null) (if(sizeOf(pickorder."order-no")>=30) ((pickorder."order-no")[0 to 29]) else (pickorder."order-no")) else " ",
 		"line-price": if(pickorder.orderlines[0].amount != null and pickorder."net-amount" != null) (if((sizeOf(getLinePrice(pickorder.orderlines[0].amount,pickorder."net-amount"))) >13) getLinePrice(pickorder.orderlines[0].amount,pickorder."net-amount")[0 to 12] else getLinePrice(pickorder.orderlines[0].amount,pickorder."net-amount")) else '',
 		"delivery-charges": if((pickorder.charges) != null) (if(sizeOf(pickorder.charges)>=15) ((pickorder.charges)[0 to 14]) else (pickorder.charges)) else " ",
-		"dispatch_method": $."lookup-value",
+		"dispatch_method": getDeliveryMode(pickorder."route-id")."lookup-value",
 		"customer-id": if((pickorder.customer."customer-id") != null) (if(sizeOf(pickorder.customer."customer-id")>=15) ((pickorder.customer."customer-id")[0 to 14]) else (pickorder.customer."customer-id")) else " ",
 		"del-name": if((pickorder.customer.fullname)!= null) (if(sizeOf(pickorder.customer.fullname)>= 50) ((pickorder.customer.fullname)[0 to 49]) else (pickorder.customer.fullname)) else " ",
 		"del-contact-email": if((pickorder.customer.email) != null) (if(sizeOf(pickorder.customer.email)>=256) ((pickorder.customer.email)[0 to 255]) else (pickorder.customer.email)) else " ",
@@ -44,7 +43,6 @@ fun getLinePrice(amount, netAmount) = (amount + netAmount)as Number as String {f
         "payments": pickorder.payments map{
             "card-number": if($."payment-mode-card"."card-number" != null) ($."payment-mode-card"."card-number") else " "
         }
-	})
 	}
 	
 }
