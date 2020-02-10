@@ -17,7 +17,11 @@
 		<mule.maven.plugin.version>3.2.7</mule.maven.plugin.version>
 	<munit.version>2.1.5</munit.version>
     </properties>
-
+    <scm>
+	<connection>scm:git:https://${env.GITHUB_PAT}@github.com/FatFace/${project.artifactId}.git</connection>
+	<developerConnection>scm:git:https://${env.GITHUB_PAT}@github.com/FatFace/${project.artifactId}.git</developerConnection>
+	<tag>HEAD</tag>
+    </scm>
 	<build>
 		<plugins>
 			<plugin>
@@ -79,18 +83,18 @@
 	</build>
 
 	<dependencies>
-		<dependency>
-            <groupId>com.fatface.mule.extensions</groupId>
-            <artifactId>mule-module-common-logger</artifactId>
-            <version>1.0.0-SNAPSHOT</version>
-            <classifier>mule-plugin</classifier>
-        </dependency>
-        <dependency>
-		  <groupId>com.fatface.mule</groupId>
-		  <artifactId>common-framework-handler</artifactId>
-		  <version>1.0.0-SNAPSHOT</version>
-		  <classifier>mule-plugin</classifier>
-		</dependency>
+	<dependency>
+	  <groupId>com.fatface.mule.extensions</groupId>
+	  <artifactId>common-logging-extension</artifactId>
+	  <version>1.0.0</version>
+	  <classifier>mule-plugin</classifier>
+	</dependency>
+	<dependency>
+	  <groupId>com.fatface.mule</groupId>
+	  <artifactId>common-framework-handler</artifactId>
+	  <version>1.0.0</version>
+	  <classifier>mule-plugin</classifier>
+	</dependency>
         <dependency>
             <groupId>org.mule.connectors</groupId>
             <artifactId>mule-http-connector</artifactId>
