@@ -37,7 +37,7 @@ output application/java
 		<set-variable value="#['get-manifest-shipment-data-from-jda-and-process-to-d365-sub-flow']" doc:name="Set Flow Name" doc:id="30d1a068-07f7-46bb-af5f-85f8e3b846b0" variableName="flowName"/>
 		<flow-ref doc:name="Log Process Entry" doc:id="0e629b67-770a-469f-b2e1-a2d3fc07901f" name="log-process-entry-sub-flow"/>
 		<flow-ref doc:name="Audit Process Entry" doc:id="cfebbc48-7304-446e-9c57-17b80cb8c46d" name="audit-process-entry-sub-flow"/>
-		<http:request method="GET" doc:name="S-JDA-HTTP-Request-Configuration" doc:id="2b54425a-795e-46a9-b5b9-884e2d45a677" path="${jda.manifests.path}" responseTimeout="${response.timeout}" config-ref="s_jda_Http_Request_configuration" outputMimeType="application/json">
+		<http:request method="GET" doc:name="S-JDA-HTTP-Request-Configuration" doc:id="2b54425a-795e-46a9-b5b9-884e2d45a677" path="${jda.manifests.path}" responseTimeout="${response.timeout.system.jda.manifest}" config-ref="s_jda_Http_Request_configuration" outputMimeType="application/json">
 			<http:headers ><![CDATA[#[output application/java
 ---
 {
@@ -134,7 +134,7 @@ p('sqs.queue.url.manifestQueueUrl')]]></ee:set-variable>
 		</ee:transform>
 		<flow-ref doc:name="Log Process Entry" doc:id="a261e0aa-579f-4c61-9971-9d3e4123d382" name="log-process-entry-sub-flow" />
 		<flow-ref doc:name="Audit Process Entry" doc:id="61fa567a-771f-4564-bc3b-7cdcacd829fa" name="audit-process-entry-sub-flow"/>
-				<http:request method="PUT" doc:name="Call D365 HTTP Request Configuration" doc:id="e306719f-a6e8-4880-b368-9a9dd2b2b835" path="${d365.updateManifestPath}" responseTimeout="${response.timeout}" config-ref="s_D365_Http_Request_configuration">
+				<http:request method="PUT" doc:name="Call D365 HTTP Request Configuration" doc:id="e306719f-a6e8-4880-b368-9a9dd2b2b835" path="${d365.updateManifestPath}" responseTimeout="${response.timeout.system.d365.manifest}" config-ref="s_D365_Http_Request_configuration">
 				
 				<error-mapping targetType="REPROCESS:LEVEL_2_RETRY" />
 					<http:body ><![CDATA[#[vars.originalPayload]]]></http:body>

@@ -31,7 +31,7 @@ p('d365.dmf.pick.create.packageName') ++ now() as String {format: "ddMMyyyyhhms"
 		<flow-ref doc:name="Audit Receiver Entry" doc:id="5006a178-19cf-4f68-a681-6c0406430959" name="audit-receiver-entry-sub-flow"/>
 		<flow-ref doc:name="Log Process Entry" doc:id="73de29ba-1c45-4e6b-932a-9d506852a69c" name="log-process-entry-sub-flow"/>
 		<flow-ref doc:name="Audit Process Entry" doc:id="60d160b9-1dd0-4df9-a7e1-3c7a09c10a11" name="audit-process-entry-sub-flow"/>
-		<http:request method="GET" doc:name="Invoke D365 System Layer" doc:id="018cb7ad-9fa1-4726-9f80-560f99199924" config-ref="s_D365_Http_Request_configuration" path="${d365.dmf.path}" responseTimeout="${response.timeout}">
+		<http:request method="GET" doc:name="Invoke D365 System Layer" doc:id="018cb7ad-9fa1-4726-9f80-560f99199924" config-ref="s_D365_Http_Request_configuration" path="${d365.dmf.path}" responseTimeout="${response.timeout.system.d365.pickOrders}">
 			<http:headers ><![CDATA[#[output application/java
 ---
 {

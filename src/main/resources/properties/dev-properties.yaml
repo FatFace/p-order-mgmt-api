@@ -122,8 +122,8 @@ lookup:
 
 cron:
   expression: 
-    manifest: "0 0/10 * 1/1 * ? *"
-    orderextract: "0 0 * ? * * *"    
+    manifest: "0 0/5 * 1/1 * ? *"
+    orderextract: "0 3/20 * 1/1 * ? *"  
    
 orders:
   export:

@@ -29,7 +29,22 @@ db:
       min: "13"
         
 response:
-  timeout: "300000"
+  timeout:
+    system:
+      jda:
+        orderExtract: "60000"
+        pickOrders : "60000"
+        manifest : "60000"
+      dblookup: 
+        pickOrders: "60000"
+        webOrders: "60000"
+      reportdb:
+        webOrders: "60000"
+      d365:
+        pickOrders: "60000"
+        manifest : "60000"
+        webOrders: "60000"
+        orderExtract: "60000"
 shipment:
   labelImageFormat: "PNG"  
 
