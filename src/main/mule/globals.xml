@@ -1,10 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<mule xmlns:os="http://www.mulesoft.org/schema/mule/os"
-	xmlns:tls="http://www.mulesoft.org/schema/mule/tls"
-	xmlns:email="http://www.mulesoft.org/schema/mule/email" xmlns:validation="http://www.mulesoft.org/schema/mule/validation"
-	xmlns:sqs="http://www.mulesoft.org/schema/mule/sqs"
-	xmlns:sftp="http://www.mulesoft.org/schema/mule/sftp" xmlns:secure-properties="http://www.mulesoft.org/schema/mule/secure-properties" xmlns:cloudhub="http://www.mulesoft.org/schema/mule/cloudhub" xmlns:db="http://www.mulesoft.org/schema/mule/db" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:api-gateway="http://www.mulesoft.org/schema/mule/api-gateway" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="
+<mule xmlns:os="http://www.mulesoft.org/schema/mule/os" xmlns:tls="http://www.mulesoft.org/schema/mule/tls"
+	xmlns:email="http://www.mulesoft.org/schema/mule/email"
+	xmlns:validation="http://www.mulesoft.org/schema/mule/validation"
+	xmlns:sqs="http://www.mulesoft.org/schema/mule/sqs" xmlns:sftp="http://www.mulesoft.org/schema/mule/sftp"
+	xmlns:secure-properties="http://www.mulesoft.org/schema/mule/secure-properties"
+	xmlns:cloudhub="http://www.mulesoft.org/schema/mule/cloudhub" xmlns:db="http://www.mulesoft.org/schema/mule/db"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns:api-gateway="http://www.mulesoft.org/schema/mule/api-gateway"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
 http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd 
 http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
 http://www.mulesoft.org/schema/mule/api-gateway http://www.mulesoft.org/schema/mule/api-gateway/current/mule-api-gateway.xsd
@@ -16,52 +22,91 @@ http://www.mulesoft.org/schema/mule/validation http://www.mulesoft.org/schema/mu
 http://www.mulesoft.org/schema/mule/email http://www.mulesoft.org/schema/mule/email/current/mule-email.xsd
 http://www.mulesoft.org/schema/mule/tls http://www.mulesoft.org/schema/mule/tls/current/mule-tls.xsd
 http://www.mulesoft.org/schema/mule/os http://www.mulesoft.org/schema/mule/os/current/mule-os.xsd">
-	<configuration-properties doc:name="Configuration properties" doc:id="31655e4d-0651-4ec4-a6ce-965230ec7e76" file="properties/common-properties.yaml" />
-	<configuration-properties doc:name="Configuration properties" doc:id="3b617f7a-4e8a-4201-b997-c85fe04c302e" file="properties/${mule.env}-properties.yaml" />   
-   	<import doc:name="Import" doc:id="71ce683d-0093-4829-a0c9-4156163ca939" file="common-auditing-framework.xml" />
-	<import doc:name="Import" doc:id="f6491dfd-1ee2-4948-a051-b03eb5a48760" file="common-logging-framework.xml" />
-<!-- 	<import doc:name="Import" doc:id="5fac976a-bf7a-4d2a-a47b-73027614fb9b" file="common-reprocessing-framework.xml" /> -->
-	<import doc:name="Import" doc:id="63ef4caf-4029-4fa8-8b23-501abc4a6387" file="common-error-handling.xml" />
-   	<http:listener-config name="p-order-mgmt-api-httpListenerConfig">
-      	  <http:listener-connection host="${http.host}" port="${http.private.port}" />
-   	</http:listener-config>
-	<db:config name="Database_Config" doc:name="Database Config" doc:id="b8195697-f573-4c1d-9ebb-faaf0ba86e54" >
-		<db:mssql-connection host="${db.audit.config.host}" user="${secure::db.audit.config.user}" password="${secure::db.audit.config.password}" databaseName="${db.audit.config.database}" port="${db.audit.config.port}">
-			<db:pooling-profile maxPoolSize="${db.pool.size.max}" minPoolSize="${db.pool.size.min}" />
+	<configuration-properties doc:name="Configuration properties"
+		doc:id="31655e4d-0651-4ec4-a6ce-965230ec7e76" file="properties/common-properties.yaml" />
+	<configuration-properties doc:name="Configuration properties"
+		doc:id="3b617f7a-4e8a-4201-b997-c85fe04c302e" file="properties/${mule.env}-properties.yaml" />
+	<import doc:name="Import" doc:id="71ce683d-0093-4829-a0c9-4156163ca939"
+		file="common-auditing-framework.xml" />
+	<import doc:name="Import" doc:id="f6491dfd-1ee2-4948-a051-b03eb5a48760"
+		file="common-logging-framework.xml" />
+	<!-- <import doc:name="Import" doc:id="5fac976a-bf7a-4d2a-a47b-73027614fb9b" 
+		file="common-reprocessing-framework.xml" /> -->
+	<import doc:name="Import" doc:id="63ef4caf-4029-4fa8-8b23-501abc4a6387"
+		file="common-error-handling.xml" />
+	<http:listener-config name="p-order-mgmt-api-httpListenerConfig">
+		<http:listener-connection host="${http.host}"
+			port="${http.private.port}" />
+	</http:listener-config>
+	<db:config name="Database_Config" doc:name="Database Config"
+		doc:id="b8195697-f573-4c1d-9ebb-faaf0ba86e54">
+		<db:mssql-connection host="${db.audit.config.host}"
+			user="${secure::db.audit.config.user}" password="${secure::db.audit.config.password}"
+			databaseName="${db.audit.config.database}" port="${db.audit.config.port}">
+			<db:pooling-profile maxPoolSize="${db.pool.size.max}"
+				minPoolSize="${db.pool.size.min}" />
 		</db:mssql-connection>
-	</db:config>	
-	<cloudhub:config name="CloudHub_Config" doc:name="CloudHub Config" doc:id="611f09fe-93a3-4f69-ab0a-5693466aeb9a" >
-			<cloudhub:connection username="${secure::cloudhub.username}" password="${secure::cloudhub.password}" environment="${environment.id}"/>
+	</db:config>
+	<cloudhub:config name="CloudHub_Config" doc:name="CloudHub Config"
+		doc:id="611f09fe-93a3-4f69-ab0a-5693466aeb9a">
+		<cloudhub:connection username="${secure::cloudhub.username}"
+			password="${secure::cloudhub.password}" environment="${environment.id}" />
 	</cloudhub:config>
-	<secure-properties:config name="Secure_Properties_Config" doc:name="Secure Properties Config" doc:id="2cbb6432-2d0c-4d01-90aa-70326bc1731e" file="properties/${mule.env}-properties.yaml" key="${encryption.key}">
+	<secure-properties:config name="Secure_Properties_Config"
+		doc:name="Secure Properties Config" doc:id="2cbb6432-2d0c-4d01-90aa-70326bc1731e"
+		file="properties/${mule.env}-properties.yaml" key="${encryption.key}">
 	</secure-properties:config>
-	<configuration doc:name="Configuration" doc:id="54fa0143-7e1d-48e0-b340-a4e48738fc8d" defaultErrorHandler-ref="GlobalExceptionStrategy" />
-	<sftp:config name="SFTP_Config" doc:name="SFTP Config" doc:id="d1857644-27b7-46ba-bb81-15e8b98f626f" >
-		<sftp:connection host="${secure::sftp.host}" port="${secure::sftp.port}" username="${secure::sftp.username}" password="${secure::sftp.password}" />
+	<configuration doc:name="Configuration"
+		doc:id="54fa0143-7e1d-48e0-b340-a4e48738fc8d" defaultErrorHandler-ref="GlobalExceptionStrategy" />
+	<sftp:config name="SFTP_Config" doc:name="SFTP Config"
+		doc:id="d1857644-27b7-46ba-bb81-15e8b98f626f">
+		<sftp:connection host="${secure::sftp.host}" port="${secure::sftp.port}"
+			username="${secure::sftp.username}" password="${secure::sftp.password}" />
 	</sftp:config>
-	<sqs:config name="Amazon_SQS_Configuration" doc:name="Amazon SQS Configuration" doc:id="2b1b5722-42da-4e24-b1b0-e12becbd5d65">
-		<sqs:basic-connection accessKey="${secure::sqs.accessKey}" secretKey="${secure::sqs.secretKey}" region="${secure::sqs.region}"/>
+	<sqs:config name="Amazon_SQS_Configuration" doc:name="Amazon SQS Configuration"
+		doc:id="2b1b5722-42da-4e24-b1b0-e12becbd5d65">
+		<sqs:basic-connection accessKey="${secure::sqs.accessKey}"
+			secretKey="${secure::sqs.secretKey}" region="${secure::sqs.region}" />
 	</sqs:config>
-	<http:request-config name="s_D365_Http_Request_configuration" doc:name="HTTP Request configuration" doc:id="277afdf2-5f6c-4d0a-b897-ef8e5f936f6b" basePath="${d365.basepath}">
-		<http:request-connection host="${d365.host}" port="${d365.port}" />
+	<http:request-config name="s_D365_Http_Request_configuration"
+		doc:name="HTTP Request configuration" doc:id="277afdf2-5f6c-4d0a-b897-ef8e5f936f6b"
+		basePath="${d365.basepath}">
+		<http:request-connection host="${d365.host}"
+			port="${d365.port}" />
 	</http:request-config>
-	<http:request-config name="s_jda_Http_Request_configuration" doc:name="HTTP Request configuration" doc:id="2ed9720e-ec24-4e84-b76c-0ed81b8eb722" basePath="${jda.basepath}">
-		<http:request-connection host="${jda.host}" port="${jda.port}" protocol="HTTPS">
-			<tls:context >
-				<tls:trust-store path="FFTrustStore.ts" password="${secure::jda.jks.password}" type="jks" insecure="true" />
+	<http:request-config name="s_jda_Http_Request_configuration"
+		doc:name="HTTP Request configuration" doc:id="2ed9720e-ec24-4e84-b76c-0ed81b8eb722"
+		basePath="${jda.basepath}">
+		<http:request-connection host="${jda.host}"
+			port="${jda.port}" protocol="HTTPS">
+			<tls:context>
+				<tls:trust-store path="FFTrustStore.ts" password="${secure::jda.jks.password}"
+					type="jks" insecure="true" />
 			</tls:context>
 		</http:request-connection>
 	</http:request-config>
-	<os:object-store name="Object_store" doc:name="Object store" doc:id="a2ebd370-24d8-4948-bafb-7b3848ca907f" />
-	<http:request-config name="dbLookup_HTTP_Request_configuration" doc:name="HTTP Request configuration" doc:id="8414566d-3ff0-4d39-998f-65d0abf53a07" basePath="${lookup.basePath}" >
-		<http:request-connection host="${lookup.host}" port="${lookup.port}" />
+	<os:object-store name="Object_store" doc:name="Object store"
+		doc:id="a2ebd370-24d8-4948-bafb-7b3848ca907f" />
+	<http:request-config name="dbLookup_HTTP_Request_configuration"
+		doc:name="HTTP Request configuration" doc:id="8414566d-3ff0-4d39-998f-65d0abf53a07"
+		basePath="${lookup.basePath}">
+		<http:request-connection host="${lookup.host}"
+			port="${lookup.port}" />
 	</http:request-config>
-	
-	<http:request-config name="S_Report_Http_Request_Configuration" doc:name="HTTP Request configuration" doc:id="586f0cda-aea1-4e59-bd00-028ea91387aa" basePath="${report.basepath}">
-		<http:request-connection host="${report.host}" port="${report.port}"/>
+
+	<http:request-config name="S_Report_Http_Request_Configuration"
+		doc:name="HTTP Request configuration" doc:id="586f0cda-aea1-4e59-bd00-028ea91387aa"
+		basePath="${report.basepath}">
+		<http:request-connection host="${report.host}"
+			port="${report.port}" />
 	</http:request-config>
-	<!-- <api-gateway:autodiscovery apiId="${api.discovery.id}" doc:name="API Autodiscovery" doc:id="e6c5790c-2da6-4cb6-9656-86ae1f224214" flowRef="p-order-mgmt-api-main" /> -->
-<http:request-config name="HTTP_Request_XCM_Configuration" doc:name="HTTP Request configuration" doc:id="0a446b98-b3de-48f4-9d31-04c2b7e51ce2" basePath="${xcm.basepath}" >
-		<http:request-connection host="${xcm.host}" port="${xcm.port}" connectionIdleTimeout="${xcm.connecitonTimeout}" />
+	<api-gateway:autodiscovery apiId="${api.discovery.id}"
+		doc:name="API Autodiscovery" doc:id="e6c5790c-2da6-4cb6-9656-86ae1f224214"
+		flowRef="p-order-mgmt-api-main" />
+	<http:request-config name="HTTP_Request_XCM_Configuration"
+		doc:name="HTTP Request configuration" doc:id="0a446b98-b3de-48f4-9d31-04c2b7e51ce2"
+		basePath="${xcm.basepath}">
+		<http:request-connection host="${xcm.host}"
+			port="${xcm.port}" connectionIdleTimeout="${xcm.connecitonTimeout}" />
 	</http:request-config>
 </mule>
