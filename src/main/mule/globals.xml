@@ -60,5 +60,8 @@ http://www.mulesoft.org/schema/mule/os http://www.mulesoft.org/schema/mule/os/cu
 	<http:request-config name="S_Report_Http_Request_Configuration" doc:name="HTTP Request configuration" doc:id="586f0cda-aea1-4e59-bd00-028ea91387aa" basePath="${report.basepath}">
 		<http:request-connection host="${report.host}" port="${report.port}"/>
 	</http:request-config>
-	<api-gateway:autodiscovery apiId="${api.discovery.id}" doc:name="API Autodiscovery" doc:id="e6c5790c-2da6-4cb6-9656-86ae1f224214" flowRef="p-order-mgmt-api-main" />
+	<!-- <api-gateway:autodiscovery apiId="${api.discovery.id}" doc:name="API Autodiscovery" doc:id="e6c5790c-2da6-4cb6-9656-86ae1f224214" flowRef="p-order-mgmt-api-main" /> -->
+<http:request-config name="HTTP_Request_XCM_Configuration" doc:name="HTTP Request configuration" doc:id="0a446b98-b3de-48f4-9d31-04c2b7e51ce2" basePath="${xcm.basepath}" >
+		<http:request-connection host="${xcm.host}" port="${xcm.port}" connectionIdleTimeout="${xcm.connecitonTimeout}" />
+	</http:request-config>
 </mule>

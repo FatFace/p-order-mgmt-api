@@ -71,6 +71,11 @@ d365:
       create:
         definitionGroupId: "IDD009-PickRequest-Export"
         packageName: "Pick-Create-"
+    export:
+      orders:
+        definitionGroupId: "IDD015-OrderInfoExport-Export"
+        packageName: "OrderInfo-Data-"
+
 
 jda:
   host: "mule-worker-internal-sit-s-jda-data-int.ir-e1.cloudhub.io"
@@ -121,7 +126,8 @@ lookup:
 cron:
   expression: 
     manifest: "0 0/10 * 1/1 * ? *"
-    orderextract: "0 0 * ? * * *"    
+    orderextract: "0 0 * ? * * *" 
+    exportOrders:  "0 0 1 1/1 * ? *"   
    
 orders:
   export:
@@ -142,3 +148,14 @@ report:
   clientId: "a1c25cbc41dc4a43a1c5c3ecbf1251c5"
   clientSecret: "![LW5QbpXxcFCYtiU4/DH0+ENIW/q+2cr3P4u6w65C4pbwoGe1SiiStpjbUB6ntxmh]"
   ordersPath: "/orders"
+  
+xcm:
+  host: "localhost"
+  port: "8094"
+  basepath: "/api/v1"
+  clientId: "3ddbd94c96c04aa2a0febb7603e12r4c2"
+  clientSecret: "3ddbd94c96c04aa2a0febb7603e12r4c2"
+  salesOrdersPath: "/sales/orders"
+  returnOrdersPath: "/return/orders"
+  connecitonTimeout: "30000"
+  

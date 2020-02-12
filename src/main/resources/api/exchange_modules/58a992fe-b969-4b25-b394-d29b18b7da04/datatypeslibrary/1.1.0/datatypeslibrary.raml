@@ -30,13 +30,16 @@ types:
     items: !include dataTypes//inventory.raml
   store-inventories:
     type: array
-    items: !include dataTypes//store-inventory.raml
+    items: !include dataTypes//inventory.raml
   web-inventories:
     type: array
-    items: !include dataTypes//web-inventory.raml
+    items: !include dataTypes//inventory.raml
   sales-orders:
     type: array
-    items: !include dataTypes//sales-order.raml
+    items: !include dataTypes//order.raml
   lookup-data:
      type: array
-     items: !include dataTypes//lookup.raml  
+     items: !include dataTypes//lookup.raml
+  return-orders:
+    type: array
+    items: !include dataTypes//order.raml     

@@ -1,11 +1,11 @@
 #%RAML 1.0 DataType
 type: object
-displayName: option line item
+displayName: shipping line item
 properties:
   product-id?: string
   tax?: number
   gross-price?: number
-  base-price?: number
+  net-price?: number
   line-item-text?: string
   tax-basis?: number
   position?: number
@@ -15,8 +15,6 @@ properties:
   step-quantity?: number
   brand?: string
   shipment-id?: string
-  personalize-text? : string
-  personalize-text-color? : string
   price-adjustments?: 
     displayName: price adjustment details
     type: array
