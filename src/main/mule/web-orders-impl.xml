@@ -25,7 +25,7 @@ payload]]></ee:set-variable>
 			<flow-ref doc:name="Audit Details Flow call" doc:id="a977b1bd-2a00-46cd-8efa-4b8882baa6f2" name="aptos-orders-auditing-sub-flow" />
 		</async>
 		<choice doc:name="Choice" doc:id="5641cc72-6e78-4405-b2cc-fd647e9ef533" >
-			<when expression="#[(vars.aptosOriginalPayload != null) or (isEmpty(vars.aptosOriginalPayload) == false)]">
+			<when expression="#[(vars.aptosOriginalPayload.orders != null ) and (isEmpty(vars.aptosOriginalPayload.orders) == false)]">
 				<flow-ref doc:name="Get Key Values For Delivery Mode" doc:id="17ca0096-800d-4012-b189-a71df4afcac3" name="get-mode-of-delivery-key-values-from-dblookup-sub-flow"/>
 				<flow-ref doc:name="Get Key Values For Sales Origin" doc:id="d6df6c36-1ef3-4c80-bb97-c27777e40d9d" name="get-sales-of-origin-key-values-from-dblookup-sub-flow"/>
 				<flow-ref doc:name="Get Key Values For Shipping Barcode" doc:id="0fb8265d-878a-46c1-9c95-b415daaa3be1" name="get-shipping-barcode-key-values-from-dblookup-flow"/>

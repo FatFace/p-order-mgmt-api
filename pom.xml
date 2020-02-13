@@ -15,7 +15,7 @@
 
 		<app.runtime>4.2.1</app.runtime>
 		<mule.maven.plugin.version>3.2.7</mule.maven.plugin.version>
-	<munit.version>2.1.5</munit.version>
+	<munit.version>2.2.3</munit.version>
     </properties>
     <scm>
 	<connection>scm:git:https://${env.GITHUB_PAT}@github.com/FatFace/${project.artifactId}.git</connection>
