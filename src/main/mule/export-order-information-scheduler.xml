@@ -8,7 +8,7 @@ http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/htt
 	<http:request-config name="HTTP_Request_configuration" doc:name="HTTP Request configuration" doc:id="d3bc01ae-9b9c-49be-8f2f-c6088711b816" basePath="/test">
 		<http:request-connection host="localhost" port="8085" />
 	</http:request-config>
-	<flow name="return-orders-scheduler-flow" doc:id="ee0f088e-ccee-4567-9d66-dc67cafe774e">
+	<flow name="export-orders-scheduler-flow" doc:id="ee0f088e-ccee-4567-9d66-dc67cafe774e">
 		<scheduler doc:name="Scheduler" doc:id="a59c687a-03f4-4d2c-aa24-c3ffd41c955d" >
 			<scheduling-strategy >
 				<cron expression="${cron.expression.exportOrders}" />

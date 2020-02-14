@@ -55,7 +55,7 @@ output application/json
 		</async>
 		<flow-ref doc:name="Log Process Entry" doc:id="e3d684c5-f188-4e10-bafd-1e4bf3aa56fd" name="log-process-entry-sub-flow"/>
 		<flow-ref doc:name="Audit Process Entry" doc:id="38fead87-9617-47e4-8ff5-462a66241609" name="audit-process-entry-sub-flow"/>
-		<http:request method="POST" doc:name="Invoke XCM Return Order System Layer" doc:id="61c2f313-dfa9-49e0-a14c-e61552345435" config-ref="HTTP_Request_XCM_Configuration" path="${xcm.returnOrdersPath}">
+		<http:request method="POST" doc:name="Invoke XCM Return Orders System Layer" doc:id="61c2f313-dfa9-49e0-a14c-e61552345435" config-ref="HTTP_Request_XCM_Configuration" path="${xcm.returnOrdersPath}">
 		<http:headers ><![CDATA[#[output application/java
 ---
 {
