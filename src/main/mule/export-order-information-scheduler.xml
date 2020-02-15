@@ -21,7 +21,7 @@ http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/htt
 				<ee:set-variable variableName="packageName" ><![CDATA[%dw 2.0
 output application/json
 ---
-p('d365.dmf.export.orders.packageName') ++ now() as String {format: "ddMMyyyyhhms"}]]></ee:set-variable>
+p('d365.dmf.export.orders.packageName') ++ now() as String {format: "ddMMyyyyHH24mmss"}]]></ee:set-variable>
 				<ee:set-variable variableName="flowName" ><![CDATA[%dw 2.0
 output application/json
 ---
