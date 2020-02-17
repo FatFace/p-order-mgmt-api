@@ -150,11 +150,11 @@ report:
   ordersPath: "/orders"
   
 xcm:
-  host: "localhost"
-  port: "8094"
+  host: "mule-worker-internal-sit-s-xcm-api.ir-e1.cloudhub.io"
+  port: "8091"
   basepath: "/api/v1"
-  clientId: "3ddbd94c96c04aa2a0febb7603e12r4c2"
-  clientSecret: "3ddbd94c96c04aa2a0febb7603e12r4c2"
+  clientId: "a1c25cbc41dc4a43a1c5c3ecbf1251c5"
+  clientSecret: "![LW5QbpXxcFCYtiU4/DH0+ENIW/q+2cr3P4u6w65C4pbwoGe1SiiStpjbUB6ntxmh]"
   salesOrdersPath: "/sales/orders"
   returnOrdersPath: "/return/orders"
   connecitonTimeout: "30000"
