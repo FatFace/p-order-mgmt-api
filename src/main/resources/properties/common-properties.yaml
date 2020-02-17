@@ -45,6 +45,10 @@ response:
         manifest : "60000"
         webOrders: "60000"
         orderExtract: "60000"
+        exportOrders: "60000"
+      xcm:
+        salesOrders: "60000"
+        returnOrders: "60000"
 shipment:
   labelImageFormat: "PNG"  
 
