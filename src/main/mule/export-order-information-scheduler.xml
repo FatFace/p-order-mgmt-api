@@ -32,7 +32,7 @@ output application/json
 		<flow-ref doc:name="Audit Receiver Entry" doc:id="d45c0a22-b4a6-431a-a72e-d6dc362ae80d" name="audit-receiver-entry-sub-flow"/>
 		<flow-ref doc:name="Log Process Entry" doc:id="54fc4691-db8b-476c-88e3-72bb39c104cf" name="log-process-entry-sub-flow"/>
 		<flow-ref doc:name="Audit Process Entry" doc:id="cc0b3781-eb70-4189-8996-666c83a94c6a" name="audit-process-entry-sub-flow"/>
-		<http:request method="GET" doc:name="Invoke D365 System Layer" doc:id="6d361d4e-4afb-4ecb-b7ba-e4f73b5a96de" config-ref="s_D365_Http_Request_configuration" path="${d365.dmf.path}" responseTimeout="${response.timeout.d365.exportOrders}">
+		<http:request method="GET" doc:name="Invoke D365 System Layer" doc:id="6d361d4e-4afb-4ecb-b7ba-e4f73b5a96de" config-ref="s_D365_Http_Request_configuration" path="${d365.dmf.path}" responseTimeout="${response.timeout.system.d365.exportOrders}">
 			<http:headers ><![CDATA[#[output application/java
 ---
 {

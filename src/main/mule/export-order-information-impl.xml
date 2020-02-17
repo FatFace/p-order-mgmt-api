@@ -12,7 +12,7 @@ http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/htt
 		</async>
 		<flow-ref doc:name="Log Process Entry" doc:id="2a5855d5-18c8-4ceb-bd4e-70ade674b293" name="log-process-entry-sub-flow"/>
 		<flow-ref doc:name="Audit Process Entry" doc:id="f66cfa4a-17be-4c03-a2c1-de30d23c4b72" name="audit-process-entry-sub-flow"/>
-		<http:request method="POST" doc:name="Invoke XCM Sales Orders System Layer" doc:id="3ec862ac-c3da-4b1f-8b72-ae2033f7374c" config-ref="HTTP_Request_XCM_Configuration" path="${xcm.salesOrdersPath}" responseTimeout="${response.timeout.xcm.salesOrders}">
+		<http:request method="POST" doc:name="Invoke XCM Sales Orders System Layer" doc:id="3ec862ac-c3da-4b1f-8b72-ae2033f7374c" path="${xcm.salesOrdersPath}" responseTimeout="${response.timeout.system.xcm.salesOrders}" config-ref="s_D365_Http_Request_configuration">
 			<http:headers ><![CDATA[#[output application/java
 ---
 {
@@ -26,9 +26,10 @@ http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/htt
 		<flow-ref doc:name="Log Process Exit" doc:id="e3707289-05eb-46af-bccf-e6f49fd1a610" name="log-process-entry-sub-flow"/>
 	</sub-flow>
 	<sub-flow name="sales-orders-primary-key-flow" doc:id="227eb449-d28a-4689-a7b9-b9e6efc36bb4" >
-		<ee:transform doc:name="set primary key for sales orders" doc:id="b6850508-80c4-4a71-8bd2-638ff7a8d5b8" >
-			<ee:message >
-				<ee:set-payload ><![CDATA[%dw 2.0
+		<set-variable value='#["sales-orders-primary-key-flow"]' doc:name="Flow Name" doc:id="a30f1405-2fdc-4f93-b79b-1ad2db98ba94" variableName="flowName"/>
+		<ee:transform doc:name="set primary key for sales orders" doc:id="b6850508-80c4-4a71-8bd2-638ff7a8d5b8">
+			<ee:message>
+				<ee:set-payload><![CDATA[%dw 2.0
 output application/json
 ---
 {
@@ -46,7 +47,11 @@ output application/json
 }]]></ee:set-payload>
 			</ee:message>
 		</ee:transform>
+		<flow-ref doc:name="Log Process Entry" doc:id="b4d7e114-5153-4bb9-a1be-934cabad2f6c" name="log-process-entry-sub-flow"/>
+		<flow-ref doc:name="Audit Process Entry" doc:id="f04ce94c-6000-47a5-a46c-e0bd83e9bd52" name="audit-process-entry-sub-flow"/>
 		<flow-ref doc:name="audit-details-processing-sub-flow" doc:id="1a1a997a-9e21-4240-9efe-dfdcfe26dcad" name="audit-details-processing-sub-flow"/>
+		<set-variable value='#["All data added to audit details table"]' doc:name="Logging Payload" doc:id="6162628c-6d31-4f30-b967-512e33fbb717" variableName="loggingPayload"/>
+		<flow-ref doc:name="Logging SubFlow" doc:id="95763186-cb32-4a9b-a75d-c1f616d5245b" name="logging-sub-flow"/>
 	</sub-flow>
 	<sub-flow name="return-orders-impl-flow" doc:id="652776e7-94f2-4009-aadf-ee0e2b57ca0a" >
 		<set-variable value='#["return-orders-impl-flow"]' doc:name="Flow Name" doc:id="b4993f46-2201-421e-a9c4-d476bfb2dfa8" variableName="flowName"/>
@@ -55,7 +60,7 @@ output application/json
 		</async>
 		<flow-ref doc:name="Log Process Entry" doc:id="e3d684c5-f188-4e10-bafd-1e4bf3aa56fd" name="log-process-entry-sub-flow"/>
 		<flow-ref doc:name="Audit Process Entry" doc:id="38fead87-9617-47e4-8ff5-462a66241609" name="audit-process-entry-sub-flow"/>
-		<http:request method="POST" doc:name="Invoke XCM Return Orders System Layer" doc:id="61c2f313-dfa9-49e0-a14c-e61552345435" config-ref="HTTP_Request_XCM_Configuration" path="${xcm.returnOrdersPath}">
+		<http:request method="POST" doc:name="Invoke XCM Return Orders System Layer" doc:id="61c2f313-dfa9-49e0-a14c-e61552345435" config-ref="HTTP_Request_XCM_Configuration" path="${xcm.returnOrdersPath}" responseTimeout="${response.timeout.system.xcm.returnOrders}">
 		<http:headers ><![CDATA[#[output application/java
 ---
 {
@@ -69,9 +74,10 @@ output application/json
 		<flow-ref doc:name="Log Process Exit" doc:id="980e720a-76b8-4744-a06b-98156131292b" name="log-process-entry-sub-flow"/>
 	</sub-flow>
 	<sub-flow name="return-orders-primary-key-flow" doc:id="bcd8b506-e428-4f0b-8cb8-1a8120cc1578" >
-		<ee:transform doc:name="set primary key for return orders" doc:id="537a2e94-5d72-4f7c-898f-85dd6234f046" >
-			<ee:message >
-				<ee:set-payload ><![CDATA[%dw 2.0
+		<set-variable value='#["return-orders-primary-key-flow"]' doc:name="Flow Name" doc:id="08eeaa32-96a5-4d34-ac91-412350c3c79c" variableName="flowName"/>
+		<ee:transform doc:name="set primary key for return orders" doc:id="537a2e94-5d72-4f7c-898f-85dd6234f046">
+			<ee:message>
+				<ee:set-payload><![CDATA[%dw 2.0
 output application/json
 ---
 {
@@ -89,6 +95,11 @@ output application/json
 }]]></ee:set-payload>
 			</ee:message>
 		</ee:transform>
+		<flow-ref doc:name="Log Process Entry" doc:id="f2d13933-c814-4e11-b0d7-0fd6a56ab3bf" name="log-process-entry-sub-flow"/>
+		<flow-ref doc:name="Audit Process Entry" doc:id="a45ae243-0f33-42dc-baf7-c36667eee80c" name="audit-process-entry-sub-flow"/>
 		<flow-ref doc:name="audit-details-processing-sub-flow" doc:id="a933d343-2418-4df5-b57d-78d5d49ac17b" name="audit-details-processing-sub-flow"/>
+		<set-variable value='#["All data added to audit details table"]' doc:name="Logging Payload" doc:id="66f80c57-d43c-483d-9e01-6a03ad9a642e" variableName="loggingPayload"/>
+		<flow-ref doc:name="Logging SubFlow" doc:id="b9f97cdb-07bc-4f47-8101-5eef84d7d99a" name="logging-sub-flow"/>
+	
 	</sub-flow>
 </mule>
