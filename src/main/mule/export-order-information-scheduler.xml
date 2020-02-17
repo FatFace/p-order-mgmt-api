@@ -30,7 +30,9 @@ output application/json
 		</ee:transform>
 		<flow-ref doc:name="Log Receiver Entry" doc:id="9da7b341-c3d7-46e7-b582-83cf7a127bd2" name="log-receiver-entry-sub-flow"/>
 		<flow-ref doc:name="Audit Receiver Entry" doc:id="d45c0a22-b4a6-431a-a72e-d6dc362ae80d" name="audit-receiver-entry-sub-flow"/>
-		<http:request method="GET" doc:name="Invoke D365 System Layer" doc:id="6d361d4e-4afb-4ecb-b7ba-e4f73b5a96de" config-ref="s_D365_Http_Request_configuration" path="${d365.dmf.path}">
+		<flow-ref doc:name="Log Process Entry" doc:id="54fc4691-db8b-476c-88e3-72bb39c104cf" name="log-process-entry-sub-flow"/>
+		<flow-ref doc:name="Audit Process Entry" doc:id="cc0b3781-eb70-4189-8996-666c83a94c6a" name="audit-process-entry-sub-flow"/>
+		<http:request method="GET" doc:name="Invoke D365 System Layer" doc:id="6d361d4e-4afb-4ecb-b7ba-e4f73b5a96de" config-ref="s_D365_Http_Request_configuration" path="${d365.dmf.path}" responseTimeout="${response.timeout.d365.exportOrders}">
 			<http:headers ><![CDATA[#[output application/java
 ---
 {
@@ -48,6 +50,8 @@ output application/json
 
 		
 		</http:request>
+		<flow-ref doc:name="Audit Process Exit" doc:id="cd1c56cf-8a97-4508-92a6-82024c6302d2" name="audit-process-exit-sub-flow"/>
+		<flow-ref doc:name="Log Process Exit" doc:id="75a63e69-bce8-44e4-891b-ae23d2d19f88" name="log-process-exit-sub-flow"/>
 		<flow-ref doc:name="Audit Dispatcher Exit" doc:id="6d0b4b4f-adb8-443e-9b12-a2dc3a2533a7" name="audit-dispatcher-exit-sub-flow"/>
 		<flow-ref doc:name="Log Dispatcher Exit" doc:id="c2362b7b-5232-4b2d-8a33-9baa3fc02472" name="log-dispatcher-exit-sub-flow"/>
 	</flow>

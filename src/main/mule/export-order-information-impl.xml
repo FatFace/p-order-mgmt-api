@@ -12,7 +12,7 @@ http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/htt
 		</async>
 		<flow-ref doc:name="Log Process Entry" doc:id="2a5855d5-18c8-4ceb-bd4e-70ade674b293" name="log-process-entry-sub-flow"/>
 		<flow-ref doc:name="Audit Process Entry" doc:id="f66cfa4a-17be-4c03-a2c1-de30d23c4b72" name="audit-process-entry-sub-flow"/>
-		<http:request method="POST" doc:name="Invoke XCM Sales Orders System Layer" doc:id="3ec862ac-c3da-4b1f-8b72-ae2033f7374c" config-ref="HTTP_Request_XCM_Configuration" path="${xcm.salesOrdersPath}">
+		<http:request method="POST" doc:name="Invoke XCM Sales Orders System Layer" doc:id="3ec862ac-c3da-4b1f-8b72-ae2033f7374c" config-ref="HTTP_Request_XCM_Configuration" path="${xcm.salesOrdersPath}" responseTimeout="${response.timeout.xcm.salesOrders}">
 			<http:headers ><![CDATA[#[output application/java
 ---
 {
