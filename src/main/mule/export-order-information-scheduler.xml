@@ -25,7 +25,7 @@ p('d365.dmf.export.orders.packageName') ++ now() as String {format: "ddMMyyyyHH2
 				<ee:set-variable variableName="flowName" ><![CDATA[%dw 2.0
 output application/json
 ---
-'order-managment-returnOrders']]></ee:set-variable>
+'export-orders-scheduler-flow']]></ee:set-variable>
 			</ee:variables>
 		</ee:transform>
 		<flow-ref doc:name="Log Receiver Entry" doc:id="9da7b341-c3d7-46e7-b582-83cf7a127bd2" name="log-receiver-entry-sub-flow"/>

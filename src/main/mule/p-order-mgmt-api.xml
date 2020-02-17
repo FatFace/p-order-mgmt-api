@@ -57,16 +57,7 @@ output application/java
         <flow-ref doc:name="Audit Dispatcher Exit" doc:id="629135bc-b383-4e3f-b2a0-43e30b0966fb" name="audit-dispatcher-exit-sub-flow" />
     </flow>
 <flow name="post:\sales\orders:application\json:p-order-mgmt-api-config">
-		<ee:transform doc:name="Set Flow Name" doc:id="ae81af98-6770-4388-a284-a8755f21d8f4" >
-			<ee:message >
-			</ee:message>
-			<ee:variables >
-				<ee:set-variable variableName="flowName" ><![CDATA[%dw 2.0
-output application/java
----
-'post:\sales\orders:application\json:p-order-mgmt-api-config']]></ee:set-variable>
-			</ee:variables>
-		</ee:transform>
+		<set-variable value="#['post:\sales\orders:application\json:p-order-mgmt-api-config']" doc:name="Flow Name" doc:id="fcf3ac49-d1bd-406d-b9d4-cf91db3256b3" variableName="flowName"/>
 		<flow-ref doc:name="Log Receiver Entry" doc:id="62b8e366-7189-4d8a-90b4-a78cd9027550" name="log-receiver-entry-sub-flow"/>
 		<flow-ref doc:name="Audit Receiver Entry" doc:id="bc9c3544-7666-4dba-9706-511b0296905f" name="audit-receiver-entry-sub-flow"/>
 		<flow-ref doc:name="Calls Sales Orders Flow" doc:id="8edcdf77-f375-4fa5-be1d-4b291229bd92" name="sales-orders-impl-flow"/>
@@ -76,16 +67,7 @@ output application/java
     </flow>
 	
 <flow name="post:\return\orders:application\json:p-order-mgmt-api-config">
-		<ee:transform doc:name="Set Flow Name" doc:id="17184d94-9ab6-4460-a552-43949cee6f83" >
-			<ee:message >
-			</ee:message>
-			<ee:variables >
-				<ee:set-variable variableName="flowName" ><![CDATA[%dw 2.0
-output application/java
----
-'post:\return\orders:application\json:p-order-mgmt-api-config']]></ee:set-variable>
-			</ee:variables>
-		</ee:transform>
+		<set-variable value="#['post:return\orders:application\json:p-order-mgmt-api-config']" doc:name="Flow Name" doc:id="add78dcb-7779-46ef-8c5d-ec485b0da78e" variableName="flowName"/>
 		<flow-ref doc:name="Log Receiver Entry" doc:id="e054aa56-033e-4a69-b812-69218f38c84a" name="log-receiver-entry-sub-flow"/>
 		<flow-ref doc:name="Audit Receiver Entry" doc:id="a00625c8-88b9-4edb-8701-0693e64a1417" name="audit-receiver-entry-sub-flow"/>
 		<flow-ref doc:name="Calls Return Orders Flow" doc:id="637d2022-decf-4d82-8cc4-59930eafda91" name="return-orders-impl-flow"/>
