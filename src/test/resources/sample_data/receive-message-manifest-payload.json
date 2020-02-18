@@ -1,0 +1,16 @@
+{
+	"manifests": [{
+		"route-id": "76651628",
+		"item-id": "204",
+		"barcode": "5052751156883",
+		"carrier-consignment-id": "GLO5850GB22626826201",
+		"container-id": "MULA16877",
+		"site-id": "PICK",
+		"location-id": "ROYALMAIL",
+		"quantity": 1.00,
+		"shipping-date": "2019-11-10T10:20:39",
+		"order-no": "15967065",
+		"carrier-id": "HERMES",
+		"status": "Open"
+	}]
+}
