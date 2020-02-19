@@ -29,7 +29,7 @@ db:
       min: "13"
         
 response:
-  timeout: "60000"
+  timeout:
     system:
       jda:
         orderExtract: "60000"
