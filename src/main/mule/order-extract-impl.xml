@@ -142,9 +142,19 @@ output application/java
 		<flow-ref doc:name="Log Process Entry" doc:id="ad500094-a464-4579-b726-34dd567c0620" name="log-process-entry-sub-flow"/>
 		<flow-ref doc:name="Audit Process Entry" doc:id="fe5ba2d5-3930-4c69-a8e3-c9011ea4be1a" name="audit-process-entry-sub-flow"/>
 		<set-variable value="#[payload]" doc:name="Set order data to variable" doc:id="57665150-d14c-4c13-b611-4774d2a582f7" variableName="orderPayload"/>
-		<sqs:read doc:name="Read" doc:id="a6b83910-f629-40f3-a33f-98d3d37a86b9" config-ref="Amazon_SQS_Configuration" queueUrl="#[p('sqs.queue.url.manifestQueueUrl')]" maxNumberOfMessages="#[6]">
+		<until-successful maxRetries="${retry.attempts}" doc:name="Until Successful" doc:id="e64220aa-9f7b-4e1e-b7a5-b1559887637b" millisBetweenRetries="${retry.frequency}">
+			<try doc:name="Try" doc:id="0d7b484d-d1c2-44d6-880c-42e39947f6ca">
+			<sqs:read doc:name="Read" doc:id="330242a6-79a7-46cc-a776-f3c63859a336" config-ref="Amazon_SQS_Configuration" queueUrl="#[p('sqs.queue.url.manifestQueueUrl')]" maxNumberOfMessages="#[6]">
 			<reconnect frequency="${retry.frequency}" count="${retry.attempts}" />
 		</sqs:read>
+			<error-handler>
+				<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="d08ff4f6-860f-473f-863b-c8f04cd078ac" type="ANY">
+					<flow-ref doc:name="log-error-sub-flow" doc:id="579d2be6-3bce-4e25-a3ef-89fe63d9e84f" name="log-error-sub-flow" />
+					<flow-ref doc:name="audit-error-sub-flow" doc:id="6120a465-6f6a-4f41-aaf8-c4b04f4c4301" name="audit-error-sub-flow" />
+				</on-error-propagate>
+			</error-handler>
+		</try>
+		</until-successful>
 		<flow-ref doc:name="Log Process Exit" doc:id="1884a941-55c9-4a4a-a2df-a6d4b43e3479" name="log-process-exit-sub-flow" />
 		<flow-ref doc:name="Audit Process Exit" doc:id="9971effb-f88d-4b84-8a87-8b21c24c7814" name="audit-process-exit-sub-flow" />
 <!-- 		<logger level="INFO" doc:name="Logger" doc:id="82db6798-e471-477b-a429-2a8e3f0c124e" message="#[payload[0].body]" /> -->
@@ -215,9 +225,19 @@ output application/java
 				</ee:transform>
 				<flow-ref doc:name="Log Process Entry" doc:id="e6eb0d01-5369-4e07-b6a7-a14f315becd6" name="log-process-entry-sub-flow"/>
 				<flow-ref doc:name="Audit Process Entry" doc:id="e704e306-dfbd-429c-9aa5-048ca71351d4" name="audit-process-entry-sub-flow"/>
-				<sqs:send-message doc:name="Send message" doc:id="30062c7a-d500-4939-b0ed-e84ba9cab789" config-ref="Amazon_SQS_Configuration" queueUrl="${sqs.queue.url.orderQueueUrl}">
+				<until-successful maxRetries="${retry.attempts}" doc:name="Until Successful" doc:id="7bc55cdb-8ddb-4960-b7ff-73f14373deeb" millisBetweenRetries="${retry.frequency}">
+					<try doc:name="Try" doc:id="7560c63b-f189-457b-8ae9-d9374078cb10" >
+						<sqs:send-message doc:name="Send message" doc:id="15584991-45a1-4e66-929b-46e61368304d" config-ref="Amazon_SQS_Configuration" queueUrl="${sqs.queue.url.orderQueueUrl}">
 					<reconnect frequency="${retry.frequency}" count="${retry.attempts}" />
 				</sqs:send-message>
+						<error-handler >
+							<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="a2e3f3e7-33e5-45bf-bcad-7ff870332a47" type="ANY">
+								<flow-ref doc:name="log-error-sub-flow" doc:id="cd577cdf-c02a-455d-8957-aabee11b3559" name="log-error-sub-flow"/>
+								<flow-ref doc:name="audit-error-sub-flow" doc:id="55d06d25-41c1-4dbb-b60e-779639af20e3" name="audit-error-sub-flow"/>
+							</on-error-propagate>
+						</error-handler>
+					</try>
+				</until-successful>
 				<flow-ref doc:name="Log Process Exit" doc:id="496dbff6-cb99-429e-8353-fa3beaf6bc4b" name="log-process-exit-sub-flow"/>
 				<flow-ref doc:name="Audit Process Exit" doc:id="baf5a38c-4e77-41c2-9311-c476f8785e49" name="audit-process-exit-sub-flow"/>
 			</when>
@@ -259,9 +279,17 @@ output application/java
 					</ee:transform>
 					<set-variable value="#['Error received from D365, Writing order data to SFTP error folder' ++ write(vars.orderErrorFilePath,'application/json')]" doc:name="Set Variable" doc:id="934a41fd-4b71-445a-baff-e4ad81301593" variableName="loggingPayload"/>
 					<flow-ref doc:name="Flow Logging Sub Flow" doc:id="d59792c0-0779-491a-b1f8-5537ce942651" name="logging-sub-flow"/>
-					<until-successful maxRetries="${retry.attempts}" doc:name="Until Successful" doc:id="99037333-7795-4793-9196-fae242ae9139" millisBetweenRetries="${retry.frequency}">
-						<sftp:write doc:name="Write" doc:id="88952ead-06bf-4ae4-9b92-ca2802e2a884" config-ref="SFTP_Config" path="#[vars.orderErrorFilePath]">
+					<until-successful maxRetries="${retry.attempts}" doc:name="Until Successful" doc:id="f57444c1-2c7d-4ee7-b0b3-660b5a49443e" millisBetweenRetries="${retry.frequency}">
+						<try doc:name="Try" doc:id="3096129e-3dab-40ec-8d34-d25488e2e0cd" >
+							<sftp:write doc:name="Write" doc:id="be9f36bb-3a3d-4fd8-9215-b8768f3fa18a" config-ref="SFTP_Config" path="#[vars.orderErrorFilePath]">
 						</sftp:write>
+							<error-handler >
+								<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="2c626629-da42-4de5-a744-6bd4a97cbb41" >
+									<flow-ref doc:name="log-error-sub-flow" doc:id="7bd92725-07de-4d6e-af98-832692dc16bd" name="log-error-sub-flow"/>
+									<flow-ref doc:name="audit-error-sub-flow" doc:id="8a3c1c2b-d27b-437a-9a81-5c66bc2a7926" name="audit-error-sub-flow"/>
+								</on-error-propagate>
+							</error-handler>
+						</try>
 					</until-successful>
 				</on-error-propagate>
 			</error-handler>
@@ -305,9 +333,19 @@ attributes.transactionFileName.stringValue]]></ee:set-variable>
 		<flow-ref doc:name="Audit Receiver Entry" doc:id="ca6c1eed-0c57-464b-bfdb-640703e452ea" name="audit-receiver-entry-sub-flow"/>
 		<logger level="INFO" doc:name="Retry Number Logging" doc:id="29156eca-97ac-47a1-81ad-6b3b684d9751" message="#['Reprocessing Count is: ' ++ write(vars.count,'application/json')]"/>
 		<set-variable value="#[attributes['sqs.message.receipt.handle']]" doc:name="Set Message Receipt" doc:id="689612aa-290d-4d3a-903e-3e307415a9f0" variableName="messageReceipt"/>
-		<sqs:delete-message doc:name="Delete message" doc:id="c32c0a79-82c9-4cf2-8305-b065c9ad27e0" config-ref="Amazon_SQS_Configuration" receiptHandle="#[vars.messageReceipt]" queueUrl="${sqs.queue.url.orderQueueUrl}" target="tempDelete">
+		<until-successful maxRetries="${retry.attempts}" doc:name="Until Successful" doc:id="97fdc0b7-a42a-49ef-bcdd-64608cd5129f" millisBetweenRetries="${retry.frequency}">
+			<try doc:name="Try" doc:id="1c3fec62-3cd7-4f11-9ffb-73857dddc603" >
+				<sqs:delete-message doc:name="Delete message" doc:id="5fbd6107-613e-4978-a42d-9f4804e9e927" config-ref="Amazon_SQS_Configuration" receiptHandle="#[vars.messageReceipt]" queueUrl="${sqs.queue.url.orderQueueUrl}" target="tempDelete">
 			<reconnect frequency="${retry.frequency}" count="${retry.attempts}" />
 		</sqs:delete-message>
+				<error-handler >
+					<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="d7d748a6-5e81-402d-815e-27ae277d2907" type="ANY">
+						<flow-ref doc:name="log-error-sub-flow" doc:id="340fef27-192a-474d-92a7-98a5083f96b8" name="log-error-sub-flow"/>
+						<flow-ref doc:name="audit-error-sub-flow" doc:id="51e2b2e6-f18f-4082-a867-89ce5ca4c8b7" name="audit-error-sub-flow"/>
+					</on-error-propagate>
+				</error-handler>
+			</try>
+		</until-successful>
 		<ee:transform doc:name="Transform Message" doc:id="6c21f267-6031-4987-9b58-3f1cd98cb520">
 					<ee:message>
 						<ee:set-payload><![CDATA[%dw 2.0
@@ -333,9 +371,17 @@ p('orders.export.sftp.errorfilepath') ++ vars.fileName]]></ee:set-variable>
 				</ee:transform>
 				<set-variable value="#[p('reprocessing.attempts') ++ ' times retries done, Data will be moved to SFTP folder with path ' ++ write(vars.filePath, 'application/json')]" doc:name="Set Variable" doc:id="a4379467-fb40-475f-9098-57b64415e4bf" variableName="loggingPayload"/>
 				<flow-ref doc:name="Flow Logging Sub Flow" doc:id="9cde173f-469f-4a01-a72a-d66bb438266e" name="logging-sub-flow"/>
-				<until-successful maxRetries="${retry.attempts}" doc:name="Until Successful" doc:id="df5ef63b-9856-4a22-8034-cf54d1bef453" millisBetweenRetries="${retry.frequency}">
-					<sftp:write doc:name="Write" doc:id="1a462f7a-f843-437f-9359-1b789f1fee73" config-ref="SFTP_Config" path="#[vars.filePath]">
+			<until-successful maxRetries="${retry.attempts}" doc:name="Until Successful" doc:id="a32b5761-33b9-45a1-a20f-a193ff508b04" millisBetweenRetries="${retry.frequency}">
+					<try doc:name="Try" doc:id="7b205734-083b-4907-bccd-d03d2d05597c" >
+						<sftp:write doc:name="Write" doc:id="36055cf5-d7f8-4276-9a27-bae718fd39e2" config-ref="SFTP_Config" path="#[vars.filePath]">
 					</sftp:write>
+						<error-handler >
+							<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="829acbaf-88c2-4c16-82b9-eba3e6cf2587" >
+								<flow-ref doc:name="log-error-sub-flow" doc:id="33ffa0b6-46a8-464a-bd28-719ac2aa3616" name="log-error-sub-flow"/>
+								<flow-ref doc:name="audit-error-sub-flow" doc:id="fee5c513-86a1-4727-90ae-651b9cf9b29a" name="audit-error-sub-flow"/>
+							</on-error-propagate>
+						</error-handler>
+					</try>
 				</until-successful>
 			</otherwise>
 		</choice>

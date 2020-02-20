@@ -39,8 +39,9 @@ payload]]></ee:set-variable>
 				</ee:transform>
 					<flow-ref doc:name="Log Process Entry" doc:id="7a745f5f-dced-4c76-bed6-a65913235221" name="log-process-entry-sub-flow"/>
 					<flow-ref doc:name="Audit Process Entry" doc:id="994f3567-78ae-41f1-a5b7-0cbf97609592" name="audit-process-entry-sub-flow"/>
-					<until-successful maxRetries="${retry.attempts}" doc:name="Until Successful" doc:id="3221bb8f-c91a-4bbf-997d-7896f7f0b767" millisBetweenRetries="${retry.frequency}">
-						<http:request method="POST" doc:name="Call Report DB Http Request Configuration" doc:id="c10190f5-c4f2-45fa-b5ea-e4054f259c65" path="${report.ordersPath}" responseTimeout="${response.timeout.system.reportdb.webOrders}" config-ref="S_Report_Http_Request_Configuration">
+
+					<http:request method="POST" doc:name="Call Report DB Http Request Configuration" doc:id="c10190f5-c4f2-45fa-b5ea-e4054f259c65" path="${report.ordersPath}" responseTimeout="${response.timeout}" config-ref="S_Report_Http_Request_Configuration">
+
 						<http:body><![CDATA[#[vars.reportdbInputPayload]]]></http:body>
 											<http:headers><![CDATA[#[output application/java
 ---
@@ -52,7 +53,6 @@ payload]]></ee:set-variable>
 }]]]></http:headers>
 					
 					</http:request>
-					</until-successful>
 					<flow-ref doc:name="Log Process Exit" doc:id="ad9c9cf7-e287-48cd-aca3-05f4db634c9c" name="log-process-exit-sub-flow"/>
 					<flow-ref doc:name="Audit Process Exit" doc:id="34436baf-fe59-4607-9b68-d1590289ab4a" name="audit-process-exit-sub-flow"/>
 				
@@ -66,8 +66,7 @@ payload]]></ee:set-variable>
 				</ee:transform>
 				<flow-ref doc:name="Log Process Entry" doc:id="4af958a0-2719-4bd8-9749-e1dbf49f2df6" name="log-process-entry-sub-flow"/>
 				<flow-ref doc:name="Audit Process Entry" doc:id="6177ca9e-227e-4e64-8f50-d74c96fc1010" name="audit-process-entry-sub-flow"/>
-				<until-successful maxRetries="${retry.attempts}" doc:name="Until Successful" doc:id="2f77d7f8-8044-44b9-9caf-2c267a1b2b18" millisBetweenRetries="${retry.frequency}">
-					<http:request method="POST" doc:name="Call D365 Http Request Configuration" doc:id="c1119184-6b74-4aea-891c-82c49922f420" config-ref="s_D365_Http_Request_configuration" path="${d365.webOrdersPath}" responseTimeout="${response.timeout.system.d365.webOrders}">
+				<http:request method="POST" doc:name="Call D365 Http Request Configuration" doc:id="c1119184-6b74-4aea-891c-82c49922f420" config-ref="s_D365_Http_Request_configuration" path="${d365.webOrdersPath}" responseTimeout="${response.timeout}">
 			<http:body><![CDATA[#[vars.d365InputPayload]]]></http:body>
 					<http:headers><![CDATA[#[output application/java
 ---
@@ -79,7 +78,6 @@ payload]]></ee:set-variable>
 }]]]></http:headers>
 					
 		</http:request>
-				</until-successful>
 				<flow-ref doc:name="Log Process Exit" doc:id="c1e82877-eccf-4a5c-b18b-23cc801cd900" name="log-process-exit-sub-flow"/>
 				<flow-ref doc:name="Audit Process Exit" doc:id="d73f8908-5b76-4554-8e2e-f1ab0c83592a" name="audit-process-exit-sub-flow"/>
 			
@@ -116,8 +114,7 @@ payload]]></ee:set-variable>
 			<otherwise >
 				<flow-ref doc:name="Log Process Entry" doc:id="838f347d-9aae-4bb3-bbe0-9a6469e00b95" name="log-process-entry-sub-flow"/>
 				<flow-ref doc:name="Audit Process Entry" doc:id="ea177514-4e5b-40b1-a084-2f6f963e2349" name="audit-process-entry-sub-flow"/>
-				<until-successful maxRetries="${retry.attempts}" doc:name="Until Successful" doc:id="f53175a9-10e1-4710-b042-ddf3e4e6439f" millisBetweenRetries="${retry.frequency}">
-					<http:request method="GET" doc:name="Call DB DM Lookup Http Request Configuration" doc:id="0d0d85db-42af-470c-beb4-5515b907962f" path="${lookup.dbLookupPath}" responseTimeout="${response.timeout.system.dblookup.webOrders}" config-ref="dbLookup_HTTP_Request_configuration">
+				<http:request method="GET" doc:name="Call DB DM Lookup Http Request Configuration" doc:id="0d0d85db-42af-470c-beb4-5515b907962f" path="${lookup.dbLookupPath}" responseTimeout="${response.timeout}" config-ref="dbLookup_HTTP_Request_configuration">
 					<http:headers><![CDATA[#[output application/java
 ---
 {
@@ -134,7 +131,6 @@ payload]]></ee:set-variable>
 	"category" : p('lookup.queryParam.aptos.modeOfDelivery.category')
 }]]]></http:query-params>
 				</http:request>
-				</until-successful>
 				<flow-ref doc:name="Audit Process Exit" doc:id="1f5ff5e3-7258-46a0-b3fc-68d4b15017fe" name="audit-process-exit-sub-flow"/>
 				<flow-ref doc:name="Log Process Exit" doc:id="10ee1b57-fc93-4676-b346-37eba3e6e457" name="log-process-exit-sub-flow"/>
 				<os:store doc:name="Store" doc:id="08fbf23a-ce28-4df3-b451-2da4fe008f00" key="#[vars.modeOfDeliveryKey]" objectStore="Object_store"/>
@@ -155,8 +151,7 @@ payload]]></ee:set-variable>
 			<otherwise >
 				<flow-ref doc:name="Log Process Entry" doc:id="5bd0692e-cf0e-44f1-9efe-19c789cc961a" name="log-process-entry-sub-flow"/>
 				<flow-ref doc:name="Audit Process Entry" doc:id="2d2b8fe9-a79b-4aaa-a380-b264529772cd" name="audit-process-entry-sub-flow"/>
-				<until-successful maxRetries="${retry.attempts}" doc:name="Until Successful" doc:id="8d8b7290-5788-448f-b2db-68cc5b7e8330" millisBetweenRetries="${retry.frequency}">
-					<http:request method="GET" doc:name="Call DB SO Lookup Http Request Configuration" doc:id="f971441d-1f38-4463-8c07-983d12dcfb6a" path="${lookup.dbLookupPath}" responseTimeout="${response.timeout.system.dblookup.webOrders}" config-ref="dbLookup_HTTP_Request_configuration">
+				<http:request method="GET" doc:name="Call DB SO Lookup Http Request Configuration" doc:id="f971441d-1f38-4463-8c07-983d12dcfb6a" path="${lookup.dbLookupPath}" responseTimeout="${response.timeout}" config-ref="dbLookup_HTTP_Request_configuration">
 					<http:headers><![CDATA[#[output application/java
 ---
 {
@@ -173,7 +168,6 @@ payload]]></ee:set-variable>
 	"category" : p('lookup.queryParam.aptos.salesOfOrigin.category')
 }]]]></http:query-params>
 				</http:request>
-				</until-successful>
 				<flow-ref doc:name="Log Process Exit" doc:id="9b7dcd2a-31eb-444c-9228-db0c99a90715" name="log-process-exit-sub-flow"/>
 				<flow-ref doc:name="Audit Process Exit" doc:id="47bfbaf8-e85f-43c6-af39-fb28f107ef31" name="audit-process-exit-sub-flow"/>
 				<os:store doc:name="Store" doc:id="9cf4d56f-5f83-4296-acf4-e7044978e7b9" key="#[vars.salesOfOriginKey]" objectStore="Object_store"/>
@@ -197,8 +191,7 @@ payload]]></ee:set-variable>
 			<otherwise >
 				<flow-ref doc:name="Log Process Entry" doc:id="4a58812f-7da4-417c-9345-9f087efba62f" name="log-process-entry-sub-flow"/>
 				<flow-ref doc:name="Audit Process Entry" doc:id="0b962d40-de13-471e-8d63-dc4db4c390c0" name="audit-process-entry-sub-flow"/>
-				<until-successful maxRetries="${retry.attempts}" doc:name="Until Successful" doc:id="d0cb5dc9-841f-4a7b-b9d4-2fdce06af838" millisBetweenRetries="${retry.frequency}">
-					<http:request method="GET" doc:name="Call DB Lookup Shipping Barcode Http Request Configuration" doc:id="242a7a58-954f-40d5-b3cf-d66f81a658c2" path="${lookup.dbLookupPath}" responseTimeout="${response.timeout.system.dblookup.webOrders}" config-ref="dbLookup_HTTP_Request_configuration">
+				<http:request method="GET" doc:name="Call DB Lookup Shipping Barcode Http Request Configuration" doc:id="242a7a58-954f-40d5-b3cf-d66f81a658c2" path="${lookup.dbLookupPath}" responseTimeout="${response.timeout}" config-ref="dbLookup_HTTP_Request_configuration">
 					<http:headers><![CDATA[#[output application/java
 ---
 {
@@ -215,7 +208,6 @@ payload]]></ee:set-variable>
 	"category" : p('lookup.queryParam.aptos.shippingBarcode.category')
 }]]]></http:query-params>
 				</http:request>
-				</until-successful>
 				<flow-ref doc:name="Log Process Exit" doc:id="9921860b-7cec-4605-b146-7bb2788c132a" name="log-process-exit-sub-flow"/>
 				<flow-ref doc:name="Audit Process Exit" doc:id="3c398308-c1e7-4cee-bb8d-6ee05f56e5f0" name="audit-process-exit-sub-flow"/>
 				<os:store doc:name="Store" doc:id="3f779e7b-a6f2-49ae-8ed0-12dd1074f451" key="#[vars.shippingBarcodeKey]" objectStore="Object_store"/>
