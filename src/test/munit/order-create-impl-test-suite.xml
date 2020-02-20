@@ -9,7 +9,8 @@
 		http://www.mulesoft.org/schema/mule/munit-tools  http://www.mulesoft.org/schema/mule/munit-tools/current/mule-munit-tools.xsd
 http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
 	<munit:config name="order-create-impl-test-suite.xml" />
-	<munit:test name="order-aptos-impl-test-suite-create-order-details-from-aptos-to-d365-main-flowTest" description="Test" doc:id="8c77df98-b9bf-44b8-85ba-055b4bdf4cf4" >
+	<import doc:name="Import" doc:id="fe093a59-e5ba-4bc0-81ec-b83cd8272f75" file="test-globals-suite.xml" />
+	<munit:test name="order-aptos-impl-test-suite-create-order-details-from-aptos-to-d365-main-flowTest" description="Test" doc:id="8c77df98-b9bf-44b8-85ba-055b4bdf4cf4">
 		<munit:behavior >
 			<munit-tools:mock-when doc:name="Mock DB DM Lookup Http Requester" doc:id="2cbad921-f942-43cb-9dfe-2197a00a8129" processor="http:request">
 				<munit-tools:with-attributes >
@@ -19,6 +20,15 @@ http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/
 					<munit-tools:payload value='#[MunitTools::getResourceAsString("response/ordercreate-dblookup-delivery-mode-response.json")]' mediaType="application/json" />
 				</munit-tools:then-return>
 			</munit-tools:mock-when>
+			<munit-tools:spy doc:name="Spy" doc:id="2748da12-2252-48e4-bd4a-d55f77a081fc" processor="http:request">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="Call DB DM Lookup Http Request Configuration" attributeName="doc:name" />
+				</munit-tools:with-attributes>
+				<munit-tools:after-call >
+					<set-variable value="#['5']" doc:name="Set Variable" doc:id="c6d416ad-4658-4231-b9fd-0b6e10858082" variableName="lookup" mimeType="application/json" />
+					<munit-tools:assert-equals doc:name="Assert equals" doc:id="b51730e1-f9a7-4bac-b38d-b6d7afccfde7" actual="#[output application/java --- write(payload.lookups[0].'lookup_id' , 'application/java')]" expected="#[output application/java --- write(vars.lookup , 'application/java')]" />
+				</munit-tools:after-call>
+			</munit-tools:spy>
 			<munit-tools:mock-when doc:name="Mock DB SO Lookup Http Requester" doc:id="eae318b5-11ca-4efe-b22f-e7fef497a46b" processor="http:request">
 				<munit-tools:with-attributes >
 					<munit-tools:with-attribute attributeName="doc:name" whereValue="Call DB SO Lookup Http Request Configuration" />
@@ -27,6 +37,15 @@ http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/
 					<munit-tools:payload value='#[MunitTools::getResourceAsString("response/ordercreate-dblookup-sales-origin-response.json")]' mediaType="application/json" />
 				</munit-tools:then-return>
 			</munit-tools:mock-when>
+			<munit-tools:spy doc:name="Spy" doc:id="f21eca61-e6da-4ae1-b41d-60999658c202" processor="http:request">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="Call DB SO Lookup Http Request Configuration" attributeName="doc:name" />
+				</munit-tools:with-attributes>
+				<munit-tools:after-call >
+					<set-variable value="#['6']" doc:name="Set Variable" doc:id="928794cf-b4bc-4189-a082-75884fb1cb5c" variableName="lookup" mimeType="application/json" />
+					<munit-tools:assert-equals doc:name="Assert equals" doc:id="1048fa1c-298a-4db2-82cb-e66010a1647f" actual="#[output application/java --- write(payload.lookups[0].'lookup_id' , 'application/java')]" expected="#[output application/java --- write(vars.lookup , 'application/java')]" />
+				</munit-tools:after-call>
+			</munit-tools:spy>
 			<munit-tools:mock-when doc:name="Mock Shipping Barcode HTTP Requester" doc:id="7c7beb2c-8c22-4976-9d58-ed6fb5083fac" processor="http:request">
 				<munit-tools:with-attributes >
 					<munit-tools:with-attribute whereValue="Call DB Lookup Http Request Configuration For Shipping Barcode" attributeName="doc:name" />
@@ -35,11 +54,29 @@ http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/
 					<munit-tools:payload value='#[MunitTools::getResourceAsString("response/ordercreate-dblookup-shipping-barcode-response.json")]' mediaType="application/json" />
 				</munit-tools:then-return>
 			</munit-tools:mock-when>
+			<munit-tools:spy doc:name="Spy" doc:id="5a696864-ed31-4adc-a985-efbd34b9a393" processor="http:request">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="Call DB Lookup Shipping Barcode Http Request Configuration" attributeName="doc:name" />
+				</munit-tools:with-attributes>
+				<munit-tools:after-call >
+					<set-variable value="#['9']" doc:name="Set Variable" doc:id="61b5289a-e528-49ee-a14a-37ca3ab8767b" variableName="lookup" mimeType="application/json" />
+					<munit-tools:assert-equals doc:name="Assert equals" doc:id="3bae8bf2-d184-433b-ba78-41f1512a2c22" actual="#[output application/java --- write(payload.lookups[0].'lookup_id' , 'application/java')]" expected="#[output application/java --- write(vars.lookup , 'application/java')]" />
+				</munit-tools:after-call>
+			</munit-tools:spy>
 			<munit-tools:mock-when doc:name="Mock Report DB Http Requester" doc:id="02a28410-127a-49ee-b9c8-dfc4db60018b" processor="http:request">
 				<munit-tools:with-attributes >
 					<munit-tools:with-attribute whereValue="Call Report DB Http Request Configuration" attributeName="doc:name" />
 				</munit-tools:with-attributes>
 			</munit-tools:mock-when>
+			<munit-tools:spy doc:name="Spy" doc:id="49a7ce26-4680-4e67-8554-5e1b0e6ec67e" processor="http:request">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="Call Report DB Http Request Configuration" attributeName="doc:name" />
+				</munit-tools:with-attributes>
+				<munit-tools:before-call >
+					<set-variable value="#['110697408']" doc:name="Set Variable" doc:id="f465f3a5-507e-4805-b53b-84bb1e3443ff" variableName="orderno" mimeType="application/json" />
+					<munit-tools:assert-equals doc:name="Assert equals" doc:id="9084d5df-7b8c-408f-aa32-a8cc666252e7" actual="#[output application/java --- write(vars.reportdbInputPayload.orders[0].'order-no' , 'application/java')]" expected="#[output application/java --- write(vars.orderno , 'application/java')]" />
+				</munit-tools:before-call>
+			</munit-tools:spy>
 			<munit-tools:mock-when doc:name="Mock D365 Http Requester" doc:id="57475b8a-a591-4b83-ad73-657d412dd7d7" processor="http:request">
 				<munit-tools:with-attributes >
 					<munit-tools:with-attribute whereValue="Call D365 Http Request Configuration" attributeName="doc:name" />
@@ -48,6 +85,15 @@ http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/
 					<munit-tools:payload value='#[MunitTools::getResourceAsString("response/ordercreate-d365-response.json")]' mediaType="application/json" />
 				</munit-tools:then-return>
 			</munit-tools:mock-when>
+			<munit-tools:spy doc:name="Spy" doc:id="55a8a5e7-ab72-4e1b-b8b1-b05aec5bca7b" processor="http:request">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="Call D365 Http Request Configuration" attributeName="doc:name" />
+				</munit-tools:with-attributes>
+				<munit-tools:before-call >
+					<set-variable value="#['110697408']" doc:name="Set Variable" doc:id="a48b7f3e-e6c1-428a-82fa-29a431b152a6" variableName="orderno" mimeType="application/json" />
+					<munit-tools:assert-equals doc:name="Assert equals" doc:id="b26e72fb-de9e-4d6d-9ddd-eff826fb3b5d" actual="#[output application/java --- write(vars.d365InputPayload.orders[0].'order-no' , 'application/java')]" expected="#[output application/java --- write(vars.orderno , 'application/java')]" />
+				</munit-tools:before-call>
+			</munit-tools:spy>
 		</munit:behavior>
 		<munit:execution >
 			
@@ -60,7 +106,7 @@ http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/
 			<!-- <munit-tools:assert-equals doc:name="Assert equals" doc:id="aa34b1e6-39ba-4280-a051-c5d1a55aa081" actual="#[payload]" expected='#[MunitTools::getResourceAsString("response/ordercreate-d365-response.json")]'/> -->
 		</munit:validation>
 	</munit:test>
-<munit:test name="order-aptos-impl-test-suite-create-order-details-from-aptos-to-d365-main-flowTest-negative" description="Test" doc:id="359be190-a9bb-4b26-b352-0f325f4d442d" >
+<munit:test name="order-aptos-impl-test-suite-create-order-details-from-aptos-to-d365-main-flowTest-negative" description="Test" doc:id="359be190-a9bb-4b26-b352-0f325f4d442d">
 		<munit:behavior >
 			<munit-tools:mock-when doc:name="Mock DB DM Lookup Http Requester" doc:id="ad342a6d-ca94-4a77-a0a4-03f2553862c4" processor="http:request">
 				<munit-tools:with-attributes >

@@ -148,13 +148,6 @@
             <version>2.1.5</version>
             <classifier>mule-plugin</classifier>
             <scope>test</scope>
-        </dependency>	
-        <dependency>
-            <groupId>com.mulesoft.munit</groupId>
-            <artifactId>munit-tools</artifactId>
-            <version>2.1.5</version>
-            <classifier>mule-plugin</classifier>
-            <scope>test</scope>
         </dependency>
 		<!-- https://mvnrepository.com/artifact/org.springframework/spring-beans -->
 		<dependency>
@@ -180,6 +173,12 @@
 		  <version>5.4.3</version>
 		  <classifier>mule-plugin</classifier>
 		</dependency>
+    	<dependency>
+            <groupId>com.mulesoft.munit</groupId>
+            <artifactId>munit-tools</artifactId>
+            <version>2.2.1</version>
+            <classifier>mule-plugin</classifier>
+        </dependency>
     </dependencies>
 	<distributionManagement>
 		<snapshotRepository>
