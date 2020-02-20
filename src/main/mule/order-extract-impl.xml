@@ -28,7 +28,21 @@ output application/java
 		</ee:transform>
 		<flow-ref doc:name="Log Receiver Entry" doc:id="77d62498-8cc7-4855-9310-c8fd5c7897f0" name="log-receiver-entry-sub-flow" />
 		<flow-ref doc:name="Audit Receiver Entry" doc:id="bae2eaf2-a4d8-4332-b476-870c31df3ae1" name="audit-receiver-entry-sub-flow"/>
+		<flow-ref doc:name="Log Process Entry" doc:id="a4e244de-645d-43be-921f-29f2485bb04b" name="log-process-entry-sub-flow"/>
+		<flow-ref doc:name="Audit Process Entry" doc:id="066f9a2e-ec2c-4c04-9841-89c484569577" name="audit-process-entry-sub-flow"/>
 		<flow-ref doc:name="call-s-jda-and-process-to-d365-impl-flow" doc:id="cc7dd770-911a-4451-8cc8-59819183625b" name="call-s-jda-and-process-to-d365-impl-flow"/>
+		<flow-ref doc:name="Log Process Exit" doc:id="6ca127e1-9070-4b23-a64d-c45721b3d32a" name="log-process-exit-sub-flow"/>
+		<flow-ref doc:name="Audit Process Exit" doc:id="9c628a31-daf2-408c-aef3-b7af53f984f9" name="audit-process-exit-sub-flow"/>
+		<ee:transform doc:name="set Flow Name" doc:id="10072e90-91ae-4efa-a37f-7c69bc1d2a8d" >
+			<ee:message >
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="flowName" ><![CDATA[%dw 2.0
+output application/java
+---
+'order-extract-impl-flow']]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
 		<flow-ref doc:name="Log Dispatcher Exit" doc:id="986bce07-fd29-46df-a2b5-8f370e86bb0f" name="log-dispatcher-exit-sub-flow"/>
 		<flow-ref doc:name="Audit Dispatcher Exit" doc:id="bec990dc-8b03-4813-955c-422c63eecb9f" name="audit-dispatcher-exit-sub-flow"/>
 	</flow>
@@ -43,6 +57,8 @@ output application/java
 'call-s-jda-and-process-to-d365-impl-flow']]></ee:set-variable>
 			</ee:variables>
 		</ee:transform>
+		<flow-ref doc:name="log Receiver Entry" doc:id="84ac7f75-3f60-4524-83e3-24bc84c1ff34" name="log-receiver-entry-sub-flow" />
+		<flow-ref doc:name="Audit Receiver Entry" doc:id="7c64f7d5-0116-4a5f-95ea-150b1dae6301" name="audit-receiver-entry-sub-flow"/>
 		<flow-ref doc:name="Log Process Entry" doc:id="cfce3e1e-0396-429e-8d85-cd27a2e4708c" name="log-process-entry-sub-flow"/>
 		<flow-ref doc:name="Audit Process Entry" doc:id="dd1639ad-1b7e-4735-adc4-fd1d81d79b31" name="audit-process-entry-sub-flow"/>
 		<http:request method="GET" doc:name="S-JDA-HTTP-Request-Configuration" doc:id="2e2372df-6ccb-4ab2-9c51-ce66f3740184" path="${jda.orders.path}" responseTimeout="${response.timeout.system.jda.orderExtract}" config-ref="s_jda_Http_Request_configuration" outputMimeType="application/json">
@@ -58,6 +74,8 @@ output application/java
 	"client_id" : p('jda.clientId')
 }]]]></http:query-params>
 		</http:request>
+		<flow-ref doc:name="Audit Process Exit" doc:id="0cc42737-77bc-435f-b971-90a05b9274ac" name="audit-process-exit-sub-flow" />
+		<flow-ref doc:name="Log Process Exit" doc:id="4cdb440a-5b24-49c1-b372-f37092e1fe01" name="log-process-exit-sub-flow" />
 		<ee:transform doc:name="JDA Response Attribute" doc:id="fff130b5-a416-459f-b85d-19789aadfe9c">
 			<ee:message>
 			</ee:message>
@@ -66,8 +84,6 @@ output application/java
 				<ee:set-variable variableName="fileName" ><![CDATA[attributes.headers['file-name']]]></ee:set-variable>
 			</ee:variables>
 		</ee:transform>
-		<flow-ref doc:name="Log Process Exit" doc:id="4cdb440a-5b24-49c1-b372-f37092e1fe01" name="log-process-exit-sub-flow"/>
-		<flow-ref doc:name="Audit Process Exit" doc:id="0cc42737-77bc-435f-b971-90a05b9274ac" name="audit-process-exit-sub-flow"/>
 		<choice doc:name="Choice" doc:id="1d575d75-492e-4e7c-b28d-dd96cbf8a864" >
 			<when expression="#[payload != null and isEmpty(payload.orders) != true]">
 				<flow-ref doc:name="Flow Reference to Order Extract Check Manifest Data" doc:id="c1d2c83f-4e82-4c91-8100-9d093f42b861" name="order-extract-check-manifest-data-sub-flow"/>
@@ -88,6 +104,8 @@ output application/java
 		</choice>
 		<flow-ref doc:name="Audit Process Exit" doc:id="de507949-2733-4e09-9ba1-a51220bdf689" name="audit-process-exit-sub-flow"/>
 		<flow-ref doc:name="Log Process Exit" doc:id="9cf957ab-7060-4cba-a6ff-1dcf082d655c" name="log-process-exit-sub-flow"/>
+	<flow-ref doc:name="Audit Dispatcher Exit" doc:id="49619ee0-0b50-4065-bf6d-523e4ba510e3" name="audit-dispatcher-exit-sub-flow"/>
+		<flow-ref doc:name="Log Dispatcher Exit" doc:id="8ee82938-3b86-444d-a49b-ef2954bfb964" name="log-dispatcher-exit-sub-flow" />
 	</flow>
 	<sub-flow name="order-extract-check-manifest-data-sub-flow" doc:id="e36f7652-4cb0-405b-afd5-1d5835291f83" >
 		<ee:transform doc:name="Flow Name" doc:id="2fb85c39-71f1-4fdc-a4dc-fc939f6162e9" >
@@ -155,8 +173,8 @@ output application/java
 			</error-handler>
 		</try>
 		</until-successful>
-		<flow-ref doc:name="Log Process Exit" doc:id="1884a941-55c9-4a4a-a2df-a6d4b43e3479" name="log-process-exit-sub-flow" />
 		<flow-ref doc:name="Audit Process Exit" doc:id="9971effb-f88d-4b84-8a87-8b21c24c7814" name="audit-process-exit-sub-flow" />
+		<flow-ref doc:name="Log Process Exit" doc:id="1884a941-55c9-4a4a-a2df-a6d4b43e3479" name="log-process-exit-sub-flow" />
 <!-- 		<logger level="INFO" doc:name="Logger" doc:id="82db6798-e471-477b-a429-2a8e3f0c124e" message="#[payload[0].body]" /> -->
 		<set-variable value="#[payload[0].body]" doc:name="Set Variable" doc:id="f4fcd1be-b995-4244-89cc-745e07423dc6" variableName="manifestData"/>
 		<set-payload value="#[vars.orderPayload]" doc:name="Set Payload" doc:id="a7fbc890-2d04-4b9d-b03e-693c16f4ac1d" />
@@ -212,6 +230,8 @@ output application/java
 'order-extract-matched-data-handling-flow']]></ee:set-variable>
 			</ee:variables>
 		</ee:transform>
+		<flow-ref doc:name="log Receiver Entry" doc:id="9d5f27d5-9b80-4634-b4f2-6f921f81def4" name="log-receiver-entry-sub-flow" />
+		<flow-ref doc:name="Audit Receiver Entry" doc:id="87960935-3125-49ec-9801-03eae6789cf0" name="audit-receiver-entry-sub-flow"/>
 		<flow-ref doc:name="Log Process Entry" doc:id="4c0a7443-e54a-4af6-b475-cc9c0d75f642" name="log-process-entry-sub-flow"/>
 		<flow-ref doc:name="Audit Process Entry" doc:id="96cbcba1-39b2-40f9-8054-2811c1a2f90c" name="audit-process-entry-sub-flow"/>
 		<choice doc:name="Choice" doc:id="2ae17774-f257-46a2-9eeb-bac9266de16a" >
@@ -246,6 +266,8 @@ output application/java
 				<flow-ref doc:name="Logging Message" doc:id="d20423f0-0f36-488f-8c33-610863117886" name="logging-sub-flow" />
 			</otherwise>
 		</choice>
+		<flow-ref doc:name="Audit Dispatcher Exit" doc:id="d2f5110a-1e72-4489-b860-082c808a97c9" name="audit-dispatcher-exit-sub-flow"/>
+		<flow-ref doc:name="Log Dispatcher Exit" doc:id="899ca0b4-62d1-4410-a62a-fffe8068a608" name="log-dispatcher-exit-sub-flow" />
 	</flow>
 	<sub-flow name="order-extract-send-to-d365" doc:id="4e4ac1cb-968c-45d1-b779-dffb242a456d" >
 		<set-variable value="order-extract-send-to-d365" doc:name="Flow Name" doc:id="9300e78e-3ed3-4312-814f-a7543749e6cf" variableName="flowName"/>
@@ -387,5 +409,7 @@ p('orders.export.sftp.errorfilepath') ++ vars.fileName]]></ee:set-variable>
 		</choice>
 		<flow-ref doc:name="Audit Process Exit" doc:id="aeca81fe-2e29-499e-9d95-c475dcee0693" name="audit-process-exit-sub-flow"/>
 		<flow-ref doc:name="Log Process Exit" doc:id="6c12147e-2b8c-4c13-b79d-7b40b30c0677" name="log-process-exit-sub-flow" />
+		<flow-ref doc:name="Audit Dispatcher Exit" doc:id="c52b43eb-9118-47d2-a316-ea74a52da893" name="audit-dispatcher-exit-sub-flow"/>
+		<flow-ref doc:name="Log Dispatcher Exit" doc:id="b494d361-f5ce-4926-a272-b2db5105bfda" name="log-dispatcher-exit-sub-flow" />
 	</flow>
 </mule>

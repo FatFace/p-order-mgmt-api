@@ -9,8 +9,8 @@ http://www.mulesoft.org/schema/mule/os http://www.mulesoft.org/schema/mule/os/cu
 
 	<sub-flow name="order-managment-app-flow" doc:id="e4041d85-5c17-4374-b202-6367cd858318" >
 		<set-variable value="#[payload]" doc:name="Set Variable" doc:id="b63136f8-1f56-46cb-a72a-bf19b3787815" variableName="originalPayload"/>
-		<flow-ref doc:name="Log Process Exit" doc:id="57488e0a-6786-42d8-b5d8-77779ab8b576" name="log-process-exit-sub-flow"/>
-		<flow-ref doc:name="Audit Process Exit" doc:id="316bb697-e0ff-45da-8c6c-b2f2d9d2338b" name="audit-process-exit-sub-flow"/>
+		<flow-ref doc:name="Log Process Entry" doc:id="57488e0a-6786-42d8-b5d8-77779ab8b576" name="log-process-entry-sub-flow"/>
+		<flow-ref doc:name="Audit Process Entry" doc:id="316bb697-e0ff-45da-8c6c-b2f2d9d2338b" name="audit-process-entry-sub-flow"/>
 		<choice doc:name="Choice" doc:id="4e7eece7-2d63-4c82-9228-781a8283cb2d" >
 			<when expression="#[(payload != null and payload.'pick-orders' != [])]">
 				<flow-ref doc:name="Get Delivery Mode numeric value " doc:id="bb575bb6-3b30-4845-83d0-e069d2755fee" name="get-delivery-mode-from-dblookup-for-pick-orders-sub-flow"/>
@@ -33,7 +33,7 @@ http://www.mulesoft.org/schema/mule/os http://www.mulesoft.org/schema/mule/os/cu
 }]]]></http:query-params>
 		</http:request>
 				<flow-ref doc:name="Audit Process Exit" doc:id="78baee98-f66e-4843-9bcd-e72a625df755" name="audit-process-exit-sub-flow" />
-				<flow-ref doc:name="Log Process Entry" doc:id="e387b50b-1d53-468d-8c62-7af9f168e776" name="log-process-entry-sub-flow" />
+				<flow-ref doc:name="Log Process Exit" doc:id="e387b50b-1d53-468d-8c62-7af9f168e776" name="log-process-exit-sub-flow" />
 			</when>
 			<otherwise >
 				<set-variable value="No data received" doc:name="Set Logging Payload" doc:id="f3badf1e-22b0-45ab-8902-a77066b46bd2" variableName="loggingPayload"/>
@@ -41,17 +41,19 @@ http://www.mulesoft.org/schema/mule/os http://www.mulesoft.org/schema/mule/os/cu
 			</otherwise>
 		</choice>
 			<flow-ref doc:name="Audit Process Exit" doc:id="c9063383-53a9-45fe-af16-e2814c6204d4" name="audit-process-exit-sub-flow" />
-			<flow-ref doc:name="Log Process Entry" doc:id="132d9531-b08e-4913-a9ac-ba0c14ed0040" name="log-process-entry-sub-flow" />
+			<flow-ref doc:name="Log Process Exit" doc:id="132d9531-b08e-4913-a9ac-ba0c14ed0040" name="log-process-exit-sub-flow" />
 	</sub-flow>
 	<sub-flow name="get-delivery-mode-from-dblookup-for-pick-orders-sub-flow" doc:id="38c64bce-f20c-443d-b122-a749a14d1d7a" >
 		<set-variable value="#['get-delivery-mode-from-dblookup-for-pick-orders-sub-flow']" doc:name="Set Variable" doc:id="19c3baaf-9791-4ab2-bf57-eba051e5b65d" variableName="flowName"/>
-		<flow-ref doc:name="Log Receiver Entry" doc:id="ce4d2752-8b05-4611-988c-dbaa3113a80a" name="log-receiver-entry-sub-flow"/>
-		<flow-ref doc:name="Audit Receiver Entry" doc:id="02ccf700-3e16-491e-b10c-0797c813bfcb" name="audit-receiver-entry-sub-flow"/>
+		<flow-ref doc:name="Log Process Entry" doc:id="f7a310e9-4c33-4643-82d3-6adfe04ed4d2" name="log-process-entry-sub-flow"/>
+		<flow-ref doc:name="Audit Process Entry" doc:id="65a6f5cf-fdff-4833-8c47-fc86400f027a" name="audit-process-entry-sub-flow"/>
 		<set-variable value="#[p('lookup.key')]" doc:name="Set Key" doc:id="b67098ee-2812-4674-ae81-529d59c2fc98" variableName="vLookUpData"/>
 		<os:contains doc:name="Check for the value in the Object Store" doc:id="7ce24818-d9c7-4de2-9f5a-a7ea66cbe3ae" key="#[vars.vLookUpData]" objectStore="Object_store"/>
 		<choice doc:name="Choice" doc:id="1b15b70f-71dd-4dd4-b4f5-93d40e166124" >
 			<when expression="#[payload ==true]">
 				<os:retrieve doc:name="Retrieve Lookup Data From Object Store" doc:id="4cbf43b7-adb6-47f9-8ff6-61c0b803322a" key="#[vars.vLookUpData]" objectStore="Object_store" />
+					<flow-ref doc:name="Audit Process Exit" doc:id="8bb4deb0-1e2a-42e9-b516-2f8ac7c08c35" name="audit-process-exit-sub-flow" />
+			<flow-ref doc:name="Log Process Exit" doc:id="f7abbdfc-de6d-4bd7-b05c-d2075883de1d" name="log-process-exit-sub-flow" />
 				<ee:transform doc:name="Transform Message" doc:id="dbe54386-8279-4d19-a16b-487bbb271c4d">
 					<ee:message>
 						<ee:set-payload><![CDATA[%dw 2.0
@@ -88,8 +90,8 @@ payload]]></ee:set-payload>
 				<flow-ref doc:name="Filter Lookup Key" doc:id="efe8f3b1-3afc-44ce-826f-c034e0859c65" name="filter-lookup-key-sub-flow"/>
 			</otherwise>
 		</choice>
-		<flow-ref doc:name="Audit Dispatcher Exist " doc:id="2d180bec-9551-4908-a441-4d3fd88dfd2c" name="audit-dispatcher-exit-sub-flow"/>
-		<flow-ref doc:name="Log Dispatcher Exist" doc:id="3065dd84-82e0-499c-8745-72031d897f48" name="log-dispatcher-exit-sub-flow"/>
+		<flow-ref doc:name="Audit Process Exit" doc:id="be3cf767-fe44-4c49-b1d6-5411ca856a66" name="audit-process-exit-sub-flow" />
+			<flow-ref doc:name="Log Process Exit" doc:id="91a822a3-095d-467d-b6e9-3ccb564244b1" name="log-process-exit-sub-flow" />
 	</sub-flow>
 	<sub-flow name="filter-lookup-key-sub-flow" doc:id="3f9eeb0b-ece4-4b94-ae98-5be4035182f7" >
 		<ee:transform doc:name="Transform Message" doc:id="e2c0bed6-c2c9-4d8a-9e02-aa46e876854b" >
