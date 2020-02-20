@@ -94,8 +94,10 @@ output application/json
 			</ee:message>
 		</ee:transform>
 		
-			<flow-ref doc:name="Flow Reference Shipment Manifest Auditing" doc:id="c92d8788-69f3-4829-bb66-65698d6b5e09" name="shipment-manifest-auditing-sub-flow" />
+			<set-variable value="#[payload]" doc:name="Set Original Payload" doc:id="a778c475-8526-44dc-98d2-8f4943b82f74" variableName="originalPayload"/>
+		<flow-ref doc:name="Flow Reference Shipment Manifest Auditing" doc:id="c92d8788-69f3-4829-bb66-65698d6b5e09" name="shipment-manifest-auditing-sub-flow" />
 		
+		<set-payload value="#[vars.originalPayload]" doc:name="Set Original Payload to Payload" doc:id="eaf4a348-35f2-4587-bcbb-bd5f779694de" />
 		<choice doc:name="Choice" doc:id="53224b4c-b857-4095-8533-4a7db3b8c1a5">
 			<when expression="#[isEmpty(payload.manifests) != true]">
 				<ee:transform doc:name="Transform To D365" doc:id="0bcabdcc-cb9e-4f31-b6e3-c5eb1548ac89">
