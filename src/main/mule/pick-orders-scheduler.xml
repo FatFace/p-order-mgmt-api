@@ -19,7 +19,7 @@ http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/htt
 				<ee:set-variable variableName="flowName" ><![CDATA[%dw 2.0
 output application/json
 ---
-'order-managment-appFlow']]></ee:set-variable>
+'pick-orders-scheduler-flow']]></ee:set-variable>
 				<ee:set-variable variableName="packageName" ><![CDATA[%dw 2.0
 output application/json
 ---
@@ -50,6 +50,16 @@ p('d365.dmf.pick.create.packageName') ++ now() as String {format: "ddMMyyyyhhms"
 </http:request>
 		<flow-ref doc:name="Audit Process Exit" doc:id="b8778633-e416-4ac5-9378-80f6a2ec3e47" name="audit-process-exit-sub-flow"/>
 		<flow-ref doc:name="Log Process Exit" doc:id="78df4676-9b7f-445c-a9b8-b0c9ab47c2ba" name="log-process-exit-sub-flow"/>
+		<ee:transform doc:name="Set Flow Name" doc:id="d4589b45-fe2d-4c2f-bdfe-68441b5dde77" >
+			<ee:message >
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="flowName" ><![CDATA[%dw 2.0
+output application/json
+---
+'pick-orders-scheduler-flow']]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
 		<flow-ref doc:name="Audit Dispatcher Exit" doc:id="de5a036f-eca8-4492-8542-8cea49f00cd1" name="audit-dispatcher-exit-sub-flow"/>
 		<flow-ref doc:name="Log Dispatcher Exit" doc:id="5e9f9a12-e72f-4898-9734-cf02107c6cd9" name="log-dispatcher-exit-sub-flow"/>
 	</flow>
