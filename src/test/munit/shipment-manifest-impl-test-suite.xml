@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:munit="http://www.mulesoft.org/schema/mule/munit" xmlns:munit-tools="http://www.mulesoft.org/schema/mule/munit-tools"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xsi:schemaLocation="
+		http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+		http://www.mulesoft.org/schema/mule/munit http://www.mulesoft.org/schema/mule/munit/current/mule-munit.xsd
+		http://www.mulesoft.org/schema/mule/munit-tools  http://www.mulesoft.org/schema/mule/munit-tools/current/mule-munit-tools.xsd">
+	<munit:config name="shipment-manifest-impl-test-suite.xml" />
+	<import doc:name="Import" doc:id="13efb044-5926-43c3-8af6-b51795660efe" file="test-globals-suite.xml" />
+	<munit:test name="shipment-manifest-impl-test-suite-JDA-shipment-manifest-flowTest" description="Test" doc:id="e8fef8f8-c337-4616-811d-ef0a38ee9e6c">
+		<munit:enable-flow-sources>
+	<munit:enable-flow-source value="common-template-check-digit-lookup-flow" />
+</munit:enable-flow-sources>
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="S-JDA-HTTP-Request-Configuration" doc:id="89f99ed5-5a3c-4217-9b74-6992f250a46b" processor="http:request">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="S-JDA-HTTP-Request-Configuration" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="${response.timeout.system.jda.manifest}" attributeName="responseTimeout" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value='#[output application/java --- readUrl("classpath://sample_data/s-jda-manifest-response.json", "application/json")]' />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:spy doc:name="Spy" doc:id="5ed12015-f10f-4822-8487-e3966f8f29e0" processor="http:request">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="S-JDA-HTTP-Request-Configuration" attributeName="doc:name" />
+				</munit-tools:with-attributes>
+				<munit-tools:after-call >
+					<set-variable value="#['11444002']" doc:name="Set Variable" doc:id="72663a85-71e0-4fc0-a167-0256dcd46985" variableName="orderno" mimeType="application/json" />
+					<munit-tools:assert-equals doc:id="1bcaa6be-c8f9-4726-b030-45ae3a641801" actual="#[output application/java --- write(payload.manifests.'order-no'[0] , 'application/java')]" expected="#[output application/java --- write(vars.orderno , 'application/java')]" doc:name="Assert equals" />
+				</munit-tools:after-call>
+			</munit-tools:spy>
+			<munit-tools:mock-when doc:name="Call D365 HTTP Request Configuration" doc:id="ba39aa86-1241-4747-b18d-e607497e0ad8" processor="http:request">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="Call D365 HTTP Request Configuration" attributeName="doc:name" />
+				</munit-tools:with-attributes>
+			</munit-tools:mock-when>
+			<munit-tools:spy doc:name="Spy" doc:id="b1041513-8d0a-441f-a3b6-4748c459ea5a" processor="http:request">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="Call D365 HTTP Request Configuration" attributeName="doc:name" />
+				</munit-tools:with-attributes>
+				<munit-tools:before-call >
+					<set-variable value="#['11444002']" doc:name="Set Variable" doc:id="80b23835-d25f-4cbe-aecb-4fd8efb9858a" variableName="orderno" mimeType="application/json" />
+					<munit-tools:assert-equals doc:id="848d5085-9047-4ed5-8e6e-f36177553613" actual="#[output application/java --- write(payload.manifests.'order-no'[0] , 'application/java')]" expected="#[output application/java --- write(vars.orderno , 'application/java')]" doc:name="Assert equals" />
+				</munit-tools:before-call>
+			</munit-tools:spy>
+		</munit:behavior>
+		<munit:execution >
+			<munit:set-event doc:name="Set Event" doc:id="49e72fb7-bf0a-4a3e-8809-c8511bb4086c" >
+				<munit:attributes value='#[{"headers" :  {"has-more-files":"false","file-name":"testFile"}}]' />
+				<munit:variables >
+					<munit:variable key="messageCorrelationId" value="testCorrelation" mediaType="application/java" />
+					<munit:variable key="transactionStartTime" value="2020-02-17T17:17:05.899Z" mediaType="application/java" />
+				</munit:variables>
+			</munit:set-event>
+			<flow-ref doc:name="Flow-ref to JDA-shipment-manifest-flow" doc:id="39dfa191-a33c-4433-a558-45777b7a65a6" name="JDA-shipment-manifest-flow"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that" doc:id="0c716b9a-c7aa-4d8e-84a1-fabd675030b4" expression="#[payload]" is='#[MunitTools::equalTo(readUrl("classpath://sample_data/shipment-manifest-response-payload.json", "application/json"))]'/>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="shipment-manifest-impl-test-suite-receive-manifest-message-and-retryTest" description="Test" doc:id="7bde7ca5-9486-4181-a370-e192758a69e3">
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Delete message" doc:id="b60b2a44-b976-47a4-a9b5-1c1eff535b44" processor="sqs:delete-message">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="Delete message" attributeName="doc:name" />
+				</munit-tools:with-attributes>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when doc:name="Call D365 HTTP Request Configuration" doc:id="cefa1790-f523-4a40-939a-19761174fcf8" processor="http:request">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="Call D365 HTTP Request Configuration" attributeName="doc:name" />
+				</munit-tools:with-attributes>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<munit:set-event doc:name="Set Event" doc:id="bbe97646-21b1-4054-ba78-863f5aa6da15" >
+				<munit:payload value="#[MunitTools::getResourceAsString('sample_data/receive-message-manifest-payload.json')]" />
+				<munit:attributes value='#[{
+	"correlationId": {
+		"stringValue": "testString"
+	},
+	"transactionStartTime": {
+		"stringValue": "2020-02-18T06:05:16.363Z"
+	},
+	"transactionId": {
+		"stringValue": "testID"
+	},
+	"reprocessingCount": {
+		"stringValue": "1"
+	},
+	"transactionFileName": {
+		"stringValue": "testFile"
+	},
+	"sqs": {
+		"message": {
+			"receipt": {
+				"handle": "testReceipt"
+			}
+		}
+	}
+}]' />
+			</munit:set-event>
+			<flow-ref doc:name="Flow-ref to receive-manifest-message-and-retry" doc:id="9967dc9f-0a5d-4e7a-90d0-ff877cf246a9" name="receive-manifest-message-and-retry"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:verify-call doc:name="Verify call" doc:id="82040455-27fb-47b8-add1-1c8f6425b23b" processor="http:request" atLeast="1">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="Call D365 HTTP Request Configuration" attributeName="doc:name" />
+				</munit-tools:with-attributes>
+			</munit-tools:verify-call>
+		</munit:validation>
+	</munit:test>
+<munit:test name="shipment-manifest-impl-test-suite-receive-manifest-message-and-retry-defaultblock-Test" description="Test" doc:id="4062c428-aa35-4431-858c-cbf54795dfde">
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Delete message" doc:id="e019b691-6ae4-4ffc-87ad-cdf0cc5ab942" processor="sqs:delete-message">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="Delete message" attributeName="doc:name" />
+				</munit-tools:with-attributes>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when doc:name="Write" doc:id="0cb0ad2e-8727-4c27-8a5a-4d48487d2889" processor="sftp:write">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="Write" attributeName="doc:name" />
+				</munit-tools:with-attributes>
+			</munit-tools:mock-when>
+		
+</munit:behavior>
+		<munit:execution >
+			<munit:set-event doc:name="Set Event" doc:id="7fd60472-8934-4d8c-9784-37eb7046f4b5" >
+				<munit:payload value="#[MunitTools::getResourceAsString('sample_data/receive-message-manifest-payload.json')]" />
+				<munit:attributes value='#[{
+	"correlationId": {
+		"stringValue": "testString"
+	},
+	"transactionStartTime": {
+		"stringValue": "2020-02-18T06:05:16.363Z"
+	},
+	"transactionId": {
+		"stringValue": "testID"
+	},
+	"reprocessingCount": {
+		"stringValue": "9"
+	},
+	"transactionFileName": {
+		"stringValue": "testFile"
+	},
+	"sqs": {
+		"message": {
+			"receipt": {
+				"handle": "testReceipt"
+			}
+		}
+	}
+}]' />
+			
+</munit:set-event>
+			<flow-ref doc:name="Flow-ref to receive-manifest-message-and-retry" doc:id="464e9b61-853c-4c29-afc8-237fbe4373c4" name="receive-manifest-message-and-retry"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:verify-call doc:name="Verify call" doc:id="355e5ea2-ea43-4fbe-8188-e31c829a3b53" processor="sftp:write" atLeast="1">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="Write" attributeName="doc:name" />
+				</munit-tools:with-attributes>
+			</munit-tools:verify-call>
+		</munit:validation>
+	
+</munit:test>
+
+</mule>

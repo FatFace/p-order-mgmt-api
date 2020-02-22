@@ -1,0 +1,16 @@
+{
+	"manifests": [{
+		"route-id": "1FFL-000792",
+		"item-id": "101",
+		"barcode": "505275168360",
+		"container-id": "",
+		"site-id": "PICK",
+		"location-id": "ROYALMAIL",
+		"quantity": 1.00,
+		"shipping-date": "20200217105535",
+		"order-no": "11444002",
+		"carrier-id": "HERMES",
+		"status": "",
+		"carrier-consignment-id": ""
+	}]
+}

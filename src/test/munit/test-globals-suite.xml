@@ -8,8 +8,8 @@
 		http://www.mulesoft.org/schema/mule/munit http://www.mulesoft.org/schema/mule/munit/current/mule-munit.xsd
 		http://www.mulesoft.org/schema/mule/munit-tools  http://www.mulesoft.org/schema/mule/munit-tools/current/mule-munit-tools.xsd">
 	<munit:config name="test-globals-suite.xml" />
+	<import doc:name="Import" doc:id="cdb848a3-6922-4a22-8448-5af69e539ec7" file="globals.xml"/>
 	<import doc:name="Import" doc:id="01bb7414-3955-48d0-a323-3899d4bb742f" file="order-managment-app.xml"/>
-	<import doc:name="Import" doc:id="fc96fc60-eec2-43d4-bf60-b7e789f40cc6" file="globals.xml"/>
 	<import doc:name="Import" doc:id="5de976b5-cc19-4c51-b05f-646c47d3707e" file="order-extract-impl.xml" />
 	<import doc:name="Import" doc:id="136a2675-14e3-4ee4-a95c-67d520852047" file="pick-orders-scheduler.xml" />
 	<import doc:name="Import" doc:id="91de68b6-5c4f-422c-ab84-2d9b41b5ee5c" file="p-order-mgmt-api.xml" />
