@@ -42,8 +42,8 @@ output application/java
 output application/json
 ---
 {
-  responseCode: vars.httpStatus,
-  responseMessage: "success"
+	"responseCode": p('status.responsecode'),
+	"responseMessage": p('status.responsemessage')
 }]]></ee:set-payload>
 			</ee:message>
             <ee:variables>
@@ -70,15 +70,15 @@ output application/java
 		</ee:transform>
 		 <flow-ref doc:name="Log Receiver Entry" doc:id="b46abfd0-4f6c-490f-a414-092add15fb89" name="log-receiver-entry-sub-flow" />
         <flow-ref doc:name="Audit Receiver Entry" doc:id="e0c503c1-943d-463b-beca-082c598e7a03" name="audit-receiver-entry-sub-flow" />
-        <flow-ref doc:name="Call Pick Orders Flow" doc:id="8ac2ebd4-8a55-4ab6-82fd-a488fffaac95" name="order-managment-app-flow" />
+        <flow-ref doc:name="Call Pick Orders Flow" doc:id="8ac2ebd4-8a55-4ab6-82fd-a488fffaac95" name="order-managment-impl-flow" />
         <ee:transform doc:name="Set Flow Name" doc:id="14ea003f-fa59-43e4-88df-ace564edba94">
             <ee:message >
 				<ee:set-payload ><![CDATA[%dw 2.0
 output application/json
 ---
 {
-  responseCode: vars.httpStatus,
-  responseMessage: "success"
+	"responseCode": p('status.responsecode'),
+	"responseMessage": p('status.responsemessage')
 }]]></ee:set-payload>
 			</ee:message>
             <ee:variables>

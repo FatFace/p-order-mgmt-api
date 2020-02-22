@@ -9,7 +9,8 @@ http://www.mulesoft.org/schema/mule/amqp http://www.mulesoft.org/schema/mule/amq
 http://www.mulesoft.org/schema/mule/sqs http://www.mulesoft.org/schema/mule/sqs/current/mule-sqs.xsd
 http://www.mulesoft.org/schema/mule/sftp http://www.mulesoft.org/schema/mule/sftp/current/mule-sftp.xsd">
 
-	<flow name="JDA-order-extract-flow" doc:id="23a2590d-f562-46da-a911-2cf2098e8abe">
+	
+	<flow name="order-extract-scheduler-flow" doc:id="23a2590d-f562-46da-a911-2cf2098e8abe">
 		<scheduler doc:name="Scheduler" doc:id="18363b90-3733-44b8-b930-913a1be28952" >
 			<scheduling-strategy >
 				<cron expression="${cron.expression.orderextract}" />
@@ -22,7 +23,7 @@ http://www.mulesoft.org/schema/mule/sftp http://www.mulesoft.org/schema/mule/sft
 				<ee:set-variable variableName="flowName" ><![CDATA[%dw 2.0
 output application/java
 ---
-'order-extract-impl-flow']]></ee:set-variable>
+'order-extract-scheduler-flow']]></ee:set-variable>
 				<ee:set-variable variableName="count" ><![CDATA[0]]></ee:set-variable>
 			</ee:variables>
 		</ee:transform>
@@ -36,7 +37,7 @@ output application/java
 				<ee:set-variable variableName="flowName" ><![CDATA[%dw 2.0
 output application/java
 ---
-'order-extract-impl-flow']]></ee:set-variable>
+'order-extract-scheduler-flow']]></ee:set-variable>
 			</ee:variables>
 		</ee:transform>
 		<flow-ref doc:name="Log Dispatcher Exit" doc:id="986bce07-fd29-46df-a2b5-8f370e86bb0f" name="log-dispatcher-exit-sub-flow"/>
@@ -55,21 +56,7 @@ output application/java
 		</ee:transform>
 		<flow-ref doc:name="Log Process Entry" doc:id="cfce3e1e-0396-429e-8d85-cd27a2e4708c" name="log-process-entry-sub-flow"/>
 		<flow-ref doc:name="Audit Process Entry" doc:id="dd1639ad-1b7e-4735-adc4-fd1d81d79b31" name="audit-process-entry-sub-flow"/>
-		<http:request method="GET" doc:name="S-JDA-HTTP-Request-Configuration" doc:id="2e2372df-6ccb-4ab2-9c51-ce66f3740184" path="${jda.orders.path}" responseTimeout="${response.timeout.system.jda.orderExtract}" config-ref="s_jda_Http_Request_configuration" outputMimeType="application/json">
-				<http:headers ><![CDATA[#[output application/java
----
-{
-	"vRequestId" : vars.transactionId
-}]]]></http:headers>
-			<http:query-params ><![CDATA[#[output application/java
----
-{
-	"client_secret" : p('secure::jda.clientSecret'),
-	"client_id" : p('jda.clientId')
-}]]]></http:query-params>
-		</http:request>
-		<flow-ref doc:name="Audit Process Exit" doc:id="0cc42737-77bc-435f-b971-90a05b9274ac" name="audit-process-exit-sub-flow" />
-		<flow-ref doc:name="Log Process Exit" doc:id="4cdb440a-5b24-49c1-b372-f37092e1fe01" name="log-process-exit-sub-flow" />
+		<flow-ref doc:name="call s-jda http request sub flow" doc:id="778b7a3f-34e6-4509-978e-c271aaae1c8b" name="call-s-jda-http-request-sub-flow" />
 		<ee:transform doc:name="JDA Response Attribute" doc:id="fff130b5-a416-459f-b85d-19789aadfe9c">
 			<ee:message>
 			</ee:message>
@@ -84,7 +71,8 @@ output application/java
 			</when>
 			<otherwise>
 				<set-variable value="There are no order data to process" doc:name="Set Logging Payload" doc:id="d851938f-e129-41c0-b5ed-4ae9205905ab" variableName="loggingPayload" />
-				<flow-ref doc:name="Logging Message" doc:id="12acbf38-f6ce-4203-ac75-b499b5b35fa4" name="logging-sub-flow"/>
+				<flow-ref doc:name="Log Warn Sub Flow" doc:id="12acbf38-f6ce-4203-ac75-b499b5b35fa4" name="log-process-warn-sub-flow"/>
+				<flow-ref doc:name="Audit Warn Sub Flow" doc:id="c152a888-b278-4f68-90b2-7fd613f34033" name="audit-warning-sub-flow"/>
 			</otherwise>
 		</choice>
 		<choice doc:name="Choice" doc:id="0af6e8e1-cb61-4991-854f-f88169c6946a">
@@ -93,9 +81,22 @@ output application/java
 			</when>
 			<otherwise>
 				<set-variable value="No Order Extract Files Available " doc:name="Set Logging Payload" doc:id="cca705f5-3f2e-4eda-8876-505b9cb4fc35" variableName="loggingPayload" />
-				<flow-ref doc:name="Logging Message" doc:id="2f4ea948-7ce7-483e-ac6b-dd9e72a7252c" name="logging-sub-flow"/>
+				<flow-ref doc:name="Log Warn Sub Flow" doc:id="2f4ea948-7ce7-483e-ac6b-dd9e72a7252c" name="log-process-warn-sub-flow"/>
+				<flow-ref doc:name="Audit Warn Sub Flow" doc:id="85b94c6e-dcea-40dd-a9ab-863abfe8abf1" name="audit-warning-sub-flow"/>
 			</otherwise>
 		</choice>
+		<ee:transform doc:name="Flow Name" doc:id="dbfd5dbb-0b61-47fe-863b-f1f4cc0e02dc" >
+			<ee:message >
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="flowName" ><![CDATA[%dw 2.0
+output application/java
+---
+'call-s-jda-and-process-to-d365-impl-flow']]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+		<flow-ref doc:name="Log Process Exit" doc:id="aae4a445-5cdd-47c0-9e92-3bf3f64a35c9" name="log-process-exit-sub-flow" />
+<flow-ref doc:name="Audit Process Exit" doc:id="bbc8cc84-815f-4e90-98f7-2b626dabca2c" name="audit-process-exit-sub-flow"/>
 	</flow>
 	<sub-flow name="order-extract-check-manifest-data-sub-flow" doc:id="e36f7652-4cb0-405b-afd5-1d5835291f83" >
 		<ee:transform doc:name="Flow Name" doc:id="2fb85c39-71f1-4fdc-a4dc-fc939f6162e9" >
@@ -128,7 +129,8 @@ output application/json
 			</when>
 			<otherwise>
 				<set-variable value="The record is not an ecom order" doc:name="Set Logging payload" doc:id="aace8a5b-63c6-4cb2-ade2-0323bb3f144b" variableName="loggingPayload" />
-				<flow-ref doc:name="Logging Message" doc:id="95a6a3de-d35f-4e7e-943f-01591f2f99e7" name="logging-sub-flow" />
+				<flow-ref doc:name="Log Warn Sub Flow" doc:id="95a6a3de-d35f-4e7e-943f-01591f2f99e7" name="log-process-warn-sub-flow" />
+				<flow-ref doc:name="Audit Warn Sub Flow" doc:id="b3ce2b11-4c5e-4321-887b-6868cd5c63a9" name="audit-warning-sub-flow"/>
 			</otherwise>
 			
 		</choice>
@@ -178,6 +180,8 @@ output application/java
 <!-- 		<logger level="INFO" doc:name="Logger" doc:id="82db6798-e471-477b-a429-2a8e3f0c124e" message="#[payload[0].body]" /> -->
 		<set-variable value="#[payload[0].body]" doc:name="Set Variable" doc:id="f4fcd1be-b995-4244-89cc-745e07423dc6" variableName="manifestData"/>
 		<set-payload value="#[vars.orderPayload]" doc:name="Set Payload" doc:id="a7fbc890-2d04-4b9d-b03e-693c16f4ac1d" />
+		<flow-ref doc:name="Log Process Entry" doc:id="34234a12-8ea6-48ae-b95a-c9910499db61" name="log-process-entry-sub-flow"/>
+<flow-ref doc:name="Audit Process Entry" doc:id="174bbd47-bd0d-4f2f-9ae6-d0022bd32fea" name="audit-process-entry-sub-flow"/>
 		<choice doc:name="Choice" doc:id="e84144a6-44ff-4e08-8268-7ba143b34c0d" >
 			<when expression="#[vars.manifestData != null and isEmpty(vars.manifestData) != true]">
 				<ee:transform doc:name="Read Manifest Data" doc:id="e5083270-266b-4ad8-a1e2-98e4dcf7828d">
@@ -415,4 +419,26 @@ p('orders.export.sftp.errorfilepath') ++ vars.fileName]]></ee:set-variable>
 		<flow-ref doc:name="Audit Dispatcher Exit" doc:id="c52b43eb-9118-47d2-a316-ea74a52da893" name="audit-dispatcher-exit-sub-flow"/>
 		<flow-ref doc:name="Log Dispatcher Exit" doc:id="b494d361-f5ce-4926-a272-b2db5105bfda" name="log-dispatcher-exit-sub-flow" />
 	</flow>
+	<sub-flow name="call-s-jda-http-request-sub-flow" doc:id="ca974c71-16f8-46f3-b741-61f8411b2825" >
+		<set-variable value="call-s-jda-http-request-sub-flow" doc:name="Flow Name" doc:id="2c5ec5cb-4296-41cf-a763-09c85c0ae161" variableName="flowName"/>
+		<flow-ref doc:name="Log Process Entry" doc:id="9540cdf4-97bf-4de7-850c-9382ceb62534" name="log-process-entry-sub-flow"/>
+<flow-ref doc:name="Audit Process Entry" doc:id="d18d9ff8-9177-46b0-8e47-ace64340d10f" name="audit-process-entry-sub-flow"/>
+		<http:request method="GET" doc:name="S-JDA-HTTP-Request-Configuration" doc:id="ebc28a84-3bbe-4967-bc72-2b6d590bb5c1" path="${jda.orders.path}" responseTimeout="${response.timeout.system.jda.orderExtract}" config-ref="s_jda_Http_Request_configuration" outputMimeType="application/json">
+				<http:headers><![CDATA[#[output application/java
+---
+{
+	"vRequestId" : vars.transactionId
+}]]]></http:headers>
+			<http:query-params><![CDATA[#[output application/java
+---
+{
+	"client_secret" : p('secure::jda.clientSecret'),
+	"client_id" : p('jda.clientId')
+}]]]></http:query-params>
+			
+		</http:request>
+		<flow-ref doc:name="Log Process Exit" doc:id="c77b01df-46d4-43a3-a6e6-362be6c5f809" name="log-process-exit-sub-flow" />
+<flow-ref doc:name="Audit Process Exit" doc:id="cf89fb31-bb52-4ddf-b3c5-c47c9795f57c" name="audit-process-exit-sub-flow"/>
+	</sub-flow>
+	
 </mule>

@@ -144,3 +144,6 @@ report:
   clientSecret: "7d3aFbC44E8e49048935f06A7A2a099d"
   ordersPath: "/orders"
     
+status:
+  responseCode: "0"
+  responseMessage: "Success"

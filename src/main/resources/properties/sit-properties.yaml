@@ -142,3 +142,7 @@ report:
   clientId: "a1c25cbc41dc4a43a1c5c3ecbf1251c5"
   clientSecret: "![LW5QbpXxcFCYtiU4/DH0+ENIW/q+2cr3P4u6w65C4pbwoGe1SiiStpjbUB6ntxmh]"
   ordersPath: "/orders"
+
+status:
+  responseCode: "0"
+  responseMessage: "Success"
