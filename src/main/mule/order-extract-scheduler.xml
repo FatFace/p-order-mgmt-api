@@ -10,7 +10,7 @@ http://www.mulesoft.org/schema/mule/sqs http://www.mulesoft.org/schema/mule/sqs/
 http://www.mulesoft.org/schema/mule/sftp http://www.mulesoft.org/schema/mule/sftp/current/mule-sftp.xsd">
 
 	
-	<flow name="order-extract-scheduler-flow" doc:id="23a2590d-f562-46da-a911-2cf2098e8abe">
+	<flow name="order-extract-trigger-flow" doc:id="23a2590d-f562-46da-a911-2cf2098e8abe">
 		<scheduler doc:name="Scheduler" doc:id="18363b90-3733-44b8-b930-913a1be28952" >
 			<scheduling-strategy >
 				<cron expression="${cron.expression.orderextract}" />
@@ -23,7 +23,7 @@ http://www.mulesoft.org/schema/mule/sftp http://www.mulesoft.org/schema/mule/sft
 				<ee:set-variable variableName="flowName" ><![CDATA[%dw 2.0
 output application/java
 ---
-'order-extract-scheduler-flow']]></ee:set-variable>
+'order-extract-trigger-flow']]></ee:set-variable>
 				<ee:set-variable variableName="count" ><![CDATA[0]]></ee:set-variable>
 			</ee:variables>
 		</ee:transform>
@@ -37,7 +37,7 @@ output application/java
 				<ee:set-variable variableName="flowName" ><![CDATA[%dw 2.0
 output application/java
 ---
-'order-extract-scheduler-flow']]></ee:set-variable>
+'order-extract-trigger-flow']]></ee:set-variable>
 			</ee:variables>
 		</ee:transform>
 		<flow-ref doc:name="Log Dispatcher Exit" doc:id="986bce07-fd29-46df-a2b5-8f370e86bb0f" name="log-dispatcher-exit-sub-flow"/>

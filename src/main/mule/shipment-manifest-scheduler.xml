@@ -9,7 +9,7 @@ http://www.mulesoft.org/schema/mule/sqs http://www.mulesoft.org/schema/mule/sqs/
 http://www.mulesoft.org/schema/mule/java http://www.mulesoft.org/schema/mule/java/current/mule-java.xsd
 http://www.mulesoft.org/schema/mule/sftp http://www.mulesoft.org/schema/mule/sftp/current/mule-sftp.xsd">
 	
-	<flow name="shipment-manifest-scheduler-flow" doc:id="23a2590d-f562-46da-a911-2cf2098e8abe" >
+	<flow name="shipment-manifest-trigger-flow" doc:id="23a2590d-f562-46da-a911-2cf2098e8abe" >
 		<scheduler doc:name="Scheduler" doc:id="159ed4e9-21ba-4dc9-9370-3b7a49e20686" >
 			<scheduling-strategy >
 				<cron expression="${cron.expression.manifest}" />
@@ -23,7 +23,7 @@ http://www.mulesoft.org/schema/mule/sftp http://www.mulesoft.org/schema/mule/sft
 				<ee:set-variable variableName="flowName" ><![CDATA[%dw 2.0
 output application/java
 ---
-'shipment-manifest-scheduler-flow']]></ee:set-variable>
+'shipment-manifest-trigger-flow']]></ee:set-variable>
 				<ee:set-variable variableName="count" ><![CDATA[0]]></ee:set-variable>
 			</ee:variables>
 		</ee:transform>
@@ -37,7 +37,7 @@ output application/java
 				<ee:set-variable variableName="flowName" ><![CDATA[%dw 2.0
 output application/java
 ---
-'shipment-manifest-scheduler-flow']]></ee:set-variable>
+'shipment-manifest-trigger-flow']]></ee:set-variable>
 			</ee:variables>
 		</ee:transform>
 		<flow-ref doc:name="Log Dispatcher Exit" doc:id="d57c4250-2708-407e-85d9-dce8a082cda5" name="log-dispatcher-exit-sub-flow"/>

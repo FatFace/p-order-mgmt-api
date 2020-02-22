@@ -7,7 +7,7 @@
 http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
 http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
 	
-	<flow name="pick-orders-scheduler-flow" doc:id="0be848f7-d42c-4b5f-9f67-29c845fad4af">
+	<flow name="pick-orders-trigger-flow" doc:id="0be848f7-d42c-4b5f-9f67-29c845fad4af">
 		<scheduler doc:name="Scheduler" doc:id="23ec0722-9862-4bc8-a084-dda881603654" >
 			<scheduling-strategy >
 				<fixed-frequency frequency="${scheduler.frequency}" timeUnit="MINUTES"/>
@@ -20,7 +20,7 @@ http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/htt
 				<ee:set-variable variableName="flowName" ><![CDATA[%dw 2.0
 output application/json
 ---
-'pick-orders-scheduler-flow']]></ee:set-variable>
+'pick-orders-trigger-flow']]></ee:set-variable>
 				<ee:set-variable variableName="packageName" ><![CDATA[%dw 2.0
 output application/json
 ---
@@ -38,7 +38,7 @@ p('d365.dmf.pick.create.packageName') ++ now() as String {format: "ddMMyyyyhhms"
 				<ee:set-variable variableName="flowName" ><![CDATA[%dw 2.0
 output application/json
 ---
-'pick-orders-scheduler-flow']]></ee:set-variable>
+'pick-orders-trigger-flow']]></ee:set-variable>
 			</ee:variables>
 		</ee:transform>
 		<flow-ref doc:name="Audit Dispatcher Exit" doc:id="de5a036f-eca8-4492-8542-8cea49f00cd1" name="audit-dispatcher-exit-sub-flow"/>
