@@ -50,7 +50,7 @@
 			</munit-tools:spy>
 		</munit:behavior>
 		<munit:execution >
-			<flow-ref doc:name="Flow-ref to JDA-order-extract-flow" doc:id="d1afc4d3-dc43-4553-aa5d-cdc3a81ca2c6" name="JDA-order-extract-flow"/>
+			<flow-ref doc:name="Flow-ref to JDA-order-extract-flow" doc:id="d1afc4d3-dc43-4553-aa5d-cdc3a81ca2c6" name="order-extract-trigger-flow"/>
 		</munit:execution>
 		<munit:validation >
 			<munit-tools:verify-call doc:name="Verify call" doc:id="c8516c26-1272-4d61-9e1f-055717c3cbb2" processor="http:request" atLeast="1">

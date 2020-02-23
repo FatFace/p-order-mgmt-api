@@ -55,7 +55,7 @@
 					<munit:variable key="transactionStartTime" value="2020-02-17T17:17:05.899Z" mediaType="application/java" />
 				</munit:variables>
 			</munit:set-event>
-			<flow-ref doc:name="Flow-ref to JDA-shipment-manifest-flow" doc:id="39dfa191-a33c-4433-a558-45777b7a65a6" name="JDA-shipment-manifest-flow"/>
+			<flow-ref doc:name="Flow-ref to JDA-shipment-manifest-flow" doc:id="39dfa191-a33c-4433-a558-45777b7a65a6" name="shipment-manifest-trigger-flow"/>
 		</munit:execution>
 		<munit:validation >
 			<munit-tools:assert-that doc:name="Assert that" doc:id="0c716b9a-c7aa-4d8e-84a1-fabd675030b4" expression="#[payload]" is='#[MunitTools::equalTo(readUrl("classpath://sample_data/shipment-manifest-response-payload.json", "application/json"))]'/>
