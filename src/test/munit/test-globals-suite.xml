@@ -13,7 +13,7 @@
 	<import doc:name="Import" doc:id="5de976b5-cc19-4c51-b05f-646c47d3707e" file="order-extract-scheduler.xml" />
 	<import doc:name="Import" doc:id="136a2675-14e3-4ee4-a95c-67d520852047" file="pick-orders-scheduler.xml" />
 	<import doc:name="Import" doc:id="91de68b6-5c4f-422c-ab84-2d9b41b5ee5c" file="p-order-mgmt-api.xml" />
-	<import doc:name="Import" doc:id="d59ccffd-ec6c-427e-8cca-e2029f46106a" file="shipment-manifest-scheduler.xml" />
+<!-- 	<import doc:name="Import" doc:id="d59ccffd-ec6c-427e-8cca-e2029f46106a" file="shipment-manifest-scheduler.xml" /> -->
 	<import doc:name="Import" doc:id="a4dc7cf8-6186-4eb4-bb4f-0237ea626a5a" file="web-orders-impl.xml" />
 	<import doc:name="Import" doc:id="809e0114-c838-4328-9d84-03c78f96809d" file="export-order-information-scheduler.xml" />
 	<import doc:name="Import" doc:id="ed17104c-e17d-4b09-a97b-8c7fe1c246c0" file="export-order-information-impl.xml" />

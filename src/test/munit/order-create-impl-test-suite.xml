@@ -10,7 +10,7 @@
 http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
 	<munit:config name="order-create-impl-test-suite.xml" />
 	<import doc:name="Import" doc:id="fe093a59-e5ba-4bc0-81ec-b83cd8272f75" file="test-globals-suite.xml" />
-	<munit:test name="order-aptos-impl-test-suite-create-order-details-from-aptos-to-d365-main-flowTest" description="Test" doc:id="8c77df98-b9bf-44b8-85ba-055b4bdf4cf4">
+	<munit:test name="order-aptos-impl-test-suite-create-order-details-from-aptos-to-d365-main-flowTest" description="Test" doc:id="8c77df98-b9bf-44b8-85ba-055b4bdf4cf4" ignore="true">
 		<munit:behavior >
 			<munit-tools:mock-when doc:name="Mock DB DM Lookup Http Requester" doc:id="2cbad921-f942-43cb-9dfe-2197a00a8129" processor="http:request">
 				<munit-tools:with-attributes >
