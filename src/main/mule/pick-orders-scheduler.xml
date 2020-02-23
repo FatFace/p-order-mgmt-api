@@ -6,7 +6,8 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="
 http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
 http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
-	<flow name="pick-orders-scheduler-flow" doc:id="0be848f7-d42c-4b5f-9f67-29c845fad4af">
+	
+	<flow name="pick-orders-trigger-flow" doc:id="0be848f7-d42c-4b5f-9f67-29c845fad4af">
 		<scheduler doc:name="Scheduler" doc:id="23ec0722-9862-4bc8-a084-dda881603654" >
 			<scheduling-strategy >
 				<fixed-frequency frequency="${scheduler.frequency}" timeUnit="MINUTES"/>
@@ -19,7 +20,7 @@ http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/htt
 				<ee:set-variable variableName="flowName" ><![CDATA[%dw 2.0
 output application/json
 ---
-'order-managment-appFlow']]></ee:set-variable>
+'pick-orders-trigger-flow']]></ee:set-variable>
 				<ee:set-variable variableName="packageName" ><![CDATA[%dw 2.0
 output application/json
 ---
@@ -29,10 +30,26 @@ p('d365.dmf.pick.create.packageName') ++ now() as String {format: "ddMMyyyyhhms"
 		</ee:transform>
 		<flow-ref doc:name="Log Receiver Entry" doc:id="da49f984-8315-4185-88fe-20dc440ede67" name="log-receiver-entry-sub-flow"/>
 		<flow-ref doc:name="Audit Receiver Entry" doc:id="5006a178-19cf-4f68-a681-6c0406430959" name="audit-receiver-entry-sub-flow"/>
-		<flow-ref doc:name="Log Process Entry" doc:id="73de29ba-1c45-4e6b-932a-9d506852a69c" name="log-process-entry-sub-flow"/>
-		<flow-ref doc:name="Audit Process Entry" doc:id="60d160b9-1dd0-4df9-a7e1-3c7a09c10a11" name="audit-process-entry-sub-flow"/>
-		<http:request method="GET" doc:name="Invoke D365 System Layer" doc:id="018cb7ad-9fa1-4726-9f80-560f99199924" config-ref="s_D365_Http_Request_configuration" path="${d365.dmf.path}" responseTimeout="${response.timeout.system.d365.pickOrders}">
-			<http:headers ><![CDATA[#[output application/java
+		<flow-ref doc:name="call-s-d365-api-for-pick-orders-sub-flow" doc:id="c52fb185-72dd-4151-ad57-447a9c82d6a4" name="call-s-d365-api-for-pick-orders-sub-flow" />
+		<ee:transform doc:name="Set Flow Name" doc:id="d4589b45-fe2d-4c2f-bdfe-68441b5dde77" >
+			<ee:message >
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="flowName" ><![CDATA[%dw 2.0
+output application/json
+---
+'pick-orders-trigger-flow']]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+		<flow-ref doc:name="Audit Dispatcher Exit" doc:id="de5a036f-eca8-4492-8542-8cea49f00cd1" name="audit-dispatcher-exit-sub-flow"/>
+		<flow-ref doc:name="Log Dispatcher Exit" doc:id="5e9f9a12-e72f-4898-9734-cf02107c6cd9" name="log-dispatcher-exit-sub-flow"/>
+	</flow>
+	<sub-flow name="call-s-d365-api-for-pick-orders-sub-flow" doc:id="788be5a1-87a2-419a-949d-43d18640b302" >
+		<set-variable value="call-s-d365-api-for-pick-orders-sub-flow" doc:name="Flow Name" doc:id="0e37fd6a-5619-4669-ae54-76dca69b92d1" variableName="flowName"/>
+		<flow-ref doc:name="Log Process Entry" doc:id="73de29ba-1c45-4e6b-932a-9d506852a69c" name="log-process-entry-sub-flow" />
+		<flow-ref doc:name="Audit Process Entry" doc:id="60d160b9-1dd0-4df9-a7e1-3c7a09c10a11" name="audit-process-entry-sub-flow" />
+		<http:request method="GET" doc:name="Invoke D365 System Layer" doc:id="998385bd-fc89-4e2c-b9de-a65a1036d64f" config-ref="s_D365_Http_Request_configuration" path="${d365.dmf.path}" responseTimeout="${response.timeout.system.d365.pickOrders}">
+			<http:headers><![CDATA[#[output application/java
 ---
 {
 	"Transaction-Id" : vars.transactionId,
@@ -40,7 +57,7 @@ p('d365.dmf.pick.create.packageName') ++ now() as String {format: "ddMMyyyyhhms"
 	"Client-Secret" : p('secure::d365.clientSecret'),
 	"Transaction-Start-Time" : vars.transactionStartTime
 }]]]></http:headers>
-			<http:query-params ><![CDATA[#[output application/java
+			<http:query-params><![CDATA[#[output application/java
 ---
 {
 	"definitionGroupId" : p('d365.dmf.pick.create.definitionGroupId'),
@@ -48,9 +65,7 @@ p('d365.dmf.pick.create.packageName') ++ now() as String {format: "ddMMyyyyhhms"
 }]]]></http:query-params>
 		
 </http:request>
-		<flow-ref doc:name="Audit Process Exit" doc:id="b8778633-e416-4ac5-9378-80f6a2ec3e47" name="audit-process-exit-sub-flow"/>
-		<flow-ref doc:name="Log Process Exit" doc:id="78df4676-9b7f-445c-a9b8-b0c9ab47c2ba" name="log-process-exit-sub-flow"/>
-		<flow-ref doc:name="Audit Dispatcher Exit" doc:id="de5a036f-eca8-4492-8542-8cea49f00cd1" name="audit-dispatcher-exit-sub-flow"/>
-		<flow-ref doc:name="Log Dispatcher Exit" doc:id="5e9f9a12-e72f-4898-9734-cf02107c6cd9" name="log-dispatcher-exit-sub-flow"/>
-	</flow>
+		<flow-ref doc:name="Audit Process Exit" doc:id="b8778633-e416-4ac5-9378-80f6a2ec3e47" name="audit-process-exit-sub-flow" />
+		<flow-ref doc:name="Log Process Exit" doc:id="78df4676-9b7f-445c-a9b8-b0c9ab47c2ba" name="log-process-exit-sub-flow" />
+	</sub-flow>
 </mule>

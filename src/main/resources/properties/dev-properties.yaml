@@ -161,3 +161,7 @@ xcm:
   returnOrdersPath: "/return/orders"
   connecitonTimeout: "30000"
   
+status:
+  responseCode: "0"
+  responseMessage: "Success"
+

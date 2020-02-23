@@ -8,7 +8,8 @@ http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/
 http://www.mulesoft.org/schema/mule/sqs http://www.mulesoft.org/schema/mule/sqs/current/mule-sqs.xsd
 http://www.mulesoft.org/schema/mule/java http://www.mulesoft.org/schema/mule/java/current/mule-java.xsd
 http://www.mulesoft.org/schema/mule/sftp http://www.mulesoft.org/schema/mule/sftp/current/mule-sftp.xsd">
-	<flow name="JDA-shipment-manifest-flow" doc:id="23a2590d-f562-46da-a911-2cf2098e8abe" >
+	
+	<flow name="shipment-manifest-trigger-flow" doc:id="23a2590d-f562-46da-a911-2cf2098e8abe" >
 		<scheduler doc:name="Scheduler" doc:id="159ed4e9-21ba-4dc9-9370-3b7a49e20686" >
 			<scheduling-strategy >
 				<cron expression="${cron.expression.manifest}" />
@@ -22,13 +23,23 @@ http://www.mulesoft.org/schema/mule/sftp http://www.mulesoft.org/schema/mule/sft
 				<ee:set-variable variableName="flowName" ><![CDATA[%dw 2.0
 output application/java
 ---
-'shipment-manifest-impl-main-flow']]></ee:set-variable>
+'shipment-manifest-trigger-flow']]></ee:set-variable>
 				<ee:set-variable variableName="count" ><![CDATA[0]]></ee:set-variable>
 			</ee:variables>
 		</ee:transform>
 		<flow-ref doc:name="Log Receiver Entry" doc:id="a5724754-50b0-41af-8620-4ea76b72bffb" name="log-receiver-entry-sub-flow"/>
 		<flow-ref doc:name="Audit Receiver Entry" doc:id="82deddf5-5caa-40d1-8dd5-091e9a936e45" name="audit-receiver-entry-sub-flow"/>
 		<flow-ref doc:name="get-manifest-shipment-data-from-jda-and-process-to-d365-sub-flow" doc:id="5790c01d-3cd4-42c2-86b2-2d0d1d38da18" name="get-manifest-shipment-data-from-jda-and-process-to-d365-sub-flow"/>
+		<ee:transform doc:name="Set Flow Name" doc:id="d585d4b8-9066-4a13-a8de-fb24d746c647" >
+			<ee:message >
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="flowName" ><![CDATA[%dw 2.0
+output application/java
+---
+'shipment-manifest-trigger-flow']]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
 		<flow-ref doc:name="Log Dispatcher Exit" doc:id="d57c4250-2708-407e-85d9-dce8a082cda5" name="log-dispatcher-exit-sub-flow"/>
 		<flow-ref doc:name="Audit Dispatcher Exit" doc:id="c104f5b6-72d3-45a6-849c-63fe1d74bc63" name="audit-dispatcher-exit-sub-flow"/>
 	</flow>
@@ -37,19 +48,7 @@ output application/java
 		<set-variable value="#['get-manifest-shipment-data-from-jda-and-process-to-d365-sub-flow']" doc:name="Set Flow Name" doc:id="30d1a068-07f7-46bb-af5f-85f8e3b846b0" variableName="flowName"/>
 		<flow-ref doc:name="Log Process Entry" doc:id="0e629b67-770a-469f-b2e1-a2d3fc07901f" name="log-process-entry-sub-flow"/>
 		<flow-ref doc:name="Audit Process Entry" doc:id="cfebbc48-7304-446e-9c57-17b80cb8c46d" name="audit-process-entry-sub-flow"/>
-		<http:request method="GET" doc:name="S-JDA-HTTP-Request-Configuration" doc:id="2b54425a-795e-46a9-b5b9-884e2d45a677" path="${jda.manifests.path}" responseTimeout="${response.timeout.system.jda.manifest}" config-ref="s_jda_Http_Request_configuration" outputMimeType="application/json">
-			<http:headers ><![CDATA[#[output application/java
----
-{
-	"vRequestId" : vars.transactionId
-}]]]></http:headers>
-			<http:query-params ><![CDATA[#[output application/java
----
-{
-	"client_secret" : p('secure::jda.clientSecret'),
-	"client_id" : p('jda.clientId')
-}]]]></http:query-params>
-		</http:request>
+		<flow-ref doc:name="call-s-jda-api-for-manifests-sub-flow" doc:id="28af7b24-90df-43ee-b4f5-ef00b843fc55" name="call-s-jda-api-for-manifests-sub-flow" />
 		<ee:transform doc:name="JDA Response Attribute" doc:id="7a845f75-2791-4185-bc74-2d5307dfdffd">
 			<ee:message>
 			</ee:message>
@@ -72,12 +71,13 @@ output application/java
 				<flow-ref doc:name="get-manifest-shipment-data-from-jda-and-process-to-d365-sub-flow" doc:id="97dd8778-2e6f-4bed-ba2c-9791d8cb3283" name="get-manifest-shipment-data-from-jda-and-process-to-d365-sub-flow" />
 			</when>
 			<otherwise>
-				<set-variable value="No Shipping Manifest Files Available" doc:name="Set Logging Payload" doc:id="03589fa4-19ff-4708-8663-598de0d28fc2" variableName="loggingPayload" />
+				<set-variable value="No Shipping Manifest File Available" doc:name="Set Logging Payload" doc:id="03589fa4-19ff-4708-8663-598de0d28fc2" variableName="loggingPayload" />
 				<flow-ref doc:name="Logging Message" doc:id="a22d797f-245f-4729-8246-e2b538aa6755" name="logging-sub-flow"/>
 			</otherwise>
 		</choice>
-		<flow-ref doc:name="Log Process Exit" doc:id="3c54f0e8-28a4-44c4-8731-38945c78eb03" name="log-process-exit-sub-flow"/>
-		<flow-ref doc:name="Audit Process Exit" doc:id="1e43cb3e-7d7f-494d-a1f2-92875ca50c21" name="audit-process-exit-sub-flow"/>
+		<set-variable value="#['get-manifest-shipment-data-from-jda-and-process-to-d365-sub-flow']" doc:name="Flow Name" doc:id="27feb322-c21b-427b-9b0d-d8554592b346" variableName="flowName"/>
+		<flow-ref doc:name="Log Process Exit" doc:id="af32aaf5-592a-4e8e-8a31-7ad66acf2369" name="log-process-exit-sub-flow" />
+<flow-ref doc:name="Audit Process Exit" doc:id="f8b0cf8a-d6b8-485b-ad52-07b2f04fbca6" name="audit-process-exit-sub-flow"/>
 	</flow>
 	<sub-flow name="check-manifest-shipment-ecom-order-and-process-to-d365-sub-flow" doc:id="9dc65fa5-b38e-43b0-b3b2-a7d1f165a916" >
 		<set-variable value="#['check-manifest-shipment-ecom-order-and-process-to-d365-sub-flow']" doc:name="Set Flow Name" doc:id="7fd79063-00b9-46c7-b2b0-a4f0a01b7972" variableName="flowName"/>
@@ -96,7 +96,6 @@ output application/json
 		
 			<set-variable value="#[payload]" doc:name="Set Original Payload" doc:id="a778c475-8526-44dc-98d2-8f4943b82f74" variableName="originalPayload"/>
 		<flow-ref doc:name="Flow Reference Shipment Manifest Auditing" doc:id="c92d8788-69f3-4829-bb66-65698d6b5e09" name="shipment-manifest-auditing-sub-flow" />
-		
 		<set-payload value="#[vars.originalPayload]" doc:name="Set Original Payload to Payload" doc:id="eaf4a348-35f2-4587-bcbb-bd5f779694de" />
 		<choice doc:name="Choice" doc:id="53224b4c-b857-4095-8533-4a7db3b8c1a5">
 			<when expression="#[isEmpty(payload.manifests) != true]">
@@ -110,11 +109,16 @@ output application/json
 			<flow-ref doc:name="D365 Call FLow Reference" doc:id="3cb1e757-4d29-4a8d-a62b-850522caa6e9" name="shipment-manifest-D365-call-sub-flow" />	
 			</when>
 			<otherwise>
+			<set-variable value="#['check-manifest-shipment-ecom-order-and-process-to-d365-sub-flow']" doc:name="Flow Name" doc:id="e2ce6d45-b7cb-4d33-be89-fd4d6fb733fa" variableName="flowName"/>
 				<set-variable value="The record is not an ecom order" doc:name="Set Logging payload" doc:id="acf03efc-55c1-4f3a-b353-f5cd9dd4da43" variableName="loggingPayload" />
-				<flow-ref doc:name="Logging Message" doc:id="1547157d-0d58-4fb4-8dbd-6f044d8b221f" name="logging-sub-flow" />
+				<flow-ref doc:name="Log Warn Sub Flow" doc:id="1547157d-0d58-4fb4-8dbd-6f044d8b221f" name="log-process-warn-sub-flow" />
+				<flow-ref doc:name="Audit Warn Sub Flow" doc:id="be890f90-5fa6-4ba9-82bf-a144e643ffe5" name="audit-warning-sub-flow"/>
 			</otherwise>
 			
 		</choice>
+		<set-variable value="#['check-manifest-shipment-ecom-order-and-process-to-d365-sub-flow']" doc:name="Set Flow Name" doc:id="b35755e6-0ca6-495f-a8ef-55b4812957d2" variableName="flowName"/>
+			<flow-ref doc:name="Audit Process Exit" doc:id="1fbdfa6d-a8e3-4ea0-bf78-2818709cdb2c" name="audit-process-exit-sub-flow" />
+		<flow-ref doc:name="Log Process Exit" doc:id="44cfbc42-9dde-4eb0-bcd5-38b76beaf545" name="log-process-exit-sub-flow" />
 	</sub-flow>
 	<sub-flow name="shipment-manifest-D365-call-sub-flow" doc:id="0fd660db-5aca-44f0-8535-d6fc77f0f585" >
 		<set-variable value="#['shipment-manifest-D365-call-sub-flow']" doc:name="Set Flow Name" doc:id="dfca2277-836d-4b84-8c20-c5c08ade9ff4" variableName="flowName"/>
@@ -157,20 +161,21 @@ p('sqs.queue.url.manifestQueueUrl')]]></ee:set-variable>
 	</sub-flow>
 	<sub-flow name="shipment-manifest-auditing-sub-flow" doc:id="e4fa9804-b3ca-48ca-8fb8-c92140e506ee" >
 		<set-variable value="#['shipment-manifest-auditing-sub-flow']" doc:name="Set Flow Name" doc:id="2d7f7bc8-cc5d-447c-9e71-6a261fb9e007" variableName="flowName"/>
-		<set-variable value="Auditing details of Manifest data" doc:name="Set Logging payload" doc:id="7873f2af-252c-49ff-bfc5-1015dec7fd61" variableName="loggingPayload" />
-		<flow-ref doc:name="Logging Message" doc:id="1ef0440a-feab-4a5b-9d4f-426d512ad90a" name="logging-sub-flow" />
+		<flow-ref doc:name="Log Process Entry" doc:id="293f3e99-66de-4f5d-a28c-d67535c76243" name="log-process-entry-sub-flow"/>
+<flow-ref doc:name="Audit Process Entry" doc:id="332a2756-ae45-43b9-ac22-30e2147a25b8" name="audit-process-entry-sub-flow"/>
 		<ee:transform doc:name="Transform Message To Audit Details Structure" doc:id="f90eb4ca-9de7-48a4-8213-c6fd0f4a9945" >
 			<ee:message >
 				<ee:set-payload resource="dwl/auditing-manifest.dwl" />
 			</ee:message>
 		</ee:transform>
 		<flow-ref doc:name="Flow Reference Audit Details Processing" doc:id="c74b2bd4-22b5-44f5-9d61-ab703349ad02" name="audit-details-processing-sub-flow"/>
-		<set-variable value="Manifest data pushed in Audit Table" doc:name="Set Logging payload" doc:id="486a5b31-96f6-4e89-a8c7-c58504b29001" variableName="loggingPayload" />
-		<flow-ref doc:name="Logging Message" doc:id="077baa4a-6242-4991-9b09-e443f7befd6e" name="logging-sub-flow" />
+		<flow-ref doc:name="Audit Process Exit" doc:id="d583945f-c83d-4ff0-881b-efa5d9cad7d3" name="audit-process-exit-sub-flow"/>
+<flow-ref doc:name="Log Process Exit" doc:id="b6f402ef-8683-4d38-96f6-8c5ceecf3f8b" name="log-process-exit-sub-flow" />
 	</sub-flow>
 	<flow name="receive-manifest-message-and-retry" doc:id="63560399-337d-4fee-afc6-1fa711a066f9">
 		<sqs:receivemessages doc:name="Receive Message From Manifest and Retry" doc:id="15d45a94-7c2c-42ae-ae08-de1037bbc01b" config-ref="Amazon_SQS_Configuration" queueUrl="${sqs.queue.url.manifestQueueUrl}"/>
 		<set-variable value="receive-manifest-message-and-retry" doc:name="Flow Name" doc:id="2fa015e1-dd82-46e7-84a7-af00ce5448a5" variableName="flowName"/>
+		
 		<ee:transform doc:name="Queue Parameter" doc:id="58f36f19-d604-4d03-aa22-21b8cd77d770" >
 			<ee:message >
 			</ee:message>
@@ -200,9 +205,22 @@ attributes.transactionFileName.stringValue]]></ee:set-variable>
 		</ee:transform>
 		<flow-ref doc:name="log Receiver Entry" doc:id="a372355f-fc4d-469d-8a9d-9c3e5741508f" name="log-receiver-entry-sub-flow" />
 		<flow-ref doc:name="Audit Receiver Entry" doc:id="4035c348-3015-4966-83c5-ddb5d5950c95" name="audit-receiver-entry-sub-flow"/>
-		<logger level="INFO" doc:name="Retry Number Logging" doc:id="5a8f7c11-c2d7-41d2-a156-045f1e032ef8" message="#['Reprocessing Count is: ' ++ write(vars.count,'application/json')]"/>
 		<set-variable value="#[attributes['sqs.message.receipt.handle']]" doc:name="Set Message Receipt" doc:id="53d9b459-041b-40ee-ad58-e62565bdf912" variableName="messageReceipt"/>
-		<sqs:delete-message doc:name="Delete message" doc:id="15cb9737-c8cf-4e94-afd5-aba420839306" config-ref="Amazon_SQS_Configuration" receiptHandle="#[vars.messageReceipt]" queueUrl="${sqs.queue.url.manifestQueueUrl}" target="tempDelete"/>
+		<flow-ref doc:name="Log Process Entry" doc:id="4d496848-535b-46c9-959f-5c32df922c26" name="log-process-entry-sub-flow"/>
+<flow-ref doc:name="Audit Process Entry" doc:id="5c07148c-47a2-4916-ab5a-541acd9bf164" name="audit-process-entry-sub-flow"/>
+		<until-successful maxRetries="${retry.attempts}" doc:name="Until Successful" doc:id="d0c104e7-1d57-450e-969e-5ce5540524e9" millisBetweenRetries="${retry.frequency}">
+			<try doc:name="Try" doc:id="7955ec88-1826-4d8e-b2d0-4000cc75a410" >
+				<sqs:delete-message doc:name="Delete message" doc:id="b52b8996-c241-4288-ad8f-b3bfafac789d" config-ref="Amazon_SQS_Configuration" receiptHandle="#[vars.messageReceipt]" queueUrl="${sqs.queue.url.manifestQueueUrl}" target="tempDelete" />
+				<error-handler >
+					<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="a62b89a0-ad6e-46de-8df6-0e36c52f2e78" type="ANY">
+						<flow-ref doc:name="log-error-sub-flow" doc:id="d01d6fdb-ef29-4a2f-8a1f-c855d2892425" name="log-error-sub-flow"/>
+						<flow-ref doc:name="audit-error-sub-flow" doc:id="284f8030-7367-4895-adc0-b7748767d7f6" name="audit-error-sub-flow"/>
+					</on-error-propagate>
+				</error-handler>
+			</try>
+		</until-successful>
+		<flow-ref doc:name="Log Process Exit" doc:id="6eb51b94-8574-4d77-9d72-efdc5817f1a7" name="log-process-exit-sub-flow" />
+		<flow-ref doc:name="Audit Process Exit" doc:id="2876c0fc-b833-4640-aa33-8c1ee191efac" name="audit-process-exit-sub-flow"/>
 		<ee:transform doc:name="Transform Message" doc:id="492a8dd7-c0a2-44db-814d-13e316f4c8d2">
 					<ee:message>
 						<ee:set-payload><![CDATA[%dw 2.0
@@ -228,15 +246,23 @@ p('orders.export.sftp.errorfilepath') ++ vars.fileName]]></ee:set-variable>
 				</ee:transform>
 				<set-variable value="#[p('reprocessing.attempts') ++ ' times retries done, Data will be moved to SFTP folder with path ' ++ write(vars.filePath, 'application/json')]" doc:name="Set Variable" doc:id="b16aa762-c639-40a8-b2d4-637d81471dc5" variableName="loggingPayload"/>
 				<flow-ref doc:name="Flow Logging Sub Flow" doc:id="25c26890-cdec-4cf4-b23a-ed9ed0f35e10" name="logging-sub-flow"/>
-				<until-successful maxRetries="${retry.attempts}" doc:name="Until Successful" doc:id="ccd4922c-e3f1-41c1-a193-ecd1249820a6" millisBetweenRetries="${retry.frequency}">
-					<sftp:write doc:name="Write" doc:id="21f081c0-2fb1-4399-9bdd-003dbe3b88c1" config-ref="SFTP_Config" path="#[vars.filePath]">
+				<until-successful maxRetries="${retry.attempts}" doc:name="Until Successful" doc:id="a2e8aa45-1296-4649-be55-61409a371450" millisBetweenRetries="${retry.frequency}">
+					<try doc:name="Try" doc:id="47c53e2c-a385-4ad8-b5f7-0d1089a37532" >
+						<sftp:write doc:name="Write" doc:id="98d1f62e-7acf-42fa-8f96-291104147f58" config-ref="SFTP_Config" path="#[vars.filePath]">
 					</sftp:write>
+						<error-handler >
+							<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="bea5aadc-5f3b-4b3f-95b7-0426302e5121" type="ANY">
+								<flow-ref doc:name="log-error-sub-flow" doc:id="5c7a792d-a3f5-4d2e-ba78-4e40b96401c8" name="log-error-sub-flow"/>
+								<flow-ref doc:name="audit-error-sub-flow" doc:id="23cd8c91-72cc-4652-ad28-790a2af446be" name="audit-error-sub-flow"/>
+							</on-error-propagate>
+						</error-handler>
+					</try>
 				</until-successful>
 			</otherwise>
 		</choice>
-		<flow-ref doc:name="Audit Process Exit" doc:id="6595241f-e8f2-4136-9a9d-fa9b6159ed73" name="audit-process-exit-sub-flow"/>
-		<flow-ref doc:name="Log Process Exit" doc:id="895bb996-e0d6-474d-a47d-30cff6aea9e1" name="log-process-exit-sub-flow" />
-		
+				<set-variable value="receive-manifest-message-and-retry" doc:name="Flow Name" doc:id="6e86684b-7705-48ea-a4db-87d5c7ddca44" variableName="flowName"/>
+		<flow-ref doc:name="Audit Dispatcher Exit" doc:id="1da2708d-f0af-4ca4-9052-d116141565ac" name="audit-dispatcher-exit-sub-flow" />
+		<flow-ref doc:name="Log Dispatcher Exit" doc:id="036daaf2-f2b0-48bb-8f5d-6329dd062338" name="log-dispatcher-exit-sub-flow" />
 	</flow>
 	<flow name="common-template-check-digit-lookup-flow" doc:id="36d55ac1-5ef7-4bb3-8174-9596c3d115d6" >
 		<java:invoke-static doc:name="Invoke java to calculate check digit" doc:id="d558b5ab-4987-4c3d-a25d-bab511f6970a" class="com.fatface.mule.utils.ProductSKUCheckDigitCal" method="getCheckSum(String)">
@@ -245,4 +271,24 @@ p('orders.export.sftp.errorfilepath') ++ vars.fileName]]></ee:set-variable>
 }]]]></java:args>
 		</java:invoke-static>
 	</flow>
+	<sub-flow name="call-s-jda-api-for-manifests-sub-flow" doc:id="ea4f54a6-7f89-4d13-85db-1056852ece1d" >
+		<set-variable value="call-s-jda-api-for-manifests-sub-flow" doc:name="Flow Name" doc:id="2c8301f2-dfc9-4c0f-9415-e70f5e5aaf3d" variableName="flowName"/>
+		<flow-ref doc:name="Log Process Entry" doc:id="a8f4f524-dd06-4870-9e62-e42165d02961" name="log-process-entry-sub-flow"/>
+<flow-ref doc:name="Audit Process Entry" doc:id="a3d19c46-fadd-476c-b4dd-d549880b67c7" name="audit-process-entry-sub-flow"/>
+		<http:request method="GET" doc:name="S-JDA-HTTP-Request-Configuration" doc:id="7c6ab267-aa6d-4b6f-8bb7-6cddf1a91c76" path="${jda.manifests.path}" responseTimeout="${response.timeout.system.jda.manifest}" config-ref="s_jda_Http_Request_configuration" outputMimeType="application/json">
+			<http:headers><![CDATA[#[output application/java
+---
+{
+	"vRequestId" : vars.transactionId
+}]]]></http:headers>
+			<http:query-params><![CDATA[#[output application/java
+---
+{
+	"client_secret" : p('secure::jda.clientSecret'),
+	"client_id" : p('jda.clientId')
+}]]]></http:query-params>
+		</http:request>
+		<flow-ref doc:name="Log Process Exit" doc:id="461d1901-c1b8-4389-ab4b-456e18c5395f" name="log-process-exit-sub-flow" />
+<flow-ref doc:name="Audit Process Exit" doc:id="f1d90877-378d-48ce-9a6c-dae58e2128a7" name="audit-process-exit-sub-flow"/>
+	</sub-flow>
 </mule>

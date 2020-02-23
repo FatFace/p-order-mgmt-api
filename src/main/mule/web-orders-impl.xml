@@ -7,9 +7,16 @@ http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/
 http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
 http://www.mulesoft.org/schema/mule/os http://www.mulesoft.org/schema/mule/os/current/mule-os.xsd
 http://www.mulesoft.org/schema/mule/java http://www.mulesoft.org/schema/mule/java/current/mule-java.xsd">
+	
+	
+	
+	
+	
 	<sub-flow name="aptos-to-d365-impl-flow" doc:id="d278a3b5-d6b8-45b8-8ba9-cbc56e0954c7" >
 		
 		<set-variable value="#['aptos-to-d365-impl-flow']" doc:name="Set Flow Name" doc:id="f1034d0e-4f80-47f7-b761-48bb51f78366" variableName="flowName"/>
+		<flow-ref doc:name="Log Process Entry" doc:id="e3035da0-9d71-45d9-b4f2-50fce399087e" name="log-process-entry-sub-flow"/>
+		<flow-ref doc:name="Audit Process Entry" doc:id="06ffc987-517d-49be-8d14-dfca129ac283" name="audit-process-entry-sub-flow"/>
 		<ee:transform doc:name="Set Input Payload" doc:id="69945192-6aa6-45bb-864c-90f13f6f948b">
 			<ee:message>
 			</ee:message>
@@ -37,24 +44,7 @@ payload]]></ee:set-variable>
 						<ee:set-variable resource="dwl/order_create_from_aptos_to_reportdb.dwl" variableName="reportdbInputPayload" />
 					</ee:variables>
 				</ee:transform>
-					<flow-ref doc:name="Log Process Entry" doc:id="7a745f5f-dced-4c76-bed6-a65913235221" name="log-process-entry-sub-flow"/>
-					<flow-ref doc:name="Audit Process Entry" doc:id="994f3567-78ae-41f1-a5b7-0cbf97609592" name="audit-process-entry-sub-flow"/>
-					<until-successful maxRetries="${retry.attempts}" doc:name="Until Successful" doc:id="3221bb8f-c91a-4bbf-997d-7896f7f0b767" millisBetweenRetries="${retry.frequency}">
-						<http:request method="POST" doc:name="Call Report DB Http Request Configuration" doc:id="c10190f5-c4f2-45fa-b5ea-e4054f259c65" path="${report.ordersPath}" responseTimeout="${response.timeout.system.reportdb.webOrders}" config-ref="S_Report_Http_Request_Configuration">
-						<http:body><![CDATA[#[vars.reportdbInputPayload]]]></http:body>
-											<http:headers><![CDATA[#[output application/java
----
-{
-	"Transaction-Id" : vars.transactionId,
-	"Client-Id" : p('report.clientId'),
-	"Client-Secret" : p('secure::report.clientSecret'),
-	"Transaction-Start-Time" : vars.transactionStartTime
-}]]]></http:headers>
-					
-					</http:request>
-					</until-successful>
-					<flow-ref doc:name="Log Process Exit" doc:id="ad9c9cf7-e287-48cd-aca3-05f4db634c9c" name="log-process-exit-sub-flow"/>
-					<flow-ref doc:name="Audit Process Exit" doc:id="34436baf-fe59-4607-9b68-d1590289ab4a" name="audit-process-exit-sub-flow"/>
+					<flow-ref doc:name="call-s-report-db-api-sub-flow" doc:id="0c9e4bc5-0979-4767-bb1d-52411c5330e6" name="call-s-report-db-api-sub-flow" />
 				
 </async>
 				<ee:transform doc:name="Set d365 Input Payload" doc:id="5d89f5b1-7d9c-456f-be6a-bdd0f993bc9d">
@@ -64,24 +54,10 @@ payload]]></ee:set-variable>
 						<ee:set-variable resource="dwl/order_create_from_aptos_d365.dwl" variableName="d365InputPayload" />
 					</ee:variables>
 				</ee:transform>
-				<flow-ref doc:name="Log Process Entry" doc:id="4af958a0-2719-4bd8-9749-e1dbf49f2df6" name="log-process-entry-sub-flow"/>
-				<flow-ref doc:name="Audit Process Entry" doc:id="6177ca9e-227e-4e64-8f50-d74c96fc1010" name="audit-process-entry-sub-flow"/>
-				<until-successful maxRetries="${retry.attempts}" doc:name="Until Successful" doc:id="2f77d7f8-8044-44b9-9caf-2c267a1b2b18" millisBetweenRetries="${retry.frequency}">
-					<http:request method="POST" doc:name="Call D365 Http Request Configuration" doc:id="c1119184-6b74-4aea-891c-82c49922f420" config-ref="s_D365_Http_Request_configuration" path="${d365.webOrdersPath}" responseTimeout="${response.timeout.system.d365.webOrders}">
-			<http:body><![CDATA[#[vars.d365InputPayload]]]></http:body>
-					<http:headers><![CDATA[#[output application/java
----
-{
-	"Transaction-Id" : vars.transactionId,
-	"Client-Id" : p('d365.clientId'),
-	"Client-Secret" : p('secure::d365.clientSecret'),
-	"Transaction-Start-Time" : vars.transactionStartTime
-}]]]></http:headers>
-					
-		</http:request>
-				</until-successful>
-				<flow-ref doc:name="Log Process Exit" doc:id="c1e82877-eccf-4a5c-b18b-23cc801cd900" name="log-process-exit-sub-flow"/>
-				<flow-ref doc:name="Audit Process Exit" doc:id="d73f8908-5b76-4554-8e2e-f1ab0c83592a" name="audit-process-exit-sub-flow"/>
+				<flow-ref doc:name="call-s-d365-api-for-web-orders-sub-flow" doc:id="44ea6503-3bcf-405a-bf6a-2dcf3367ee90" name="call-s-d365-api-for-web-orders-sub-flow" />
+				<set-variable value="#['aptos-to-d365-impl-flow']" doc:name="Set Flow Name" doc:id="0e61296a-4a3c-4886-9a6f-20f39156607d" variableName="flowName"/>
+					<flow-ref doc:name="Log Process Exit" doc:id="1cf97a9d-2b43-4c8e-abeb-4839c1f11f53" name="log-process-exit-sub-flow"/>
+				<flow-ref doc:name="Audit Process Exit" doc:id="c576f514-fb62-4a6d-8018-00793ea10299" name="audit-process-exit-sub-flow"/>
 			
 </when>
 			<otherwise >
@@ -106,124 +82,76 @@ payload]]></ee:set-variable>
 	</sub-flow>
 	<sub-flow name="get-mode-of-delivery-key-values-from-dblookup-sub-flow" doc:id="b3f886d8-1f34-4ebd-a34f-4d02c8774b1e" >
 		<set-variable value="#['get-mode-of-delivery-key-values-from-dblookup-sub-flow']" doc:name="Flow Name" doc:id="abe34bec-e8ba-4fe9-a741-e573afd14400" variableName="flowName"/>
+		<flow-ref doc:name="Log Process Entry" doc:id="fa3426c1-c56d-4916-b21d-a0ea01c6153f" name="log-process-entry-sub-flow"/>
+		<flow-ref doc:name="Audit Process Entry" doc:id="94576b04-2936-45ff-9063-33012c3905ae" name="audit-process-entry-sub-flow"/>
 		<set-variable value="#[p('lookup.aptos.modeOfDelivery.key')]" doc:name="Set Lookup Key" doc:id="c4c2e3df-47b1-42a1-8df0-2b81cc1a611c" variableName="modeOfDeliveryKey"/>
 		<os:contains doc:name="Contains" doc:id="446be61a-f981-4b30-968d-f11404e01b21" key="#[vars.modeOfDeliveryKey]" objectStore="Object_store"/>
 		<choice doc:name="Choice" doc:id="88263750-46ad-428b-b4e3-d4e14f3ea66c" >
 			<when expression="#[payload ==true]">
 				<os:retrieve doc:name="Retrieve" doc:id="bfd16d13-fb28-4c14-a47a-9ae494bc6dc3" key="#[vars.modeOfDeliveryKey]" objectStore="Object_store"/>
+				<flow-ref doc:name="Log Sub Flow" doc:id="32a14344-c50a-40b6-b5fd-0c1a83ea5573" name="logging-sub-flow"/>
+				<flow-ref doc:name="Audit Sub Flow" doc:id="6d343949-1427-4b11-89d1-07442772ed42" name="audit-success-sub-flow"/>
 				<flow-ref doc:name="Map Mode Of Delivery Value" doc:id="7d7d8713-1984-45b4-a7a0-13a6bf392094" name="filter-mode-of-delivery"/>
 			</when>
 			<otherwise >
-				<flow-ref doc:name="Log Process Entry" doc:id="838f347d-9aae-4bb3-bbe0-9a6469e00b95" name="log-process-entry-sub-flow"/>
-				<flow-ref doc:name="Audit Process Entry" doc:id="ea177514-4e5b-40b1-a084-2f6f963e2349" name="audit-process-entry-sub-flow"/>
-				<until-successful maxRetries="${retry.attempts}" doc:name="Until Successful" doc:id="f53175a9-10e1-4710-b042-ddf3e4e6439f" millisBetweenRetries="${retry.frequency}">
-					<http:request method="GET" doc:name="Call DB DM Lookup Http Request Configuration" doc:id="0d0d85db-42af-470c-beb4-5515b907962f" path="${lookup.dbLookupPath}" responseTimeout="${response.timeout.system.dblookup.webOrders}" config-ref="dbLookup_HTTP_Request_configuration">
-					<http:headers><![CDATA[#[output application/java
----
-{
-	"Transaction-Id" : vars.transactionId,
-	"Client-Id" : p('lookup.clientId'),
-	"Client-Secret" : p('secure::lookup.clientSecret'),
-	"Transaction-Start-Time" : vars.transactionStartTime
-}]]]></http:headers>
-					<http:query-params><![CDATA[#[output application/java
----
-{
-	"source" : p('lookup.queryParam.aptos.modeOfDelivery.source'),
-	"type" : p('lookup.queryParam.aptos.modeOfDelivery.type'),
-	"category" : p('lookup.queryParam.aptos.modeOfDelivery.category')
-}]]]></http:query-params>
-				</http:request>
-				</until-successful>
-				<flow-ref doc:name="Audit Process Exit" doc:id="1f5ff5e3-7258-46a0-b3fc-68d4b15017fe" name="audit-process-exit-sub-flow"/>
-				<flow-ref doc:name="Log Process Exit" doc:id="10ee1b57-fc93-4676-b346-37eba3e6e457" name="log-process-exit-sub-flow"/>
+				<flow-ref doc:name="call-s-db-lookup-api-sub-flow" doc:id="d6966532-f16d-4a22-b4a2-b1d428acae7c" name="call-s-db-lookup-api-sub-flow" />
 				<os:store doc:name="Store" doc:id="08fbf23a-ce28-4df3-b451-2da4fe008f00" key="#[vars.modeOfDeliveryKey]" objectStore="Object_store"/>
 				<flow-ref doc:name="Map Mode Of Delivery Value" doc:id="dd362dd9-8bf9-4d95-84fe-1fff64577793" name="filter-mode-of-delivery"/>
 			</otherwise>
 		</choice>
+		<flow-ref doc:name="Audit Process Exit" doc:id="eeb8b599-6d4d-49d9-a1b0-16a0a70ed67a" name="audit-process-exit-sub-flow" />
+		<flow-ref doc:name="Log Process Exit" doc:id="7f8fb607-667b-4cd3-a1d1-8a69b87f4a27" name="log-process-exit-sub-flow"/>
 	</sub-flow>
 	<sub-flow name="get-sales-of-origin-key-values-from-dblookup-sub-flow" doc:id="ba6585e8-5178-4ff7-9b78-9050d6785c95">
-	<set-variable value="#['get-sales-of-origin-from-dblookup-for-create-order-sub-flow']" doc:name="Flow Name" doc:id="c40b1d1a-8ea5-4387-9e0d-ac4104419c62" variableName="flowName"/>
+	<set-variable value="#['get-sales-of-origin-key-values-from-dblookup-sub-flow']" doc:name="Flow Name" doc:id="c40b1d1a-8ea5-4387-9e0d-ac4104419c62" variableName="flowName"/>
+		<flow-ref doc:name="Log Process Entry" doc:id="e78e7432-c319-43bb-9259-73d1c22c8a75" name="log-process-entry-sub-flow"/>
+		<flow-ref doc:name="Audit Process Entry" doc:id="4f3f30df-0df0-4ef7-90fe-9f42325ab476" name="audit-process-entry-sub-flow"/>
 		<set-variable value="#[p('lookup.aptos.salesOfOrigin.key')]" doc:name="Set SalesOfOrigin Lookup Key" doc:id="35ea9718-0d86-476d-a06f-85f346fa04d1" variableName="salesOfOriginKey"/>
 		<os:contains doc:name="Contains" doc:id="2bdfef22-e962-49ba-8c14-1c31b19327c5" key="#[vars.salesOfOriginKey]" objectStore="Object_store"/>
 		<choice doc:name="Choice" doc:id="cffd7802-4916-4bd2-9cda-fab15395864c" >
 			<when expression="#[payload ==true]">
 				<os:retrieve doc:name="Retrieve" doc:id="a7a4e689-3c16-4add-a9ca-7e3eb2fc5866" key="#[vars.salesOfOriginKey]" objectStore="Object_store"/>
+				<flow-ref doc:name="Log Sub Flow" doc:id="7fd442dc-da5f-43e0-86f1-d8bd7c32c433" name="logging-sub-flow" />
+				<flow-ref doc:name="Audit Sub Flow" doc:id="b44974f8-cd17-49f2-9767-5e7a1f35da4a" name="audit-success-sub-flow" />
 				<flow-ref doc:name="Map Sales Of Origin Value" doc:id="11b88397-0a41-410e-90bb-5ce225ff72df" name="filter-sales-of-origin"/>
 			
 </when>
 			<otherwise >
-				<flow-ref doc:name="Log Process Entry" doc:id="5bd0692e-cf0e-44f1-9efe-19c789cc961a" name="log-process-entry-sub-flow"/>
-				<flow-ref doc:name="Audit Process Entry" doc:id="2d2b8fe9-a79b-4aaa-a380-b264529772cd" name="audit-process-entry-sub-flow"/>
-				<until-successful maxRetries="${retry.attempts}" doc:name="Until Successful" doc:id="8d8b7290-5788-448f-b2db-68cc5b7e8330" millisBetweenRetries="${retry.frequency}">
-					<http:request method="GET" doc:name="Call DB SO Lookup Http Request Configuration" doc:id="f971441d-1f38-4463-8c07-983d12dcfb6a" path="${lookup.dbLookupPath}" responseTimeout="${response.timeout.system.dblookup.webOrders}" config-ref="dbLookup_HTTP_Request_configuration">
-					<http:headers><![CDATA[#[output application/java
----
-{
-	"Transaction-Id" : vars.transactionId,
-	"Client-Id" : p('lookup.clientId'),
-	"Client-Secret" : p('secure::lookup.clientSecret'),
-	"Transaction-Start-Time" : vars.transactionStartTime
-}]]]></http:headers>
-					<http:query-params><![CDATA[#[output application/java
----
-{
-	"source" : p('lookup.queryParam.aptos.salesOfOrigin.source'),
-	"type" : p('lookup.queryParam.aptos.salesOfOrigin.type'),
-	"category" : p('lookup.queryParam.aptos.salesOfOrigin.category')
-}]]]></http:query-params>
-				</http:request>
-				</until-successful>
-				<flow-ref doc:name="Log Process Exit" doc:id="9b7dcd2a-31eb-444c-9228-db0c99a90715" name="log-process-exit-sub-flow"/>
-				<flow-ref doc:name="Audit Process Exit" doc:id="47bfbaf8-e85f-43c6-af39-fb28f107ef31" name="audit-process-exit-sub-flow"/>
+				<flow-ref doc:name="call-s-db-lookup-api-for-sales-order-sub-flow" doc:id="b51f8434-32d7-4b26-b65b-36ca18998bb1" name="call-s-db-lookup-api-for-sales-order-sub-flow" />
 				<os:store doc:name="Store" doc:id="9cf4d56f-5f83-4296-acf4-e7044978e7b9" key="#[vars.salesOfOriginKey]" objectStore="Object_store"/>
 				<flow-ref doc:name="Map Sales Of Origin Value" doc:id="a8b3c263-5d86-488d-9306-20270b975917" name="filter-sales-of-origin"/>
 			
 </otherwise>
 		</choice>
+	<flow-ref doc:name="Audit Process Exit" doc:id="cd0139d0-30e1-47bb-8b6f-dcc81bdc91b4" name="audit-process-exit-sub-flow" />
+		<flow-ref doc:name="Log Process Exit" doc:id="4742399c-589c-41d8-9219-cdbdeb1e9091" name="log-process-exit-sub-flow"/>
 	</sub-flow>
 	<flow name="get-shipping-barcode-key-values-from-dblookup-flow" doc:id="a3cb24b4-8c38-489e-9fb9-3849e29d146f">
 	<set-variable value="#['get-shipping-barcode-key-values-from-dblookup-sub-flow']" doc:name="Flow Name" doc:id="3e970437-038d-4daa-9785-03f2a31d06a8" variableName="flowName"/>
 		<!-- <set-variable value="#[payload]" doc:name="Set Request BarCode Key" doc:id="1a7b7547-2d66-49b0-90cc-a71687cf6d80" variableName="vRequestBarCodeKey"/> -->
 		<set-variable value="#[p('lookup.aptos.shippingBarcode.key')]" doc:name="Set Shipping Barcode Lookup Key" doc:id="f8bdf6cd-9c24-45d6-a88a-356223929dab" variableName="shippingBarcodeKey"/>
+		<flow-ref doc:name="Log Process Entry" doc:id="3f6518f1-d1f2-46da-8184-a745619123d8" name="log-process-entry-sub-flow"/>
+<flow-ref doc:name="Audit Process Entry" doc:id="2ce61a67-5480-41be-bf6c-96c3106656b1" name="audit-process-entry-sub-flow"/>
 		<os:contains doc:name="Contains" doc:id="4769969f-c1b5-4af3-8fb1-ed167c6dd721" key="#[vars.shippingBarcodeKey]" objectStore="Object_store"/>
 		<choice doc:name="Choice" doc:id="cec9c378-e7be-4a77-817f-513f8d9df79b" >
 			<when expression="#[payload ==true]">
 				<os:retrieve doc:name="Retrieve" doc:id="e261ad96-fe0e-46a3-96a6-4e0f4c94417d" key="#[vars.shippingBarcodeKey]" objectStore="Object_store"/>
+				<flow-ref doc:name="Log Sub Flow" doc:id="f7f559c5-8f4a-4c18-b745-a843bcb15504" name="logging-sub-flow" />
+				<flow-ref doc:name="Audit Sub Flow" doc:id="93ca5274-116a-4946-9b74-c716428b3b29" name="audit-success-sub-flow" />
 				<flow-ref doc:name="Map Shipping Barcode Value" doc:id="39822f06-2f90-4a2a-bbc0-ab5f9c46efdd" name="filter-shipping-barcode"/>
 				<!-- <flow-ref doc:name="Map Mode Of Delivery Value" doc:id="3de6c498-0aef-4165-97bd-796d42cee118" name="filter-mode-of-delivery"/> -->
 			
 </when>
 			<otherwise >
-				<flow-ref doc:name="Log Process Entry" doc:id="4a58812f-7da4-417c-9345-9f087efba62f" name="log-process-entry-sub-flow"/>
-				<flow-ref doc:name="Audit Process Entry" doc:id="0b962d40-de13-471e-8d63-dc4db4c390c0" name="audit-process-entry-sub-flow"/>
-				<until-successful maxRetries="${retry.attempts}" doc:name="Until Successful" doc:id="d0cb5dc9-841f-4a7b-b9d4-2fdce06af838" millisBetweenRetries="${retry.frequency}">
-					<http:request method="GET" doc:name="Call DB Lookup Shipping Barcode Http Request Configuration" doc:id="242a7a58-954f-40d5-b3cf-d66f81a658c2" path="${lookup.dbLookupPath}" responseTimeout="${response.timeout.system.dblookup.webOrders}" config-ref="dbLookup_HTTP_Request_configuration">
-					<http:headers><![CDATA[#[output application/java
----
-{
-	"Transaction-Id" : vars.transactionId,
-	"Client-Id" : p('lookup.clientId'),
-	"Client-Secret" : p('secure::lookup.clientSecret'),
-	"Transaction-Start-Time" : vars.transactionStartTime
-}]]]></http:headers>
-					<http:query-params><![CDATA[#[output application/java
----
-{
-	"source" : p('lookup.queryParam.aptos.shippingBarcode.source'),
-	"type" : p('lookup.queryParam.aptos.shippingBarcode.type'),
-	"category" : p('lookup.queryParam.aptos.shippingBarcode.category')
-}]]]></http:query-params>
-				</http:request>
-				</until-successful>
-				<flow-ref doc:name="Log Process Exit" doc:id="9921860b-7cec-4605-b146-7bb2788c132a" name="log-process-exit-sub-flow"/>
-				<flow-ref doc:name="Audit Process Exit" doc:id="3c398308-c1e7-4cee-bb8d-6ee05f56e5f0" name="audit-process-exit-sub-flow"/>
+				<flow-ref doc:name="call-s-db-lookup-api-for-shipping-barcode-sub-flow" doc:id="6e587862-f0d1-4693-a390-1cdea1113280" name="call-s-db-lookup-api-for-shipping-barcode-sub-flow" />
 				<os:store doc:name="Store" doc:id="3f779e7b-a6f2-49ae-8ed0-12dd1074f451" key="#[vars.shippingBarcodeKey]" objectStore="Object_store"/>
 				<flow-ref doc:name="Map Shipping Barcode Value" doc:id="8764f845-2b37-4d54-ad03-892d5bda0040" name="filter-shipping-barcode"/>
 				<!-- <flow-ref doc:name="Map Mode Of Delivery Value" doc:id="b9c61d2b-f7ac-4ef6-bbb7-f7ee726d6ea6" name="filter-mode-of-delivery"/> -->
 			
 </otherwise>
 		</choice>
+		<flow-ref doc:name="Log Process Exit" doc:id="399e912d-1da2-4b78-a1ce-4d5231513fc9" name="log-process-exit-sub-flow" />
+<flow-ref doc:name="Audit Process Exit" doc:id="c1cc0900-efb5-435a-ba7a-0948a7d01675" name="audit-process-exit-sub-flow"/>
 	</flow>
 	<sub-flow name="filter-mode-of-delivery" doc:id="382d3b9f-a9d8-4f1c-8d36-999496de41dd" >
 		<ee:transform doc:name="Map Key Value For Delivery Mode" doc:id="3b839c23-4a13-494e-8485-51b06eadd218" >
@@ -290,4 +218,120 @@ output application/json skipNullOn = "everywhere"
 			</ee:variables>
 		</ee:transform>
 	</sub-flow>
+	<sub-flow name="call-s-report-db-api-sub-flow" doc:id="c992c638-8540-41ee-9308-52fe5da839fd" >
+		<set-variable value="call-s-report-db-api-sub-flow" doc:name="Flow Name" doc:id="d70ea393-bffe-4c03-a1cc-23c3da8fa433" variableName="flowName"/>
+		<flow-ref doc:name="Log Process Entry" doc:id="45892fbe-7fed-45ee-89ce-88d74931faad" name="log-process-entry-sub-flow"/>
+<flow-ref doc:name="Audit Process Entry" doc:id="19a33282-cf67-40a5-84f4-3f71e19659d7" name="audit-process-entry-sub-flow"/>
+		<http:request method="POST" doc:name="Call Report DB Http Request Configuration" doc:id="1926623c-9359-4289-8579-4ca949643401" path="${report.ordersPath}" responseTimeout="${response.timeout.system.reportdb.webOrders}" config-ref="S_Report_Http_Request_Configuration">
+
+						<http:body><![CDATA[#[vars.reportdbInputPayload]]]></http:body>
+											<http:headers><![CDATA[#[output application/java
+---
+{
+	"Transaction-Id" : vars.transactionId,
+	"Client-Id" : p('report.clientId'),
+	"Client-Secret" : p('secure::report.clientSecret'),
+	"Transaction-Start-Time" : vars.transactionStartTime
+}]]]></http:headers>
+			
+					
+					</http:request>
+					<flow-ref doc:name="Log Process Exit" doc:id="b10493a7-f7b1-4d80-b8e3-7cd1e1f18c00" name="log-process-exit-sub-flow" />
+<flow-ref doc:name="Audit Process Exit" doc:id="001f31f4-231d-4c08-9133-e5d65ddf515b" name="audit-process-exit-sub-flow"/>
+	</sub-flow>
+	<sub-flow name="call-s-d365-api-for-web-orders-sub-flow" doc:id="122c9ddb-137d-4cfd-8dfb-ab0d8446531b" >
+		<set-variable value="call-s-d365-api-for-web-orders-sub-flow" doc:name="Flow Name" doc:id="f53c962c-d683-471e-bba0-c645fc62fbe4" variableName="flowName"/>
+		<flow-ref doc:name="Log Process Entry" doc:id="691170df-7488-4d8c-9ff0-86f7cf747a9a" name="log-process-entry-sub-flow"/>
+<flow-ref doc:name="Audit Process Entry" doc:id="0da8db94-2730-4315-a516-6e9972188c05" name="audit-process-entry-sub-flow"/>
+		<http:request method="POST" doc:name="Call D365 Http Request Configuration" doc:id="14da697e-acdf-415e-876e-c96b06e2f2d8" config-ref="s_D365_Http_Request_configuration" path="${d365.webOrdersPath}" responseTimeout="${response.timeout.system.d365.webOrders}">
+			<http:body><![CDATA[#[vars.d365InputPayload]]]></http:body>
+					<http:headers><![CDATA[#[output application/java
+---
+{
+	"Transaction-Id" : vars.transactionId,
+	"Client-Id" : p('d365.clientId'),
+	"Client-Secret" : p('secure::d365.clientSecret'),
+	"Transaction-Start-Time" : vars.transactionStartTime
+}]]]></http:headers>
+					
+		</http:request>
+		<flow-ref doc:name="Log Process Exit" doc:id="e06df0ab-aa84-4f8b-a4c3-82b43e8b28f5" name="log-process-exit-sub-flow" />
+<flow-ref doc:name="Audit Process Exit" doc:id="a881bffd-e84e-462c-9f01-5d9025a135ae" name="audit-process-exit-sub-flow"/>
+	</sub-flow>
+	<sub-flow name="call-s-db-lookup-api-sub-flow" doc:id="a24930ee-793e-4c6c-b923-e288acd95d44" >
+			<set-variable value="call-s-db-lookup-api-sub-flow" doc:name="Flow Name" doc:id="61244ddb-7223-41a0-9d3c-d1462a56877a" variableName="flowName"/>
+		<flow-ref doc:name="Log Process Entry" doc:id="a1107bfe-7b13-4c9d-994e-f04b1e1c0b15" name="log-process-entry-sub-flow"/>
+<flow-ref doc:name="Audit Process Entry" doc:id="185886fe-b050-4a24-b93b-3c4f8c02805e" name="audit-process-entry-sub-flow"/>
+		<http:request method="GET" doc:name="Call DB DM Lookup Http Request Configuration" doc:id="9d0ba598-1605-4ad5-b194-0e8efc9ae01d" path="${lookup.dbLookupPath}" responseTimeout="${response.timeout.system.dblookup.webOrders}" config-ref="dbLookup_HTTP_Request_configuration">
+					<http:headers><![CDATA[#[output application/java
+---
+{
+	"Transaction-Id" : vars.transactionId,
+	"Client-Id" : p('lookup.clientId'),
+	"Client-Secret" : p('secure::lookup.clientSecret'),
+	"Transaction-Start-Time" : vars.transactionStartTime
+}]]]></http:headers>
+					<http:query-params><![CDATA[#[output application/java
+---
+{
+	"source" : p('lookup.queryParam.aptos.modeOfDelivery.source'),
+	"type" : p('lookup.queryParam.aptos.modeOfDelivery.type'),
+	"category" : p('lookup.queryParam.aptos.modeOfDelivery.category')
+}]]]></http:query-params>
+				</http:request>
+				<flow-ref doc:name="Log Process Exit" doc:id="75262736-da12-422d-9a85-93dd9a8786bd" name="log-process-exit-sub-flow" />
+<flow-ref doc:name="Audit Process Exit" doc:id="127fb585-49f7-4806-b2a6-664987cf8206" name="audit-process-exit-sub-flow"/>
+	</sub-flow>
+	<sub-flow name="call-s-db-lookup-api-for-sales-order-sub-flow" doc:id="334ef131-9037-4d2b-bffb-e847d4b25c21" >
+		
+		<set-variable value="call-s-db-lookup-api-for-sales-order-sub-flow" doc:name="Flow Name" doc:id="47875c95-0847-4d94-8477-aaac39407975" variableName="flowName"/>
+		<flow-ref doc:name="Log Process Entry" doc:id="7bc9336d-11ef-4087-9a17-ccc3ec11c394" name="log-process-entry-sub-flow"/>
+<flow-ref doc:name="Audit Process Entry" doc:id="8c5829c3-ba41-4f7d-8391-76859af401d8" name="audit-process-entry-sub-flow"/>
+		<http:request method="GET" doc:name="Call DB SO Lookup Http Request Configuration" doc:id="c5a812e2-e6f5-4571-921d-f279e0697541" path="${lookup.dbLookupPath}" responseTimeout="${response.timeout.system.dblookup.pickOrders}" config-ref="dbLookup_HTTP_Request_configuration">
+					<http:headers><![CDATA[#[output application/java
+---
+{
+	"Transaction-Id" : vars.transactionId,
+	"Client-Id" : p('lookup.clientId'),
+	"Client-Secret" : p('secure::lookup.clientSecret'),
+	"Transaction-Start-Time" : vars.transactionStartTime
+}]]]></http:headers>
+					<http:query-params><![CDATA[#[output application/java
+---
+{
+	"source" : p('lookup.queryParam.aptos.salesOfOrigin.source'),
+	"type" : p('lookup.queryParam.aptos.salesOfOrigin.type'),
+	"category" : p('lookup.queryParam.aptos.salesOfOrigin.category')
+}]]]></http:query-params>
+			
+				</http:request>
+				<flow-ref doc:name="Log Process Exit" doc:id="1ff3bab1-eb1f-41dd-95cb-30431fbfc3c2" name="log-process-exit-sub-flow" />
+<flow-ref doc:name="Audit Process Exit" doc:id="ad4aa805-635a-4585-94fb-47b6dda14c28" name="audit-process-exit-sub-flow"/>
+	</sub-flow>
+	<sub-flow name="call-s-db-lookup-api-for-shipping-barcode-sub-flow" doc:id="9146f39c-a1f7-4cee-a648-608cb1eec023" >
+		<set-variable value="call-s-db-lookup-api-for-shipping-barcode-sub-flow" doc:name="Flow Name" doc:id="f86c1c88-77c8-4f50-a4f5-613d0674e4df" variableName="flowName"/>
+		<flow-ref doc:name="Log Process Entry" doc:id="ff3d8663-b260-4608-8212-5ae1b88efdd3" name="log-process-entry-sub-flow"/>
+<flow-ref doc:name="Audit Process Entry" doc:id="853def95-4fc1-4e51-889a-ffc7bb7a8a3c" name="audit-process-entry-sub-flow"/>
+		<http:request method="GET" doc:name="Call DB Lookup Shipping Barcode Http Request Configuration" doc:id="8bfb5066-d941-4cff-a977-025d454985a7" path="${lookup.dbLookupPath}" responseTimeout="${response.timeout.system.dblookup.pickOrders}" config-ref="dbLookup_HTTP_Request_configuration">
+					<http:headers><![CDATA[#[output application/java
+---
+{
+	"Transaction-Id" : vars.transactionId,
+	"Client-Id" : p('lookup.clientId'),
+	"Client-Secret" : p('secure::lookup.clientSecret'),
+	"Transaction-Start-Time" : vars.transactionStartTime
+}]]]></http:headers>
+					<http:query-params><![CDATA[#[output application/java
+---
+{
+	"source" : p('lookup.queryParam.aptos.shippingBarcode.source'),
+	"type" : p('lookup.queryParam.aptos.shippingBarcode.type'),
+	"category" : p('lookup.queryParam.aptos.shippingBarcode.category')
+}]]]></http:query-params>
+			
+				</http:request>
+				<flow-ref doc:name="Log Process Exit" doc:id="137363c6-088f-48cb-852b-01a623a845d8" name="log-process-exit-sub-flow" />
+<flow-ref doc:name="Audit Process Exit" doc:id="9601c503-d1bd-4622-8756-a8d9662522fa" name="audit-process-exit-sub-flow"/>
+	</sub-flow>
+	
 </mule>
