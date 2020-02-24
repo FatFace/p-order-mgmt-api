@@ -178,6 +178,7 @@
             <artifactId>munit-tools</artifactId>
             <version>2.2.1</version>
             <classifier>mule-plugin</classifier>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 	<distributionManagement>
