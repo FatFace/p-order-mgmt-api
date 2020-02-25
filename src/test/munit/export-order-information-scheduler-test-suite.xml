@@ -8,6 +8,7 @@
 		http://www.mulesoft.org/schema/mule/munit http://www.mulesoft.org/schema/mule/munit/current/mule-munit.xsd
 		http://www.mulesoft.org/schema/mule/munit-tools  http://www.mulesoft.org/schema/mule/munit-tools/current/mule-munit-tools.xsd">
 	<munit:config name="export-order-information-scheduler-test-suite.xml" />
+	<import doc:name="Import" doc:id="828d0f33-b378-4319-beaf-46689c588460" file="test-globals-suite.xml" />
 	<munit:test name="export-order-information-scheduler-test-suite-export-orders-scheduler-flowTest" description="Test" doc:id="92941162-9564-4fb9-875b-51be75a6596e" >
 		<munit:behavior >
 			<munit-tools:mock-when doc:name="Export Order Schedular" doc:id="c6a8918a-0dbc-4974-8c00-16c2313979e1" processor="scheduler">

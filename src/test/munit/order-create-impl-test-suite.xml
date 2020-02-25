@@ -10,7 +10,7 @@
 http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
 	<munit:config name="order-create-impl-test-suite.xml" />
 	<import doc:name="Import" doc:id="fe093a59-e5ba-4bc0-81ec-b83cd8272f75" file="test-globals-suite.xml" />
-	<munit:test name="order-aptos-impl-test-suite-create-order-details-from-aptos-to-d365-main-flowTest" description="Test" doc:id="8c77df98-b9bf-44b8-85ba-055b4bdf4cf4" ignore="true">
+	<munit:test name="order-aptos-impl-test-suite-create-order-details-from-aptos-to-d365-main-flowTest" description="Test" doc:id="8c77df98-b9bf-44b8-85ba-055b4bdf4cf4">
 		<munit:behavior >
 			<munit-tools:mock-when doc:name="Mock DB DM Lookup Http Requester" doc:id="2cbad921-f942-43cb-9dfe-2197a00a8129" processor="http:request">
 				<munit-tools:with-attributes >
@@ -48,7 +48,7 @@ http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/
 			</munit-tools:spy>
 			<munit-tools:mock-when doc:name="Mock Shipping Barcode HTTP Requester" doc:id="7c7beb2c-8c22-4976-9d58-ed6fb5083fac" processor="http:request">
 				<munit-tools:with-attributes >
-					<munit-tools:with-attribute whereValue="Call DB Lookup Http Request Configuration For Shipping Barcode" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="Call DB Lookup Shipping Barcode Http Request Configuration" attributeName="doc:name" />
 				</munit-tools:with-attributes>
 				<munit-tools:then-return >
 					<munit-tools:payload value='#[MunitTools::getResourceAsString("response/ordercreate-dblookup-shipping-barcode-response.json")]' mediaType="application/json" />
@@ -102,7 +102,7 @@ http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/
 		</munit:execution>
 		<munit:validation >
 		
-			<munit-tools:assert-that doc:name="Assert that" doc:id="a158c2e2-032c-4554-ba0c-63cb715144e9" is="#[MunitTools::equalTo('CREATED')]" expression="#[payload.responseText]"/>
+			<munit-tools:assert-that doc:name="Assert that" doc:id="a158c2e2-032c-4554-ba0c-63cb715144e9" is="#[MunitTools::equalTo('Success')]" expression="#[payload.responseMessage]"/>
 			<!-- <munit-tools:assert-equals doc:name="Assert equals" doc:id="aa34b1e6-39ba-4280-a051-c5d1a55aa081" actual="#[payload]" expected='#[MunitTools::getResourceAsString("response/ordercreate-d365-response.json")]'/> -->
 		</munit:validation>
 	</munit:test>

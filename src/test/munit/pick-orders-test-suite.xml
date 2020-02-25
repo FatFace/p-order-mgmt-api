@@ -53,7 +53,7 @@
 					<munit-tools:with-attribute whereValue="Invoke System Layer JDA Api to Post Orders" attributeName="doc:name" />
 				</munit-tools:with-attributes>
 			</munit-tools:verify-call>
-			<flow-ref doc:name="order-managment-app-flow" doc:id="2f4a9a9d-4524-4598-a4b9-53485a71f55c" name="order-managment-impl-flow"/>
+			<flow-ref doc:name="order-managment-impl-flow" doc:id="2f4a9a9d-4524-4598-a4b9-53485a71f55c" name="order-managment-impl-flow"/>
 		</munit:execution>
 		<munit:validation >
 			<munit-tools:assert-that doc:name="Assert that" doc:id="2515fc31-9e5b-4548-987c-fc16ba21f4c0" expression="#[payload.status]" is="#[MunitTools::equalTo('success')]"/>
@@ -81,7 +81,7 @@
 		</munit:behavior>
 		<munit:execution >
 			<set-payload value="#[MunitTools::getResourceAsString('request/pick-orders-failure-request.json')]" doc:name="Set Payload" doc:id="94022b40-9537-41a9-8483-f9c19dd346c1" mimeType="application/json"/>
-			<flow-ref doc:name="order-managment-app-flow" doc:id="478d1d44-79a6-40fb-a157-e29f612570ef" name="order-managment-impl-flow"/>
+			<flow-ref doc:name="order-managment-impl-flow" doc:id="478d1d44-79a6-40fb-a157-e29f612570ef" name="order-managment-impl-flow"/>
 		</munit:execution>
 		<munit:validation >
 			<munit-tools:assert-that doc:name="Assert that" doc:id="dde8e350-6dc1-43fe-b48a-5257e77c5ec2" expression="#[vars.loggingPayload]" is="#[MunitTools::equalTo('No data received')]"/>
@@ -102,7 +102,7 @@
 			</munit-tools:mock-when>
 		</munit:behavior>
 		<munit:execution >
-			<flow-ref doc:name="pick-orders-scheduler-flow" doc:id="559f82e8-f6e9-4c26-b8f1-6d0c342e0998" name="pick-orders-trigger-flow"/>
+			<flow-ref doc:name="pick-orders-trigger-flow" doc:id="559f82e8-f6e9-4c26-b8f1-6d0c342e0998" name="pick-orders-trigger-flow"/>
 		</munit:execution>
 		<munit:validation >
 			<munit-tools:assert-that doc:name="Assert that" doc:id="62572a4e-59a5-4763-8e90-e65ecd3a856f" expression="#[payload]" is="#[MunitTools::equalTo('')]"/>

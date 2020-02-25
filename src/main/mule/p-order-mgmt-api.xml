@@ -42,8 +42,8 @@ output application/java
 output application/json
 ---
 {
-	"responseCode": p('status.responsecode'),
-	"responseMessage": p('status.responsemessage')
+	"responseCode": p('status.responseCode'),
+	"responseMessage": p('status.responseMessage')
 }]]></ee:set-payload>
 			</ee:message>
             <ee:variables>
