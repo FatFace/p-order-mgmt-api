@@ -158,19 +158,7 @@ payload]]></ee:set-variable>
 			<ee:message >
 			</ee:message>
 			<ee:variables >
-				<ee:set-variable variableName="dmLookupValue" ><![CDATA[%dw 2.0
-output application/json skipNullOn = "everywhere"
----
-
-vars.aptosOriginalPayload.'orders' map (value) ->{
-(payload.lookups filter (($."lookup-key") == value."delivery-mode") map {
-
-	"order-no" : value."order-no",
-	"lookup-value" : $."lookup-value"
-} reduce $$)
-
-}
-]]></ee:set-variable>
+				<ee:set-variable resource="dwl/delivery-mode-lookup.dwl" variableName="dmLookupValue" />
 			</ee:variables>
 		</ee:transform>
 	</sub-flow>
@@ -179,20 +167,7 @@ vars.aptosOriginalPayload.'orders' map (value) ->{
 			<ee:message >
 			</ee:message>
 			<ee:variables >
-				<ee:set-variable variableName="soLookupValue" ><![CDATA[%dw 2.0
-output application/json skipNullOn = "everywhere"
----
-
-vars.dmLookupValue map (value) ->{
-(payload.lookups filter (($."lookup-key") == value."lookup-value") map {
-
-	"order-no" : value."order-no",
-	"lookup-key" : value."lookup-value",
-	"lookup-value" : $."lookup-value"
-} reduce $$)
-
-}
-]]></ee:set-variable>
+				<ee:set-variable resource="dwl/sales-origin-lookup.dwl" variableName="soLookupValue" />
 			</ee:variables>
 		</ee:transform>
 	</sub-flow>
@@ -201,20 +176,7 @@ vars.dmLookupValue map (value) ->{
 			<ee:message >
 			</ee:message>
 			<ee:variables >
-				<ee:set-variable variableName="sbLookupValue" ><![CDATA[%dw 2.0
-output application/json skipNullOn = "everywhere"
----
-
-(vars.aptosOriginalPayload.'orders' map (value) ->{
-	data:(value.'orderlines' map (ol) ->{
-(payload.lookups filter (($."lookup-key") == ol.barcode) map {
-
-	"order-no" : value."order-no",
-	"barcode": ol.barcode,
-	"lookup-value" : $."lookup-value"
-}) })
-
-}).data reduce $$]]></ee:set-variable>
+				<ee:set-variable resource="dwl/shipping-barcode-lookup.dwl" variableName="sbLookupValue" />
 			</ee:variables>
 		</ee:transform>
 	</sub-flow>
