@@ -105,3 +105,12 @@ error:
 system:
   layer:
     response: "No Data from System Layer"
+    
+pooling:
+  profile:
+    max:
+      connection:
+        size: "7"
+      idle:
+        size: "2"
+      wait: "0"    
