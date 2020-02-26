@@ -89,7 +89,7 @@ output application/java
 output application/json
 ---
 {
-	manifests: payload.manifests filter ($."order-no" != null and $."order-no" != '') map $
+	manifests: payload.manifests filter ($."order-no" != null and $."order-no" != '' and $."location-id" == 'ROYALMAIL') map $
 }]]></ee:set-payload>
 			</ee:message>
 		</ee:transform>
