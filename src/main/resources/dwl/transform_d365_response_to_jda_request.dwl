@@ -38,7 +38,9 @@ fun getLinePrice(amount, netAmount) = (amount + netAmount)as Number as String {f
 			"product-barcode": if((orderline.barcode) != null) (if(sizeOf(orderline.barcode)>=12) ((orderline.barcode)[0 to 11]) else (orderline.barcode)) else " ",
 			"line-price": if((orderline."sales-price")!= null) (if(sizeOf(orderline."sales-price")>=15) ((orderline."sales-price")[0 to 14]) else (orderline."sales-price")) else " ",
 			"product-name": if((orderline."item-name") != null) (if(sizeOf(orderline."item-name")>30) ((orderline."item-name")[0 to 29]) else (orderline."item-name")) else " ",
-			"internal-sales-order-number": pickorder."order-no"
+			"internal-sales-order-number": pickorder."order-no",
+			"personalize-text" : if(orderline."personalize-text" != null) (orderline."personalize-text") else "",
+			"personalize-text-color" : if(orderline."personalize-text-color" != null) (orderline."personalize-text-color") else ""
 		},
         "payments": pickorder.payments map{
             "card-number": if($."payment-mode-card"."card-number" != null) ($."payment-mode-card"."card-number") else " "
