@@ -115,10 +115,11 @@ output application/java
 			<ee:message >
 				<ee:set-payload ><![CDATA[%dw 2.0
 output application/json
+fun checkData(data) = data.orderlines filter ($.quantity != $."ordered-quantity")
 ---
 {
-	orders: payload.orders filter ($."order-no" != null and $."order-no" != '' and $.status != 'shipped') map $
-}]]></ee:set-payload>
+	orders: payload.orders filter ($."order-no" != null and $."order-no" != '' and $.status != 'shipped' and isEmpty(checkData($)) == false) map $  
+} ]]></ee:set-payload>
 			</ee:message>
 			<ee:variables >
 			</ee:variables>
