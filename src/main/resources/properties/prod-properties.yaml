@@ -128,3 +128,12 @@ xcm:
 status:
   responseCode: "0"
   responseMessage: "Success"
+  
+pooling:
+  profile:
+    max:
+      connection:
+        size: "4"
+      idle:
+        size: "2"
+      wait: "0"
