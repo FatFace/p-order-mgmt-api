@@ -291,6 +291,7 @@ output application/java
 {
 	"Transaction-Id" : vars.transactionId,
 	"Client-Id" : p('d365.clientId'),
+	"file-name" : vars.fileName,
 	"Client-Secret" : p('secure::d365.clientSecret'),
 	"Transaction-Start-Time" : vars.transactionStartTime
 }]]]></http:headers>
