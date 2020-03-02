@@ -40,10 +40,10 @@ http://www.mulesoft.org/schema/mule/os http://www.mulesoft.org/schema/mule/os/cu
 		<flow-ref doc:name="Log Process Entry" doc:id="f7a310e9-4c33-4643-82d3-6adfe04ed4d2" name="log-process-entry-sub-flow"/>
 		<flow-ref doc:name="Audit Process Entry" doc:id="65a6f5cf-fdff-4833-8c47-fc86400f027a" name="audit-process-entry-sub-flow"/>
 		<set-variable value="#[p('lookup.key')]" doc:name="Set Key" doc:id="b67098ee-2812-4674-ae81-529d59c2fc98" variableName="vLookUpData"/>
-		<os:contains doc:name="Check for the value in the Object Store" doc:id="7ce24818-d9c7-4de2-9f5a-a7ea66cbe3ae" key="#[vars.vLookUpData]" objectStore="Object_store"/>
+		<os:contains doc:name="Check for the value in the Object Store" doc:id="7ce24818-d9c7-4de2-9f5a-a7ea66cbe3ae" key="#[vars.vLookUpData]"/>
 		<choice doc:name="Choice" doc:id="1b15b70f-71dd-4dd4-b4f5-93d40e166124" >
 			<when expression="#[payload ==true]">
-				<os:retrieve doc:name="Retrieve Lookup Data From Object Store" doc:id="4cbf43b7-adb6-47f9-8ff6-61c0b803322a" key="#[vars.vLookUpData]" objectStore="Object_store" />
+				<os:retrieve doc:name="Retrieve Lookup Data From Object Store" doc:id="4cbf43b7-adb6-47f9-8ff6-61c0b803322a" key="#[vars.vLookUpData]" />
 				<ee:transform doc:name="Transform Message" doc:id="dbe54386-8279-4d19-a16b-487bbb271c4d">
 					<ee:message>
 						<ee:set-payload><![CDATA[%dw 2.0
@@ -56,7 +56,7 @@ payload]]></ee:set-payload>
 			</when>
 			<otherwise >
 				<flow-ref doc:name="call-db-lookup-api-sub-flow" doc:id="57b25f76-0850-4bac-aa9e-eb04f8e22563" name="call-db-lookup-api-sub-flow" />
-				<os:store doc:name="Store Lookup Data in Object Store" doc:id="f13ccd49-4240-4593-a82a-6edd76c776e8" key="#[vars.vLookUpData]" objectStore="Object_store" />
+				<os:store doc:name="Store Lookup Data in Object Store" doc:id="f13ccd49-4240-4593-a82a-6edd76c776e8" key="#[vars.vLookUpData]"/>
 				<flow-ref doc:name="Filter Lookup Key" doc:id="efe8f3b1-3afc-44ce-826f-c034e0859c65" name="filter-lookup-key-sub-flow"/>
 			</otherwise>
 		</choice>

@@ -87,8 +87,6 @@ http://www.mulesoft.org/schema/mule/os http://www.mulesoft.org/schema/mule/os/cu
 			</tls:context>
 		</http:request-connection>
 	</http:request-config>
-	<os:object-store name="Object_store" doc:name="Object store"
-		doc:id="a2ebd370-24d8-4948-bafb-7b3848ca907f" />
 	<http:request-config name="dbLookup_HTTP_Request_configuration"
 		doc:name="HTTP Request configuration" doc:id="8414566d-3ff0-4d39-998f-65d0abf53a07"
 		basePath="${lookup.basePath}">
