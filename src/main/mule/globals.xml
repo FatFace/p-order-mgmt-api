@@ -61,7 +61,9 @@ http://www.mulesoft.org/schema/mule/os http://www.mulesoft.org/schema/mule/os/cu
 	<sftp:config name="SFTP_Config" doc:name="SFTP Config"
 		doc:id="d1857644-27b7-46ba-bb81-15e8b98f626f">
 		<sftp:connection host="${secure::sftp.host}" port="${secure::sftp.port}"
-			username="${secure::sftp.username}" password="${secure::sftp.password}" />
+			username="${secure::sftp.username}" password="${secure::sftp.password}" >
+			<pooling-profile maxActive="${pooling.profile.max.connection.size}" maxIdle="${pooling.profile.max.idle.size}" maxWait="${pooling.profile.max.wait}" />
+		</sftp:connection>
 	</sftp:config>
 	<sqs:config name="Amazon_SQS_Configuration" doc:name="Amazon SQS Configuration"
 		doc:id="2b1b5722-42da-4e24-b1b0-e12becbd5d65">

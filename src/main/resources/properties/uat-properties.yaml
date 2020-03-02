@@ -162,3 +162,12 @@ xcm:
 status:
   responseCode: "0"
   responseMessage: "Success"
+  
+pooling:
+  profile:
+    max:
+      connection:
+        size: "5"
+      idle:
+        size: "1"
+      wait: "0"  
