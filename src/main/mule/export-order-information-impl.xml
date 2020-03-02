@@ -17,9 +17,9 @@ http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/htt
 ---
 {
 	"Transaction-Id" : vars.transactionId,
-	"Client-Id" : p('xcm.clientId'),
-	"Client-Secret" : p('secure::xcm.clientSecret'),
-	"Transaction-Start-Time" : vars.transactionStartTime
+	"client_secret" : p('secure::xcm.clientSecret'),
+	"Transaction-Start-Time" : vars.transactionStartTime,
+	"client_id" : p('xcm.clientId')
 }]]]></http:headers>
 		</http:request>
 		<flow-ref doc:name="Audit Process Exit" doc:id="ad2288cc-4e08-4c29-9ef0-59171c6a4d05" name="audit-process-exit-sub-flow"/>
@@ -66,9 +66,9 @@ output application/json
 ---
 {
 	"Transaction-Id" : vars.transactionId,
-	"Client-Id" : "p('xcm.clientId')",
-	"Client-Secret" : "p('secure::xcm.clientSecret')",
-	"Transaction-Start-Time" : vars.transactionStartTime
+	"client_secret" : "p('secure::xcm.clientSecret')",
+	"Transaction-Start-Time" : vars.transactionStartTime,
+	"client_id" : "p('xcm.clientId')"
 }]]]></http:headers>
 		</http:request>
 		<flow-ref doc:name="Audit Process Exit" doc:id="9bbf41f6-f386-4dd9-97c3-400679a43b12" name="audit-process-exit-sub-flow"/>

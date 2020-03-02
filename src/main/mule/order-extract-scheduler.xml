@@ -290,10 +290,10 @@ output application/java
 ---
 {
 	"Transaction-Id" : vars.transactionId,
-	"Client-Id" : p('d365.clientId'),
 	"file-name" : vars.fileName,
-	"Client-Secret" : p('secure::d365.clientSecret'),
-	"Transaction-Start-Time" : vars.transactionStartTime
+	"client_secret" : p('secure::d365.clientSecret'),
+	"Transaction-Start-Time" : vars.transactionStartTime,
+	"client_id" : p('d365.clientId')
 }]]]></http:headers>
 			<http:response-validator>
 					<http:success-status-code-validator values="#[200]" />

@@ -98,9 +98,9 @@ payload]]></ee:set-payload>
 ---
 {
 	"Transaction-Id" : vars.transactionId,
-	"Client-Id" : p('lookup.clientId'),
-	"Client-Secret" : p('secure::lookup.clientSecret'),
-	"Transaction-Start-Time" : vars.transactionStartTime
+	"client_secret" : p('secure::lookup.clientSecret'),
+	"Transaction-Start-Time" : vars.transactionStartTime,
+	"client_id" : p('lookup.clientId')
 }]]]></http:headers>
 					<http:query-params><![CDATA[#[output application/java
 ---

@@ -188,9 +188,9 @@ payload]]></ee:set-variable>
 ---
 {
 	"Transaction-Id" : vars.transactionId,
-	"Client-Id" : p('report.clientId'),
-	"Client-Secret" : p('secure::report.clientSecret'),
-	"Transaction-Start-Time" : vars.transactionStartTime
+	"client_secret" : p('secure::report.clientSecret'),
+	"Transaction-Start-Time" : vars.transactionStartTime,
+	"client_id" : p('report.clientId')
 }]]]></http:headers>
 			
 					
@@ -208,9 +208,9 @@ payload]]></ee:set-variable>
 ---
 {
 	"Transaction-Id" : vars.transactionId,
-	"Client-Id" : p('d365.clientId'),
-	"Client-Secret" : p('secure::d365.clientSecret'),
-	"Transaction-Start-Time" : vars.transactionStartTime
+	"client_secret" : p('secure::d365.clientSecret'),
+	"Transaction-Start-Time" : vars.transactionStartTime,
+	"client_id" : p('d365.clientId')
 }]]]></http:headers>
 					
 		</http:request>
@@ -226,9 +226,9 @@ payload]]></ee:set-variable>
 ---
 {
 	"Transaction-Id" : vars.transactionId,
-	"Client-Id" : p('lookup.clientId'),
-	"Client-Secret" : p('secure::lookup.clientSecret'),
-	"Transaction-Start-Time" : vars.transactionStartTime
+	"client_secret" : p('secure::lookup.clientSecret'),
+	"Transaction-Start-Time" : vars.transactionStartTime,
+	"client_id" : p('lookup.clientId')
 }]]]></http:headers>
 					<http:query-params><![CDATA[#[output application/java
 ---
@@ -251,9 +251,9 @@ payload]]></ee:set-variable>
 ---
 {
 	"Transaction-Id" : vars.transactionId,
-	"Client-Id" : p('lookup.clientId'),
-	"Client-Secret" : p('secure::lookup.clientSecret'),
-	"Transaction-Start-Time" : vars.transactionStartTime
+	"client_secret" : p('secure::lookup.clientSecret'),
+	"Transaction-Start-Time" : vars.transactionStartTime,
+	"client_id" : p('lookup.clientId')
 }]]]></http:headers>
 					<http:query-params><![CDATA[#[output application/java
 ---
@@ -276,9 +276,9 @@ payload]]></ee:set-variable>
 ---
 {
 	"Transaction-Id" : vars.transactionId,
-	"Client-Id" : p('lookup.clientId'),
-	"Client-Secret" : p('secure::lookup.clientSecret'),
-	"Transaction-Start-Time" : vars.transactionStartTime
+	"client_secret" : p('secure::lookup.clientSecret'),
+	"Transaction-Start-Time" : vars.transactionStartTime,
+	"client_id" : p('lookup.clientId')
 }]]]></http:headers>
 					<http:query-params><![CDATA[#[output application/java
 ---
