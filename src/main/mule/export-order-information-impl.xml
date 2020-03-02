@@ -47,6 +47,7 @@ output application/json
 }]]></ee:set-payload>
 			</ee:message>
 		</ee:transform>
+		<set-variable value='#["sales-orders-primary-key-flow"]' doc:name="Flow Name" doc:id="fb519848-c22d-432c-94a5-66214580100b" variableName="flowName"/>
 		<flow-ref doc:name="Log Process Entry" doc:id="b4d7e114-5153-4bb9-a1be-934cabad2f6c" name="log-process-entry-sub-flow"/>
 		<flow-ref doc:name="Audit Process Entry" doc:id="f04ce94c-6000-47a5-a46c-e0bd83e9bd52" name="audit-process-entry-sub-flow"/>
 		<flow-ref doc:name="audit-details-processing-sub-flow" doc:id="1a1a997a-9e21-4240-9efe-dfdcfe26dcad" name="audit-details-processing-sub-flow"/>
@@ -95,6 +96,7 @@ output application/json
 }]]></ee:set-payload>
 			</ee:message>
 		</ee:transform>
+		<set-variable value='#["return-orders-impl-flow"]' doc:name="Flow Name" doc:id="2bc629df-c1a6-42f0-a3fc-adac59028127" variableName="flowName"/>
 		<flow-ref doc:name="Log Process Entry" doc:id="f2d13933-c814-4e11-b0d7-0fd6a56ab3bf" name="log-process-entry-sub-flow"/>
 		<flow-ref doc:name="Audit Process Entry" doc:id="a45ae243-0f33-42dc-baf7-c36667eee80c" name="audit-process-entry-sub-flow"/>
 		<flow-ref doc:name="audit-details-processing-sub-flow" doc:id="a933d343-2418-4df5-b57d-78d5d49ac17b" name="audit-details-processing-sub-flow"/>
