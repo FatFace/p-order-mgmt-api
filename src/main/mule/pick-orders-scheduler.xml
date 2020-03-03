@@ -10,7 +10,7 @@ http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/htt
 	<flow name="pick-orders-trigger-flow" doc:id="0be848f7-d42c-4b5f-9f67-29c845fad4af">
 		<scheduler doc:name="Scheduler" doc:id="23ec0722-9862-4bc8-a084-dda881603654" >
 			<scheduling-strategy >
-				<fixed-frequency frequency="${scheduler.frequency}" timeUnit="MINUTES"/>
+				<cron expression="${scheduler.cron.expression}" />
 			</scheduling-strategy>
 		</scheduler>
 		<ee:transform doc:name="Set Attributes" doc:id="e4aec26d-bd22-41db-ba1a-85bad9d63bda" >

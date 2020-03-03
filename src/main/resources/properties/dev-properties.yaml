@@ -12,7 +12,6 @@ api:
 scheduler:
   cron:
     expression: "0 0/15 * 1/1 * ? *"
-  frequency : "15"
         
 d365:
   host: "mule-worker-internal-dev-s-d365-api.ir-e1.cloudhub.io"
