@@ -129,7 +129,8 @@ fun checkData(data) = data.orderlines filter ($.quantity != $."ordered-quantity"
 				<flow-ref doc:name="Flow Reference Get Manifest Data" doc:id="428e84de-f365-4349-9386-e92167cbf7b8" name="order-extract-get-manifest-data"/>
 			</when>
 			<otherwise>
-				<set-variable value="The record is not an ecom order" doc:name="Set Logging payload" doc:id="aace8a5b-63c6-4cb2-ade2-0323bb3f144b" variableName="loggingPayload" />
+				<set-variable value="Order file doesn't have any valid order" doc:name="Set Logging payload" doc:id="aace8a5b-63c6-4cb2-ade2-0323bb3f144b" variableName="loggingPayload" />
+				<flow-ref doc:name="logging-sub-flow" doc:id="0129c8b1-0277-4b24-ba27-31b4b8523b08" name="logging-sub-flow"/>
 				<flow-ref doc:name="Log Warn Sub Flow" doc:id="95a6a3de-d35f-4e7e-943f-01591f2f99e7" name="log-process-warn-sub-flow" />
 				<flow-ref doc:name="Audit Warn Sub Flow" doc:id="b3ce2b11-4c5e-4321-887b-6868cd5c63a9" name="audit-warning-sub-flow"/>
 			</otherwise>

@@ -110,7 +110,8 @@ output application/json
 			</when>
 			<otherwise>
 			<set-variable value="#['check-manifest-shipment-ecom-order-and-process-to-d365-sub-flow']" doc:name="Flow Name" doc:id="e2ce6d45-b7cb-4d33-be89-fd4d6fb733fa" variableName="flowName"/>
-				<set-variable value="The record is not an ecom order" doc:name="Set Logging payload" doc:id="acf03efc-55c1-4f3a-b353-f5cd9dd4da43" variableName="loggingPayload" />
+				<set-variable value="This file doesn't have valid manifest data" doc:name="Set Logging payload" doc:id="acf03efc-55c1-4f3a-b353-f5cd9dd4da43" variableName="loggingPayload" />
+				<flow-ref doc:name="Logging Sub Flow" doc:id="0c0952dd-2882-4178-969c-1b074705e245" name="logging-sub-flow" />
 				<flow-ref doc:name="Log Warn Sub Flow" doc:id="1547157d-0d58-4fb4-8dbd-6f044d8b221f" name="log-process-warn-sub-flow" />
 				<flow-ref doc:name="Audit Warn Sub Flow" doc:id="be890f90-5fa6-4ba9-82bf-a144e643ffe5" name="audit-warning-sub-flow"/>
 			</otherwise>
