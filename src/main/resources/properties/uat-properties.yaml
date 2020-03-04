@@ -126,12 +126,12 @@ cron:
   expression: 
     manifest: "0 0/5 * 1/1 * ? *"
     orderextract: "0 0 0/1 1/1 * ? *"     
-    exportOrders:  "0 0 1 1/1 * ? *"   
+    exportOrders: "0 0 1 1/1 * ? *"   
    
 orders:
   export:
     sftp:
-      errorfilepath:  "/FatFace/sftp/MuleSoftIntegration/uat/error/outgoing/orderData/jdaOrder"
+      errorfilepath:  "/FatFace/sftp/MuleSoftIntegration/uat/error/outgoing/orderData/jdaOrder/"
 send:
   manifest:
     queue: "true"
@@ -139,9 +139,9 @@ send:
 pick:
   orders:
     orderType: "WEB"
-  
+
 report:
-  host: "mule-worker-internal-uat-s-reportdb-api.ir-e1.cloudhub.io"
+  host: "mule-worker-internal-uat-s-report-db-api.ir-e1.cloudhub.io"
   port: "8091"
   basepath: "/api/v1"
   clientId: "878d7706ad57449ba28c0fe669d6c921"
@@ -157,7 +157,7 @@ xcm:
   salesOrdersPath: "/sales/orders"
   returnOrdersPath: "/return/orders"
   connecitonTimeout: "30000"
- 
+  
 status:
   responseCode: "0"
   responseMessage: "Success"
