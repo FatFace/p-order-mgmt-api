@@ -47,11 +47,11 @@ sqs:
   region: "![6lleIG6Qoif/fTA7pK+sUA==]"
   queue:
     target:
-      manifest: "shipping-manifest-q"
-      order: "order-extract-q"
+      manifest: "uat-shipping-manifest-q"
+      order: "uat-order-extract-q"
     url: 
-      manifestQueueUrl: "https://sqs.eu-west-1.amazonaws.com/691628577374/shipping-manifest-q"
-      orderQueueUrl: "https://sqs.eu-west-1.amazonaws.com/691628577374/order-extract-q"
+      manifestQueueUrl: "https://sqs.eu-west-1.amazonaws.com/691628577374/uat-shipping-manifest-q"
+      orderQueueUrl: "https://sqs.eu-west-1.amazonaws.com/691628577374/uat-order-extract-q"
         
 d365:
   host: "mule-worker-internal-uat-s-d365-api.ir-e1.cloudhub.io"
