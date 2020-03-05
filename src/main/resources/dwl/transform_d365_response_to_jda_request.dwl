@@ -43,7 +43,7 @@ fun getLinePrice(amount, netAmount) = (amount + netAmount)as Number as String {f
 			"personalize-text-color" : if(orderline."personalize-text-color" != null) (orderline."personalize-text-color") else ""
 		},
         "payments": pickorder.payments map{
-            "card-number": if($."payment-mode-card"."card-number" != null) ($."payment-mode-card"."card-number") else "",
+            "card-num": if($."payment-mode-card"."card-number" != null) ($."payment-mode-card"."card-number") else "",
             "payment-mode": if($."payment-mode" != null) ($."payment-mode") else ""
         }
 	}
