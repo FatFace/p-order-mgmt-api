@@ -66,9 +66,9 @@ output application/json
 ---
 {
 	"Transaction-Id" : vars.transactionId,
-	"client_secret" : "p('secure::xcm.clientSecret')",
+	"client_secret" : p('secure::xcm.clientSecret'),
 	"Transaction-Start-Time" : vars.transactionStartTime,
-	"client_id" : "p('xcm.clientId')"
+	"client_id" : p('xcm.clientId')
 }]]]></http:headers>
 		</http:request>
 		<flow-ref doc:name="Audit Process Exit" doc:id="9bbf41f6-f386-4dd9-97c3-400679a43b12" name="audit-process-exit-sub-flow"/>
