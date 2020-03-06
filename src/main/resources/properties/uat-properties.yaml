@@ -126,7 +126,7 @@ cron:
   expression: 
     manifest: "0 0/5 * 1/1 * ? *"
     orderextract: "0 0 0/1 1/1 * ? *"     
-    exportOrders: "0 0 1 1/1 * ? *"   
+    exportOrders: "0 0/30 * 1/1 * ? *"   
    
 orders:
   export:
