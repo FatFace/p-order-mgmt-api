@@ -33,7 +33,7 @@ db:
    port: "1433"
    user: "![AyD0mBi0zwPqptV8KbEJGkjzeMuTdVHL2AEWiq0N3sQ=]"
    password: "![PX91DJD02zpJ0MJ3jLRKUw==]"
-   database: "FATFACE_DB" 
+   database: "FATFACE_UAT_DB" 
 
 sftp:
   host: "ftp.fatface.com"
@@ -47,11 +47,11 @@ sqs:
   region: "![6lleIG6Qoif/fTA7pK+sUA==]"
   queue:
     target:
-      manifest: "uat-shipping-manifest-q"
-      order: "uat-order-extract-q"
+      manifest: "shipping-manifest-q"
+      order: "order-extract-q"
     url: 
-      manifestQueueUrl: "https://sqs.eu-west-1.amazonaws.com/691628577374/uat-shipping-manifest-q"
-      orderQueueUrl: "https://sqs.eu-west-1.amazonaws.com/691628577374/uat-order-extract-q"
+      manifestQueueUrl: "https://sqs.eu-west-1.amazonaws.com/309769536943/shipping-manifest-q"
+      orderQueueUrl: "https://sqs.eu-west-1.amazonaws.com/309769536943/order-extract-q"
         
 d365:
   host: "mule-worker-internal-uat-s-d365-api.ir-e1.cloudhub.io"
