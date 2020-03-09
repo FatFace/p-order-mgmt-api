@@ -29,14 +29,16 @@ fun getBarcode(barCode) = vars.sbLookupValue filter ($."barcode" == barCode) map
 					'postcode': if (ord.customer.'shipping-address'.postcode != null) ord.customer.'shipping-address'.postcode else '',
 					'county': if (ord.customer.'shipping-address'.county != null) ord.customer.'shipping-address'.county else '',
 					'state': if (ord.customer.'shipping-address'.state != null) ord.customer.'shipping-address'.state else '',
-					'country': if (ord.customer.'shipping-address'.country != null) ord.customer.'shipping-address'.country else ''
+					'country': if (ord.customer.'shipping-address'.country != null) ord.customer.'shipping-address'.country else '',
+					'full-name': if (ord.customer.'shipping-address'.'full-name' != null) ord.customer.'shipping-address'.'full-name' else ''
 				},
 				'billing-address': {
 		          'street': ord.customer.'billing-address'.street,
 		          'city': ord.customer.'billing-address'.city,
 		          'postcode': ord.customer.'billing-address'.postcode,
 		          'country': ord.customer.'billing-address'.country,
-		          'state': ord.customer.'billing-address'.state
+		          'state': ord.customer.'billing-address'.state,
+		          'full-name': ord.customer.'billing-address'.'full-name'
         		}
 			},
 			orderlines: ord.orderlines map (ordl, indOfOrdl) -> {
