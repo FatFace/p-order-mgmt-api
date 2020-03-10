@@ -9,7 +9,7 @@
 		http://www.mulesoft.org/schema/mule/munit-tools  http://www.mulesoft.org/schema/mule/munit-tools/current/mule-munit-tools.xsd">
 	<munit:config name="pick-orders-test-suite.xml" />
 	<import doc:name="Import" doc:id="c0742357-759b-4b0f-8d60-70afb6b89cdd" file="test-globals-suite.xml" />
-	<munit:test name="pick-orders-test-suite-order-managment-app-flowTest" description="Test" doc:id="24b31562-c826-48be-b984-1098b0792dcf" >
+	<munit:test name="pick-orders-test-suite-order-managment-app-flowTest" description="Test" doc:id="24b31562-c826-48be-b984-1098b0792dcf" ignore="true">
 		<munit:behavior >
 			<munit-tools:mock-when doc:name="Mock Lookup Api System Layer Call" doc:id="e41ed56e-b0d9-47de-821b-b10043be3d8a" processor="http:request">
 				<munit-tools:with-attributes >
@@ -60,7 +60,7 @@
 		</munit:validation>
 	</munit:test>
 	
-	<munit:test name="pick-orders-test-suite-order-managment-app-failure-flow" description="Test" doc:id="43fe496f-dc6d-456a-b7e6-3b4e46ce31c5">
+	<munit:test name="pick-orders-test-suite-order-managment-app-failure-flow" description="Test" doc:id="43fe496f-dc6d-456a-b7e6-3b4e46ce31c5" ignore="true">
 		<munit:behavior >
 			<munit-tools:mock-when doc:name="Mock Lookup Api System Layer Call" doc:id="ea173c9f-0c9a-4fa0-9491-f322a4224fed" processor="http:request">
 				<munit-tools:with-attributes >
@@ -88,7 +88,7 @@
 		</munit:validation>
 	</munit:test>
 	
-	<munit:test name="pick-orders-scheduler-test-flow" description="MUnit Test" doc:id="c6370eb0-8069-4561-8820-25902d509e45">
+	<munit:test name="pick-orders-scheduler-test-flow" description="MUnit Test" doc:id="c6370eb0-8069-4561-8820-25902d509e45" ignore="true">
 		<munit:behavior >
 			<munit-tools:mock-when doc:name="Mock Scheduler" doc:id="3f63512b-2bad-44bf-9240-e55e9583a35f" processor="scheduler">
 				<munit-tools:with-attributes >
