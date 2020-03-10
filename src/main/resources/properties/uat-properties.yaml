@@ -42,8 +42,8 @@ sftp:
   password: "![YoKYhq6QWsR9eW3AVcCh2TRSSvrwrp94baroSAHlBlg=]" 
   
 sqs:
-  accessKey: "![iKDP0/LYfR1ghGUCOAayKYI5kMT/ieTr3IMibNfn9y8=]"
-  secretKey: "![z8W9r4EBG78ATEDLlzRgrDu8pSr3cf8u0RPGoG/mEyLZSeyc1prL/JqYzbF2CWUY]"
+  accessKey: "![0Bna5lThT35ukyJf1B4b+NBulG5Jn3QQkYSe2AQTrhI=]"
+  secretKey: "![YeUejrLAXF1G2lBwQcIhz9Sid46kdmSOB5j0CXeQxGBfNQRpQE+hxJQna0as7ws5]"
   region: "![6lleIG6Qoif/fTA7pK+sUA==]"
   queue:
     target:
