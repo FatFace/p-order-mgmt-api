@@ -50,8 +50,8 @@ jda:
     path: "/pick/manifests" 
 
 cloudhub:
-  username: "![Wkd/i0mr4M5DRXGPkpxl3A+qPh6NASJ83cobwz2qfXs=]"
-  password: "![TUOtb96a5rFz9HgwE5GrsA==]"
+  username: "![0so5SqsEunWc4U+W5DRa5eJOhljaw4Nx0qJg4yp3qnA=]"
+  password: "![828g0ukkhaCDoayPBgPZ06Oa0uDELiXntFk5OykvNdk=]"
 
 db:
  audit: 
