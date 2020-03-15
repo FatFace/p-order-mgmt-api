@@ -15,8 +15,8 @@ scheduler:
   
 #----Common Block---No change Needed----      
 cloudhub:
-  username: "![Wkd/i0mr4M5DRXGPkpxl3A+qPh6NASJ83cobwz2qfXs=]"
-  password: "![TUOtb96a5rFz9HgwE5GrsA==]"
+  username: "![V1H6cIZG27BimoyWHnUmWwgd7Z72XsoF+lx6EKe7Hfc=]"
+  password: "![pU6khIodBBpK1c7QxH7VmdEtcJxtRvmoKBlI+hYGFqk=]"
   
 smtp:
   host: "mail.fatface.net"
