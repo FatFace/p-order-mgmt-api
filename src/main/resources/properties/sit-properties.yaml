@@ -103,6 +103,8 @@ lookup:
     shippingBarcode:
       key: "SHIPPING_BAR_CODE-ORDERITEM_NUMSTR-APTOS"
   key: "ORDER_TYPE-MODE_OF_DELIVERY-D365"
+  emarsys:
+    key: "MODE_OF_DELIVERY-DEPT-D365"
   clientId: "a1c25cbc41dc4a43a1c5c3ecbf1251c5"
   clientSecret: "![LW5QbpXxcFCYtiU4/DH0+ENIW/q+2cr3P4u6w65C4pbwoGe1SiiStpjbUB6ntxmh]"
   queryParam:
@@ -122,6 +124,11 @@ lookup:
         type: "SHIPPING_BAR_CODE"
         category: "ORDERITEM_NUMSTR"
         source: "APTOS"
+    emarsys:
+      modeOfDelivery:
+        type: "MODE_OF_DELIVERY"
+        catgeory: "DEPT"
+        source: "D365"
 cron:
   expression: 
     manifest: "0 0/5 * 1/1 * ? *"
@@ -157,7 +164,15 @@ xcm:
   salesOrdersPath: "/sales/orders"
   returnOrdersPath: "/return/orders"
   connecitonTimeout: "30000"
-  
+
+emarsys:
+  host: "localhost"
+  port: "8092"
+  basePath: "/api/v1"
+  clientId: ""
+  clientSecret: ""
+  emailPath: "/emails"
+   
 status:
   responseCode: "0"
   responseMessage: "Success"

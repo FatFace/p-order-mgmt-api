@@ -109,4 +109,24 @@ output application/java
         <flow-ref doc:name="Log Dispatcher Exit" doc:id="f9d8a157-42b1-4af3-85e6-7b0a4492972a" name="log-dispatcher-exit-sub-flow" />
         <flow-ref doc:name="Audit Dispather Exit" doc:id="4b49aa4e-7cde-40e7-90ce-b9abe98804ae" name="audit-dispatcher-exit-sub-flow" />
     </flow>
+    <flow name="post:\sales\orders\emails:application\json:p-order-mgmt-api-config">
+    	<set-variable value="#['post:\sales\orders\emails:application\json:p-order-mgmt-api-config']" doc:name="Flow Name" doc:id="03eb330c-138a-4b5d-9aa0-20539c914232" variableName="flowName" />
+        <flow-ref doc:name="Log Receiver Entry" doc:id="d6038fdc-40ab-4eb7-805d-9048d7041e5b" name="log-receiver-entry-sub-flow" />
+        <flow-ref doc:name="Audit Receiver Entry" doc:id="4caaec6c-4881-405e-a196-7809501d4216" name="audit-receiver-entry-sub-flow" />
+        <flow-ref doc:name="Transactional Email Flow" doc:id="256565ce-26d1-42cc-8de7-fc34ca9533b6" name="post-transactional-email-impl-sub-slow"/>
+		<ee:transform xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd" doc:id="41ba1586-3a8e-41d2-ae52-ab2d0a2030ea">
+            <ee:message>
+                <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{
+  responseCode: p('status.responseCode'),
+  responseText: p('status.responseMessage')
+}]]></ee:set-payload>
+            </ee:message>
+        </ee:transform>
+        <set-variable value="#['post:\sales\orders\emails:application\json:p-order-mgmt-api-config']" doc:name="Flow Name" doc:id="340b0842-78fd-43ac-a0e0-9f5643b9399d" variableName="flowName" />
+        <flow-ref doc:name="Log Dispatcher Exit" doc:id="d0722907-6d8b-4851-b4d5-13da55ae75dc" name="log-dispatcher-exit-sub-flow" />
+        <flow-ref doc:name="Audit Dispather Exit" doc:id="15d7b4c8-82f3-4ea6-b56f-536744441cb4" name="audit-dispatcher-exit-sub-flow" />
+    </flow>
 </mule>

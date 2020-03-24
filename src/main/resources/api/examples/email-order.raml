@@ -1,0 +1,14 @@
+#%RAML 1.0 NamedExample
+order-no: "28759577"
+order-date: 2019-10-03T18:25:43.200Z
+route-id: "1"
+currency: "GBP"
+net-amount: 6.21
+vat-amount: 1.24
+sales-status: "shipped"
+delivery-mode: "1"
+customer: !include email-customer.raml
+orderlines: [!include email-orderline.raml]
+product-line-items: [!include email-product-line-items.raml]
+payments: [!include email-payment.raml]
+   

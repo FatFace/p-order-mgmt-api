@@ -68,6 +68,24 @@ uses:
             application/json:
               example: |
                 { "responseCode" : 0,  "responseText" : "success"}
+    /emails:
+      type: 
+        resourceTypesLib.collection:
+      is: [traitsLib.traceable: {required: true}, traitsLib.secured: {required: true}]   
+      post:
+        description: |
+          Send transaction emails to Emarsys
+        body:
+          application/json:
+            example: !include examples/email-orders.raml
+            properties:
+              orders: dataTypesLib.orders
+        responses:
+          201:
+            body:
+              application/json:
+                example: |
+                  { "responseCode" : 0,  "responseText" : "success"}
 /return:
   /orders:
     type: 
