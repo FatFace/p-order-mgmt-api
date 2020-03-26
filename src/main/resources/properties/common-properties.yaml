@@ -101,7 +101,9 @@ error:
     reprocessing:
       level2retry: "Level 2 Retry Mechanism Processing"
     cloudhub:
-      alert: "Sending alert to Help Desk"   
+      alert: "Sending alert to Help Desk" 
+    help:
+      desk: "Order without Email"  
 system:
   layer:
     response: "No Data from System Layer"

@@ -1,0 +1,64 @@
+{
+	"orders":[{
+	"route-id" : "5479",
+	"order-type" : "Confirmation",
+	"order-no" : "UKF4100004644",
+	"currency" : "GBP",
+	"net-amount" : 133.34,
+	"vat-amount" : 26.66,
+	"sales-status" : "Invoiced",
+	"customer" : {
+		"email" : "abc@gmail.com",
+		"billing-address" :{
+			"first-name" : "BillingAddress",
+			"last-name" : "",
+			"street" : "7 Lasham Green",
+			"city" : "Havant",
+			"postcode" : "PO9 5QP",
+			"state" : "Hampshire",
+			"country" : "GBR",
+			"contact-number" : "07558864522"
+		},
+		"shipping-address" : {
+			"first-name" : "SamMcCready",
+			"last-name" : "",
+			"street" : "7 Lasham Green",
+			"city" : "Havant",
+			"postcode" : "PO9 5QP",
+			"county" : "Hampshire",
+			"country" : "GBR"
+		}
+	},
+	"delivery-mode" : "standGBP",
+	"order-date" : "2020-02-06T10:05:14Z",
+	"orderlines" : [{
+		"item-id" : "947684",
+		"quantity" : 1,
+		"amount" : 54.17,
+		"product" : {
+			"skus" : [{
+				"barcode" : "5052751598867",
+				"product-id" : "947684 :  : ONE : BLK-BLACK :",
+				"name" : "AVA CROSS BODY BAG- / AVA CROSS BODY BAG-",
+				"colour" : "BLK-BLACK",
+				"size"  : "ONE",
+				"fit" : ""
+			}]
+		},
+		"promotions" : [{
+			"promotion-id" : ""
+		}]
+	}],
+	"product-line-items" : [{
+		"option-line-items" : [{
+			"personalize-text" : "WOW",
+			"personalize-text-color" : "gold"
+		}]
+	}],
+		
+	"payment" :[{
+		"payment-mode" : "VISA",
+		"amount" : "170"
+	}]	
+}]
+}

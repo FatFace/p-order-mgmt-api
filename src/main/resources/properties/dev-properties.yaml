@@ -3,6 +3,7 @@ http:
   host: "0.0.0.0"
   private:
     port: "8091"
+  port: "8081"
   consolePath: "/console/*"
   
 api:
@@ -127,8 +128,8 @@ lookup:
         source: "APTOS"
     emarsys:
       modeOfDelivery:
-        type: "MODE_OF_DELIVERY"
-        catgeory: "DEPT"
+        type: "DELIVERY_TYPE"
+        catgeory: "MODE"
         source: "D365"
 
 cron:

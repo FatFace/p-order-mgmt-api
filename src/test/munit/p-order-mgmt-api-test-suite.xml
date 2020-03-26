@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:munit="http://www.mulesoft.org/schema/mule/munit"
+	xmlns:munit-tools="http://www.mulesoft.org/schema/mule/munit-tools" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xsi:schemaLocation="
+		http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+		http://www.mulesoft.org/schema/mule/munit http://www.mulesoft.org/schema/mule/munit/current/mule-munit.xsd
+		http://www.mulesoft.org/schema/mule/munit-tools  http://www.mulesoft.org/schema/mule/munit-tools/current/mule-munit-tools.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<munit:config name="p-order-mgmt-api-test-suite.xml" />
+	<munit:test name="p-order-mgmt-api-test-suite-post:\sales\orders\emails-success-flow" description="Test" doc:id="953d921a-5c3a-4ed7-ab3b-80bb43efc1e1">
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when" doc:id="34277f6f-e6dd-47a5-afbd-89d150dd4c85" processor="http:request">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="Invoke s-db-lookup-api" attributeName="doc:name" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[MunitTools::getResourceAsString('sample_data/transactional-email-lookup-value-response.json')]" mediaType="application/json" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when doc:name="Mock when" doc:id="b0a63610-f7f7-4de8-85f4-b49f67fe17b8" processor="http:request">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="Invoke s-email-data-int" attributeName="doc:name" />
+				</munit-tools:with-attributes>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<set-payload value="#[MunitTools::getResourceAsString('sample_data/transactional-email-request.json')]" doc:name="Set Payload" doc:id="082bf030-0527-42a7-8c44-ed1e86a52957" mimeType="application/json"/>
+			<flow-ref doc:name="Flow-ref to post:\sales\orders\emails:application\json:p-order-mgmt-api-config" doc:id="4f6cc2e2-9422-4707-a56d-cd81a44e7c6f" name="post:\sales\orders\emails:application\json:p-order-mgmt-api-config"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:verify-call doc:name="Verify call" doc:id="b213961b-80d9-4c28-a9e5-c98f679a6fc1" processor="http:request">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="Invoke s-email-data-int" attributeName="doc:name" />
+				</munit-tools:with-attributes>
+			</munit-tools:verify-call>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="p-order-mgmt-api-test-suite-post:\sales\orders\emails" description="Test" doc:id="edbc1f63-8415-4834-b8d9-f223d5f902be">
+			<munit:behavior>
+				<munit-tools:mock-when doc:name="Mock when" doc:id="4e275f7d-f28c-4fe4-8545-124175c44441" processor="http:request">
+					<munit-tools:with-attributes>
+						<munit-tools:with-attribute whereValue="Invoke s-db-lookup-api" attributeName="doc:name" />
+					</munit-tools:with-attributes>
+					<munit-tools:then-return>
+						<munit-tools:payload value="#[MunitTools::getResourceAsString('sample_data/transactional-email-lookup-value-response.json')]" mediaType="application/json" />
+					</munit-tools:then-return>
+				</munit-tools:mock-when>
+				<munit-tools:mock-when doc:name="Mock when" doc:id="b9e24704-911e-4b5c-865d-8cde7b5f0af4" processor="http:request">
+					<munit-tools:with-attributes>
+						<munit-tools:with-attribute whereValue="Invoke s-email-data-int" attributeName="doc:name" />
+					</munit-tools:with-attributes>
+				</munit-tools:mock-when>
+			<munit-tools:mock-when doc:name="Mock when" doc:id="2e087140-2bf4-4ebc-8e53-3dd9cac7231a" processor="raise-error">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="Raise error" attributeName="doc:name" />
+				</munit-tools:with-attributes>
+			</munit-tools:mock-when>
+			</munit:behavior>
+			<munit:execution>
+				<set-payload value="#[MunitTools::getResourceAsString('sample_data/transactional-email-request-without-email.json')]" doc:name="Set Payload" doc:id="3042a46c-d623-475c-b8f1-f4351b7ab89e" mimeType="application/json" />
+				<ee:transform doc:name="Transform Message" doc:id="bb5c0ef3-83d0-48fb-bd16-6f780732676c" >
+				<ee:message >
+				</ee:message>
+				<ee:variables >
+					<ee:set-variable variableName="transactionStartTime" ><![CDATA['2018-08-02T16:58:12.121Z']]></ee:set-variable>
+					<ee:set-variable variableName="transactionId" ><![CDATA[%dw 2.0
+output application/json
+---
+uuid()]]></ee:set-variable>
+				</ee:variables>
+			</ee:transform>
+			<flow-ref doc:name="post-transactional-email-impl-sub-slow" doc:id="665cc79d-ff14-454b-9ec7-c4009c80f12a" name="post-transactional-email-impl-sub-slow" />
+			</munit:execution>
+			<munit:validation>
+				<munit-tools:verify-call doc:name="Verify call" doc:id="d04b35d3-2f30-464e-8f0a-8409d3617d47" processor="raise-error">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="Raise error" attributeName="doc:name" />
+				</munit-tools:with-attributes>
+				</munit-tools:verify-call>
+			</munit:validation>
+		</munit:test>
+
+
+</mule>
