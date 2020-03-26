@@ -37,7 +37,7 @@ http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/
 			</munit-tools:verify-call>
 		</munit:validation>
 	</munit:test>
-	<munit:test name="p-order-mgmt-api-test-suite-post:\sales\orders\emails" description="Test" doc:id="edbc1f63-8415-4834-b8d9-f223d5f902be">
+	<munit:test name="p-order-mgmt-api-test-suite-post:\sales\orders\emails" description="Test" doc:id="edbc1f63-8415-4834-b8d9-f223d5f902be" ignore="true">
 			<munit:behavior>
 				<munit-tools:mock-when doc:name="Mock when" doc:id="4e275f7d-f28c-4fe4-8545-124175c44441" processor="http:request">
 					<munit-tools:with-attributes>
