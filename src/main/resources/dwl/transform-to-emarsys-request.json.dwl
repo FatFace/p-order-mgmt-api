@@ -30,6 +30,7 @@ fun getLookupModeOfDelivery(order) = vars.lookupModeOfDelivery filter($.'order-n
 			'postcode' : vars.originalPayload.customer.'shipping-address'.postcode,
 			'county' : vars.originalPayload.customer.'shipping-address'.county,
 			'country' : vars.originalPayload.customer.'shipping-address'.country
+		}
 		},
         'delivery-mode' : getLookupModeOfDelivery(vars.originalPayload).'lookup-value',
         'order-date': vars.originalPayload.'order-date',
@@ -42,5 +43,4 @@ fun getLookupModeOfDelivery(order) = vars.lookupModeOfDelivery filter($.'order-n
         'payment' : vars.originalPayload.payment map (payments) ->{
             (payments)
         }
-    }
 }
