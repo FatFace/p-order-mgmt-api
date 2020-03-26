@@ -62,6 +62,17 @@ output application/json
 				</ee:transform>
 					<flow-ref doc:name="Invoke s-email-data-int System Layer" doc:id="aed93419-9d33-4eba-8cf4-d4dd93644be7" name="call-s-email-data-int-sub-flow"/>
 				</foreach>
+				<ee:transform doc:name="Transform Message" doc:id="9b3540d7-68d8-4719-9dc8-d67fa1ca2af3" >
+					<ee:message >
+						<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+  responseCode: p('status.responseCode'),
+  responseText: p('status.responseMessage')
+}]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
 			</when>
 			<otherwise >
 				<set-variable value="No Orders with Email Id" doc:name="Set Variable" doc:id="ea0f0155-4356-4194-8d29-ba9e30767fa8" variableName="loggingPayload"/>
@@ -167,17 +178,6 @@ vars.ordersWithEmailId.orders map (orders)->{
 	"client_id" : p('emarsys.clientId')
 }]]]></http:query-params>
 		</http:request>
-		<ee:transform doc:name="Transform Message" doc:id="e31370e5-dc52-480f-aaed-4b471a199949" >
-			<ee:message >
-				<ee:set-payload ><![CDATA[%dw 2.0
-output application/json
----
-{
-  responseCode: p('status.responseCode'),
-  responseText: p('status.responseMessage')
-}]]></ee:set-payload>
-			</ee:message>
-		</ee:transform>
 		<set-variable value="#['call-s-email-data-int-sub-flow']" doc:name="Set Variable" doc:id="fb9edd05-02fc-4d8f-ab51-fdb1c6725cfc" variableName="flowName"/>
 		<flow-ref doc:name="Audit process exit" doc:id="68cc1a8c-0616-4f6e-8647-5437a6bc82f7" name="audit-process-exit-sub-flow"/>
 		<flow-ref doc:name="Log process exit" doc:id="fa0c46cc-67d1-4ce7-bbd2-f245e10b7edd" name="log-process-exit-sub-flow"/>
