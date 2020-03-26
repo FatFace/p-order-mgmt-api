@@ -121,7 +121,7 @@ report:
   ordersPath: "/orders"
   
 xcm:
-  host: ""mule-worker-internal-s-xcm-api.ir-e1.cloudhub.io""
+  host: "mule-worker-internal-s-xcm-api.ir-e1.cloudhub.io"
   port: "8091"
   basepath: "/api/v1"
   clientId: "587f052383c44efbadc76e22201cba19"
@@ -131,8 +131,8 @@ xcm:
   connecitonTimeout: "30000"
 
 emarsys:
-  host: "localhost"
-  port: "8092"
+  host: "mule-worker-internal-s-email-data-api.ir-e1.cloudhub.io"
+  port: "8091"
   basePath: "/api/v1"
   clientId: ""
   clientSecret: ""
@@ -141,6 +141,9 @@ emarsys:
 status:
   responseCode: "0"
   responseMessage: "Success"
+  failed:
+    responseCode: "-1"
+    responseMessage: "Failed"
   
 pooling:
   profile:

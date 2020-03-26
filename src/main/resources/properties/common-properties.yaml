@@ -103,7 +103,7 @@ error:
     cloudhub:
       alert: "Sending alert to Help Desk" 
     help:
-      desk: "Order without Email"  
+      desk: "Email Id is mandatory for order number:"  
 system:
   layer:
     response: "No Data from System Layer"

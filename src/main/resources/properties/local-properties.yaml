@@ -171,13 +171,16 @@ emarsys:
   host: "localhost"
   port: "8092"
   basePath: "/api/v1"
-  clientId: ""
-  clientSecret: ""
+  clientId: "c1751cc13ad746a8a49c404c966839f7"
+  clientSecret: "![Uve1NAvt5zaIs55ecLLnd6rhKY81uIy0j5/clihbaHvBkxed9l+lipNeE/ztkCnm]"
   emailPath: "/emails"
 
 status:
   responseCode: "0"
   responseMessage: "Success"
+  failed:
+    responseCode: "-1"
+    responseMessage: "Failed"
   
 pooling:
   profile:

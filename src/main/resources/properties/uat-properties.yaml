@@ -166,16 +166,19 @@ xcm:
   connecitonTimeout: "30000"
 
 emarsys:
-  host: "localhost"
-  port: "8092"
+  host: "mule-worker-internal-uat-s-email-data-api.ir-e1.cloudhub.io"
+  port: "8091"
   basePath: "/api/v1"
-  clientId: ""
-  clientSecret: ""
+  clientId: "878d7706ad57449ba28c0fe669d6c921"
+  clientSecret: "![xXfiJhHOrpkgby8wWnyNRCdoKPeIjUWXj8Gl9gKMxtLWIW0YMHZE2jE76rGwkF0V]"
   emailPath: "/emails"
     
 status:
   responseCode: "0"
   responseMessage: "Success"
+  failed:
+    responseCode: "-1"
+    responseMessage: "Failed"
   
 pooling:
   profile:

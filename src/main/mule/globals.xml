@@ -109,8 +109,8 @@ http://www.mulesoft.org/schema/mule/os http://www.mulesoft.org/schema/mule/os/cu
 		<http:request-connection host="${xcm.host}"
 			port="${xcm.port}" connectionIdleTimeout="${xcm.connecitonTimeout}" />
 	</http:request-config>
-	<http:request-config name="s_email_HTTP_Request_Configuration" doc:name="HTTP Request configuration" doc:id="a90dddfa-1567-4cde-8f99-352dd162bc22" >
+	<http:request-config name="s_email_HTTP_Request_Configuration" doc:name="HTTP Request configuration" doc:id="a90dddfa-1567-4cde-8f99-352dd162bc22" basePath="${emarsys.basePath}">
 		<http:request-connection host="${emarsys.host}" port="${emarsys.port}" />
 	</http:request-config>
-	<os:object-store name="Object_store" doc:name="Object store" doc:id="613e5a63-395a-4a9f-adca-d7e50a49e9ad" />
+	
 </mule>

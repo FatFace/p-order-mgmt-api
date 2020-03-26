@@ -29,9 +29,9 @@ output application/json
 			<try doc:name="Try" doc:id="b03c41c6-876c-432e-ae97-a09a1c41fab4" >
 			
 			<choice doc:name="Choice" doc:id="e278fe60-8a41-4236-b8d1-24b7b64d5e6f" >
-				<when expression="#[isEmpty(payload.orders) == false]">
-					<set-variable value="#[write(vars.additionalInfo,'application/json') ++ p('error.msg.help.desk')]" doc:name="Set Additional info" doc:id="beb27704-4dfe-4173-9fb3-8d4e13c39b22" variableName="additionalInfo"/>
-					<raise-error doc:name="Raise error" doc:id="fd29f8b0-9d29-411b-98e7-961571949b47" type="FF_CLOUDHUB:HELPDESK_ALERT" description="Transactional Email Not Specified"/>
+					<when expression="#[isEmpty(payload.orders) == false]">
+						<set-variable value="#[write(vars.additionalInfo,'application/json') ++ p('error.msg.help.desk') ++ write(payload.orders[0].'order-no','application/json')]" doc:name="Set Additional info" doc:id="beb27704-4dfe-4173-9fb3-8d4e13c39b22" variableName="additionalInfo" />
+						<raise-error doc:name="Raise error" doc:id="fd29f8b0-9d29-411b-98e7-961571949b47" type="FF_CLOUDHUB:HELPDESK_ALERT" description="Transactional Email Not Specified" />
 				</when>
 					<otherwise >
 						<set-variable value="DATA IS VALID" doc:name="Set Variable" doc:id="7a7b186d-89c5-4f25-903a-d0e707d905b1" variableName="loggingPayload"/>
@@ -66,6 +66,17 @@ output application/json
 			<otherwise >
 				<set-variable value="No Orders with Email Id" doc:name="Set Variable" doc:id="ea0f0155-4356-4194-8d29-ba9e30767fa8" variableName="loggingPayload"/>
 				<flow-ref doc:name="Logging sub flow" doc:id="77f6dd3a-d52b-492c-b70c-2a9c849856b5" name="logging-sub-flow"/>
+				<ee:transform doc:name="Transform Message" doc:id="4bbb3525-3d35-41ea-b063-20bb6a1948b6" >
+					<ee:message >
+						<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+  responseCode: p('status.failed.responseCode'),
+  responseText: p('status.failed.responseMessage')
+}]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
 			</otherwise>
 		</choice>
 		<set-variable value="#['post-transactional-email-impl-sub-slow']" doc:name="Set Variable" doc:id="3d57db06-5f25-4aee-9b96-6d3cc490b852" variableName="flowName"/>
@@ -77,10 +88,10 @@ output application/json
 		<flow-ref doc:name="Log process entry" doc:id="c9fe36bf-fb3b-4760-a973-65ef6d579557" name="log-process-entry-sub-flow"/>
 		<flow-ref doc:name="Audit process entry" doc:id="9be4b7b3-be6b-469f-90c7-e209dab80b3a" name="audit-process-entry-sub-flow"/>
 		<set-variable value="#['MODE_OF_DELIVERY-DEPT-D365']" doc:name="Set Lookup key" doc:id="73ace86b-cbfc-4ff9-8d88-08d54178a144" variableName="vLookupKey"/>
-		<os:contains doc:name="Contains" doc:id="7bca8674-4bf7-4d64-bf92-2128464999ad" key="#[vars.vLookupKey]" objectStore="Object_store"/>
+		<os:contains doc:name="Contains" doc:id="7bca8674-4bf7-4d64-bf92-2128464999ad" key="#[vars.vLookupKey]"/>
 		<choice doc:name="Choice" doc:id="f73605fc-432e-461c-81d5-7fdeb42c004d" >
 			<when expression="#[payload == true]">
-				<os:retrieve doc:name="Retrieve" doc:id="886d6b17-945e-42c7-a7c2-aff9093d1c6d" key="#[vars.vLookupKey]" objectStore="Object_store"/>
+				<os:retrieve doc:name="Retrieve" doc:id="886d6b17-945e-42c7-a7c2-aff9093d1c6d" key="#[vars.vLookupKey]"/>
 				<ee:transform doc:name="Transform Message" doc:id="51ec4b7c-f5ff-410a-8770-b52d3017ca6e" >
 					<ee:message >
 						<ee:set-payload ><![CDATA[%dw 2.0
@@ -93,7 +104,7 @@ payload]]></ee:set-payload>
 			</when>
 			<otherwise >
 				<flow-ref doc:name="Call s-dblookup-api sub flow" doc:id="734e5f1d-6874-4fc8-90b0-429ec0bbb7b5" name="call-dp-lookup-api-sub-flow"/>
-				<os:store doc:name="Store" doc:id="afc6f2f6-97dc-4959-9840-aae7792519ba" key="#[vars.vLookupKey]" objectStore="Object_store"/>
+				<os:store doc:name="Store" doc:id="afc6f2f6-97dc-4959-9840-aae7792519ba" key="#[vars.vLookupKey]"/>
 				<flow-ref doc:name="Flow Reference" doc:id="a4af5c75-0168-4a00-91dd-97ae1ab8bf08" name="transaform-lookup-value-sub-flow"/>
 			</otherwise>
 		</choice>
@@ -156,6 +167,17 @@ vars.ordersWithEmailId.orders map (orders)->{
 	"client_id" : p('emarsys.clientId')
 }]]]></http:query-params>
 		</http:request>
+		<ee:transform doc:name="Transform Message" doc:id="e31370e5-dc52-480f-aaed-4b471a199949" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+  responseCode: p('status.responseCode'),
+  responseText: p('status.responseMessage')
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
 		<set-variable value="#['call-s-email-data-int-sub-flow']" doc:name="Set Variable" doc:id="fb9edd05-02fc-4d8f-ab51-fdb1c6725cfc" variableName="flowName"/>
 		<flow-ref doc:name="Audit process exit" doc:id="68cc1a8c-0616-4f6e-8647-5437a6bc82f7" name="audit-process-exit-sub-flow"/>
 		<flow-ref doc:name="Log process exit" doc:id="fa0c46cc-67d1-4ce7-bbd2-f245e10b7edd" name="log-process-exit-sub-flow"/>
