@@ -34,7 +34,7 @@ fun getLinePrice(amount, netAmount) = (amount + netAmount)as Number as String {f
 		"inv-contact-country": if((pickorder.customer."billing-address".country) != null) (if(sizeOf(pickorder.customer."billing-address".country)>=24) ((pickorder.customer."billing-address".country)[0 to 24]) else (pickorder.customer."billing-address".country)) else "",
 		"order-lines": pickorder.orderlines map ( orderline , indexOfOrderline ) -> {
 			"line-id" : (100 + indexOfOrderline +1) as String,
-			"qty-ordered": if((orderline.quantity) !=null) (if(sizeOf(orderline.quantity)>=6) ((orderline.quantity)[0 to 5]) else (orderline.quantity)) else "",
+			"qty-ordered": if((orderline.quantity) !=null) (if(sizeOf(orderline.quantity)>=6) ((orderline.quantity)[0 to 5] as String) else (orderline.quantity) as String) else "",
 			"product-barcode": if((orderline.barcode) != null) (if(sizeOf(orderline.barcode)>=12) ((orderline.barcode)[0 to 11]) else (orderline.barcode)) else "",
 			"line-price" : if(orderline."tax-amount" != null and orderline."sales-price" !=null) (orderline."tax-amount" + orderline."sales-price") as String {format : ".######"} else "",
 			"product-name": if((orderline."item-name") != null) (if(sizeOf(orderline."item-name")>30) ((orderline."item-name")[0 to 29]) else (orderline."item-name")) else "",
