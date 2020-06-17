@@ -118,7 +118,7 @@ output application/json
 fun checkData(data) = data.orderlines filter ($.quantity != $."ordered-quantity")
 ---
 {
-	orders: payload.orders filter ($."order-no" != null and $."order-no" != '' and $.status != 'shipped' and isEmpty(checkData($)) == false) map $  
+	orders: payload.orders filter ($."order-no" != null and $."order-no" != '' and $.status == 'Shipped' and isEmpty(checkData($)) == false) map $  
 } ]]></ee:set-payload>
 			</ee:message>
 			<ee:variables >
