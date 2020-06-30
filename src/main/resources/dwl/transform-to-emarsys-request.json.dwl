@@ -29,7 +29,8 @@ fun getLookupModeOfDelivery(order) = vars.lookupModeOfDelivery filter($.'order-n
 			'city' : vars.originalPayload.customer.'shipping-address'.city,
 			'postcode' : vars.originalPayload.customer.'shipping-address'.postcode,
 			'county' : vars.originalPayload.customer.'shipping-address'.county,
-			'country' : vars.originalPayload.customer.'shipping-address'.country
+			'country' : vars.originalPayload.customer.'shipping-address'.country,
+			'contact-number' : vars.originalPayload.customer.'shipping-address'.'contact-number'
 		}
 		},
         'delivery-mode' : getLookupModeOfDelivery(vars.originalPayload).'lookup-value',
