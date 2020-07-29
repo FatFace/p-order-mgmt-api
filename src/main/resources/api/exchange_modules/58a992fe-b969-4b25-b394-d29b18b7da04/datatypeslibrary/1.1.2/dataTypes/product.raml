@@ -1,0 +1,20 @@
+#%RAML 1.0 DataType
+type: object
+displayName: product
+properties:
+  season?: string
+  qualifier?: string
+  commodity-code?: string
+  country-id?: string
+  name?: string
+  retail-type?: string
+  product-type?: string
+  product-category?: string
+  is-active?: boolean
+  product-id?: string
+  status?: string
+  skus?:
+    description: sku details
+    type: array
+    items: 
+      type: !include sku.raml
