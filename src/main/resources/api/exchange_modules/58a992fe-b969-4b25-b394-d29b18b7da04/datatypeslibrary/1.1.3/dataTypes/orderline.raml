@@ -2,7 +2,14 @@
 type: object
 displayName: orderline
 properties:
+  data-area-id?: string
+  sales-order?: string
   item-id?: string
+  package-slip-id?: string
+  fullfillment-status?: string
+  sales-container-id?: string
+  vat-group?: string
+  discount?: string
   line-id?: number
   item-name?: string
   quantity?: number
@@ -17,15 +24,20 @@ properties:
   personalize-text-color?: string
   invent-trans-id?: string
   cancelled-quantity?: number
-  created-date?: datetime-only
+  created-date?: datetime
   delivered-quantity?: number
   delivery-remainder?: number
   invoice-remainder?: number
   item-group-id?: string
-  modified-date?: datetime-only
+  delivery-mode?: string
+  modified-date?: datetime
   ordered-quantity?: number
   return-status?: string
+  disposition-code?: string
   tax-group-id?: string
+  on-order?: string
+  carrier?: string
+  carrier-tracking-id?: string
   promotions?: 
     displayName: promotions and discounts offered
     type: array

@@ -2,7 +2,14 @@
 type: object
 displayName: order
 properties:
+  data-area-id?: string
+  sales-origin?: string
+  discount?: string
+  vat-group?: string
+  invoice-amount?: string
   order-no?: string
+  sales-table-id?: string
+  cust-acct?: string
   order-date?: datetime
   sales-date?: date-only
   delivery-date?: date-only
@@ -15,14 +22,18 @@ properties:
   source?: string
   legal-entity?: string
   created-by?: string
-  modified-date?: datetime-only
+  modified-date?: datetime
   order-type?: string
   orginal-sales-order-id?: string
+  third-party-order-id?: string
+  store-origin-id?: string
   sales-pool?: string
+  sales-status?: string
   return-status?: string
   rma-no?: string
-  sales-status?: string
   transaction-id?: string
+  sales-table-rec-id?: string
+  customer-id?: string
   customer?: 
     displayName: customer details
     type: !include customer.raml
@@ -34,6 +45,7 @@ properties:
   charges?: number
   net-amount?: number
   vat-amount?: number
+  calculated-vat-amount?: number
   product-line-items?:
     displayName: Product line items
     type: array
