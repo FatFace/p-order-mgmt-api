@@ -1,0 +1,32 @@
+#%RAML 1.0 DataType
+type: object
+displayName: store
+properties:
+  store-id?: string
+  name?: string
+  store-code?: string
+  store-address?:
+    type: !include address.raml
+  #skus field needs to be replaced by products based impact analysis with existing usage  
+  skus?:
+    displayName: List of SKUs
+    type: array
+    items: !include sku.raml
+  click-and-collect?: boolean
+  store-fulfillment?: boolean
+  longitude?: string
+  latitude?: string
+  monday-open-time?: time-only
+  monday-close-time?: time-only
+  tuesday-open-time?: time-only
+  tuesday-close-time?: time-only
+  wednesday-open-time?: time-only
+  wednesday-close-time?: time-only
+  thursday-open-time?: time-only
+  thursday-close-time?: time-only
+  friday-open-time?: time-only
+  friday-close-time?: time-only
+  saturday-open-time?: time-only
+  saturday-close-time?: time-only
+  sunday-open-time?: time-only
+  sunday-close-time?: time-only

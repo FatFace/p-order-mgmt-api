@@ -4,6 +4,7 @@ fun getLookupModeOfDelivery(order) = vars.lookupModeOfDelivery filter($.'order-n
 ---
 {
 		"data-area-id": vars.originalPayload.'data-area-id',
+		 "route-id" : vars.originalPayload.'route-id',
 		"order-type": vars.originalPayload.'order-type',
 		"order-no" : vars.originalPayload.'order-no',
 		"order-date" : if(vars.originalPayload.'order-date' != null and vars.originalPayload.'order-date' != "") vars.originalPayload.'order-date' else null,

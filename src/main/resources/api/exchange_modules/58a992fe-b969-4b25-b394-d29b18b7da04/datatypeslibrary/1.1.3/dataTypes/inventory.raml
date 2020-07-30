@@ -1,0 +1,35 @@
+#%RAML 1.0 DataType
+type: object
+displayName: inventory
+properties:
+  client-id?: string
+  record-type?: string
+  action?: string
+  code?: string
+  original-quantity-sign?: string
+  original-quantity?: number
+  adjusted-quantity-sign?: string
+  adjusted-quantity?: number
+  created-date?: datetime-only
+  order-type?: string
+  return-status?: string
+  pallet-config?: string
+  products?: 
+    type: array
+    items: !include product.raml    
+  from-location-id?: string
+  to-location-id?: string
+  final-location-id?: string
+  reference-id?: string
+  line-id?: string
+  notes?: string
+  reason-id?: string
+  user-id?: string
+  site-id?: string
+  owner-id?: string
+  lock-code?: string
+  lock-status?: string
+  session-type?: string
+  total-quantity?: number
+  stock-pool?: string
+  
