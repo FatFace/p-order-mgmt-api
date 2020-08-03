@@ -30,6 +30,7 @@ fun getLookupModeOfDelivery(order) = vars.lookupModeOfDelivery filter($.'order-n
 				"description": vars.originalPayload.customer.'shipping-address'.description,
 				"city": vars.originalPayload.customer.'shipping-address'.city,
 				"county": vars.originalPayload.customer.'shipping-address'.county,
+				"state": vars.originalPayload.customer.'shipping-address'.state
 			}
 		},
 		"sales-origin": vars.originalPayload.'sales-origin',
