@@ -40,7 +40,7 @@ fun getLookupModeOfDelivery(order) = vars.lookupModeOfDelivery filter($.'order-n
 		"currency": vars.originalPayload.currency,
 		"sales-table-rec-id": vars.originalPayload.'sales-table-rec-id',
 		"vat-amount": vars.originalPayload.'vat-amount',
-		'delivery-mode' : getLookupModeOfDelivery(vars.originalPayload).'lookup-value',
+		'delivery-mode' : vars.originalPayload.'delivery-mode',
 		"customer-id": vars.originalPayload.'customer-id',
 		"rma-no": vars.originalPayload.'rma-no',
 		"net-amount" : if(vars.originalPayload.'net-amount' != null and vars.originalPayload.'net-amount' != "") vars.originalPayload.'net-amount' as Number else 0,
@@ -55,7 +55,49 @@ fun getLookupModeOfDelivery(order) = vars.lookupModeOfDelivery filter($.'order-n
 		"sales-status": vars.originalPayload.'sales-status',
 		"return-status": vars.originalPayload.'return-status',
         'orderlines' : vars.originalPayload.orderlines map (orderline) ->{
-            (orderline)
+           "data-area-id": orderline.'data-area-id',
+			"sales-order": orderline.'sales-order',
+			"line-id": orderline.'line-id',
+			"package-slip-id": orderline.'package-slip-id',
+			"version": orderline.version,
+			"discount":  orderline.discount,
+			'delivery-mode' : getLookupModeOfDelivery(vars.originalPayload).'lookup-value',
+			"fullfillment-status": orderline.'fullfillment-status',
+			"sales-container-id": orderline.'sales-container-id',
+			"remaining": orderline.remaining,
+			"quantity" :  orderline.quantity ,
+			"delivered-quantity": orderline.'delivered-quantity',
+			"cancelled-quantity":  orderline.'cancelled-quantity' ,
+			"vat-group": orderline.'vat-group',
+			"item-id": orderline.'item-id',
+			"base-price": orderline.'base-price',
+			"delivery-remainder": orderline.'delivery-remainder',
+			"invoice-remainder":  orderline.'invoice-remainder' ,
+			"created-date":   orderline.'created-date' ,
+			"disposition-code": orderline.'disposition-code',
+			"modified-date":  orderline.'modified-date' ,
+			"on-order":  orderline.'on-order' ,
+			"carrier": orderline.carrier,
+			"carrier-tracking-id": orderline.'carrier-tracking-id',
+			"delivery-mode": orderline.'delivery-mode',
+			"personalize-text" : orderline.'personalize-text',
+			"personalize-text-color" : orderline.'personalize-text-color',
+			"promotions" : [{
+				"promotion-id" : orderline.promotions[0].'promotion-id'
+			}],
+			"warehouse": {
+				"warehouse-id": orderline.warehouse.'warehouse-id'
+			},
+			"product" : {
+				"skus" : orderline.product.skus map (skuline) -> {
+					"barcode" : if(skuline.barcode != null and skuline.barcode != "") skuline.barcode else "",
+					"product-id" : skuline.'product-id',
+					"name" : skuline.name,
+					"colour" : skuline.colour,
+					"size"  : skuline.size,
+					"fit" : skuline.fit
+				}
+			}
         },
         'product-line-items': vars.originalPayload.'product-line-items' map (productline) ->{
             (productline)
