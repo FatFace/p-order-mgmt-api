@@ -79,7 +79,6 @@ fun getLookupModeOfDelivery(order) = vars.lookupModeOfDelivery filter($.'order-n
 			"on-order":  orderline.'on-order' ,
 			"carrier": orderline.carrier,
 			"carrier-tracking-id": orderline.'carrier-tracking-id',
-			"delivery-mode": orderline.'delivery-mode',
 			"personalize-text" : orderline.'personalize-text',
 			"personalize-text-color" : orderline.'personalize-text-color',
 			"promotions" : [{
