@@ -72,6 +72,7 @@ fun getLookupModeOfDelivery(order) = vars.lookupModeOfDelivery filter($.'order-n
 			"item-id": orderline.'item-id',
 			"base-price": orderline.'base-price',
 			"delivery-remainder": orderline.'delivery-remainder',
+			"invent-trans-id": orderline.'invent-trans-id',
 			"invoice-remainder":  orderline.'invoice-remainder' ,
 			"created-date":   orderline.'created-date' ,
 			"disposition-code": orderline.'disposition-code',
