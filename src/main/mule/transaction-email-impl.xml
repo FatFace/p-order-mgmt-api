@@ -130,12 +130,17 @@ payload]]></ee:set-payload>
 			<ee:variables >
 				<ee:set-variable variableName="lookupModeOfDelivery" ><![CDATA[%dw 2.0
 output application/json
+var orderswithEmail = vars.ordersWithEmailId.orders
 fun getModeOfDelivery(mode) = payload.lookups filter (($.'lookup-key') == mode.'delivery-mode') reduce $$
 ---
-vars.ordersWithEmailId.orders map (orders)->{
-	'order-no' : orders.'order-no',
+(vars.ordersWithEmailId.orders map (orders)-> {
+	"lookup": (orders.orderlines map (orders)-> {
+	"line-id": orders.'line-id',
 	'lookup-value' : if(getModeOfDelivery(orders) != null and isEmpty(getModeOfDelivery(orders)) != true ) (getModeOfDelivery(orders).'lookup-value') else ""
-}]]></ee:set-variable>
+	
+})
+
+})]]></ee:set-variable>
 			</ee:variables>
 		</ee:transform>
 	</sub-flow>

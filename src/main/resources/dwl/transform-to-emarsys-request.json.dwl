@@ -1,10 +1,11 @@
 %dw 2.0
 output application/json
-fun getLookupModeOfDelivery(order) = vars.lookupModeOfDelivery filter($.'order-no' == order.'order-no') reduce $$
+var lookupModeOfDelivery = vars.lookupModeOfDelivery[0].lookup
+fun getLookupModeOfDelivery(orderline) = lookupModeOfDelivery filter($.'line-id' == orderline.'line-id') reduce $$
 ---
 {
 		"data-area-id": vars.originalPayload.'data-area-id',
-		 "route-id" : vars.originalPayload.'route-id',
+		"route-id" : vars.originalPayload.'route-id',
 		"order-type": vars.originalPayload.'order-type',
 		"order-no" : vars.originalPayload.'order-no',
 		"order-date" : if(vars.originalPayload.'order-date' != null and vars.originalPayload.'order-date' != "") vars.originalPayload.'order-date' else null,
@@ -61,7 +62,7 @@ fun getLookupModeOfDelivery(order) = vars.lookupModeOfDelivery filter($.'order-n
 			"package-slip-id": orderline.'package-slip-id',
 			"version": orderline.version,
 			"discount":  orderline.discount,
-			'delivery-mode' : getLookupModeOfDelivery(vars.originalPayload).'lookup-value',
+			'delivery-mode' : getLookupModeOfDelivery(orderline).'lookup-value',
 			"fullfillment-status": orderline.'fullfillment-status',
 			"sales-container-id": orderline.'sales-container-id',
 			"remaining": orderline.remaining,
