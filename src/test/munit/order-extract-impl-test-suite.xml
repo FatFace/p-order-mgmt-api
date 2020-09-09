@@ -9,7 +9,7 @@
 		http://www.mulesoft.org/schema/mule/munit-tools  http://www.mulesoft.org/schema/mule/munit-tools/current/mule-munit-tools.xsd">
 	<munit:config name="order-extract-impl-test-suite.xml" />
 	<import doc:name="Import" doc:id="98d4454f-ed38-419a-a429-3dccf17d1bf7" file="test-globals-suite.xml" />
-	<munit:test name="order-extract-impl-test-suite-JDA-order-extract-flowTest" description="Test" doc:id="bf08c016-23a2-4760-ad8b-6140a0cdb2fc" ignore="true">
+	<munit:test name="order-extract-impl-test-suite-JDA-order-extract-flowTest" description="Test" doc:id="bf08c016-23a2-4760-ad8b-6140a0cdb2fc">
 		<munit:behavior >
 			<munit-tools:mock-when doc:name="S-JDA-HTTP-Request-Configuration" doc:id="5b64916c-fbe7-4547-b42e-a541b94f7691" processor="http:request">
 				<munit-tools:with-attributes >
@@ -60,7 +60,7 @@
 			</munit-tools:verify-call>
 		</munit:validation>
 	</munit:test>
-	<munit:test name="order-extract-impl-test-suite-receive-order-message-and-retryTest" description="Test" doc:id="3ce843ef-46bd-490e-8a03-13d04c2e3f9d" ignore="true">
+	<munit:test name="order-extract-impl-test-suite-receive-order-message-and-retryTest" description="Test" doc:id="3ce843ef-46bd-490e-8a03-13d04c2e3f9d">
 		<munit:behavior >
 			<munit-tools:mock-when doc:name="Delete message" doc:id="b405d039-74e9-459a-9588-cfc741181ea2" processor="sqs:delete-message">
 				<munit-tools:with-attributes >
@@ -111,7 +111,7 @@
 			</munit-tools:verify-call>
 		</munit:validation>
 	</munit:test>
-	<munit:test name="order-extract-impl-test-suite-order-extract-matched-data-handling-flowTest" description="Test" doc:id="e6ce3ece-864f-49e2-8f01-41d56784bdad" ignore="true">
+	<munit:test name="order-extract-impl-test-suite-order-extract-matched-data-handling-flowTest" description="Test" doc:id="e6ce3ece-864f-49e2-8f01-41d56784bdad">
 		<munit:behavior >
 			<munit-tools:mock-when doc:name="Send message" doc:id="4b00e5f5-be7e-4a72-b45c-518df54d8856" processor="sqs:send-message">
 				<munit-tools:with-attributes>

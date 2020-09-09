@@ -10,7 +10,7 @@
 	<munit:config name="export-order-information-impl-test-suite.xml" />
 	
 	<import doc:name="Import" doc:id="44793098-b585-4261-a989-96daccb31076" file="test-globals-suite.xml" />
-	<munit:test name="export-order-information-impl-test-suite-sales-orders-impl-flowTest" description="Test" doc:id="873f6041-b033-44f9-a687-1276bc7dbf73" >
+	<munit:test name="export-order-information-impl-test-suite-sales-orders-impl-flowTest" description="Test" doc:id="873f6041-b033-44f9-a687-1276bc7dbf73">
 		<munit:behavior >
 			<munit-tools:mock-when doc:name="Invoke XCM Sales Orders System Layer" doc:id="90e1f3c6-f938-4e93-aab2-6d933b400f09" processor="http:request">
 				<munit-tools:with-attributes >

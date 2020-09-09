@@ -112,7 +112,7 @@
 			</munit-tools:verify-call>
 		</munit:validation>
 	</munit:test>
-<munit:test name="shipment-manifest-impl-test-suite-receive-manifest-message-and-retry-defaultblock-Test" description="Test" doc:id="4062c428-aa35-4431-858c-cbf54795dfde" ignore="true">
+<munit:test name="shipment-manifest-impl-test-suite-receive-manifest-message-and-retry-defaultblock-Test" description="Test" doc:id="4062c428-aa35-4431-858c-cbf54795dfde">
 		<munit:behavior >
 			<munit-tools:mock-when doc:name="Delete message" doc:id="e019b691-6ae4-4ffc-87ad-cdf0cc5ab942" processor="sqs:delete-message">
 				<munit-tools:with-attributes >
