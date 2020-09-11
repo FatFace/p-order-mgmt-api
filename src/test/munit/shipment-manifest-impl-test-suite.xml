@@ -9,7 +9,7 @@
 		http://www.mulesoft.org/schema/mule/munit-tools  http://www.mulesoft.org/schema/mule/munit-tools/current/mule-munit-tools.xsd">
 	<munit:config name="shipment-manifest-impl-test-suite.xml" />
 	<import doc:name="Import" doc:id="13efb044-5926-43c3-8af6-b51795660efe" file="test-globals-suite.xml" />
-	<munit:test name="shipment-manifest-impl-test-suite-JDA-shipment-manifest-flowTest" description="Test" doc:id="e8fef8f8-c337-4616-811d-ef0a38ee9e6c" ignore="true">
+	<munit:test name="shipment-manifest-impl-test-suite-JDA-shipment-manifest-flowTest" description="Test" doc:id="e8fef8f8-c337-4616-811d-ef0a38ee9e6c">
 		<munit:enable-flow-sources>
 	<munit:enable-flow-source value="common-template-check-digit-lookup-flow" />
 </munit:enable-flow-sources>
@@ -61,7 +61,7 @@
 			<munit-tools:assert-that doc:name="Assert that" doc:id="0c716b9a-c7aa-4d8e-84a1-fabd675030b4" expression="#[payload]" is='#[MunitTools::equalTo(readUrl("classpath://sample_data/shipment-manifest-response-payload.json", "application/json"))]'/>
 		</munit:validation>
 	</munit:test>
-	<munit:test name="shipment-manifest-impl-test-suite-receive-manifest-message-and-retryTest" description="Test" doc:id="7bde7ca5-9486-4181-a370-e192758a69e3" ignore="true">
+	<munit:test name="shipment-manifest-impl-test-suite-receive-manifest-message-and-retryTest" description="Test" doc:id="7bde7ca5-9486-4181-a370-e192758a69e3">
 		<munit:behavior >
 			<munit-tools:mock-when doc:name="Delete message" doc:id="b60b2a44-b976-47a4-a9b5-1c1eff535b44" processor="sqs:delete-message">
 				<munit-tools:with-attributes >
