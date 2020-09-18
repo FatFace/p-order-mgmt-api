@@ -1,3 +1,7 @@
+
+
+
+
 http:
   basePath: "/api/v1/*"
   host: "0.0.0.0"
@@ -16,8 +20,8 @@ scheduler:
 #----Common Block---No change Needed----      
 cloudhub:
   username: "![V1H6cIZG27BimoyWHnUmWwgd7Z72XsoF+lx6EKe7Hfc=]"
-  password: "![pU6khIodBBpK1c7QxH7VmdEtcJxtRvmoKBlI+hYGFqk=]"
-  
+  password: "![wmZO64w9adSbkSupgF1rvuPY6b41eRIir+fDY77v8zU=]"
+    
 smtp:
   host: "mail.fatface.net"
   port: "465"
