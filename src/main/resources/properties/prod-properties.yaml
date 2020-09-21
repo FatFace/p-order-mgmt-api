@@ -76,7 +76,7 @@ d365:
         packageName: "OrderInfo-Data-"
  
 jda:
-  host: "mule-worker-internal-s-jda-data-int.ir-e1.cloudhub.io"
+  host: "mule-worker-internal-s-jda-data-int.eu.cloudhub.io"
   port: "8092"
   basepath: "/api/v1"
   clientId: "587f052383c44efbadc76e22201cba19"
