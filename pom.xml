@@ -86,13 +86,13 @@
 	<dependency>
 	  <groupId>com.fatface.mule.extensions</groupId>
 	  <artifactId>common-logging-extension</artifactId>
-	  <version>1.0.0</version>
+	  <version>1.0.1-SNAPSHOT</version>
 	  <classifier>mule-plugin</classifier>
 	</dependency>
 	<dependency>
 	  <groupId>com.fatface.mule</groupId>
 	  <artifactId>common-framework-handler</artifactId>
-	  <version>1.0.3</version>
+	  <version>1.0.2-SNAPSHOT</version>
 	  <classifier>mule-plugin</classifier>
 	</dependency>
         <dependency>
