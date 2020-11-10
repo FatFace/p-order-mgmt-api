@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:munit="http://www.mulesoft.org/schema/mule/munit" xmlns:munit-tools="http://www.mulesoft.org/schema/mule/munit-tools"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xsi:schemaLocation="
+		http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+		http://www.mulesoft.org/schema/mule/munit http://www.mulesoft.org/schema/mule/munit/current/mule-munit.xsd
+		http://www.mulesoft.org/schema/mule/munit-tools  http://www.mulesoft.org/schema/mule/munit-tools/current/mule-munit-tools.xsd">
+	<munit:config name="test-globals-suite.xml" />
+	<import doc:name="Import" doc:id="cdb848a3-6922-4a22-8448-5af69e539ec7" file="globals.xml"/>
+	<import doc:name="Import" doc:id="01bb7414-3955-48d0-a323-3899d4bb742f" file="order-managment-impl.xml"/>
+	<import doc:name="Import" doc:id="5de976b5-cc19-4c51-b05f-646c47d3707e" file="order-extract-scheduler.xml" />
+	<import doc:name="Import" doc:id="136a2675-14e3-4ee4-a95c-67d520852047" file="pick-orders-scheduler.xml" />
+	<import doc:name="Import" doc:id="91de68b6-5c4f-422c-ab84-2d9b41b5ee5c" file="p-order-mgmt-api.xml" />
+	<import doc:name="Import" doc:id="d59ccffd-ec6c-427e-8cca-e2029f46106a" file="shipment-manifest-scheduler.xml" />
+	<import doc:name="Import" doc:id="a4dc7cf8-6186-4eb4-bb4f-0237ea626a5a" file="web-orders-impl.xml" />
+	<import doc:name="Import" doc:id="0d8f5675-00ff-4280-85f4-d70d68c4be1c" file="export-order-information-impl.xml" />
+	<import doc:name="Import" doc:id="4bcba7db-73c2-4105-a6c1-9ca2869c3f13" file="export-order-information-scheduler.xml" />
+	
+
+</mule>

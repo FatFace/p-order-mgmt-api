@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:munit="http://www.mulesoft.org/schema/mule/munit" xmlns:munit-tools="http://www.mulesoft.org/schema/mule/munit-tools"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xsi:schemaLocation="
+		http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+		http://www.mulesoft.org/schema/mule/munit http://www.mulesoft.org/schema/mule/munit/current/mule-munit.xsd
+		http://www.mulesoft.org/schema/mule/munit-tools  http://www.mulesoft.org/schema/mule/munit-tools/current/mule-munit-tools.xsd">
+	<munit:config name="export-order-information-scheduler-test-suite.xml" />
+	<import doc:name="Import" doc:id="828d0f33-b378-4319-beaf-46689c588460" file="test-globals-suite.xml" />
+	<munit:test name="export-order-information-scheduler-test-suite-export-orders-scheduler-flowTest" description="Test" doc:id="92941162-9564-4fb9-875b-51be75a6596e">
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Export Order Schedular" doc:id="c6a8918a-0dbc-4974-8c00-16c2313979e1" processor="scheduler">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="Scheduler" attributeName="doc:name" />
+				</munit-tools:with-attributes>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when doc:name="Invoke D365 System Layer" doc:id="4394ae21-0074-4797-b804-852df40bc7b9" processor="http:request">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="Invoke D365 System Layer" attributeName="doc:name" />
+				</munit-tools:with-attributes>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to export-orders-scheduler-flow" doc:id="cda0a829-90a7-4319-a344-717e65421b9a" name="export-orders-scheduler-flow"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:verify-call doc:name="Verify call" doc:id="309a38c7-4c16-406c-8915-2b486f3b4314" processor="http:request" atLeast="#[1]">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="Invoke D365 System Layer" attributeName="doc:name" />
+				</munit-tools:with-attributes>
+			</munit-tools:verify-call>
+		</munit:validation>
+	</munit:test>
+
+
+</mule>

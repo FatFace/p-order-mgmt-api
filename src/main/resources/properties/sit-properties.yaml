@@ -1,19 +1,190 @@
 http:
-  basePath: "/api/*"
+  basePath: "/api/v1/*"
+  host: "0.0.0.0"
   private:
     port: "8091"
-  api:
-    p-template-api:
-      basePath: "/"
-      host: ""
-      port: ""
-      path: ""  
-autodiscovery:
-  id: ""
-  flow: "x-template-api-main"
-
+  consolePath: "/console/*"
+  
+api:
+  discovery:
+    id: ""
+  
+scheduler:
+  cron:
+    expression: "0 0/15 * 1/1 * ? *"
+  
+#----Common Block---No change Needed----      
 cloudhub:
-  domain: ""
-  usrname: ""
-  password: ""
-  environment: ""
+  username: "![V1H6cIZG27BimoyWHnUmWwgd7Z72XsoF+lx6EKe7Hfc=]"
+  password: "![pU6khIodBBpK1c7QxH7VmdEtcJxtRvmoKBlI+hYGFqk=]"
+  
+smtp:
+  host: "mail.fatface.net"
+  port: "465"
+  user: "![XImJcfQv4D6cYan0i6XwPZi8Uxv0OkDQvTITnsw/onM=]"
+  password: "![r9f7FSUCH+2adxR8OeswFg==]"
+  subject: "Fatface API Exception"
+#----Common Block---No change Needed----
+
+db:
+ audit: 
+  config:
+   host: "mule-sandbox.cm1i2vsjtzdf.eu-west-1.rds.amazonaws.com"
+   port: "1433"
+   user: "![AyD0mBi0zwPqptV8KbEJGkjzeMuTdVHL2AEWiq0N3sQ=]"
+   password: "![PX91DJD02zpJ0MJ3jLRKUw==]"
+   database: "FATFACE_DB" 
+
+sftp:
+  host: "ftp.fatface.com"
+  port: "22"
+  username: "![W49cMbSedB3HHfPcr0pWWyYHk27r5mLh++/a62Nglxg=]"
+  password: "![YoKYhq6QWsR9eW3AVcCh2TRSSvrwrp94baroSAHlBlg=]" 
+  
+sqs:
+  accessKey: "![iKDP0/LYfR1ghGUCOAayKYI5kMT/ieTr3IMibNfn9y8=]"
+  secretKey: "![z8W9r4EBG78ATEDLlzRgrDu8pSr3cf8u0RPGoG/mEyLZSeyc1prL/JqYzbF2CWUY]"
+  region: "![6lleIG6Qoif/fTA7pK+sUA==]"
+  queue:
+    target:
+      manifest: "shipping-manifest-q"
+      order: "order-extract-q"
+    url: 
+      manifestQueueUrl: "https://sqs.eu-west-1.amazonaws.com/691628577374/shipping-manifest-q"
+      orderQueueUrl: "https://sqs.eu-west-1.amazonaws.com/691628577374/order-extract-q"
+        
+d365:
+  host: "mule-worker-internal-sit-s-d365-api.ir-e1.cloudhub.io"
+  port: "8091"
+  basepath: "/api/v1"
+  clientId: "a1c25cbc41dc4a43a1c5c3ecbf1251c5"
+  clientSecret: "![LW5QbpXxcFCYtiU4/DH0+ENIW/q+2cr3P4u6w65C4pbwoGe1SiiStpjbUB6ntxmh]"
+  getCustomerGroupPath: "/data/CustomerGroups"
+  updateProductsPath: "/data/products"     
+  updateManifestPath: "/pick/manifests"
+  updateOrderExtractPath: "/pick/orders" 
+  webOrdersPath: "/web/orders"
+  dmf: 
+    path: "/dmf/export"
+    pick:
+      create:
+        definitionGroupId: "IDD009-PickRequest-Export"
+        packageName: "Pick-Create-"
+    export:
+      orders:
+        definitionGroupId: "IDD015-OrderInfoExport-Export"
+        packageName: "OrderInfo-Data-"
+
+
+jda:
+  host: "mule-worker-internal-sit-s-jda-data-int.ir-e1.cloudhub.io"
+  port: "8092"
+  basepath: "/api/v1"
+  clientId: "a1c25cbc41dc4a43a1c5c3ecbf1251c5"
+  clientSecret: "![LW5QbpXxcFCYtiU4/DH0+ENIW/q+2cr3P4u6w65C4pbwoGe1SiiStpjbUB6ntxmh]"
+
+  jks:
+    password: "![yqrYtFIRqm28xrunLqR/2kqfcVd97HqoY0AWEfF+m8M=]"
+  orders:
+    path: "/pick/orders"
+  ordersPath: "/orders"  
+  manifests:
+    path: "/pick/manifests" 
+lookup:
+  host: "mule-worker-internal-sit-s-dblookup-api.ir-e1.cloudhub.io"
+  port: "8091"
+  basePath: "/api/v1"
+  dbLookupPath: "/lookups"
+  aptos:
+    modeOfDelivery:
+      key: "MODE_OF_DELIVERY-NUMSTR-APTOS"
+    salesOfOrigin:
+      key: "SALES_ORIGIN-MODE_OF_DELIVERY-APTOS"
+    shippingBarcode:
+      key: "SHIPPING_BAR_CODE-ORDERITEM_NUMSTR-APTOS"
+  key: "ORDER_TYPE-MODE_OF_DELIVERY-D365"
+  emarsys:
+    key: "MODE_OF_DELIVERY-DEPT-D365"
+  clientId: "a1c25cbc41dc4a43a1c5c3ecbf1251c5"
+  clientSecret: "![LW5QbpXxcFCYtiU4/DH0+ENIW/q+2cr3P4u6w65C4pbwoGe1SiiStpjbUB6ntxmh]"
+  queryParam:
+    type: "ORDER_TYPE"
+    catgeory: "MODE_OF_DELIVERY"
+    source: "D365"
+    aptos:
+      modeOfDelivery:
+        type: "MODE_OF_DELIVERY"
+        category: "NUMSTR"
+        source: "APTOS"
+      salesOfOrigin:
+        type: "SALES_ORIGIN"
+        category: "MODE_OF_DELIVERY"
+        source: "APTOS"
+      shippingBarcode:
+        type: "SHIPPING_BAR_CODE"
+        category: "ORDERITEM_NUMSTR"
+        source: "APTOS"
+    emarsys:
+      modeOfDelivery:
+        type: "DELIVERY_TYPE"
+        catgeory: "MODE"
+        source: "D365"
+cron:
+  expression: 
+    manifest: "0 0/5 * 1/1 * ? *"
+    orderextract: "0 3/20 * 1/1 * ? *"     
+    exportOrders:  "0 0 1 1/1 * ? *"   
+   
+orders:
+  export:
+    sftp:
+      errorfilepath:  "/FatFace/sftp/MuleSoftIntegration/sit/error/outgoing/orderData/jdaOrder/"
+send:
+  manifest:
+    queue: "true"
+
+pick:
+  orders:
+    orderType: "WEB"
+
+report:
+  host: "mule-worker-internal-sit-s-report-db-api.ir-e1.cloudhub.io"
+  port: "8091"
+  basepath: "/api/v1"
+  clientId: "a1c25cbc41dc4a43a1c5c3ecbf1251c5"
+  clientSecret: "![LW5QbpXxcFCYtiU4/DH0+ENIW/q+2cr3P4u6w65C4pbwoGe1SiiStpjbUB6ntxmh]"
+  ordersPath: "/orders"
+  
+xcm:
+  host: "mule-worker-internal-sit-s-xcm-api.ir-e1.cloudhub.io"
+  port: "8091"
+  basepath: "/api/v1"
+  clientId: "a1c25cbc41dc4a43a1c5c3ecbf1251c5"
+  clientSecret: "![LW5QbpXxcFCYtiU4/DH0+ENIW/q+2cr3P4u6w65C4pbwoGe1SiiStpjbUB6ntxmh]"
+  salesOrdersPath: "/sales/orders"
+  returnOrdersPath: "/return/orders"
+  connecitonTimeout: "30000"
+
+emarsys:
+  host: "mule-worker-internal-sit-s-email-data-api.ir-e1.cloudhub.io"
+  port: "8091"
+  basePath: "/api/v1"
+  clientId: "a1c25cbc41dc4a43a1c5c3ecbf1251c5"
+  clientSecret: "![LW5QbpXxcFCYtiU4/DH0+ENIW/q+2cr3P4u6w65C4pbwoGe1SiiStpjbUB6ntxmh]"
+  emailPath: "/emails"
+   
+status:
+  responseCode: "0"
+  responseMessage: "Success"
+  failed:
+    responseCode: "-1"
+    responseMessage: "Failed"
+  
+pooling:
+  profile:
+    max:
+      connection:
+        size: "5"
+      idle:
+        size: "1"
+      wait: "0"  

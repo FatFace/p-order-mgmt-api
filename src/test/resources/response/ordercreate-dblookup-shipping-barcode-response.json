@@ -1,0 +1,29 @@
+{
+    "lookups": [
+        {
+            "lookup_id": 9,
+            "lookup-key": "5",
+            "lookup-value": "0000000000001"
+        },
+        {
+            "lookup_id": 9,
+            "lookup-key": "6",
+            "lookup-value": "0000000000002"
+        },
+        {
+            "lookup_id": 9,
+            "lookup-key": "8",
+            "lookup-value": "0000000000004"
+        },
+        {
+            "lookup_id": 9,
+            "lookup-key": "7",
+            "lookup-value": "0000000000011"
+        },
+        {
+            "lookup_id": 9,
+            "lookup-key": "",
+            "lookup-value": "0000000000001"
+        }
+    ]
+}

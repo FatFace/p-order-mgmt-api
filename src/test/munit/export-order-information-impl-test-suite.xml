@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:munit="http://www.mulesoft.org/schema/mule/munit" xmlns:munit-tools="http://www.mulesoft.org/schema/mule/munit-tools"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xsi:schemaLocation="
+		http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+		http://www.mulesoft.org/schema/mule/munit http://www.mulesoft.org/schema/mule/munit/current/mule-munit.xsd
+		http://www.mulesoft.org/schema/mule/munit-tools  http://www.mulesoft.org/schema/mule/munit-tools/current/mule-munit-tools.xsd">
+	<munit:config name="export-order-information-impl-test-suite.xml" />
+	
+	<import doc:name="Import" doc:id="44793098-b585-4261-a989-96daccb31076" file="test-globals-suite.xml" />
+	<munit:test name="export-order-information-impl-test-suite-sales-orders-impl-flowTest" description="Test" doc:id="873f6041-b033-44f9-a687-1276bc7dbf73">
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Invoke XCM Sales Orders System Layer" doc:id="90e1f3c6-f938-4e93-aab2-6d933b400f09" processor="http:request">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="Invoke XCM Sales Orders System Layer" attributeName="doc:name" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value='#[""]' />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<set-payload value="#[MunitTools::getResourceAsString('request/export-sales-orders-request.json')]" doc:name="Set Payload" doc:id="7d135576-c297-4b9b-ae28-1105fcdbd033" mimeType="application/json"/>
+			<flow-ref doc:name="sales-orders-impl-flow" doc:id="a814cc52-653b-4d74-9d35-0e39f47873d7" name="sales-orders-impl-flow"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:verify-call doc:name="Verify call" doc:id="7f47d32d-7f09-450a-b426-f71f8d285973" processor="http:request">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="Invoke XCM Sales Orders System Layer" attributeName="doc:name" />
+				</munit-tools:with-attributes>
+			</munit-tools:verify-call>
+		</munit:validation>
+	</munit:test>
+	
+	<munit:test name="export-order-information-impl-test-suite-return-orders-impl-flowTest" description="Test" doc:id="f0122e05-199e-4fd8-a913-104c77e9b924" >
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Invoke XCM Return Orders System Layer" doc:id="1ccc6ce1-59fb-460d-abf3-29d53a445ca1" processor="http:request">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="Invoke XCM Return Orders System Layer" attributeName="doc:name" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value='#[""]' />
+				</munit-tools:then-return>
+			
+</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<set-payload value="#[MunitTools::getResourceAsString('request/export-return-orders-request.json')]" doc:name="Set Payload" doc:id="8af45211-78eb-4601-a764-014e844f20c7" mimeType="application/json"/>
+			<flow-ref doc:name="return-orders-impl-flow" doc:id="e6c5f60f-269b-4da1-9066-639d170b4dbb" name="return-orders-impl-flow"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:verify-call doc:name="Verify call" doc:id="973d9ee0-6fc0-4199-b6d4-129734ee10c9" processor="http:request">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="Invoke XCM Return Orders System Layer" attributeName="doc:name" />
+				</munit-tools:with-attributes>
+
+			</munit-tools:verify-call>
+		</munit:validation>
+	</munit:test>
+
+
+</mule>

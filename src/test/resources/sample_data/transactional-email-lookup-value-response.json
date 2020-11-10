@@ -1,0 +1,34 @@
+{
+  "lookups": [
+    {
+      "lookup_id": 3,
+      "lookup-key": "standGBP",
+      "lookup-value": "UK Standard Tracked Delivery"
+    },
+    {
+      "lookup_id": 3,
+      "lookup-key": "StandEUR",
+      "lookup-value": "UK Standard Tracked Delivery"
+    },
+    {
+      "lookup_id": 3,
+      "lookup-key": "standEUR",
+      "lookup-value": "UK Standard Tracked Delivery"
+    },
+    {
+      "lookup_id": 3,
+      "lookup-key": "perSTD",
+      "lookup-value": "UK Standard Tracked Delivery"
+    },
+    {
+      "lookup_id": 3,
+      "lookup-key": "nextdayGBP",
+      "lookup-value": "UK Next Day Delivery"
+    },
+    {
+      "lookup_id": 3,
+      "lookup-key": "nextdayEUR",
+      "lookup-value": "UK Next Day Delivery"
+    }
+  ]
+}

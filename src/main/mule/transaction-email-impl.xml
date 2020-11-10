@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:os="http://www.mulesoft.org/schema/mule/os"
+	xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/os http://www.mulesoft.org/schema/mule/os/current/mule-os.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
+	
+	<sub-flow name="post-transactional-email-impl-sub-slow" doc:id="10a6d0b5-dea7-4038-a48f-4f4b7f65ed4a" >
+		<set-variable value="#['post-transactional-email-impl-sub-slow']" doc:name="Set Variable" doc:id="fe0115b7-3ce9-49f2-a669-2c62d7ff29ec" variableName="flowName"/>
+		<flow-ref doc:name="Log process entry" doc:id="c7aecb69-3d78-4804-86ff-f555fee6c427" name="log-process-entry-sub-flow"/>
+		<flow-ref doc:name="Audit process entry" doc:id="d67fdbc5-370b-4770-b754-d5c14898cfb6" name="audit-process-entry-sub-flow"/>
+		<ee:transform doc:name="Filter orders without email address" doc:id="0100e6e0-bc1d-4d31-b42c-17967fe775c9" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+"orders" : payload.orders filter (isEmpty($.customer.email) == true)]]></ee:set-payload>
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="ordersWithEmailId" ><![CDATA[%dw 2.0
+output application/json
+---
+"orders" : payload.orders filter (isEmpty($.customer.email) == false)]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+		<async doc:name="Async" doc:id="61637ad8-9ba7-4494-8535-fb4fbfa5dd89" >
+			<try doc:name="Try" doc:id="b03c41c6-876c-432e-ae97-a09a1c41fab4" >
+			
+			<choice doc:name="Choice" doc:id="e278fe60-8a41-4236-b8d1-24b7b64d5e6f" >
+					<when expression="#[isEmpty(payload.orders) == false]">
+						<set-variable value="#[write(vars.additionalInfo,'application/json') ++ p('error.msg.help.desk') ++ write(payload.orders[0].'order-no','application/json')]" doc:name="Set Additional info" doc:id="beb27704-4dfe-4173-9fb3-8d4e13c39b22" variableName="additionalInfo" />
+						<raise-error doc:name="Raise error" doc:id="fd29f8b0-9d29-411b-98e7-961571949b47" type="FF_CLOUDHUB:HELPDESK_ALERT" description="Transactional Email Not Specified" />
+				</when>
+					<otherwise >
+						<set-variable value="DATA IS VALID" doc:name="Set Variable" doc:id="7a7b186d-89c5-4f25-903a-d0e707d905b1" variableName="loggingPayload"/>
+						<flow-ref doc:name="Logging sub flow" doc:id="c43185bc-0a89-4008-9f3b-3275dc248fd3" name="logging-sub-flow"/>
+					</otherwise>
+			</choice>
+				<error-handler >
+					<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="115aef1e-a64f-4fd2-a038-9ef1258fb260" >
+						<set-payload value="#[error.description]" doc:name="Set Payload with error description" doc:id="f457b89f-26e3-4217-a3b2-7315d2d784b8" />
+						<flow-ref doc:name="Log error sub flow" doc:id="4f826ab0-0828-4080-9d1b-706b3982b70e" name="log-error-sub-flow"/>
+						<flow-ref doc:name="Audit error sub flow" doc:id="15e0f192-b857-44fd-9c01-fc221872c54e" name="audit-error-sub-flow"/>
+					</on-error-propagate>
+				</error-handler>
+			
+</try>
+		</async>
+		<choice doc:name="Choice" doc:id="0e2e6209-a13c-4b32-b686-56e19db9cbc2" >
+			<when expression="#[vars.ordersWithEmailId != null and isEmpty(vars.ordersWithEmailId.orders) == false]">
+				<foreach doc:name="For Each" doc:id="fdfcf1cc-5b43-403d-817b-988aad8bfb72" collection="#[vars.ordersWithEmailId.orders]">
+					<set-variable value="#[payload]" doc:name="Set Variable" doc:id="509c3b41-91f8-4edc-a897-488c669ac9db" variableName="originalPayload"/>
+					<flow-ref doc:name="Logging sub flow" doc:id="579de68a-da9b-4043-a3c2-efe1a20893d9" name="logging-sub-flow"/>
+					<flow-ref doc:name="Audit sub flow" doc:id="7345e110-19d9-4e3b-9682-94f950448c67" name="audit-success-sub-flow"/>
+					<flow-ref doc:name="Get Mode Of Delivery" doc:id="86dcd368-073d-488e-b77e-742076439453" name="get-mode-of-delivery-lookup-value-sub-flow"/>
+					<ee:transform doc:name="Emarsys request payload" doc:id="4f874839-e599-4023-8b2e-110afc966a0b">
+					<ee:message>
+							<ee:set-payload resource="dwl/transform-to-emarsys-request.json.dwl" />
+					</ee:message>
+				</ee:transform>
+					<flow-ref doc:name="Invoke s-email-data-int System Layer" doc:id="aed93419-9d33-4eba-8cf4-d4dd93644be7" name="call-s-email-data-int-sub-flow"/>
+				</foreach>
+				<ee:transform doc:name="Transform Message" doc:id="9b3540d7-68d8-4719-9dc8-d67fa1ca2af3" >
+					<ee:message >
+						<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+  responseCode: p('status.responseCode'),
+  responseText: p('status.responseMessage')
+}]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
+			</when>
+			<otherwise >
+				<set-variable value="No Orders with Email Id" doc:name="Set Variable" doc:id="ea0f0155-4356-4194-8d29-ba9e30767fa8" variableName="loggingPayload"/>
+				<flow-ref doc:name="Logging sub flow" doc:id="77f6dd3a-d52b-492c-b70c-2a9c849856b5" name="logging-sub-flow"/>
+				<ee:transform doc:name="Transform Message" doc:id="4bbb3525-3d35-41ea-b063-20bb6a1948b6" >
+					<ee:message >
+						<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+  responseCode: p('status.failed.responseCode'),
+  responseText: p('status.failed.responseMessage')
+}]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
+			</otherwise>
+		</choice>
+		<set-variable value="#['post-transactional-email-impl-sub-slow']" doc:name="Set Variable" doc:id="3d57db06-5f25-4aee-9b96-6d3cc490b852" variableName="flowName"/>
+		<flow-ref doc:name="Audit process exit" doc:id="1dbc678a-e937-4cf0-8e1c-c35a41f3f12b" name="audit-process-exit-sub-flow"/>
+		<flow-ref doc:name="Log process exit" doc:id="50ae1853-7a77-4cc9-b9f8-0704515d08f3" name="log-process-exit-sub-flow"/>
+	</sub-flow>
+	<sub-flow name="get-mode-of-delivery-lookup-value-sub-flow" doc:id="62e692cc-0a2c-431d-b8a2-3a0b77569274" >
+		<set-variable value="#['get-mode-of-delivery-lookup-value-sub-flow']" doc:name="Set flow name" doc:id="c695b32f-07ae-45f0-ad98-d6397fb7101a" variableName="flowName"/>
+		<flow-ref doc:name="Log process entry" doc:id="c9fe36bf-fb3b-4760-a973-65ef6d579557" name="log-process-entry-sub-flow"/>
+		<flow-ref doc:name="Audit process entry" doc:id="9be4b7b3-be6b-469f-90c7-e209dab80b3a" name="audit-process-entry-sub-flow"/>
+		<set-variable value="#['MODE_OF_DELIVERY-DEPT-D365']" doc:name="Set Lookup key" doc:id="73ace86b-cbfc-4ff9-8d88-08d54178a144" variableName="vLookupKey"/>
+		<os:contains doc:name="Contains" doc:id="7bca8674-4bf7-4d64-bf92-2128464999ad" key="#[vars.vLookupKey]"/>
+		<choice doc:name="Choice" doc:id="f73605fc-432e-461c-81d5-7fdeb42c004d" >
+			<when expression="#[payload == true]">
+				<os:retrieve doc:name="Retrieve" doc:id="886d6b17-945e-42c7-a7c2-aff9093d1c6d" key="#[vars.vLookupKey]"/>
+				<ee:transform doc:name="Transform Message" doc:id="51ec4b7c-f5ff-410a-8770-b52d3017ca6e" >
+					<ee:message >
+						<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
+				<flow-ref doc:name="Flow Reference" doc:id="83c9f4e8-eab6-40cf-81f6-3dda41d46c1a" name="transaform-lookup-value-sub-flow"/>
+			</when>
+			<otherwise >
+				<flow-ref doc:name="Call s-dblookup-api sub flow" doc:id="734e5f1d-6874-4fc8-90b0-429ec0bbb7b5" name="call-dp-lookup-api-sub-flow"/>
+				<os:store doc:name="Store" doc:id="afc6f2f6-97dc-4959-9840-aae7792519ba" key="#[vars.vLookupKey]"/>
+				<flow-ref doc:name="Flow Reference" doc:id="a4af5c75-0168-4a00-91dd-97ae1ab8bf08" name="transaform-lookup-value-sub-flow"/>
+			</otherwise>
+		</choice>
+		<set-variable value="#['get-mode-of-delivery-lookup-value-sub-flow']" doc:name="Set Variable" doc:id="c70545d7-2128-41ac-9782-ce6ad719f068" variableName="flowName"/>
+		<flow-ref doc:name="Audit process exit" doc:id="3a83a32b-7f22-4690-9425-1685b4498228" name="audit-process-exit-sub-flow"/>
+		<flow-ref doc:name="Log process exit" doc:id="3902d4c3-06f3-40e3-ae5d-4b3a40c99eeb" name="log-process-exit-sub-flow"/>
+	</sub-flow>
+	<sub-flow name="transaform-lookup-value-sub-flow" doc:id="efc23291-a5a1-4e9d-995b-1d4b5c0dd09a" >
+		<ee:transform doc:name="Transform Message" doc:id="5a14fa8e-18da-4572-956c-3d18a4673207" >
+			<ee:message >
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="lookupModeOfDelivery" ><![CDATA[%dw 2.0
+output application/json
+var orderswithEmail = vars.ordersWithEmailId.orders
+fun getModeOfDelivery(mode) = payload.lookups filter (($.'lookup-key') == mode.'delivery-mode') reduce $$
+---
+(vars.ordersWithEmailId.orders map (orders)-> {
+	"lookup": (orders.orderlines map (orders)-> {
+	"line-id": orders.'line-id',
+	'lookup-value' : if(getModeOfDelivery(orders) != null and isEmpty(getModeOfDelivery(orders)) != true ) (getModeOfDelivery(orders).'lookup-value') else ""
+	
+})
+
+})]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+	</sub-flow>
+	<sub-flow name="call-dp-lookup-api-sub-flow" doc:id="40092151-8f47-4950-9bd9-b8fc70602948" >
+		<set-variable value="call-dp-lookup-api-sub-flow" doc:name="Set Variable" doc:id="0eba8c0c-9c8e-4cf4-a016-df5f914a30f6" variableName="flowName"/>
+		<flow-ref doc:name="Log process entry" doc:id="541ab6b8-0617-4cf2-bf9d-ab4ef1f14eda" name="log-process-entry-sub-flow"/>
+		<flow-ref doc:name="Audit process entry" doc:id="2a420392-8fa1-40f7-ac21-7df4f0d2e9b4" name="audit-process-entry-sub-flow"/>
+		<http:request method="GET" doc:name="Invoke s-db-lookup-api" doc:id="92e64029-3007-4a51-a856-b36619dd3fb3" config-ref="dbLookup_HTTP_Request_configuration" path="${lookup.dbLookupPath}">
+			<http:headers ><![CDATA[#[output application/java
+---
+{
+	"Transaction-Id" : "76bh4e57yhrndijen3",
+	"client_secret" : p('secure::lookup.clientSecret'),
+	"Transaction-Start-Time" : "2018-08-02T16:58:12.121Z",
+	"client_id" : p('lookup.clientId')
+}]]]></http:headers>
+			<http:query-params ><![CDATA[#[output application/java
+---
+{
+	"source" : p('lookup.queryParam.emarsys.modeOfDelivery.source'),
+	"type" : p('lookup.queryParam.emarsys.modeOfDelivery.type'),
+	"category" : p('lookup.queryParam.emarsys.modeOfDelivery.catgeory')
+}]]]></http:query-params>
+			
+		</http:request>
+		<set-variable value="#['call-dp-lookup-api-sub-flow']" doc:name="Set Variable" doc:id="0dc976cb-b8ae-476e-9a92-812bf8f99a97" variableName="flowName"/>
+		<flow-ref doc:name="Audit process exit" doc:id="70bb7ee9-f6b1-4d98-a775-7ff84a6e7cea" name="audit-process-exit-sub-flow"/>
+		<flow-ref doc:name="Log process exit" doc:id="cbdcc4ff-9141-4aa4-a5b3-f69d974d84af" name="log-process-exit-sub-flow"/>
+	</sub-flow>
+	<sub-flow name="call-s-email-data-int-sub-flow" doc:id="57f4fd23-bba2-4de2-b768-b5334688323b" >
+		<set-variable value="#['call-s-email-data-int-sub-flow']" doc:name="Set Variable" doc:id="7d78bf3e-6d45-4b9f-be15-171ebaef3dc7" variableName="flowName"/>
+		<flow-ref doc:name="Log process entry" doc:id="0009dd5d-baa3-400e-a5b5-fb3543b5a3c1" name="log-process-entry-sub-flow"/>
+		<flow-ref doc:name="Audit process entry" doc:id="f80d83a9-06c8-4fa5-8aa0-822225ac8864" name="audit-process-entry-sub-flow"/>
+		<http:request method="POST" doc:name="Invoke s-email-data-int" doc:id="ed0c1dab-cd18-486e-8df0-73570e3220d2" config-ref="s_email_HTTP_Request_Configuration" path="${emarsys.emailPath}">
+			<http:query-params ><![CDATA[#[output application/java
+---
+{
+	"client_secret" : p('secure::emarsys.clientSecret'),
+	"vRequestId" : vars.transactionId,
+	"client_id" : p('emarsys.clientId')
+}]]]></http:query-params>
+		</http:request>
+		<set-variable value="#['call-s-email-data-int-sub-flow']" doc:name="Set Variable" doc:id="fb9edd05-02fc-4d8f-ab51-fdb1c6725cfc" variableName="flowName"/>
+		<flow-ref doc:name="Audit process exit" doc:id="68cc1a8c-0616-4f6e-8647-5437a6bc82f7" name="audit-process-exit-sub-flow"/>
+		<flow-ref doc:name="Log process exit" doc:id="fa0c46cc-67d1-4ce7-bbd2-f245e10b7edd" name="log-process-exit-sub-flow"/>
+	</sub-flow>
+</mule>

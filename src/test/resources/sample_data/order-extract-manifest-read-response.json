@@ -1,0 +1,23 @@
+[{
+	"body": {
+		"manifests": [{
+			"route-id": "56651089",
+			"status": "Pick",
+			"order-no": "USF1000244260",
+			"orderlines": [{
+				"item-id": "101",
+				"quantity": 1,
+				"barcode": "505275114190"
+			}]
+		}, {
+			"route-id": "56651989",
+			"status": "Pick",
+			"order-no": "11666IDD002",
+			"orderlines": [{
+				"item-id": "101",
+				"quantity": 1,
+				"barcode": "505275114190"
+			}]
+		}]
+	}
+}]

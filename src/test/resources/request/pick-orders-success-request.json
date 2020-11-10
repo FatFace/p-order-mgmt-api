@@ -1,0 +1,54 @@
+{
+  "pick-orders": [
+    {
+      "order-id": "UKF1234567891",
+      "route-id": "13298",
+      "order-date": "2019-12-17T16:34:09Z",
+      "delivery-mode": "",
+      "sale-date": "2019-12-17",
+      "shipment-id": "13298",
+      "pick-status": false,
+      "delivery-date": "2019-12-17",
+      "charges": "0.000000",
+      "net-amount": "20.000000",
+      "customer": {
+        "customer-id": "C000056",
+        "salutation": "",
+        "fullname": "Jeff Banks",
+        "first-name": "",
+        "last-name": "",
+        "telephone": "",
+        "email": "jeffbanks@fatface.com",
+        "shipping-address": {
+          "address-1": "1-3 Ridgway",
+          "address-2": "",
+          "town": "Havant",
+          "postcode": "PO9 1QJ"
+        },
+        "billing-address": {
+          "address-1": "1-3 Ridgway",
+          "town": "Havant",
+          "postcode": "PO9 1QJ",
+          "county": "",
+          "country": "GBR"
+        }
+      },
+      "orderlines": [
+        {
+          "quantity": "1.000000",
+          "barcode": "5052751628243",
+          "sales-price": "20.000000",
+          "item-name": "BIRDSEYE CREW",
+          "item-id": "947613",
+          "amount": "20.000000"
+        }
+      ],
+      "payments": [
+        {
+          "amount": "20.000000",
+          "payment-mode": "20.000000"
+        }
+      ]
+    }
+  ]
+}

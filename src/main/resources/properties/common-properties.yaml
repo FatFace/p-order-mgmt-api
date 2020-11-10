@@ -2,10 +2,13 @@ is:
   audit:
     toggle: "ON"
     payload: "ON"
+    details:
+      toggle: "ON"
   logging:
     toggle: "OFF"
 
-domain: "common-template-api"
+domain: "p-order-mgmt-api"
+
 environment:
   id: "Development"  
 flow:
@@ -16,6 +19,42 @@ retry:
   frequency: "2000"
   attempts: "3"   
   
+d365:
+  batch:
+    size: "1"
+db:
+  pool:
+    size:
+      max: "35"
+      min: "13"
+        
+response:
+  timeout:
+    system:
+      jda:
+        orderExtract: "60000"
+        pickOrders : "60000"
+        manifest : "60000"
+      dblookup: 
+        pickOrders: "60000"
+        webOrders: "60000"
+      reportdb:
+        webOrders: "60000"
+      d365:
+        pickOrders: "60000"
+        manifest : "60000"
+        webOrders: "60000"
+        orderExtract: "60000"
+        exportOrders: "60000"
+      xcm:
+        salesOrders: "60000"
+        returnOrders: "60000"
+shipment:
+  labelImageFormat: "PNG"  
+
+reprocessing:
+  attempts: "8"
+
 error:
   msg:
     '404': "Resource not found"
@@ -53,6 +92,19 @@ error:
       access: "SFTP Access Denied"
       connection: "SFTP Connectivity error"
       path: "SFTP Illegal Path"
-      retry: "SFTP Retry Exhausted"  
-      
-      
+      retry: "SFTP Retry Exhausted"
+    compress:
+      notCompress: "Not able to compress"
+      invalidFormat: "The given content does not match the format of the configured strategy"
+      multipleEntry: "The archive to be decompressed has more than one entry"
+      notDecompress: "Not able to decompress" 
+    reprocessing:
+      level2retry: "Level 2 Retry Mechanism Processing"
+    cloudhub:
+      alert: "Sending alert to Help Desk" 
+    help:
+      desk: "Email Id is mandatory for order number:"  
+system:
+  layer:
+    response: "No Data from System Layer"
+        

@@ -1,37 +1,39 @@
 %dw 2.0
 output application/java
+var messageQ = vars.originalPayload
+var messageMT = messageQ.^['mimeType']
 ---
 {
 	delaySeconds: 0,
-	body: write(payload, payload.^['mimeType']),
+	body: write(messageQ, messageMT),
 	messageAttributes: {
 		"correlationId": {
-			"stringValue" : attributes.correlationId.stringValue,
+			"stringValue" : vars.messageCorrelationId,
 			"dataType" : "String.correlationId"
 		} as Object {
 			class: "org.mule.extension.sqs.api.model.MessageAttributeValue"
 		},
-		"targetQueue": {
-			"stringValue" : attributes.targetQueue.stringValue,
-			"dataType" : "String.targetQueue"
+		"reprocessingCount": {
+			"stringValue" : vars.count,
+			"dataType" : "String.reprocessingCount"
 		} as Object {
-			class : "org.mule.extension.sqs.api.model.MessageAttributeValue"
-		},
-		"targetQueueUrl": {
-			"stringValue" : attributes.targetQueueUrl.stringValue,
-			"dataType" : "String.targetQueueUrl"
-		} as Object {
-			class : "org.mule.extension.sqs.api.model.MessageAttributeValue"
+			class: "org.mule.extension.sqs.api.model.MessageAttributeValue"
 		},
 		"transactionId": {
-			"stringValue" : attributes.transactionId.stringValue,
+			"stringValue" : vars.transactionId,
 			"dataType" : "String.transactionId"
 		} as Object {
 			class : "org.mule.extension.sqs.api.model.MessageAttributeValue"
 		},
 		"transactionStartTime": {
-			"stringValue" : attributes.transactionStartTime.stringValue,
+			"stringValue" : vars.transactionStartTime,
 			"dataType" : "String.transactionStartTime"
+		} as Object {
+			class : "org.mule.extension.sqs.api.model.MessageAttributeValue"
+		},
+		"transactionFileName": {
+			"stringValue" : vars.fileName,
+			"dataType" : "String.transactionFileName"
 		} as Object {
 			class : "org.mule.extension.sqs.api.model.MessageAttributeValue"
 		}

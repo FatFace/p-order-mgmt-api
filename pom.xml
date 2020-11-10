@@ -4,7 +4,9 @@
 
 	<groupId>com.fatface.mule</groupId>
 	<artifactId>p-order-mgmt-api</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
+
+    <version>1.0.1</version>
+
     <packaging>mule-application</packaging>
 
 	<name>p-order-mgmt-api</name>
@@ -14,7 +16,9 @@
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
 		<app.runtime>4.2.1</app.runtime>
-		<mule.maven.plugin.version>3.2.7</mule.maven.plugin.version>
+
+		<mule.maven.plugin.version>3.3.5</mule.maven.plugin.version>
+
 	<munit.version>2.2.3</munit.version>
     </properties>
     <scm>
@@ -55,17 +59,21 @@
                     </execution>
                 </executions>
                 <configuration>
-					<runtimeVersion>4.2.1-hf4</runtimeVersion>
+
+					<runtimeVersion>4.2.1-hf6</runtimeVersion>
+
                     <coverage>
                         <runCoverage>true</runCoverage>
                         <formats>
                             <format>html</format>
                         </formats>
                         <ignoreFiles>
-			    <ignoreFile>common-auditing-framework.xml</ignoreFile>
-			    <ignoreFile>common-error-handling.xml</ignoreFile>
-			    <ignoreFile>common-logging-framework.xml</ignoreFile>
-			</ignoreFiles>
+
+						    <ignoreFile>common-auditing-framework.xml</ignoreFile>
+						    <ignoreFile>common-error-handling.xml</ignoreFile>
+						    <ignoreFile>common-logging-framework.xml</ignoreFile>
+						</ignoreFiles>
+
                     </coverage>
                 </configuration>
             </plugin>
@@ -92,7 +100,9 @@
 	<dependency>
 	  <groupId>com.fatface.mule</groupId>
 	  <artifactId>common-framework-handler</artifactId>
-	  <version>1.0.0</version>
+
+	  <version>1.0.3</version>
+
 	  <classifier>mule-plugin</classifier>
 	</dependency>
         <dependency>

@@ -1,0 +1,39 @@
+{
+    "lookups": [
+        {
+            "lookup_id": 5,
+            "lookup-key": "5",
+            "lookup-value": "standardGBP"
+        },
+        {
+            "lookup_id": 5,
+            "lookup-key": "6",
+            "lookup-value": "standardGBP"
+        },
+        {
+            "lookup_id": 5,
+            "lookup-key": "1",
+            "lookup-value": "nextdayGBP"
+        },
+        {
+            "lookup_id": 5,
+            "lookup-key": "2",
+            "lookup-value": "nextdayGBP"
+        },
+        {
+            "lookup_id": 5,
+            "lookup-key": "4",
+            "lookup-value": "delivertostoreGBP"
+        },
+        {
+            "lookup_id": 5,
+            "lookup-key": "9",
+            "lookup-value": "overseasUSD"
+        },
+        {
+            "lookup_id": 5,
+            "lookup-key": "3",
+            "lookup-value": "overseasGBP"
+        }
+    ]
+}

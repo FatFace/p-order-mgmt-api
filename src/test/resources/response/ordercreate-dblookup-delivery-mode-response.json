@@ -1,0 +1,29 @@
+{
+    "lookups": [
+        {
+            "lookup_id": 5,
+            "lookup-key": "5",
+            "lookup-value": "standGBP"
+        },
+        {
+            "lookup_id": 5,
+            "lookup-key": "1",
+            "lookup-value": "nextdayGBP"
+        },
+        {
+            "lookup_id": 5,
+            "lookup-key": "2",
+            "lookup-value": "DtsGBP"
+        },
+        {
+            "lookup_id": 5,
+            "lookup-key": "4",
+            "lookup-value": "RowGBP"
+        },
+        {
+            "lookup_id": 5,
+            "lookup-key": "",
+            "lookup-value": "nextdayGBP"
+        }
+    ]
+}

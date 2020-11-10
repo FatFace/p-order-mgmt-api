@@ -1,0 +1,79 @@
+{
+  "lookups": [
+    {
+      "lookup_id": 1,
+      "lookup-key": "standardGBP",
+      "lookup-value": "5"
+    },
+    {
+      "lookup_id": 1,
+      "lookup-key": "nextdayGBP",
+      "lookup-value": "1"
+    },
+    {
+      "lookup_id": 1,
+      "lookup-key": "ClickandCollectGBP",
+      "lookup-value": "n/a"
+    },
+    {
+      "lookup_id": 1,
+      "lookup-key": "ClickandCollectGBP",
+      "lookup-value": "4"
+    },
+    {
+      "lookup_id": 1,
+      "lookup-key": "ClickandCollectGBP",
+      "lookup-value": "4"
+    },
+    {
+      "lookup_id": 1,
+      "lookup-key": "PerdelivertostoreGBP",
+      "lookup-value": "7"
+    },
+    {
+      "lookup_id": 1,
+      "lookup-key": "PerstanardGBP",
+      "lookup-value": "8"
+    },
+    {
+      "lookup_id": 1,
+      "lookup-key": "GLOBALE_STANDARD",
+      "lookup-value": "3"
+    },
+    {
+      "lookup_id": 1,
+      "lookup-key": "overseasUSD",
+      "lookup-value": "9"
+    },
+    {
+      "lookup_id": 1,
+      "lookup-key": "delivertostoreGBP",
+      "lookup-value": "4"
+    },
+    {
+      "lookup_id": 1,
+      "lookup-key": "delivertostoreGBP",
+      "lookup-value": "4"
+    },
+    {
+      "lookup_id": 1,
+      "lookup-key": "standardGBP1",
+      "lookup-value": "5"
+    },
+    {
+      "lookup_id": 1,
+      "lookup-key": "nextdayGBP1",
+      "lookup-value": "1"
+    },
+    {
+      "lookup_id": 1,
+      "lookup-key": "delivertostoreGBP",
+      "lookup-value": "4"
+    },
+	{
+	  "lookup_id": 1,
+      "lookup-key": "Courier",
+      "lookup-value": "5"
+	}
+  ]
+}

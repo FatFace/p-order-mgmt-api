@@ -1,0 +1,77 @@
+#%RAML 1.0 Library
+usage: Library of common HTTP status for response to operations
+traits: 
+  HTTP-200:
+    responses: 
+      200:
+        description: |
+          The request has succeeded without any errors.
+
+  HTTP-201:
+    responses: 
+      201:
+        description: |
+          The request has been fulfilled and has resulted in one or more new resources being created.
+
+  HTTP-202:
+    responses: 
+      202:
+        description: |
+         The request has been accepted for processing, but the processing has not been completed. The request might or might not eventually be acted upon, as it might be disallowed when processing actually takes place.
+
+  HTTP-204:
+    responses: 
+      204:
+        description: |
+         The server has successfully fulfilled the request and that there is no additional content to send in the response payload body.       
+
+  HTTP-400:
+    responses: 
+      400:
+        description: |
+          The server cannot or will not process the request due to something that is perceived to be a client error (e.g., malformed request syntax, invalid request message framing, or deceptive request routing).
+ 
+  HTTP-401:
+    responses: 
+      401:
+        description: |
+          The request has not been accepted because it lacks valid authentication credentials for the target resource.
+
+  HTTP-403:
+    responses: 
+      403:
+        description: |
+          The server understood the request but refuses to authorize it.       
+
+  HTTP-404:
+    responses: 
+      404:
+        description: |
+          The origin server did not find a current representation for the target resource or is not willing to disclose that one exists.
+
+  HTTP-500:
+    responses: 
+      500:
+        description: |
+          The server encountered an unexpected condition that prevented it from fulfilling the request.
+
+  HTTP-501:
+    responses: 
+      501:
+        description: |
+          The server does not support the functionality required to fulfill the request.        
+
+  HTTP-502:
+    responses:
+      502:
+        description: |
+          The server, acting as a proxy or gateway service, was not able to get a valid or any response from the upstream server.
+
+  HTTP-504:
+    responses:
+      504:
+        description: |
+          The server, while acting as a gateway or proxy, did not receive a timely response from the upstream server specified by the URI (e.g. HTTP, FTP, LDAP) or some other auxiliary server (e.g. DNS) it needed to access in attempting to complete the request.
+
+
+ 
