@@ -141,7 +141,7 @@ p('sqs.queue.url.manifestQueueUrl')]]></ee:set-variable>
 		</ee:transform>
 		<flow-ref doc:name="Log Process Entry" doc:id="a261e0aa-579f-4c61-9971-9d3e4123d382" name="log-process-entry-sub-flow" />
 		<flow-ref doc:name="Audit Process Entry" doc:id="61fa567a-771f-4564-bc3b-7cdcacd829fa" name="audit-process-entry-sub-flow"/>
-				<http:request method="PUT" doc:name="Call D365 HTTP Request Configuration" doc:id="e306719f-a6e8-4880-b368-9a9dd2b2b835" path="${d365.updateManifestPath}" responseTimeout="${response.timeout.system.d365.manifest}" config-ref="s_D365_Http_Request_configuration">
+				<http:request method="PUT" doc:name="Call D365 HTTP Request Configuration" doc:id="e306719f-a6e8-4880-b368-9a9dd2b2b835" path="${d365.updateManifestPath}" responseTimeout="${response.timeout.system.d365.manifest}" config-ref="s_D365_ODATA_Http_Request_configuration">
 				
 				<error-mapping targetType="REPROCESS:LEVEL_2_RETRY" />
 					<http:body ><![CDATA[#[vars.originalPayload]]]></http:body>
@@ -150,9 +150,9 @@ p('sqs.queue.url.manifestQueueUrl')]]></ee:set-variable>
 {
 	"Transaction-Id" : vars.transactionId,
 	"file-name" : vars.fileName,
-	"client_secret" : p('secure::d365.clientSecret'),
+	"client_secret" : p('secure::d365.odata.clientSecret'),
 	"Transaction-Start-Time" : vars.transactionStartTime,
-	"client_id" : p('d365.clientId')
+	"client_id" : p('d365.odata.clientId')
 }]]]></http:headers>
 					<http:response-validator>
 					<http:success-status-code-validator values="#[200]" />

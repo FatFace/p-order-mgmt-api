@@ -64,6 +64,12 @@ d365:
   updateManifestPath: "/pick/manifests"
   updateOrderExtractPath: "/pick/orders" 
   webOrdersPath: "/web/orders"
+  odata:
+    host: "mule-worker-internal-sit-s-d365-odata-api.ir-e1.cloudhub.io"
+    port: "8091"
+    basepath: "/api/v1"
+    clientId: "a1c25cbc41dc4a43a1c5c3ecbf1251c5"
+    clientSecret: "![LW5QbpXxcFCYtiU4/DH0+ENIW/q+2cr3P4u6w65C4pbwoGe1SiiStpjbUB6ntxmh]"
   dmf: 
     path: "/dmf/export"
     pick:
