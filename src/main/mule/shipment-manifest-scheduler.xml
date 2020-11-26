@@ -209,7 +209,7 @@ attributes.transactionFileName.stringValue]]></ee:set-variable>
 		<flow-ref doc:name="Audit Receiver Entry" doc:id="4035c348-3015-4966-83c5-ddb5d5950c95" name="audit-receiver-entry-sub-flow"/>
 		<set-variable value="#[attributes['sqs.message.receipt.handle']]" doc:name="Set Message Receipt" doc:id="53d9b459-041b-40ee-ad58-e62565bdf912" variableName="messageReceipt"/>
 		<flow-ref doc:name="Log Process Entry" doc:id="4d496848-535b-46c9-959f-5c32df922c26" name="log-process-entry-sub-flow"/>
-<flow-ref doc:name="Audit Process Entry" doc:id="5c07148c-47a2-4916-ab5a-541acd9bf164" name="audit-process-entry-sub-flow"/>
+<!-- <flow-ref doc:name="Audit Process Entry" doc:id="5c07148c-47a2-4916-ab5a-541acd9bf164" name="audit-process-entry-sub-flow"/>  -->
 		<until-successful maxRetries="${retry.attempts}" doc:name="Until Successful" doc:id="d0c104e7-1d57-450e-969e-5ce5540524e9" millisBetweenRetries="${retry.frequency}">
 			<try doc:name="Try" doc:id="7955ec88-1826-4d8e-b2d0-4000cc75a410" >
 				<sqs:delete-message doc:name="Delete message" doc:id="b52b8996-c241-4288-ad8f-b3bfafac789d" config-ref="Amazon_SQS_Configuration" receiptHandle="#[vars.messageReceipt]" queueUrl="${sqs.queue.url.manifestQueueUrl}" target="tempDelete" />

@@ -16,7 +16,6 @@ http://www.mulesoft.org/schema/mule/java http://www.mulesoft.org/schema/mule/jav
 		
 		<set-variable value="#['aptos-to-d365-impl-flow']" doc:name="Set Flow Name" doc:id="f1034d0e-4f80-47f7-b761-48bb51f78366" variableName="flowName"/>
 		<flow-ref doc:name="Log Process Entry" doc:id="e3035da0-9d71-45d9-b4f2-50fce399087e" name="log-process-entry-sub-flow"/>
-		<flow-ref doc:name="Audit Process Entry" doc:id="06ffc987-517d-49be-8d14-dfca129ac283" name="audit-process-entry-sub-flow"/>
 		<ee:transform doc:name="Set Input Payload" doc:id="69945192-6aa6-45bb-864c-90f13f6f948b">
 			<ee:message>
 			</ee:message>
@@ -28,6 +27,7 @@ output application/json
 payload]]></ee:set-variable>
 			</ee:variables>
 		</ee:transform>
+		<flow-ref doc:name="Audit Process Entry" doc:id="06ffc987-517d-49be-8d14-dfca129ac283" name="audit-process-entry-sub-flow" />
 		<async doc:name="Async" doc:id="a964c7c2-50e1-4b26-b200-52d43d2abfdb" >
 			<flow-ref doc:name="Audit Details Flow call" doc:id="a977b1bd-2a00-46cd-8efa-4b8882baa6f2" name="aptos-orders-auditing-sub-flow" />
 		</async>

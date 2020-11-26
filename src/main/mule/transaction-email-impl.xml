@@ -10,7 +10,6 @@ http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/htt
 	<sub-flow name="post-transactional-email-impl-sub-slow" doc:id="10a6d0b5-dea7-4038-a48f-4f4b7f65ed4a" >
 		<set-variable value="#['post-transactional-email-impl-sub-slow']" doc:name="Set Variable" doc:id="fe0115b7-3ce9-49f2-a669-2c62d7ff29ec" variableName="flowName"/>
 		<flow-ref doc:name="Log process entry" doc:id="c7aecb69-3d78-4804-86ff-f555fee6c427" name="log-process-entry-sub-flow"/>
-		<flow-ref doc:name="Audit process entry" doc:id="d67fdbc5-370b-4770-b754-d5c14898cfb6" name="audit-process-entry-sub-flow"/>
 		<ee:transform doc:name="Filter orders without email address" doc:id="0100e6e0-bc1d-4d31-b42c-17967fe775c9" >
 			<ee:message >
 				<ee:set-payload ><![CDATA[%dw 2.0
@@ -25,6 +24,7 @@ output application/json
 "orders" : payload.orders filter (isEmpty($.customer.email) == false)]]></ee:set-variable>
 			</ee:variables>
 		</ee:transform>
+		<flow-ref doc:name="Audit process entry" doc:id="d67fdbc5-370b-4770-b754-d5c14898cfb6" name="audit-process-entry-sub-flow" />
 		<async doc:name="Async" doc:id="61637ad8-9ba7-4494-8535-fb4fbfa5dd89" >
 			<try doc:name="Try" doc:id="b03c41c6-876c-432e-ae97-a09a1c41fab4" >
 			
