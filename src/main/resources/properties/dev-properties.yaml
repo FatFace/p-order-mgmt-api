@@ -15,9 +15,9 @@ scheduler:
     expression: "0 0/15 * 1/1 * ? *"
         
 d365:
-  host: "mule-worker-internal-dev-s-d365-api.ir-e1.cloudhub.io"
-  port: "8091"
-  basepath: "/api/v1"
+  host: "internal-ff-test-dlb.lb.anypointdns.net"
+  port: "80"
+  basepath: "/dev-s-d365-api/api/v1"
   clientId: "c1751cc13ad746a8a49c404c966839f7"
   clientSecret: "![Uve1NAvt5zaIs55ecLLnd6rhKY81uIy0j5/clihbaHvBkxed9l+lipNeE/ztkCnm]"
   getCustomerGroupPath: "/data/CustomerGroups"
@@ -26,9 +26,9 @@ d365:
   updateOrderExtractPath: "/pick/orders"
   webOrdersPath: "/web/orders"
   odata:
-    host: "mule-worker-internal-dev-s-d365-odata-api.ir-e1.cloudhub.io"
-    port: "8091"
-    basepath: "/api/v1"
+    host: "internal-ff-test-dlb.lb.anypointdns.net"
+    port: "80"
+    basepath: "/dev-s-d365-odata-api/api/v1"
     clientId: "c1751cc13ad746a8a49c404c966839f7"
     clientSecret: "![Uve1NAvt5zaIs55ecLLnd6rhKY81uIy0j5/clihbaHvBkxed9l+lipNeE/ztkCnm]"
   dmf: 
