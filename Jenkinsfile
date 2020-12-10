@@ -107,7 +107,7 @@ pipeline {
                             } else {
                                 echo  "Build and test artifact.."
                                 withMaven(globalMavenSettingsConfig: 'global-maven-settings-xml-id') {
-                                   sh 'mvn clean package -Dmule.env="${MULE_ENV}" -Dencryption.key="${ENCRYPTION_KEY}" -DskipMunitTests'
+                                   sh 'mvn clean package -DskipMunitTests -Dmule.env="${MULE_ENV}" -Dencryption.key="${ENCRYPTION_KEY}" -DskipMunitTests'
                             	}
 
                            }
