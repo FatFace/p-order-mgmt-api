@@ -76,6 +76,12 @@ http://www.mulesoft.org/schema/mule/os http://www.mulesoft.org/schema/mule/os/cu
 		<http:request-connection host="${d365.host}"
 			port="${d365.port}" />
 	</http:request-config>
+	<http:request-config name="s_D365_ODATA_Http_Request_configuration"
+		doc:name="HTTP Request configuration" doc:id="6ff14cf0-79e2-40e2-ad1f-13f736578ed5"
+		basePath="${d365.odata.basepath}">
+		<http:request-connection host="${d365.odata.host}"
+			port="${d365.odata.port}" />
+	</http:request-config>
 	<http:request-config name="s_jda_Http_Request_configuration"
 		doc:name="HTTP Request configuration" doc:id="2ed9720e-ec24-4e84-b76c-0ed81b8eb722"
 		basePath="${jda.basepath}">
