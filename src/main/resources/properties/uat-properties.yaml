@@ -54,9 +54,9 @@ sqs:
       orderQueueUrl: "https://sqs.eu-west-1.amazonaws.com/309769536943/order-extract-q"
         
 d365:
-  host: "mule-worker-internal-uat-s-d365-api.ir-e1.cloudhub.io"
-  port: "8091"
-  basepath: "/api/v1"
+  host: "internal-ff-test-dlb.lb.anypointdns.net"
+  port: "80"
+  basepath: "/uat-s-d365-api/api/v1"
   clientId: "878d7706ad57449ba28c0fe669d6c921"
   clientSecret: "![xXfiJhHOrpkgby8wWnyNRCdoKPeIjUWXj8Gl9gKMxtLWIW0YMHZE2jE76rGwkF0V]"
   getCustomerGroupPath: "/data/CustomerGroups"
@@ -64,6 +64,12 @@ d365:
   updateManifestPath: "/pick/manifests"
   updateOrderExtractPath: "/pick/orders" 
   webOrdersPath: "/web/orders"
+  odata:
+    host: "internal-ff-test-dlb.lb.anypointdns.net"
+    port: "80"
+    basepath: "/uat-s-d365-odata-api/api/v1"
+    clientId: "878d7706ad57449ba28c0fe669d6c921"
+    clientSecret: "![xXfiJhHOrpkgby8wWnyNRCdoKPeIjUWXj8Gl9gKMxtLWIW0YMHZE2jE76rGwkF0V]"
   dmf: 
     path: "/dmf/export"
     pick:

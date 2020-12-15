@@ -24,7 +24,13 @@ d365:
   updateProductsPath: "/data/products"     
   updateManifestPath: "/pick/manifests"
   updateOrderExtractPath: "/pick/orders"
-  webOrdersPath: "/web/orders"  
+  webOrdersPath: "/web/orders"
+  odata:
+    host: "localhost"
+    port: "8092"
+    basepath: "/api/v1"
+    clientId: "c1751cc13ad746a8a49c404c966839f7"
+    clientSecret: "7d3aFbC44E8e49048935f06A7A2a099d"  
   dmf: 
     path: "/dmf/export"
     pick:
