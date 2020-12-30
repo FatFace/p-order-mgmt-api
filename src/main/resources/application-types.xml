@@ -11,8 +11,6 @@ type manifest = {|
 ]]></types:shape>
     </types:type>
   </types:catalog>
-  <types:enrichment select="#81990bae-596c-4f95-baf8-6780766cfdd7"/>
-  <types:enrichment select="#29613637-3c1f-4944-8fee-13d71ee46871"/>
   <types:enrichment select="#0b8671a7-bf9c-49ac-a888-983d6a130205">
     <types:processor-declaration>
       <types:input-event>
@@ -31,9 +29,4 @@ type manifest = {|
       </types:input-event>
     </types:processor-declaration>
   </types:enrichment>
-  <types:enrichment select="#cf76c100-3d06-494c-a266-2209c8e73934"/>
-  <types:enrichment select="#4cc14d7e-b523-4a00-9b6b-12a7a72adadd"/>
-  <types:enrichment select="#2bcb7010-8f00-46fc-acf9-0ceeffe35540"/>
-  <types:enrichment select="#f140519b-f4cc-4c4c-9e1c-fac0e1cdae2b"/>
-  <types:enrichment select="#bb5c0ef3-83d0-48fb-bd16-6f780732676c"/>
 </types:mule>

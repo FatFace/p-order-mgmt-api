@@ -42,4 +42,10 @@ types:
      items: !include dataTypes//lookup.raml
   return-orders:
     type: array
-    items: !include dataTypes//order.raml     
+    items: !include dataTypes//order.raml 
+  shipment-details:
+    type: array
+    items: !include dataTypes//carrier.raml
+  shipped-orders:
+    type: array
+    items: !include dataTypes//shippedorder-dataheader.raml

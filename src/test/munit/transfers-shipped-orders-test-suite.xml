@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:munit="http://www.mulesoft.org/schema/mule/munit" xmlns:munit-tools="http://www.mulesoft.org/schema/mule/munit-tools"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xsi:schemaLocation="
+		http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+		http://www.mulesoft.org/schema/mule/munit http://www.mulesoft.org/schema/mule/munit/current/mule-munit.xsd
+		http://www.mulesoft.org/schema/mule/munit-tools  http://www.mulesoft.org/schema/mule/munit-tools/current/mule-munit-tools.xsd">
+	<munit:config name="transfers-shipped-orders-test-suite.xml" />
+	<import doc:name="Import" doc:id="f265d4c9-944c-411e-a47f-d62c12f52e82" file="test-globals-suite.xml" />
+	<munit:test name="transfers-shipped-orders-test-suite-put-transfers-shipped-orders-impl-flowTest" description="Test" doc:id="ecf830c0-38f5-4da2-b250-bce95d90efb9">
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock Lookup Api System Layer Call" doc:id="3d275775-5d62-4619-9bb9-8b41ecc97499" processor="http:request">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="Invoke System Layer Lookup Api to Get Lookup Key" attributeName="doc:name" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:variables >
+						<munit-tools:variable key="lookupResponse" value='#[MunitTools::getResourceAsString("response/dblookup_response.json")]' mediaType="application/json" />
+					</munit-tools:variables>
+				</munit-tools:then-return>
+			
+</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<set-payload value="#[MunitTools::getResourceAsString('request/transfer-shipped-orders-request.json')]" doc:name="Set Payload" doc:id="baebd845-932b-4449-9bc0-d92bad2538e3" mimeType="application/json"/>
+			<flow-ref doc:name="Flow-ref to put-transfers-shipped-orders-impl-flow" doc:id="35b46825-3a06-4f54-a1ab-0969ff619779" name="put-transfers-shipped-orders-impl-flow"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:verify-call doc:name="Verify call" doc:id="7584cd2a-10b8-47b9-b4e0-d7f59ae3fe4c" processor="http:request">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="Invoke System Layer Lookup Api to Get Lookup Key" attributeName="doc:name" />
+				</munit-tools:with-attributes>
+			</munit-tools:verify-call>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="transfers-shipped-orders-test-suite-put-transfers-shipped-orders-default-impl-flowTest" description="Test" doc:id="34cbebeb-89ce-4c06-925b-ec23e9afd8e2" >
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock Lookup Api System Layer Call" doc:id="b5167945-b997-4262-a269-35e64b8f5b1a" processor="http:request">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="Invoke System Layer Lookup Api to Get Lookup Key" attributeName="doc:name" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:variables >
+						<munit-tools:variable key="lookupResponse" value='#[MunitTools::getResourceAsString("response/dblookup_response.json")]' mediaType="application/json" />
+					</munit-tools:variables>
+				</munit-tools:then-return>
+			
+</munit-tools:mock-when>
+<munit-tools:mock-when doc:name="Send message" doc:id="5c49992d-0221-43ff-98a0-8a7def99ff55" processor="sqs:send-message">
+				<munit-tools:with-attributes>
+					<munit-tools:with-attribute whereValue="Send message" attributeName="doc:name" />
+				</munit-tools:with-attributes>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to transfers-shipped-order-data-handling-flow" doc:id="42b4eb59-fafb-4541-9c36-886d5d559cb5" name="transfers-shipped-order-data-handling-flow"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that" doc:id="40bbc537-44c7-49bb-8ead-829fa164ac1c" expression="#[payload]" is="#[MunitTools::notNullValue()]"/>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="transfer-shipped-impl-test-suite-order-data-handling-flowTest" description="Test" doc:id="196424fb-2ddd-4d41-9b05-e8d5c2ca6c87">
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Send message" doc:id="7f088496-ebf6-40ce-8b35-f2de9e1fe2d1" processor="sqs:send-message">
+				<munit-tools:with-attributes>
+					<munit-tools:with-attribute whereValue="Send message" attributeName="doc:name" />
+				</munit-tools:with-attributes>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<munit:set-event doc:name="Set Event" doc:id="74027b0e-3414-4b98-afa4-c4218578968f" >
+				<munit:payload value="#[MunitTools::getResourceAsString('sample_data/transfer-shipped-orders-data.json')]" />
+				<munit:variables >
+					<munit:variable key="matchedOrderData" value='{ "orders" : "false"}' mediaType="application/json" />
+				</munit:variables>
+			
+</munit:set-event>
+			<flow-ref doc:name="Flow-ref to transfers-shipped-order-data-handling-flow" doc:id="0b10bbae-c3ff-40d6-bd41-e020afd4bc90" name="transfers-shipped-order-data-handling-flow"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:verify-call doc:name="Verify call" doc:id="235a60f9-6b77-402b-ab66-ea030ee7e946" processor="sqs:send-message" atLeast="1">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="Send message" attributeName="doc:name" />
+				</munit-tools:with-attributes>
+			</munit-tools:verify-call>
+		
+</munit:validation>
+	</munit:test>
+	<munit:test name="transfers-shipped-orders-test-suite-call-report-db-impl-flowTest" description="Test" doc:id="52e15b0d-543f-45aa-818f-9a0505f858a6" >
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock Reportdb Api System Layer Call" doc:id="b21881e7-ea2e-4f41-b039-946de1a953c1" processor="http:request">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="Call Report DB Http Request Configuration" attributeName="doc:name" />
+				</munit-tools:with-attributes>
+
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to call-s-report-db-api-sub-flow" doc:id="70ba98d9-1f6a-4ba6-b83a-259bf1fb4ede" name="call-s-report-db-api-sub-flow"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that" doc:id="288215b1-7fab-47dd-89c6-6798f500a837" is="#[MunitTools::notNullValue()]" expression="#[payload]"/>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="transfers-shipped-orders-negative-flowTest" description="Test" doc:id="eb169a86-ad1e-488c-a8b3-3898809e1128" expectedErrorType="HTTP:CONNECTIVITY">
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock Lookup Api System Layer Call" doc:id="cde59c22-4ddb-42c7-b0be-47d4b9e8ebef" processor="http:request">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="Invoke System Layer Lookup Api to Get Lookup Key" attributeName="doc:name" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:error typeId="HTTP:CONNECTIVITY" />
+				</munit-tools:then-return>
+			
+
+</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<set-payload value="#[MunitTools::getResourceAsString('request/transfer-shipped-orders-request.json')]" doc:name="Set Payload" doc:id="2cd292a7-4587-4eb4-ab20-f5d0cc928243" mimeType="application/json"/>
+			<flow-ref doc:name="Flow-ref to call-db-lookup-api-sub-flow" doc:id="29d95a9a-45da-4ed1-aada-e0526361d40a" name="call-db-lookup-shipped-orders-api-sub-flow"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that" doc:id="479d1d16-6144-4994-ad39-f55b0305a248" is="#[MunitTools::notNullValue()]" expression="#['failed']"/>
+		</munit:validation>
+	</munit:test>
+
+</mule>

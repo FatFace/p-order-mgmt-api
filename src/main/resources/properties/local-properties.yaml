@@ -54,7 +54,9 @@ jda:
     path: "/pick/orders"
   ordersPath: "/orders"  
   manifests:
-    path: "/pick/manifests" 
+    path: "/pick/manifests"
+  shippedorders:
+    path: "/transfers/orders"
 
 cloudhub:
   username: "![V1H6cIZG27BimoyWHnUmWwgd7Z72XsoF+lx6EKe7Hfc=]"
@@ -143,6 +145,7 @@ cron:
     manifest: "0 0/5 * 1/1 * ? *"
     orderextract: "0 3/20 * 1/1 * ? *"   
     exportOrders:  "0 0 1 1/1 * ? *"
+    shippedOrders: "0 0 * ? * * *"
    
 orders:
   export: 

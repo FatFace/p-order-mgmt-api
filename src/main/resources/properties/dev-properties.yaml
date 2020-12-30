@@ -54,9 +54,11 @@ jda:
     password: "![yqrYtFIRqm28xrunLqR/2kqfcVd97HqoY0AWEfF+m8M=]"
   orders:
     path: "/pick/orders"
-  ordersPath: "/orders"  
-  manifests:
-    path: "/pick/manifests" 
+    ordersPath: "/orders"  
+    manifests:
+      path: "/pick/manifests" 
+    shippedorders:
+      path: "/transfers/orders"
 
 #----Common Block---No change Needed----      
 cloudhub:
@@ -119,6 +121,9 @@ lookup:
     type: "ORDER_TYPE"
     catgeory: "MODE_OF_DELIVERY"
     source: "D365"
+    shippedorderstype: "Store_Entity"
+    shippedorderscatgeory: "Entity"
+    shippedorderssource: "JDA"
     aptos:
       modeOfDelivery:
         type: "MODE_OF_DELIVERY"
@@ -143,6 +148,7 @@ cron:
     manifest: "0 0/5 * 1/1 * ? *"
     orderextract: "0 3/20 * 1/1 * ? *"  
     exportOrders: "0 0 1 1/1 * ? *"   
+    shippedOrders: "0 0 * ? * * *"
    
 orders:
   export:
@@ -163,6 +169,7 @@ report:
   clientId: "c1751cc13ad746a8a49c404c966839f7"
   clientSecret: "![Uve1NAvt5zaIs55ecLLnd6rhKY81uIy0j5/clihbaHvBkxed9l+lipNeE/ztkCnm]"
   ordersPath: "/orders"
+  shippedordersPath: "/transfers/shipped-orders"
   
 xcm:
   host: "mule-worker-internal-dev-s-xcm-api.ir-e1.cloudhub.io"

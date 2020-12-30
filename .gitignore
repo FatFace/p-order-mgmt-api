@@ -54,3 +54,4 @@ catalog/
 bin/
 /reports
 .DS_Store
+src/main/mule/shipped-orders-scheduler.xml

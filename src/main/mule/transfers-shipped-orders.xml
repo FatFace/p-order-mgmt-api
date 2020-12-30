@@ -1,0 +1,289 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:sqs="http://www.mulesoft.org/schema/mule/sqs"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/sqs http://www.mulesoft.org/schema/mule/sqs/current/mule-sqs.xsd">
+	<sub-flow name="put-transfers-shipped-orders-impl-flow" doc:id="19ec656b-73ea-4641-b1fb-9b67ed624140" >
+		<ee:transform doc:name="Set Parameter" doc:id="d3a93fad-bed1-42ff-b9b7-a722e31c2493" >
+			<ee:message >
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="flowName" ><![CDATA[%dw 2.0
+output application/java
+---
+'transfers-shipped-orders-trigger-flow']]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+		<flow-ref doc:name="Log Receiver Entry" doc:id="6f6dde43-815e-402c-a6e8-2e7d2d9ba8d9" name="log-receiver-entry-sub-flow"/>
+		<flow-ref doc:name="Audit Receiver Entry" doc:id="3ee341f9-f5f8-4d83-b7fa-3292debf5ee5" name="audit-receiver-entry-sub-flow"/>
+		<flow-ref doc:name="call-db-lookup-api-sub-flow" doc:id="804581dc-51fa-49c8-94fd-0e19aae6b99f" name="call-db-lookup-shipped-orders-api-sub-flow"/>
+		<async doc:name="Async" doc:id="a86c72e1-ccea-4e66-89ea-66d7d100938b" >
+			<flow-ref doc:name="call-transfers-orders-data-from-s-report-db-sub-flow" doc:id="e9f8fa5d-5356-4056-a0d1-8ff2e5e2aa1a" name="call-s-report-db-api-sub-flow" />
+		</async>
+		<ee:transform doc:name="Filter Lookup Key" doc:id="b3691fdc-8c7b-4157-8454-4b09ca45c98e">
+			<ee:message>
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="flattenResponse" ><![CDATA[%dw 2.0
+output application/json
+---
+(flatten(vars.lookupResponse.lookups groupBy $.lookup_id pluck($)) map {
+    ($."lookup-key"): ($."lookup-value")
+} reduce ((item, accumulator) -> item ++ accumulator)) distinctBy $]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+		<ee:transform doc:name="Transform using Lookup" doc:id="1366b534-7337-4a0c-a633-837b1cefa51b" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload map((item,index) -> {    
+	"record-type": item."record-type",
+	"action": item.action,
+	"region": vars.flattenResponse[payload[0]."user-def-note-1"],
+	"client-id": item."client-id",
+	"order-id": item."order-id",
+	"line-id": item."line-id",
+	"sku-id": item."sku-id",
+	"batch-id": item."batch-id",
+	"expiry-dstamp": item."expiry-dstamp",
+	"config-id": item."config-id",
+    "tag-id": item."tag-id",
+    "work-group": item."work-group",
+    "consignment": item."consignment",
+    "container-id": item."container-id",
+    "pallet-id": item."pallet-id",
+    "pallet-config": item."pallet-config",
+    "site-id": item."site-id",
+    "location-id": item."location-id",
+    "owner-id": item."owner-id",
+    "qty-picked": item."qty-picked",
+    "picked-dstamp": item."picked-dstamp",
+    "qty-shipped": item."qty-shipped",
+    "shipped-dstamp": item."shipped-dstamp",
+    "shipped": item."shipped",
+    "station-id": item."station-id",
+    "user-id": item."user-id",
+    "pallet-volume": item."pallet-volume",
+    "pallet-height": item."pallet-height",
+    "pallet-depth": item."pallet-depth",
+    "pallet-width": item."pallet-width",
+    "pallet-weight": item."pallet-weight",
+    "receipt-id": item."receipt-id",
+    "receipt-dstamp": item."receipt-dstamp",
+    "supplier-id": item."supplier-id",
+    "origin-id": item."origin-id",
+    "condition-id": item."condition-id",
+    "lock-status": item."lock-status",
+    "lock-code": item."lock-code",
+    "notes": item.notes,
+    "manuf-dstamp": item."manuf-dstamp",
+  "trailer-id": item."trailer-id",
+  "bol-id": item."bol-id",
+  "user-def-type-1": item."user-def-type-1",
+  "user-def-type-2": item."user-def-type-2",
+  "user-def-type-3": item."user-def-type-3",
+  "user-def-type-4": item."user-def-type-4",
+  "user-def-type-5": item."user-def-type-5",
+  "user-def-type-6": item."user-def-type-6",
+  "user-def-type-7": item."user-def-type-7",
+  "user-def-type-8": item."user-def-type-8",
+  "user-def-chk-1": item."user-def-chk-1",
+  "user-def-chk-2": item."user-def-chk-2",
+  "user-def-chk-3": item."user-def-chk-3",
+  "user-def-chk-4": item."user-def-chk-4",
+  "user-def-date-1": item."user-def-date-1",
+  "user-def-date-2": item."user-def-date-2",
+  "user-def-date-3": item."user-def-date-3",
+  "user-def-date-4": item."user-def-date-4",
+  "user-def-num-1": item."user-def-num-1",
+  "user-def-num-2": item."user-def-num-2",
+  "user-def-num-3": item."user-def-num-3",
+  "user-def-num-4": item."user-def-num-4",
+  "user-def-note-1": item."user-def-note-1",
+  "user-def-note-2": item."user-def-note-2",
+  "time-zone-name": item."time-zone-name",
+  "spec-code": item."spec-code",
+  "qty-delivered": item."qty-delivered",
+  "delivered-dstamp": item."delivered-dstamp",
+  "delivered": item.delivered,
+  "pod-confirmed": item."pod-confirmed",
+  "pod-exception-reason": item."pod-exception-reason",
+  "trailer-position": item."trailer-position",
+  "kit-ratio": item."kit-ratio",
+  "from-label": item."from-label",
+  "to-label": item."to-label",
+  "pack-despatch-repack": item."pack-despatch-repack",
+  "uploaded": item.uploaded,
+  "uploaded-vview": item."uploaded-vview",
+  "sap-tid": item."sap-tid",
+  "sap-pick-id": item."sap-pick-id",
+  "sap-pick-req": item."sap-pick-req",
+  "ce-rotation-id": item."ce-rotation-id",
+  "ce-consignment-id": item."ce-consignment-id",
+  "ce-receipt-type": item."ce-receipt-type",
+  "ce-originator": item."ce-originator",
+  "ce-originator-reference": item."ce-originator-reference",
+  "ce-coo": item."ce-coo",
+  "ce-cwc": item."ce-cwc",
+  "ce-ucr": item."ce-ucr",
+  "ce-under-bond": item."ce-under-bond",
+  "ce-document-dstamp": item."ce-document-dstamp",
+  "customer-id": item."customer-id",
+  "pick-label-id": item."pick-label-id",
+  "ce-duty-stamp": item."ce-duty-stamp",
+  "catch-weight": item."catch-weight",
+  "shipment-number": item."shipment-number",
+  "picked-weight": item."picked-weight",
+  "picked-volume": item."picked-volume",
+  "tracking-level": item."tracking-level",
+  "archived": item.archived,
+  "carrier-id": item."carrier-id",
+  "hub-carrier-id": item."hub-carrier-id",
+  "hub-service-level": item."hub-service-level",
+  "service-level": item."service-level",
+  "proforma-invoice-num": item."proforma-invoice-num",
+  "carrier-container-id": item."carrier-container-id",
+  "container-weight": item."container-weight",
+  "container-height": item."container-height",
+  "container-width": item."container-width",
+  "container-depth": item."container-depth",
+  "packing-pallet-qty": item."packing-pallet-qty",
+    "packing-pallet-type": item."packing-pallet-type",
+    "container-type": item."container-type",
+  "container-n-of-n": item."container-n-of-n",
+  "hub-container-id": item."hub-container-id",
+  "labelled": item.labelled,
+  "reprint-labels": item."reprint-labels",
+  "status": item.status,
+  "pallet-labelled": item."pallet-labelled",
+  "load-sequence": item."load-sequence",
+  "ce-order-id": item."ce-order-id",
+  "ce-status": item."ce-status",
+  "ce-reason-notes": item."ce-reason-notes",
+  "ce-instructions": item."ce-instructions",
+  "uploaded-customs": item."uploaded-customs",
+  "customer-shipment-number": item."customer-shipment-number",
+  "shipment-group": item."shipment-group",
+  "master-order-id": item."master-order-id",
+  "master-order-line-id": item."master-order-line-id",
+  "shipment-ref": item."shipment-ref",
+  "carrier-consignment-num": item."carrier-consignment-num",
+  "carrier-consignment-id": item."carrier-consignment-id",
+  "total-volume": item."total-volume",
+  "trolley-slot-id": item."trolley-slot-id",
+  "carrier-manifest-number": item."carrier-manifest-number",
+  "transport-boxes": item."transport-boxes"
+})]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<flow-ref doc:name="transfers-shipped-order-data-handling-flow" doc:id="723909ed-9df8-4904-a588-3e4856559c14" name="transfers-shipped-order-data-handling-flow"/>
+		<ee:transform doc:name="Set Flow Name" doc:id="2fbba602-a747-4fb3-b9aa-f9938f356ed8" >
+			<ee:message >
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="flowName" ><![CDATA[%dw 2.0
+output application/java
+---
+'transfers-shipped-orders-trigger-flow']]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+		<flow-ref doc:name="Log Dispatcher Exit" doc:id="d789036d-7d33-4479-8df0-80070584f8a9" name="log-dispatcher-exit-sub-flow"/>
+		<flow-ref doc:name="Audit Dispatcher Exit" doc:id="9c78cccd-66e2-4aec-94be-a549f6044f18" name="audit-dispatcher-exit-sub-flow"/>
+	</sub-flow>
+	<flow name="transfers-shipped-order-data-handling-flow" doc:id="326ac366-0121-45df-a096-32da67d0ec2d" >
+		<ee:transform doc:name="Flow Name" doc:id="d59e4e78-ed74-4bfb-98a0-89aa38009d12" >
+			<ee:message >
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="flowName" ><![CDATA[%dw 2.0
+output application/java
+---
+'transfer-shipped-orders-data-handling-flow']]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+		<flow-ref doc:name="Log Process Entry" doc:id="6992b4d0-f9f7-4aa7-be20-6ec941fade37" name="log-process-entry-sub-flow"/>
+<flow-ref doc:name="Audit Process Entry" doc:id="bae14216-0d9d-4794-9bca-39c21a0e091a" name="audit-process-entry-sub-flow"/>
+		<choice doc:name="Choice" doc:id="2a3e42cc-1651-42a4-be2c-dd0b6277d085" >
+			<when expression="#[payload != null and isEmpty(payload) != true]">
+<!-- 				<logger level="INFO" doc:name="Logger" doc:id="0137cd7a-a1b7-4ecc-aa12-1fdb22e7d701" message="#['Matched Data is: ' ++ write(vars.matchedOrderData,'application/json')]"/> -->
+				<set-variable value="#[payload]" doc:name="Set Original Payload" doc:id="732e8dac-0293-458a-bda3-9bf15b1a7869" variableName="originalPayload" />
+				<ee:transform doc:name="Transform Message" doc:id="5728fa77-1832-4506-837c-a4c5e4bc2fa6" >
+					<ee:message >
+						<ee:set-payload resource="dwl/create-order-queue-msg.dwl" />
+					</ee:message>
+				</ee:transform>
+				<flow-ref doc:name="Log Process Entry" doc:id="fa90866a-a4ec-4e70-85e5-6875818f74ec" name="log-process-entry-sub-flow"/>
+				<flow-ref doc:name="Audit Process Entry" doc:id="fac29a86-05fd-480e-91c8-e357a79837c6" name="audit-process-entry-sub-flow"/>
+				<until-successful maxRetries="${retry.attempts}" doc:name="Until Successful" doc:id="ddb290b1-9134-4c5d-819f-74e69a085590" millisBetweenRetries="${retry.frequency}">
+					<try doc:name="Try" doc:id="438aef9f-c4f2-4692-b559-1a7b17b50d76" >
+						<sqs:send-message doc:name="Send message" doc:id="6e66c327-0598-42b2-9284-878d8ef02d8e" config-ref="Amazon_SQS_Configuration" queueUrl="${sqs.queue.url.orderQueueUrl}">
+							<reconnect frequency="${retry.frequency}" count="${retry.attempts}" />
+						</sqs:send-message>
+						<error-handler >
+							<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="0ac43bbd-dc46-4e96-9ab2-45bc14ab101d" type="ANY">
+								<flow-ref doc:name="log-error-sub-flow" doc:id="5b34dd6d-cf67-4037-96d5-3a81727682ef" name="log-error-sub-flow"/>
+								<flow-ref doc:name="audit-error-sub-flow" doc:id="b0dad047-a9e0-4839-84a8-af0d6884410e" name="audit-error-sub-flow"/>
+							</on-error-propagate>
+						</error-handler>
+					</try>
+				</until-successful>
+				<flow-ref doc:name="Audit Process Exit" doc:id="4c0ab414-964a-42dd-b583-b5a1cb7e7433" name="audit-process-exit-sub-flow" />
+				<flow-ref doc:name="Log Process Exit" doc:id="a88eeab6-7834-4743-bc1f-5c57e03e5023" name="log-process-exit-sub-flow"/>
+			</when>
+			<otherwise >
+				<set-variable value="No data matached with manifest Data" doc:name="Set Logging payload" doc:id="789a937e-0905-4ae1-95df-bac74609ec7d" variableName="loggingPayload" />
+				<flow-ref doc:name="Logging Message" doc:id="16a709e6-a1ee-408a-ad1a-2545607d9d75" name="logging-sub-flow" />
+			</otherwise>
+		</choice>
+	</flow>
+	<sub-flow name="call-db-lookup-shipped-orders-api-sub-flow" doc:id="ae8be7f7-ac7b-467c-861d-6e11cc02bfe0" >
+		<set-variable value="call-db-lookup-api-sub-flow" doc:name="Flow Name" doc:id="cee252be-a6ff-46d2-a6ad-dce347796ee6" variableName="flowName"/>
+		<flow-ref doc:name="Log Process Entry" doc:id="e1a22c89-7087-4713-8485-338ee0915ce2" name="log-process-entry-sub-flow"/>
+<flow-ref doc:name="Audit Process Entry" doc:id="4a04b761-dab6-423d-bf35-3d4a7eaaf343" name="audit-process-entry-sub-flow"/>
+		<http:request method="GET" doc:name="Invoke System Layer Lookup Api to Get Lookup Key" doc:id="15dc0ad8-7ba9-44ca-ab08-c75cd84235b9" path="${lookup.dbLookupPath}" responseTimeout="${response.timeout.system.dblookup.pickOrders}" config-ref="dbLookup_HTTP_Request_configuration" target="lookupResponse">
+					<http:headers><![CDATA[#[output application/java
+---
+{
+	"Transaction-Id" : vars.transactionId,
+	"client_secret" : p('secure::lookup.clientSecret'),
+	"Transaction-Start-Time" : vars.transactionStartTime,
+	"client_id" : p('lookup.clientId')
+}]]]></http:headers>
+					<http:query-params><![CDATA[#[output application/java
+---
+{
+	"source" : p('lookup.queryParam.shippedorderssource'),
+	"type" : p('lookup.queryParam.shippedorderstype'),
+	"category" : p('lookup.queryParam.shippedorderscatgeory')
+}]]]></http:query-params>
+				</http:request>
+		<flow-ref doc:name="Log Process Exit" doc:id="9934e4ed-b2f9-4515-b7de-b1ce52674899" name="log-process-exit-sub-flow" />
+<flow-ref doc:name="Audit Process Exit" doc:id="a4bba50e-f52d-41c2-b64f-df225e3964ee" name="audit-process-exit-sub-flow"/>
+	</sub-flow>
+	<!-- <sub-flow name="call-s-report-db-put-transfer-order-api-sub-flow" doc:id="48ec0eec-3aa2-4771-b0cc-2252f2edd676" >
+		<set-variable value="call-s-report-db-api-sub-flow" doc:name="Flow Name" doc:id="3367474d-74e5-4f6a-a24f-ac5ae85f987f" variableName="flowName"/>
+		<flow-ref doc:name="Log Process Entry" doc:id="180d3ebc-d6d6-4e5b-9fb2-85134f32e6b4" name="log-process-entry-sub-flow"/>
+<flow-ref doc:name="Audit Process Entry" doc:id="80d62ddb-8b0d-437a-8149-ac024986c39b" name="audit-process-entry-sub-flow"/>
+		<http:request method="PUT" doc:name="Call Report DB Http Request Configuration" doc:id="870f180e-6477-42e0-88f3-b36901135438" path="${report.shippedordersPath}" responseTimeout="${response.timeout.system.reportdb.webOrders}" config-ref="S_Report_Http_Request_Configuration" target="lookupResponse">
+
+						<http:body><![CDATA[#[vars.reportdbInputPayload]]]></http:body>
+											<http:headers><![CDATA[#[output application/java
+-&#45;&#45;
+{
+	"Transaction-Id" : vars.transactionId,
+	"client_secret" : p('secure::report.clientSecret'),
+	"Transaction-Start-Time" : vars.transactionStartTime,
+	"client_id" : p('report.clientId')
+}]]]></http:headers>
+			
+					
+					</http:request>
+					<flow-ref doc:name="Log Process Exit" doc:id="3b8f7295-3e8e-43a8-96f1-07f81aff7634" name="log-process-exit-sub-flow" />
+<flow-ref doc:name="Audit Process Exit" doc:id="6346d4a5-54bd-4047-88b0-d5e45a3e3290" name="audit-process-exit-sub-flow"/>
+	</sub-flow> -->
+</mule>
