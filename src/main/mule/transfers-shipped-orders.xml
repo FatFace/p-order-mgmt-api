@@ -24,6 +24,94 @@ output application/java
 		<async doc:name="Async" doc:id="a86c72e1-ccea-4e66-89ea-66d7d100938b" >
 			<flow-ref doc:name="call-transfers-orders-data-from-s-report-db-sub-flow" doc:id="e9f8fa5d-5356-4056-a0d1-8ff2e5e2aa1a" name="call-s-report-db-api-sub-flow" />
 		</async>
+		<ee:transform doc:name="Transform Message" doc:id="f242bb09-0a93-4b3e-bddd-d96fda150867" >
+			<ee:message >
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="lookupResponse" ><![CDATA[%dw 2.0
+output application/java
+---
+{
+  "lookups": [
+    {
+      "lookup_id": 1,
+      "lookup-key": "standardGBP",
+      "lookup-value": "5"
+    },
+    {
+      "lookup_id": 1,
+      "lookup-key": "nextdayGBP",
+      "lookup-value": "1"
+    },
+    {
+      "lookup_id": 1,
+      "lookup-key": "ClickandCollectGBP",
+      "lookup-value": "n/a"
+    },
+    {
+      "lookup_id": 1,
+      "lookup-key": "ClickandCollectGBP",
+      "lookup-value": "4"
+    },
+    {
+      "lookup_id": 1,
+      "lookup-key": "ClickandCollectGBP",
+      "lookup-value": "4"
+    },
+    {
+      "lookup_id": 1,
+      "lookup-key": "PerdelivertostoreGBP",
+      "lookup-value": "7"
+    },
+    {
+      "lookup_id": 1,
+      "lookup-key": "PerstanardGBP",
+      "lookup-value": "8"
+    },
+    {
+      "lookup_id": 1,
+      "lookup-key": "GLOBALE_STANDARD",
+      "lookup-value": "3"
+    },
+    {
+      "lookup_id": 1,
+      "lookup-key": "overseasUSD",
+      "lookup-value": "9"
+    },
+    {
+      "lookup_id": 1,
+      "lookup-key": "delivertostoreGBP",
+      "lookup-value": "4"
+    },
+    {
+      "lookup_id": 1,
+      "lookup-key": "delivertostoreGBP",
+      "lookup-value": "4"
+    },
+    {
+      "lookup_id": 1,
+      "lookup-key": "standardGBP1",
+      "lookup-value": "5"
+    },
+    {
+      "lookup_id": 1,
+      "lookup-key": "nextdayGBP1",
+      "lookup-value": "1"
+    },
+    {
+      "lookup_id": 1,
+      "lookup-key": "delivertostoreGBP",
+      "lookup-value": "4"
+    },
+	{
+	  "lookup_id": 1,
+      "lookup-key": "Courier",
+      "lookup-value": "5"
+	}
+  ]
+}]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
 		<ee:transform doc:name="Filter Lookup Key" doc:id="b3691fdc-8c7b-4157-8454-4b09ca45c98e">
 			<ee:message>
 			</ee:message>
@@ -32,7 +120,7 @@ output application/java
 output application/json
 ---
 (flatten(vars.lookupResponse.lookups groupBy $.lookup_id pluck($)) map {
-    ($."lookup-key"): ($."lookup-value")
+    ($."lookup-value"): ($."lookup-key")
 } reduce ((item, accumulator) -> item ++ accumulator)) distinctBy $]]></ee:set-variable>
 			</ee:variables>
 		</ee:transform>
@@ -196,6 +284,16 @@ output application/java
 		<flow-ref doc:name="Audit Dispatcher Exit" doc:id="9c78cccd-66e2-4aec-94be-a549f6044f18" name="audit-dispatcher-exit-sub-flow"/>
 	</sub-flow>
 	<flow name="transfers-shipped-order-data-handling-flow" doc:id="326ac366-0121-45df-a096-32da67d0ec2d" >
+		<ee:transform doc:name="Transform Message" doc:id="bb67ad62-8aff-4bba-a56f-1c663a4e6925" >
+			<ee:message >
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="fileName" ><![CDATA[%dw 2.0
+output application/java
+---
+attributes.headers['file-name']]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
 		<ee:transform doc:name="Flow Name" doc:id="d59e4e78-ed74-4bfb-98a0-89aa38009d12" >
 			<ee:message >
 			</ee:message>
@@ -221,7 +319,7 @@ output application/java
 				<flow-ref doc:name="Audit Process Entry" doc:id="fac29a86-05fd-480e-91c8-e357a79837c6" name="audit-process-entry-sub-flow"/>
 				<until-successful maxRetries="${retry.attempts}" doc:name="Until Successful" doc:id="ddb290b1-9134-4c5d-819f-74e69a085590" millisBetweenRetries="${retry.frequency}">
 					<try doc:name="Try" doc:id="438aef9f-c4f2-4692-b559-1a7b17b50d76" >
-						<sqs:send-message doc:name="Send message" doc:id="6e66c327-0598-42b2-9284-878d8ef02d8e" config-ref="Amazon_SQS_Configuration" queueUrl="${sqs.queue.url.orderQueueUrl}">
+						<sqs:send-message doc:name="Send message" doc:id="6e66c327-0598-42b2-9284-878d8ef02d8e" config-ref="Amazon_SQS_Configuration" queueUrl="${sqs.queue.url.transferorderQueueUrl}">
 							<reconnect frequency="${retry.frequency}" count="${retry.attempts}" />
 						</sqs:send-message>
 						<error-handler >
@@ -234,7 +332,8 @@ output application/java
 				</until-successful>
 				<flow-ref doc:name="Audit Process Exit" doc:id="4c0ab414-964a-42dd-b583-b5a1cb7e7433" name="audit-process-exit-sub-flow" />
 				<flow-ref doc:name="Log Process Exit" doc:id="a88eeab6-7834-4743-bc1f-5c57e03e5023" name="log-process-exit-sub-flow"/>
-			</when>
+			
+</when>
 			<otherwise >
 				<set-variable value="No data matached with manifest Data" doc:name="Set Logging payload" doc:id="789a937e-0905-4ae1-95df-bac74609ec7d" variableName="loggingPayload" />
 				<flow-ref doc:name="Logging Message" doc:id="16a709e6-a1ee-408a-ad1a-2545607d9d75" name="logging-sub-flow" />

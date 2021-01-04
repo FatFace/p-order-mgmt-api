@@ -1,0 +1,18 @@
+#%RAML 1.0 Trait
+
+usage: Apply this to any method that needs to set value for logical decision in term message flow
+headers: 
+  correlationId:
+    displayName:  Correlation-Id
+    description: |
+      Unique ID which is usually system generated
+    type: string
+    example: "98982948984"
+    required: true
+  file-name:
+    displayName:  File-name
+    description: |
+      This field indicates name of File
+    type: string
+    example: "testFile"
+    required: true

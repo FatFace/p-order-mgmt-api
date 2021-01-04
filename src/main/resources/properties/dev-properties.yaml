@@ -99,6 +99,7 @@ sqs:
     url:
       manifestQueueUrl: "https://sqs.eu-west-1.amazonaws.com/691628577374/dev-shipping-manifest-q"
       orderQueueUrl: "https://sqs.eu-west-1.amazonaws.com/691628577374/dev-order-extract-q"
+      transferorderQueueUrl: "https://sqs.eu-west-1.amazonaws.com/691628577374/dev-shipped-orders-queue"
 
 lookup:
   host: "mule-worker-internal-dev-s-dblookup-api.ir-e1.cloudhub.io"
