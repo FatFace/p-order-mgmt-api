@@ -122,8 +122,8 @@ lookup:
     type: "ORDER_TYPE"
     catgeory: "MODE_OF_DELIVERY"
     source: "D365"
-    shippedorderstype: "Store_Entity"
-    shippedorderscatgeory: "Entity"
+    shippedorderstype: "Entity"
+    shippedorderscatgeory: "Store Entity"
     shippedorderssource: "JDA"
     aptos:
       modeOfDelivery:

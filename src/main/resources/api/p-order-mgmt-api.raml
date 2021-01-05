@@ -4,7 +4,7 @@ version: v1
 baseUri: http://localhost:8081/api/{version}
 
 uses:
-  dataTypesLib: exchange_modules/58a992fe-b969-4b25-b394-d29b18b7da04/datatypeslibrary/1.1.8/datatypeslibrary.raml
+  dataTypesLib: exchange_modules/58a992fe-b969-4b25-b394-d29b18b7da04/datatypeslibrary/1.1.10/datatypeslibrary.raml
   resourceTypesLib: exchange_modules/58a992fe-b969-4b25-b394-d29b18b7da04/resourcetypeslibrary/1.0.1/resourcetypeslibrary.raml
   traitsLib: exchange_modules/58a992fe-b969-4b25-b394-d29b18b7da04/traitslibrary/1.0.5/traitslibrary.raml
 
@@ -115,8 +115,9 @@ uses:
         Create Transfer shippedorders in Reporting DB and D365
       body:
         application/json:   
-          example: !include examples/dataheaders.raml
-          type: dataTypesLib.shipped-orders
+          example: !include examples/transfer-orders.raml
+          properties:
+            transfer-orders: dataTypesLib.transfer-orders
       responses:
         200:
           body:
