@@ -21,11 +21,6 @@
 					</munit-tools:variables>
 				</munit-tools:then-return>
 			</munit-tools:mock-when>
-			<munit-tools:mock-when doc:name="Mock when Report DB api" doc:id="4a33618e-3745-4b15-b3c0-597eb4dccbce" processor="http:request">
-				<munit-tools:with-attributes >
-					<munit-tools:with-attribute whereValue="Call Report DB Http Request Configuration" attributeName="doc:name" />
-				</munit-tools:with-attributes>
-			</munit-tools:mock-when>
 			<munit-tools:mock-when doc:name="Mock when Send Message" doc:id="53a072d2-47fc-41aa-8a67-effb0473fbf2" processor="sqs:send-message">
 				<munit-tools:with-attributes >
 					<munit-tools:with-attribute whereValue="Send message" attributeName="doc:name" />
@@ -59,11 +54,6 @@
 						<munit-tools:variable key="lookupResponse" value="#[MunitTools::getResourceAsString('response/dblookup_response.json')]" mediaType="application/json" />
 					</munit-tools:variables>
 				</munit-tools:then-return>
-			</munit-tools:mock-when>
-			<munit-tools:mock-when doc:name="Mock when Report DB api" doc:id="6188736b-5123-4baa-9a0c-ecf62843ef66" processor="http:request">
-				<munit-tools:with-attributes >
-					<munit-tools:with-attribute whereValue="Call Report DB Http Request Configuration" attributeName="doc:name" />
-				</munit-tools:with-attributes>
 			</munit-tools:mock-when>
 			<munit-tools:mock-when doc:name="Mock when Send Message" doc:id="c9233170-fd0b-44a0-93a6-5c6401b87db0" processor="sqs:send-message">
 				<munit-tools:with-attributes >
@@ -127,11 +117,6 @@
 						<munit-tools:variable key="lookupResponse" value="#[MunitTools::getResourceAsString('response/dblookup_response.json')]" mediaType="application/json" />
 					</munit-tools:variables>
 				</munit-tools:then-return>
-			</munit-tools:mock-when>
-			<munit-tools:mock-when doc:name="Mock when Report DB api" doc:id="37bf7884-349e-41e9-a39f-025b0bef6c86" processor="http:request">
-				<munit-tools:with-attributes >
-					<munit-tools:with-attribute whereValue="Call Report DB Http Request Configuration" attributeName="doc:name" />
-				</munit-tools:with-attributes>
 			</munit-tools:mock-when>
 			<munit-tools:mock-when doc:name="Mock when Send Message" doc:id="d02e99e2-4ded-4710-9250-dee6c337a39f" processor="sqs:send-message">
 				<munit-tools:with-attributes >

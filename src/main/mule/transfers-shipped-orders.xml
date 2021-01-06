@@ -20,10 +20,7 @@ output application/java
 		</ee:transform>
 		<flow-ref doc:name="Log Receiver Entry" doc:id="6f6dde43-815e-402c-a6e8-2e7d2d9ba8d9" name="log-receiver-entry-sub-flow"/>
 		<flow-ref doc:name="Audit Receiver Entry" doc:id="3ee341f9-f5f8-4d83-b7fa-3292debf5ee5" name="audit-receiver-entry-sub-flow"/>
-		<flow-ref doc:name="call-db-lookup-api-sub-flow" doc:id="804581dc-51fa-49c8-94fd-0e19aae6b99f" name="call-db-lookup-shipped-orders-api-sub-flow"/>
-		<async doc:name="Async" doc:id="a86c72e1-ccea-4e66-89ea-66d7d100938b" >
-			<flow-ref doc:name="call-transfers-orders-data-from-s-report-db-sub-flow" doc:id="e9f8fa5d-5356-4056-a0d1-8ff2e5e2aa1a" name="call-s-report-db-api-sub-flow" />
-		</async>		
+		<flow-ref doc:name="call-db-lookup-api-sub-flow" doc:id="804581dc-51fa-49c8-94fd-0e19aae6b99f" name="call-db-lookup-shipped-orders-api-sub-flow"/>		
 		<ee:transform doc:name="Filter Lookup Key" doc:id="b3691fdc-8c7b-4157-8454-4b09ca45c98e">
 			<ee:message>
 			</ee:message>
@@ -130,26 +127,5 @@ output application/java
 				</http:request>
 		<flow-ref doc:name="Log Process Exit" doc:id="9934e4ed-b2f9-4515-b7de-b1ce52674899" name="log-process-exit-sub-flow" />
 <flow-ref doc:name="Audit Process Exit" doc:id="a4bba50e-f52d-41c2-b64f-df225e3964ee" name="audit-process-exit-sub-flow"/>
-	</sub-flow>
-	<!-- <sub-flow name="call-s-report-db-put-transfer-order-api-sub-flow" doc:id="48ec0eec-3aa2-4771-b0cc-2252f2edd676" >
-		<set-variable value="call-s-report-db-api-sub-flow" doc:name="Flow Name" doc:id="3367474d-74e5-4f6a-a24f-ac5ae85f987f" variableName="flowName"/>
-		<flow-ref doc:name="Log Process Entry" doc:id="180d3ebc-d6d6-4e5b-9fb2-85134f32e6b4" name="log-process-entry-sub-flow"/>
-<flow-ref doc:name="Audit Process Entry" doc:id="80d62ddb-8b0d-437a-8149-ac024986c39b" name="audit-process-entry-sub-flow"/>
-		<http:request method="PUT" doc:name="Call Report DB Http Request Configuration" doc:id="870f180e-6477-42e0-88f3-b36901135438" path="${report.shippedordersPath}" responseTimeout="${response.timeout.system.reportdb.webOrders}" config-ref="S_Report_Http_Request_Configuration" target="lookupResponse">
-
-						<http:body><![CDATA[#[vars.reportdbInputPayload]]]></http:body>
-											<http:headers><![CDATA[#[output application/java
--&#45;&#45;
-{
-	"Transaction-Id" : vars.transactionId,
-	"client_secret" : p('secure::report.clientSecret'),
-	"Transaction-Start-Time" : vars.transactionStartTime,
-	"client_id" : p('report.clientId')
-}]]]></http:headers>
-			
-					
-					</http:request>
-					<flow-ref doc:name="Log Process Exit" doc:id="3b8f7295-3e8e-43a8-96f1-07f81aff7634" name="log-process-exit-sub-flow" />
-<flow-ref doc:name="Audit Process Exit" doc:id="6346d4a5-54bd-4047-88b0-d5e45a3e3290" name="audit-process-exit-sub-flow"/>
-	</sub-flow> -->
+	</sub-flow>	
 </mule>
