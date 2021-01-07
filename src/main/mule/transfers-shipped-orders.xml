@@ -61,7 +61,7 @@ p('region.UK')]]></ee:set-variable>
 						<flow-ref doc:name="call-transfers-shipped-orders-d365-api-sub-flow" doc:id="a6aa10ad-971d-4184-8223-8e89883de200" name="call-transfers-shipped-orders-d365-api-sub-flow" />
 					</when>
 					<otherwise >
-						<set-variable value="Invalid Payload!!" doc:name="Set Variable loggingPayload" doc:id="b04c9de6-6353-4bcb-9f88-cf63a8119970" variableName="loggingPayload" />
+						<set-variable value="#[%dw 2.0 output application/java --- 'Empty Payload for UK Region' ++ p('region.UK')]" doc:name="Set Variable loggingPayload" doc:id="b04c9de6-6353-4bcb-9f88-cf63a8119970" variableName="loggingPayload" />
 						<flow-ref doc:name="logging-sub-flow" doc:id="81c3a5e7-bab8-4250-bb69-7bbff7fecbb7" name="logging-sub-flow"/>
 					</otherwise>
 				</choice>
@@ -89,7 +89,7 @@ p('region.US')]]></ee:set-variable>
 						<flow-ref doc:name="call-transfers-shipped-orders-d365-api-sub-flow" doc:id="989796c1-afb4-4e06-b8e9-a021de8249b2" name="call-transfers-shipped-orders-d365-api-sub-flow" />
 					</when>
 					<otherwise >
-						<set-variable value="Invalid Payload!!" doc:name="Set Variable loggingPayload" doc:id="dbee0c1b-26f9-43aa-a2de-c0038aee4461" variableName="loggingPayload"/>
+						<set-variable value="#[%dw 2.0 output application/java --- 'Empty Payload for US Region' ++ p('region.US')]" doc:name="Set Variable loggingPayload" doc:id="dbee0c1b-26f9-43aa-a2de-c0038aee4461" variableName="loggingPayload"/>
 						<flow-ref doc:name="logging-sub-flow" doc:id="e8a2d1f8-f29e-4754-8fdf-7a03e11561aa" name="logging-sub-flow"/>
 					</otherwise>
 				</choice>
