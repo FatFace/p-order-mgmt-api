@@ -54,7 +54,7 @@ sqs:
       orderQueueUrl: "https://sqs.eu-west-1.amazonaws.com/691628577374/order-extract-q"
         
 d365:
-  host: "internal-ff-test-dlb.lb.anypointdns.net"
+  host: "ff-test-dlb.lb.anypointdns.net"
   port: "80"
   basepath: "/sit-s-d365-api/api/v1"
   clientId: "a1c25cbc41dc4a43a1c5c3ecbf1251c5"
@@ -65,7 +65,7 @@ d365:
   updateOrderExtractPath: "/pick/orders" 
   webOrdersPath: "/web/orders"
   odata:
-    host: "internal-ff-test-dlb.lb.anypointdns.net"
+    host: "ff-test-dlb.lb.anypointdns.net"
     port: "80"
     basepath: "/sit-s-d365-odata-api/api/v1"
     clientId: "a1c25cbc41dc4a43a1c5c3ecbf1251c5"

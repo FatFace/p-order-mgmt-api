@@ -54,7 +54,7 @@ sqs:
       orderQueueUrl: "https://sqs.eu-west-1.amazonaws.com/236032602791/prod-mule-order-extract-q"
      
 d365:
-  host: "internal-ff-test-dlb.lb.anypointdns.net"
+  host: "ff-prod-dlb.lb.anypointdns.net"
   port: "80"
   basepath: "/s-d365-api/api/v1"
   clientId: "587f052383c44efbadc76e22201cba19"
@@ -65,7 +65,7 @@ d365:
   updateOrderExtractPath: "/pick/orders" 
   webOrdersPath: "/web/orders"
   odata:
-    host: "internal-ff-test-dlb.lb.anypointdns.net"
+    host: "ff-prod-dlb.lb.anypointdns.net"
     port: "80"
     basepath: "/s-d365-odata-api/api/v1"
     clientId: "587f052383c44efbadc76e22201cba19"
