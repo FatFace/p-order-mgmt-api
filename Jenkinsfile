@@ -74,7 +74,6 @@ pipeline {
         stage ('Build: Package'){
             when {
             		expression {return params.IS_MAVEN_RELEASE == false}
-			expression { BRANCH_TAG ==~ '^(?:.*develop|.*master|.*feature/.*|.*release/.*|.*fix/.*|.*hotfix/.*)$' }
             } 
             steps {
                 script {               
@@ -95,8 +94,7 @@ pipeline {
         stage ('Peform: Test and QA'){
             when {
                  expression {return params.IS_MAVEN_RELEASE == false}
-		 expression {return params.IS_PUBLISH_REQUIRED == false}
-                 expression { BRANCH_TAG ==~ '^(?:.*develop)$' }            
+		 		expression {return params.IS_PUBLISH_REQUIRED == false}
             } 
             steps {
                     
@@ -118,9 +116,7 @@ pipeline {
 		
 	stage ('Publish: To maven repo'){
             when {
-                   expression {return params.IS_MAVEN_RELEASE == false}
                    expression {return params.IS_PUBLISH_REQUIRED}
-                   expression { BRANCH_TAG ==~ '^(?:.*develop|.*release/.*|.*fix/.*|.*hotfix/.*)$' }         
                 } 
             steps {
                     
@@ -142,10 +138,7 @@ pipeline {
         
         stage ('Deploy: To Mule runtime..'){
 			when {
-                  		expression {return params.IS_MAVEN_RELEASE == false}
-				expression {return params.IS_PUBLISH_REQUIRED == false}
 			 	expression {return params.IS_MULE_DEPLOYMENT_REQUIRED}
-			      	expression { BRANCH_TAG ==~ '^(?:.*develop|.*release/.*|.*fix/.*|.*hotfix/.*)$' } 				
 	        	} 
 	 		steps {
 	 			    
