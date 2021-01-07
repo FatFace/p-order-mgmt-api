@@ -7,8 +7,8 @@
 http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
 http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
 http://www.mulesoft.org/schema/mule/sqs http://www.mulesoft.org/schema/mule/sqs/current/mule-sqs.xsd">
-	<sub-flow name="put-transfers-shipped-orders-impl-flow" doc:id="19ec656b-73ea-4641-b1fb-9b67ed624140" >
-		<ee:transform doc:name="Set flow name and query parameters" doc:id="d3a93fad-bed1-42ff-b9b7-a722e31c2493" >
+	<sub-flow name="put-transfers-shipped-orders-impl-flow" doc:id="2bfe72b6-7826-4a6a-b26f-9e326dd327b9" >
+		<ee:transform doc:name="Set flow name and query parameters" doc:id="626108d0-e540-4b4b-9e37-6d4ba1b9cc5d" >
 			<ee:message >
 			</ee:message>
 			<ee:variables >
@@ -22,24 +22,24 @@ output application/java
 attributes.queryParams]]></ee:set-variable>
 			</ee:variables>
 		</ee:transform>
-		<flow-ref doc:name="Log Receiver Entry" doc:id="6f6dde43-815e-402c-a6e8-2e7d2d9ba8d9" name="log-receiver-entry-sub-flow"/>
-		<flow-ref doc:name="Audit Receiver Entry" doc:id="3ee341f9-f5f8-4d83-b7fa-3292debf5ee5" name="audit-receiver-entry-sub-flow"/>
-		<flow-ref doc:name="call-db-lookup-api-sub-flow" doc:id="804581dc-51fa-49c8-94fd-0e19aae6b99f" name="call-db-lookup-shipped-orders-api-sub-flow"/>		
-		<ee:transform doc:name="Filter Lookup Key" doc:id="b3691fdc-8c7b-4157-8454-4b09ca45c98e">
+		<flow-ref doc:name="Log Receiver Entry" doc:id="870e2552-ecb0-4f7c-8c9f-576de6946003" name="log-receiver-entry-sub-flow"/>
+		<flow-ref doc:name="Audit Receiver Entry" doc:id="7e232484-60ff-4f9f-93c1-0d267e5b5c5c" name="audit-receiver-entry-sub-flow"/>
+		<flow-ref doc:name="call-db-lookup-api-sub-flow" doc:id="e2c6e063-abce-4e72-aa6f-d41a25385e54" name="call-db-lookup-shipped-orders-api-sub-flow"/>		
+		<ee:transform doc:name="Filter Lookup Key" doc:id="c9af6a91-e77b-4d14-a5ea-05e79ad7bec9">
 			<ee:message>
 			</ee:message>
 			<ee:variables >
 				<ee:set-variable resource="dwl/filter_lookup_value_transferorder.dwl" variableName="flattenResponse" />
 			</ee:variables>
 		</ee:transform>
-		<ee:transform doc:name="Transform using Lookup" doc:id="1366b534-7337-4a0c-a633-837b1cefa51b" >
+		<ee:transform doc:name="Transform using Lookup" doc:id="f96c1937-2552-44c0-bbe8-e0b518a81203" >
 			<ee:message >
 				<ee:set-payload resource="dwl/jda-to-d365-tansferorders-mapping.dwl" />
 			</ee:message>
 		</ee:transform>
-		<scatter-gather doc:name="Scatter-Gather" doc:id="0565e0c0-6c69-4de0-a254-a4e3e1c276e3" timeout="1200000">
+		<scatter-gather doc:name="Scatter-Gather" doc:id="9f2a1b6d-91c6-41bf-82f2-dc7ac28c79d3" timeout="1200000">
 			<route >
-				<ee:transform doc:name="Filter using region as UK and capture region" doc:id="580d4e76-0cf9-4817-b8a9-1942b76dfa38" >
+				<ee:transform doc:name="Filter using region as UK and capture region" doc:id="54ccd760-1e84-47d2-a79a-b333a907c9b1" >
 					<ee:message >
 						<ee:set-payload ><![CDATA[%dw 2.0
 output application/json
@@ -56,10 +56,18 @@ output application/java
 p('region.UK')]]></ee:set-variable>
 					</ee:variables>
 				</ee:transform>
-				<flow-ref doc:name="call-transfers-shipped-orders-d365-api-sub-flow" doc:id="57cd5de4-4f49-403b-896d-d11c53e30e56" name="call-transfers-shipped-orders-d365-api-sub-flow"/>
+				<choice doc:name="Choice" doc:id="71d49b58-9ee3-4f7e-afa1-e7a7cdbae670" >
+					<when expression='#[sizeOf(payload."transfer-orders") &gt; 0]'>
+						<flow-ref doc:name="call-transfers-shipped-orders-d365-api-sub-flow" doc:id="a6aa10ad-971d-4184-8223-8e89883de200" name="call-transfers-shipped-orders-d365-api-sub-flow" />
+					</when>
+					<otherwise >
+						<set-variable value="Invalid Payload!!" doc:name="Set Variable loggingPayload" doc:id="b04c9de6-6353-4bcb-9f88-cf63a8119970" variableName="loggingPayload" />
+						<flow-ref doc:name="logging-sub-flow" doc:id="81c3a5e7-bab8-4250-bb69-7bbff7fecbb7" name="logging-sub-flow"/>
+					</otherwise>
+				</choice>
 			</route>
 			<route >
-				<ee:transform doc:name="Filter using region as 2FFC and capture region" doc:id="63d97d11-19e9-4ea5-ab39-63819ad43b59" >
+				<ee:transform doc:name="Filter using region as 2FFC and capture region" doc:id="700b95c1-ff69-429a-96c4-ccf771aa8850" >
 					<ee:message >
 						<ee:set-payload ><![CDATA[%dw 2.0
 output application/json
@@ -76,10 +84,18 @@ output application/java
 p('region.US')]]></ee:set-variable>
 					</ee:variables>
 				</ee:transform>
-				<flow-ref doc:name="call-transfers-shipped-orders-d365-api-sub-flow" doc:id="08ead985-7706-4c5e-83b9-9ca8efb65e94" name="call-transfers-shipped-orders-d365-api-sub-flow"/>
+				<choice doc:name="Choice" doc:id="5b0aa831-2ae5-486a-8ae6-5069d4c771fe" >
+					<when expression='#[sizeOf(payload."transfer-orders") &gt; 0]'>
+						<flow-ref doc:name="call-transfers-shipped-orders-d365-api-sub-flow" doc:id="989796c1-afb4-4e06-b8e9-a021de8249b2" name="call-transfers-shipped-orders-d365-api-sub-flow" />
+					</when>
+					<otherwise >
+						<set-variable value="Invalid Payload!!" doc:name="Set Variable loggingPayload" doc:id="dbee0c1b-26f9-43aa-a2de-c0038aee4461" variableName="loggingPayload"/>
+						<flow-ref doc:name="logging-sub-flow" doc:id="e8a2d1f8-f29e-4754-8fdf-7a03e11561aa" name="logging-sub-flow"/>
+					</otherwise>
+				</choice>
 			</route>
 		</scatter-gather>
-		<ee:transform doc:name="Set Flow Name" doc:id="2fbba602-a747-4fb3-b9aa-f9938f356ed8" >
+		<ee:transform doc:name="Set Flow Name" doc:id="36974e67-7599-41c3-beaa-251d2b0bb525" >
 			<ee:message >
 			</ee:message>
 			<ee:variables >
@@ -89,14 +105,14 @@ output application/java
 'call-transfers-shipped-orders-d365-api-sub-flow']]></ee:set-variable>
 			</ee:variables>
 		</ee:transform>
-		<flow-ref doc:name="Log Dispatcher Exit" doc:id="d789036d-7d33-4479-8df0-80070584f8a9" name="log-dispatcher-exit-sub-flow"/>
-		<flow-ref doc:name="Audit Dispatcher Exit" doc:id="9c78cccd-66e2-4aec-94be-a549f6044f18" name="audit-dispatcher-exit-sub-flow"/>
+		<flow-ref doc:name="Log Dispatcher Exit" doc:id="18d9cc05-fdc5-41a5-82d6-b5669f51d0cf" name="log-dispatcher-exit-sub-flow"/>
+		<flow-ref doc:name="Audit Dispatcher Exit" doc:id="b3d3137f-0ecb-4d76-a93a-651e8e00b5f4" name="audit-dispatcher-exit-sub-flow"/>
 	</sub-flow>
-	<sub-flow name="call-db-lookup-shipped-orders-api-sub-flow" doc:id="ae8be7f7-ac7b-467c-861d-6e11cc02bfe0" >
-		<set-variable value="call-db-lookup-api-sub-flow" doc:name="Flow Name" doc:id="cee252be-a6ff-46d2-a6ad-dce347796ee6" variableName="flowName"/>
-		<flow-ref doc:name="Log Process Entry" doc:id="e1a22c89-7087-4713-8485-338ee0915ce2" name="log-process-entry-sub-flow"/>
-<flow-ref doc:name="Audit Process Entry" doc:id="4a04b761-dab6-423d-bf35-3d4a7eaaf343" name="audit-process-entry-sub-flow"/>
-		<http:request method="GET" doc:name="Invoke System Layer Lookup Api to Get Lookup Key" doc:id="15dc0ad8-7ba9-44ca-ab08-c75cd84235b9" path="${lookup.dbLookupPath}" responseTimeout="${response.timeout.system.dblookup.pickOrders}" config-ref="dbLookup_HTTP_Request_configuration" target="lookupResponse">
+	<sub-flow name="call-db-lookup-shipped-orders-api-sub-flow" doc:id="5283d0cd-a842-4f4e-8dcc-7101fb5198ba" >
+		<set-variable value="call-db-lookup-api-sub-flow" doc:name="Flow Name" doc:id="d9fb30e6-7c7a-40a6-a244-96f8a4ebd4b3" variableName="flowName"/>
+		<flow-ref doc:name="Log Process Entry" doc:id="9129be11-3336-47fe-b503-ea971845e730" name="log-process-entry-sub-flow"/>
+<flow-ref doc:name="Audit Process Entry" doc:id="9352c466-4ad8-4ecb-bf3a-e94335ff2a25" name="audit-process-entry-sub-flow"/>
+		<http:request method="GET" doc:name="Invoke System Layer Lookup Api to Get Lookup Key" doc:id="8a0468f7-2b70-44ba-a64c-8bd4697f894e" path="${lookup.dbLookupPath}" responseTimeout="${response.timeout.system.dblookup.pickOrders}" config-ref="dbLookup_HTTP_Request_configuration" target="lookupResponse">
 					<http:headers><![CDATA[#[output application/java
 ---
 {
@@ -113,14 +129,14 @@ output application/java
 	"category" : p('lookup.queryParam.shippedorderscatgeory')
 }]]]></http:query-params>
 				</http:request>
-		<flow-ref doc:name="Log Process Exit" doc:id="9934e4ed-b2f9-4515-b7de-b1ce52674899" name="log-process-exit-sub-flow" />
-<flow-ref doc:name="Audit Process Exit" doc:id="a4bba50e-f52d-41c2-b64f-df225e3964ee" name="audit-process-exit-sub-flow"/>
+		<flow-ref doc:name="Log Process Exit" doc:id="9e8db2ab-e35c-40e4-a534-15e81def3e18" name="log-process-exit-sub-flow" />
+<flow-ref doc:name="Audit Process Exit" doc:id="fa9cf27a-02f5-40f0-aa42-31dc72193ff0" name="audit-process-exit-sub-flow"/>
 	</sub-flow>
-	<sub-flow name="call-transfers-shipped-orders-d365-api-sub-flow" doc:id="28bb94a0-e10f-4353-9f3a-3a465fd8c3f7" >
-		<set-variable value="call-transfers-shipped-orders-d365-api-sub-flow" doc:name="Flow Name" doc:id="e0c9b232-4191-4a89-a0e6-3032fa49af58" variableName="flowName"/>
-		<flow-ref doc:name="Log Process Entry" doc:id="4f557c56-3276-4157-a032-61bf0f4e7f1d" name="log-process-entry-sub-flow"/>
-		<flow-ref doc:name="Audit Process Entry" doc:id="6ed567f9-b4a1-4209-b2a7-101f36774409" name="audit-process-entry-sub-flow"/>
-		<http:request method="PUT" doc:name="Invoke D365 System Layer" doc:id="2eb85d11-4ccf-41c6-a908-29b11d4668de" config-ref="s_D365_Http_Request_configuration" path="${d365.transferShippedOrders}">
+	<sub-flow name="call-transfers-shipped-orders-d365-api-sub-flow" doc:id="541e27d0-caed-4a14-9255-d2fb78cc5639" >
+		<set-variable value="call-transfers-shipped-orders-d365-api-sub-flow" doc:name="Flow Name" doc:id="0a433e14-cfc0-46d7-9c82-c3aa734f938e" variableName="flowName"/>
+		<flow-ref doc:name="Log Process Entry" doc:id="dc8aa12f-09ea-4f16-b632-50b7ebf8712a" name="log-process-entry-sub-flow"/>
+		<flow-ref doc:name="Audit Process Entry" doc:id="2471dac5-5aa6-450b-928e-4140c5882e7a" name="audit-process-entry-sub-flow"/>
+		<http:request method="PUT" doc:name="Invoke D365 System Layer" doc:id="f1543762-c91c-4613-9277-7fd96827eebd" config-ref="s_D365_Http_Request_configuration" path="${d365.transferShippedOrders}">
 			<http:headers><![CDATA[#[output application/java
 ---
 {
@@ -136,7 +152,7 @@ output application/java
 	"region" : vars.vRegion
 }]]]></http:query-params>
 		</http:request>
-		<flow-ref doc:name="Log Process Exit" doc:id="8d9125a8-932d-47b5-9d50-1572b5a0fc35" name="log-process-exit-sub-flow"/>
-		<flow-ref doc:name="Audit Process Exit" doc:id="2ef7f3e6-ce8f-4b8e-82ea-295ab3feb312" name="audit-process-exit-sub-flow"/>
+		<flow-ref doc:name="Log Process Exit" doc:id="40d18afd-1a63-44c0-a2f6-65c3e32a560c" name="log-process-exit-sub-flow"/>
+		<flow-ref doc:name="Audit Process Exit" doc:id="94a8d6b9-e3fa-4157-9b16-3582803e3948" name="audit-process-exit-sub-flow"/>
 	</sub-flow>	
 </mule>
