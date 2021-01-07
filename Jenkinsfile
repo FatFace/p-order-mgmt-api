@@ -17,13 +17,13 @@ pipeline {
 		description: 'Enable if you would like to deploy into Mule runtime.'
         )
         
-        string(name: 'MULE_CLOUDHUB_RUNTIME', defaultValue: '4.2.1', description: 'Mule runtime')
+        string(name: 'MULE_CLOUDHUB_RUNTIME', defaultValue: '4.2.2', description: 'Mule runtime')
         string(name: 'MULE_APPLICATION_NAME', defaultValue: 'dev-p-order-mgmt-api', description: 'Unique name of the application [mule artifact] while deploying Anypoint platform')
         string(name: 'MULE_ENV', defaultValue: 'Development', description: 'Enviroment setting for Mule app/api artifact')
  	    
         gitParameter name: 'BRANCH_TAG',
                      type: 'PT_BRANCH_TAG',
-                     defaultValue: 'fix/IDD001-odata-separation-changes',
+                     defaultValue: 'feature/IDD040',
                      description: 'Choose a git branch to start CI/CD pipeline.'	
     	
     }

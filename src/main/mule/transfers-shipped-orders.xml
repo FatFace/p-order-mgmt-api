@@ -8,7 +8,7 @@ http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/htt
 http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
 http://www.mulesoft.org/schema/mule/sqs http://www.mulesoft.org/schema/mule/sqs/current/mule-sqs.xsd">
 	<sub-flow name="put-transfers-shipped-orders-impl-flow" doc:id="19ec656b-73ea-4641-b1fb-9b67ed624140" >
-		<ee:transform doc:name="Set Parameter" doc:id="d3a93fad-bed1-42ff-b9b7-a722e31c2493" >
+		<ee:transform doc:name="Set flow name and query parameters" doc:id="d3a93fad-bed1-42ff-b9b7-a722e31c2493" >
 			<ee:message >
 			</ee:message>
 			<ee:variables >
@@ -16,6 +16,10 @@ http://www.mulesoft.org/schema/mule/sqs http://www.mulesoft.org/schema/mule/sqs/
 output application/java
 ---
 'transfers-shipped-orders-trigger-flow']]></ee:set-variable>
+				<ee:set-variable variableName="vQueryParams" ><![CDATA[%dw 2.0
+output application/java
+---
+attributes.queryParams]]></ee:set-variable>
 			</ee:variables>
 		</ee:transform>
 		<flow-ref doc:name="Log Receiver Entry" doc:id="6f6dde43-815e-402c-a6e8-2e7d2d9ba8d9" name="log-receiver-entry-sub-flow"/>
@@ -33,7 +37,48 @@ output application/java
 				<ee:set-payload resource="dwl/jda-to-d365-tansferorders-mapping.dwl" />
 			</ee:message>
 		</ee:transform>
-		<flow-ref doc:name="transfers-shipped-order-data-handling-flow" doc:id="723909ed-9df8-4904-a588-3e4856559c14" name="transfers-shipped-order-data-handling-flow"/>
+		<scatter-gather doc:name="Scatter-Gather" doc:id="0565e0c0-6c69-4de0-a254-a4e3e1c276e3" timeout="1200000">
+			<route >
+				<ee:transform doc:name="Filter using region as UK and capture region" doc:id="580d4e76-0cf9-4817-b8a9-1942b76dfa38" >
+					<ee:message >
+						<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+var region = payload filter ($.region == p('region.UK'))
+---
+{
+    "transfer-orders" : region
+}]]></ee:set-payload>
+					</ee:message>
+					<ee:variables >
+						<ee:set-variable variableName="vRegion" ><![CDATA[%dw 2.0
+output application/java
+---
+p('region.UK')]]></ee:set-variable>
+					</ee:variables>
+				</ee:transform>
+				<flow-ref doc:name="call-transfers-shipped-orders-d365-api-sub-flow" doc:id="57cd5de4-4f49-403b-896d-d11c53e30e56" name="call-transfers-shipped-orders-d365-api-sub-flow"/>
+			</route>
+			<route >
+				<ee:transform doc:name="Filter using region as 2FFC and capture region" doc:id="63d97d11-19e9-4ea5-ab39-63819ad43b59" >
+					<ee:message >
+						<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+var region = payload filter ($.region == p('region.US'))
+---
+{
+    "transfer-orders" : region
+}]]></ee:set-payload>
+					</ee:message>
+					<ee:variables >
+						<ee:set-variable variableName="vRegion" ><![CDATA[%dw 2.0
+output application/java
+---
+p('region.US')]]></ee:set-variable>
+					</ee:variables>
+				</ee:transform>
+				<flow-ref doc:name="call-transfers-shipped-orders-d365-api-sub-flow" doc:id="08ead985-7706-4c5e-83b9-9ca8efb65e94" name="call-transfers-shipped-orders-d365-api-sub-flow"/>
+			</route>
+		</scatter-gather>
 		<ee:transform doc:name="Set Flow Name" doc:id="2fbba602-a747-4fb3-b9aa-f9938f356ed8" >
 			<ee:message >
 			</ee:message>
@@ -41,69 +86,12 @@ output application/java
 				<ee:set-variable variableName="flowName" ><![CDATA[%dw 2.0
 output application/java
 ---
-'transfers-shipped-orders-trigger-flow']]></ee:set-variable>
+'call-transfers-shipped-orders-d365-api-sub-flow']]></ee:set-variable>
 			</ee:variables>
 		</ee:transform>
 		<flow-ref doc:name="Log Dispatcher Exit" doc:id="d789036d-7d33-4479-8df0-80070584f8a9" name="log-dispatcher-exit-sub-flow"/>
 		<flow-ref doc:name="Audit Dispatcher Exit" doc:id="9c78cccd-66e2-4aec-94be-a549f6044f18" name="audit-dispatcher-exit-sub-flow"/>
 	</sub-flow>
-	<flow name="transfers-shipped-order-data-handling-flow" doc:id="326ac366-0121-45df-a096-32da67d0ec2d" >
-		<ee:transform doc:name="Transform Message" doc:id="bb67ad62-8aff-4bba-a56f-1c663a4e6925" >
-			<ee:message >
-			</ee:message>
-			<ee:variables >
-				<ee:set-variable variableName="fileName" ><![CDATA[%dw 2.0
-output application/java
----
-attributes.headers['file-name']]]></ee:set-variable>
-			</ee:variables>
-		</ee:transform>
-		<ee:transform doc:name="Flow Name" doc:id="d59e4e78-ed74-4bfb-98a0-89aa38009d12" >
-			<ee:message >
-			</ee:message>
-			<ee:variables >
-				<ee:set-variable variableName="flowName" ><![CDATA[%dw 2.0
-output application/java
----
-'transfer-shipped-orders-data-handling-flow']]></ee:set-variable>
-			</ee:variables>
-		</ee:transform>
-		<flow-ref doc:name="Log Process Entry" doc:id="6992b4d0-f9f7-4aa7-be20-6ec941fade37" name="log-process-entry-sub-flow"/>
-<flow-ref doc:name="Audit Process Entry" doc:id="bae14216-0d9d-4794-9bca-39c21a0e091a" name="audit-process-entry-sub-flow"/>
-		<choice doc:name="Choice" doc:id="2a3e42cc-1651-42a4-be2c-dd0b6277d085" >
-			<when expression="#[payload != null and isEmpty(payload) != true]">
-<!-- 				<logger level="INFO" doc:name="Logger" doc:id="0137cd7a-a1b7-4ecc-aa12-1fdb22e7d701" message="#['Matched Data is: ' ++ write(vars.matchedOrderData,'application/json')]"/> -->
-				<set-variable value="#[payload]" doc:name="Set Original Payload" doc:id="732e8dac-0293-458a-bda3-9bf15b1a7869" variableName="originalPayload" />
-				<ee:transform doc:name="Transform Message" doc:id="5728fa77-1832-4506-837c-a4c5e4bc2fa6" >
-					<ee:message >
-						<ee:set-payload resource="dwl/create-transfer-order-queue-msg.dwl" />
-					</ee:message>
-				</ee:transform>
-				<flow-ref doc:name="Log Process Entry" doc:id="fa90866a-a4ec-4e70-85e5-6875818f74ec" name="log-process-entry-sub-flow"/>
-				<flow-ref doc:name="Audit Process Entry" doc:id="fac29a86-05fd-480e-91c8-e357a79837c6" name="audit-process-entry-sub-flow"/>
-				<until-successful maxRetries="${retry.attempts}" doc:name="Until Successful" doc:id="ddb290b1-9134-4c5d-819f-74e69a085590" millisBetweenRetries="${retry.frequency}">
-					<try doc:name="Try" doc:id="438aef9f-c4f2-4692-b559-1a7b17b50d76" >
-						<sqs:send-message doc:name="Send message" doc:id="6e66c327-0598-42b2-9284-878d8ef02d8e" config-ref="Amazon_SQS_Configuration" queueUrl="${sqs.queue.url.transferorderQueueUrl}">
-							<reconnect frequency="${retry.frequency}" count="${retry.attempts}" />
-						</sqs:send-message>
-						<error-handler >
-							<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="0ac43bbd-dc46-4e96-9ab2-45bc14ab101d" type="ANY">
-								<flow-ref doc:name="log-error-sub-flow" doc:id="5b34dd6d-cf67-4037-96d5-3a81727682ef" name="log-error-sub-flow"/>
-								<flow-ref doc:name="audit-error-sub-flow" doc:id="b0dad047-a9e0-4839-84a8-af0d6884410e" name="audit-error-sub-flow"/>
-							</on-error-propagate>
-						</error-handler>
-					</try>
-				</until-successful>
-				<flow-ref doc:name="Audit Process Exit" doc:id="4c0ab414-964a-42dd-b583-b5a1cb7e7433" name="audit-process-exit-sub-flow" />
-				<flow-ref doc:name="Log Process Exit" doc:id="a88eeab6-7834-4743-bc1f-5c57e03e5023" name="log-process-exit-sub-flow"/>
-			
-</when>
-			<otherwise >
-				<set-variable value="No data matached with manifest Data" doc:name="Set Logging payload" doc:id="789a937e-0905-4ae1-95df-bac74609ec7d" variableName="loggingPayload" />
-				<flow-ref doc:name="Logging Message" doc:id="16a709e6-a1ee-408a-ad1a-2545607d9d75" name="logging-sub-flow" />
-			</otherwise>
-		</choice>
-	</flow>
 	<sub-flow name="call-db-lookup-shipped-orders-api-sub-flow" doc:id="ae8be7f7-ac7b-467c-861d-6e11cc02bfe0" >
 		<set-variable value="call-db-lookup-api-sub-flow" doc:name="Flow Name" doc:id="cee252be-a6ff-46d2-a6ad-dce347796ee6" variableName="flowName"/>
 		<flow-ref doc:name="Log Process Entry" doc:id="e1a22c89-7087-4713-8485-338ee0915ce2" name="log-process-entry-sub-flow"/>
@@ -127,5 +115,28 @@ output application/java
 				</http:request>
 		<flow-ref doc:name="Log Process Exit" doc:id="9934e4ed-b2f9-4515-b7de-b1ce52674899" name="log-process-exit-sub-flow" />
 <flow-ref doc:name="Audit Process Exit" doc:id="a4bba50e-f52d-41c2-b64f-df225e3964ee" name="audit-process-exit-sub-flow"/>
+	</sub-flow>
+	<sub-flow name="call-transfers-shipped-orders-d365-api-sub-flow" doc:id="28bb94a0-e10f-4353-9f3a-3a465fd8c3f7" >
+		<set-variable value="call-transfers-shipped-orders-d365-api-sub-flow" doc:name="Flow Name" doc:id="e0c9b232-4191-4a89-a0e6-3032fa49af58" variableName="flowName"/>
+		<flow-ref doc:name="Log Process Entry" doc:id="4f557c56-3276-4157-a032-61bf0f4e7f1d" name="log-process-entry-sub-flow"/>
+		<flow-ref doc:name="Audit Process Entry" doc:id="6ed567f9-b4a1-4209-b2a7-101f36774409" name="audit-process-entry-sub-flow"/>
+		<http:request method="PUT" doc:name="Invoke D365 System Layer" doc:id="2eb85d11-4ccf-41c6-a908-29b11d4668de" config-ref="s_D365_Http_Request_configuration" path="${d365.transferShippedOrders}">
+			<http:headers><![CDATA[#[output application/java
+---
+{
+	"Transaction-Id" : vars.transactionId,
+	"client_secret" : p('secure::d365.clientSecret'),
+	"Transaction-Start-Time" : vars.transactionStartTime,
+	"client_id" : p('d365.clientId')
+}]]]></http:headers>
+			<http:query-params ><![CDATA[#[output application/java
+---
+{
+	"file-name" : vars.vQueryParams."file-name",
+	"region" : vars.vRegion
+}]]]></http:query-params>
+		</http:request>
+		<flow-ref doc:name="Log Process Exit" doc:id="8d9125a8-932d-47b5-9d50-1572b5a0fc35" name="log-process-exit-sub-flow"/>
+		<flow-ref doc:name="Audit Process Exit" doc:id="2ef7f3e6-ce8f-4b8e-82ea-295ab3feb312" name="audit-process-exit-sub-flow"/>
 	</sub-flow>	
 </mule>

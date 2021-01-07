@@ -9,6 +9,6 @@ payload."transfer-orders" map((item,index) -> {
     "shipped-dstamp": item."shipped-dstamp",
     "user-def-type-1": item."user-def-note-1",
     "sku-id": item."sku-id",
-    "qty-shipped": item."qty-shipped"
-
+    "qty-shipped": item."qty-shipped",
+    "line-number": item."line-number"
 })

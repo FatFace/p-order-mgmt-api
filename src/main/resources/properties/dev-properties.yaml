@@ -25,6 +25,7 @@ d365:
   updateManifestPath: "/pick/manifests"
   updateOrderExtractPath: "/pick/orders"
   webOrdersPath: "/web/orders"
+  transferShippedOrders: "/transfer/shipped-orders"
   odata:
     host: "internal-ff-test-dlb.lb.anypointdns.net"
     port: "80"
@@ -41,7 +42,6 @@ d365:
       orders:
         definitionGroupId: "IDD015-OrderInfoExport-Export"
         packageName: "OrderInfo-Data-"
-
 
 jda:
   host: "mule-worker-internal-dev-s-jda-data-int.ir-e1.cloudhub.io"
@@ -205,3 +205,7 @@ pooling:
       idle:
         size: "1"
       wait: "0"
+      
+region:
+  UK: "1FFL"
+  US: "2FFC"
