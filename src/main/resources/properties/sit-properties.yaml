@@ -88,7 +88,6 @@ jda:
   basepath: "/api/v1"
   clientId: "a1c25cbc41dc4a43a1c5c3ecbf1251c5"
   clientSecret: "![LW5QbpXxcFCYtiU4/DH0+ENIW/q+2cr3P4u6w65C4pbwoGe1SiiStpjbUB6ntxmh]"
-
   jks:
     password: "![yqrYtFIRqm28xrunLqR/2kqfcVd97HqoY0AWEfF+m8M=]"
   orders:
@@ -117,6 +116,9 @@ lookup:
     type: "ORDER_TYPE"
     catgeory: "MODE_OF_DELIVERY"
     source: "D365"
+    shippedorderstype: "Entity"
+    shippedorderscatgeory: "Store Entity"
+    shippedorderssource: "JDA"
     aptos:
       modeOfDelivery:
         type: "MODE_OF_DELIVERY"

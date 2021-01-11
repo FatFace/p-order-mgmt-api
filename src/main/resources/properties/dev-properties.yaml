@@ -54,11 +54,9 @@ jda:
     password: "![yqrYtFIRqm28xrunLqR/2kqfcVd97HqoY0AWEfF+m8M=]"
   orders:
     path: "/pick/orders"
-    ordersPath: "/orders"  
-    manifests:
-      path: "/pick/manifests" 
-    shippedorders:
-      path: "/transfers/orders"
+  ordersPath: "/orders"  
+  manifests:
+    path: "/pick/manifests"
 
 #----Common Block---No change Needed----      
 cloudhub:

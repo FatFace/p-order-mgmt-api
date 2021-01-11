@@ -277,7 +277,7 @@ p('orders.export.sftp.errorfilepath') ++ vars.fileName]]></ee:set-variable>
 		<set-variable value="call-s-jda-api-for-manifests-sub-flow" doc:name="Flow Name" doc:id="2c8301f2-dfc9-4c0f-9415-e70f5e5aaf3d" variableName="flowName"/>
 		<flow-ref doc:name="Log Process Entry" doc:id="a8f4f524-dd06-4870-9e62-e42165d02961" name="log-process-entry-sub-flow"/>
 <flow-ref doc:name="Audit Process Entry" doc:id="a3d19c46-fadd-476c-b4dd-d549880b67c7" name="audit-process-entry-sub-flow"/>
-		<http:request method="GET" doc:name="S-JDA-HTTP-Request-Configuration" doc:id="7c6ab267-aa6d-4b6f-8bb7-6cddf1a91c76" path="${jda.orders.manifests.path}" responseTimeout="${response.timeout.system.jda.manifest}" config-ref="s_jda_Http_Request_configuration" outputMimeType="application/json">
+		<http:request method="GET" doc:name="S-JDA-HTTP-Request-Configuration" doc:id="7c6ab267-aa6d-4b6f-8bb7-6cddf1a91c76" path="${jda.manifests.path}" responseTimeout="${response.timeout.system.jda.manifest}" config-ref="s_jda_Http_Request_configuration" outputMimeType="application/json">
 			<http:headers><![CDATA[#[output application/java
 ---
 {
