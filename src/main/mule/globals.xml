@@ -118,5 +118,8 @@ http://www.mulesoft.org/schema/mule/os http://www.mulesoft.org/schema/mule/os/cu
 	<http:request-config name="s_email_HTTP_Request_Configuration" doc:name="HTTP Request configuration" doc:id="a90dddfa-1567-4cde-8f99-352dd162bc22" basePath="${emarsys.basePath}">
 		<http:request-connection host="${emarsys.host}" port="${emarsys.port}" />
 	</http:request-config>
+	<http:request-config name="s_wms_cims_HTTP_Request_configuration" doc:name="HTTP Request configuration" doc:id="d5cf27b6-fbbb-4feb-83cc-71d0f953e221" basePath="${cims.basepath}" >
+		<http:request-connection host="${cims.host}" port="${cims.port}" />
+	</http:request-config>
 	
 </mule>

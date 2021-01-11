@@ -80,7 +80,10 @@ d365:
       orders:
         definitionGroupId: "IDD015-OrderInfoExport-Export"
         packageName: "OrderInfo-Data-"
-
+    transfer:
+      orders:
+        definitionGroupId: "IDD041-TransferOrders-Export"
+        packageName: "Transfer-Orders-"
 
 jda:
   host: "mule-worker-internal-uat-s-jda-data-int.ir-e1.cloudhub.io"
@@ -96,6 +99,13 @@ jda:
   ordersPath: "/orders"  
   manifests:
     path: "/pick/manifests" 
+cims:
+  host: "mule-worker-internal-uat-s-wms-cims-api.ir-e1.cloudhub.io"
+  port: "8092"
+  basepath: "/api/v1"
+  sales:
+    orders:
+      path: "/pos/sales/orders"
 lookup:
   host: "mule-worker-internal-uat-s-dblookup-api.ir-e1.cloudhub.io"
   port: "8091"
@@ -138,8 +148,11 @@ lookup:
 cron:
   expression: 
     manifest: "0 0/5 * 1/1 * ? *"
-    orderextract: "0 0 0/1 1/1 * ? *"     
-    exportOrders: "0 0/30 * 1/1 * ? *"   
+    orderextract: "0 3/20 * 1/1 * ? *"  
+    exportOrders: "0 0 1 1/1 * ? *"   
+    shippedOrders: "0 0 * ? * * *"
+    ukTransferOrders: "0 0 * ? * * *"
+    usTransferOrders: "0 0 * ? * * *"  
    
 orders:
   export:
@@ -194,3 +207,7 @@ pooling:
       idle:
         size: "1"
       wait: "0"  
+      
+region:
+  UK: "1FFL"
+  US: "2FFC"

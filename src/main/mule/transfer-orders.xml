@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
+	<flow name="transfer-orders-uk-scheduler-flow" doc:id="3fac95f7-22da-4026-8473-77304e261855" >
+		<scheduler doc:name="UKScheduler" doc:id="480066af-347c-43f0-acb6-5f12076211e4" >
+			<scheduling-strategy >
+				<cron expression="${cron.expression.ukTransferOrders}" />
+			</scheduling-strategy>
+		</scheduler>
+		<ee:transform doc:name="Set UK Region" doc:id="319457ce-8b6f-4639-8a07-e23e2545b514" >
+			<ee:message >
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="vRegion" ><![CDATA[%dw 2.0
+output application/java
+---
+p('region.UK')]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+		<flow-ref doc:name="transfer-orders-scheduler-sub-flow" doc:id="3b5a9068-cf7e-4eb6-b6c1-670ecfbc0ddd" name="transfer-orders-scheduler-sub-flow"/>
+	</flow>
+		<flow name="transfer-orders-us-scheduler-flow" doc:id="cac1e877-8733-49f5-bef9-2d5809c6cfb1" >
+		<scheduler doc:name="USScheduler" doc:id="6c0803f7-7630-4c02-b96a-a98358e060af" >
+			<scheduling-strategy >
+				<cron expression="${cron.expression.usTransferOrders}" />
+			</scheduling-strategy>
+		</scheduler>
+		<ee:transform doc:name="Set US Region" doc:id="acc4cf6b-344c-49d5-a467-ce6d7d214d45" >
+			<ee:message >
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="vRegion" ><![CDATA[%dw 2.0
+output application/java
+---
+p('region.US')]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+		<flow-ref doc:name="transfer-orders-scheduler-sub-flow" doc:id="4eff0dbc-d885-40c2-926c-5575d3e7e507" name="transfer-orders-scheduler-sub-flow"/>
+	</flow>
+			<sub-flow name="transfer-orders-scheduler-sub-flow" doc:id="87408604-94de-4699-a843-d8f6b28d9d07" >
+			<ee:transform doc:name="Set Attributes" doc:id="196e0a08-cf0d-4321-b336-d45c5235ff7b" >
+			<ee:message >
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="packageName" ><![CDATA[%dw 2.0
+output application/json
+---
+p('d365.dmf.transfer.orders.packageName') ++ now() as String {format: "ddMMyyyyhhms"}]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+		<flow-ref doc:name="Log Receiver Entry" doc:id="f4deaa80-d46a-483e-a54b-aace8ef31dcc" name="log-receiver-entry-sub-flow"/>
+		<flow-ref doc:name="Audit Receiver Entry" doc:id="8cb8f75f-50d5-4b35-acfc-305bfde47361" name="audit-receiver-entry-sub-flow"/>
+		<flow-ref doc:name="call-d365-api-for-transfer-orders-sub-flow" doc:id="be39bef5-3e66-476a-8744-da064c658a7b" name="call-d365-api-for-transfer-orders-sub-flow"/>
+		<ee:transform doc:name="Set Flow Name" doc:id="1f74272a-963c-4faa-845a-6d73fa3aa9fc" >
+			<ee:message >
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="flowName" ><![CDATA[%dw 2.0
+output application/java
+---
+"transfer-orders-scheduler-sub-flow"]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+		<flow-ref doc:name="Audit Dispatcher Exit" doc:id="a90f4709-4ca6-4a0d-878f-2832288b2f54" name="audit-dispatcher-exit-sub-flow"/>
+		<flow-ref doc:name="Log Dispatcher Exit" doc:id="c5f662ef-4bac-480f-b838-7a70300344fb" name="log-dispatcher-exit-sub-flow"/>
+	</sub-flow>
+	<sub-flow name="call-d365-api-for-transfer-orders-sub-flow" doc:id="5a67db37-6360-4564-9e34-df654b8d528d" >
+		<set-variable value="call-d365-api-for-transfer-orders-sub-flow" doc:name="Flow Name" doc:id="a6922803-4b13-422b-be75-32ef616908f0" variableName="flowName"/>
+		<flow-ref doc:name="Log Process Entry" doc:id="90bead1d-40f2-446a-bda1-b6f9ea5c691d" name="log-process-entry-sub-flow"/>
+		<flow-ref doc:name="Audit Process Entry" doc:id="ce02638c-e75e-4dbe-ad3d-269e9edf71f6" name="audit-process-entry-sub-flow"/>
+		<http:request method="GET" doc:name="Invoke D365 System Layer" doc:id="1c49a64f-66b4-4b9e-8001-7b39bf3d57a2" config-ref="s_D365_Http_Request_configuration" path="${d365.dmf.path}">
+			<http:headers><![CDATA[#[output application/java
+---
+{
+	"Transaction-Id" : vars.transactionId,
+	"client_secret" : p('secure::d365.clientSecret'),
+	"Transaction-Start-Time" : vars.transactionStartTime,
+	"client_id" : p('d365.clientId')
+}]]]></http:headers>
+			<http:query-params><![CDATA[#[output application/java
+---
+{
+	"definitionGroupId" : p('d365.dmf.transfer.orders.definitionGroupId'),
+	"packageName" : vars.packageName,
+	"region" : vars.vRegion
+}]]]></http:query-params>
+		</http:request>
+		<flow-ref doc:name="Audit Process Exit" doc:id="576f648f-6b92-469f-b226-1202ff2fd5d2" name="audit-process-exit-sub-flow"/>
+		<flow-ref doc:name="Log Process Exit" doc:id="f951848d-85b1-420b-a158-6b38c12eb335" name="log-process-exit-sub-flow"/>
+	</sub-flow>
+	<sub-flow name="put-transfer-orders-impl-flow" doc:id="66366189-ee39-4ef7-83c5-dab729a5b6ec" >
+	<ee:transform doc:name="Set flow name and parameters" doc:id="bf36bc9a-f510-4515-963b-d3d5c9f39199" >
+			<ee:message >
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="flowName" ><![CDATA[%dw 2.0
+output application/java
+---
+"put-transfer-orders-impl-flow"]]></ee:set-variable>
+				<ee:set-variable variableName="vQueryParams" ><![CDATA[%dw 2.0
+output application/java
+---
+attributes.queryParams]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+		<flow-ref doc:name="Log Receiver Entry" doc:id="6624adec-fd7e-4237-b4d7-e6ac65954c82" name="log-receiver-entry-sub-flow"/>
+		<flow-ref doc:name="Audit Receiver Entry" doc:id="4e164d5a-eb47-42ba-9898-13988247cb3d" name="audit-receiver-entry-sub-flow"/>
+		<flow-ref doc:name="call-s-wms-cims-api-sub-flow" doc:id="f72a0caf-0ef3-4f91-98c5-8f256e543eb6" name="call-s-wms-cims-api-sub-flow"/>
+		<ee:transform doc:name="Set Flow Name" doc:id="74d187b2-0d22-4346-9a10-7afa6547c966" >
+			<ee:message >
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="flowName" ><![CDATA[%dw 2.0
+output application/java
+---
+"put-transfer-orders-impl-flow"]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+		<flow-ref doc:name="Audit Dispatcher Exit" doc:id="c435a6da-178f-4146-ab10-456aa4c3a763" name="audit-dispatcher-exit-sub-flow"/>
+		<flow-ref doc:name="Log Dispatcher Exit" doc:id="a8966356-64c8-414b-b1b5-c011a895b4fd" name="log-dispatcher-exit-sub-flow"/>
+	</sub-flow>
+	<sub-flow name="call-s-wms-cims-api-sub-flow" doc:id="428c0d23-5559-4eb4-8a72-a7dc9b1e3110" >
+		<set-variable value="call-dev-s-wms-cims-api-sub-flow" doc:name="Flow Name" doc:id="3898e92a-fc1a-4737-b6db-305a431e5bbe" variableName="flowName"/>
+		<flow-ref doc:name="Log Process Entry" doc:id="aec76d18-0d60-4cd0-9a0f-9942a68ded4f" name="log-process-entry-sub-flow"/>
+		<flow-ref doc:name="Audit Process Entry" doc:id="f7f513c1-6975-41b8-b894-ce70712360d3" name="audit-process-entry-sub-flow"/>
+		<http:request method="GET" doc:name="Invoke CIMS System Layer" doc:id="0a8dbd09-78d8-4964-9c39-e4238f2953c8" config-ref="s_wms_cims_HTTP_Request_configuration" path="${cims.sales.orders.path}">
+			<http:headers><![CDATA[#[output application/java
+---
+{
+	"Transaction-Id" : vars.transactionId,
+	"client_secret" : p('secure::d365.clientSecret'),
+	"Transaction-Start-Time" : vars.transactionStartTime,
+	"client_id" : p('d365.clientId')
+}]]]></http:headers>
+			<http:query-params><![CDATA[#[output application/java
+---
+{
+	"region" : vars.vQueryParams.region
+}]]]></http:query-params>
+		</http:request>
+		<flow-ref doc:name="Audit Process Exit" doc:id="dab5042d-348d-4b91-af71-549b252b27c9" name="audit-process-exit-sub-flow"/>
+		<flow-ref doc:name="Log Process Exit" doc:id="b44028b7-f5ef-41aa-b73f-014443b37f45" name="log-process-exit-sub-flow"/>
+	</sub-flow>
+</mule>

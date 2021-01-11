@@ -1,0 +1,18 @@
+#%RAML 1.0 Trait
+
+usage: Apply this to any method that needs to be traced in term message flow
+headers: 
+  Transaction-Id:
+    description: | 
+      Unique ID which is usually system generated or is passed through API layers if generated already
+    displayName:  Transaction-ID 
+    type: string
+    example: 2ddbd94c-96c0-4aa2-a0fe-bb7603ebca7c
+    required: <<required>>
+  Transaction-Start-Time: 
+    description: |
+      Timestamp captured when the request has been initiated
+    displayName:  Transaction-Start-Time 
+    type: datetime
+    example: 2018-08-02T16:58:12.121Z
+    required: <<required>>

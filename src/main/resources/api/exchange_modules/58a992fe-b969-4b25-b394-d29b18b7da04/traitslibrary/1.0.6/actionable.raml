@@ -1,0 +1,16 @@
+#%RAML 1.0 Trait
+
+usage: Apply this to any method that needs to set value for logical decision in term message flow
+headers: 
+  Feed-Type?:
+    displayName:  Feed-Type
+    description: |
+      This field allows you to check whether it is full feed or partial feed
+    type: string
+    example: full
+  Exexcution-Id?:
+    displayName:  Execution-Id
+    description: |
+      This field is used for D365 call
+    type: string
+    example: "12345"

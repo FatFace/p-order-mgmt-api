@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <mule xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation=" http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd ">
-    <apikit:config name="p-order-mgmt-api-config" raml="p-order-mgmt-api.raml" outboundHeadersMapName="outboundHeaders" httpStatusVarName="httpStatus" />
+    <apikit:config name="p-order-mgmt-api-config" api="p-order-mgmt-api.raml" raml="p-order-mgmt-api.raml" outboundHeadersMapName="outboundHeaders" httpStatusVarName="httpStatus" />
     <flow name="p-order-mgmt-api-main">
         <http:listener config-ref="p-order-mgmt-api-httpListenerConfig" path="${http.basePath}">
             <http:response statusCode="#[vars.httpStatus default 200]" />
@@ -119,7 +119,7 @@ output application/java
         <flow-ref doc:name="Audit Dispather Exit" doc:id="15d7b4c8-82f3-4ea6-b56f-536744441cb4" name="audit-dispatcher-exit-sub-flow" />
     </flow>
     <flow name="put:\transfer\shipped-orders:application\json:p-order-mgmt-api-config">
-    	<set-variable value="#['put:\transfers\shipped-orders:application\json:p-order-mgmt-api-config']" doc:name="Flow Name" doc:id="4b4d09fb-9149-4cbb-a523-ce44f0ed4afc" variableName="flowName" />
+        <set-variable value="#['put:\transfers\shipped-orders:application\json:p-order-mgmt-api-config']" doc:name="Flow Name" doc:id="4b4d09fb-9149-4cbb-a523-ce44f0ed4afc" variableName="flowName" />
         <flow-ref doc:name="Log Receiver Entry" doc:id="0e3f9aee-aa81-4c64-8a01-1f682134028a" name="log-receiver-entry-sub-flow" />
         <flow-ref doc:name="Audit Receiver Entry" doc:id="6d5a9e3e-e186-4c02-8248-5419115ea981" name="audit-receiver-entry-sub-flow" />
         <flow-ref doc:name="Transfers Shipped Orders Flow" doc:id="8e58f97a-944f-4a07-9387-edc5f1f97756" name="put-transfers-shipped-orders-impl-flow" />
@@ -127,6 +127,26 @@ output application/java
         <flow-ref doc:name="Log Dispatcher Exit" doc:id="fb697afb-1f3c-45d7-9d1b-97e26148a9bc" name="log-dispatcher-exit-sub-flow" />
         <flow-ref doc:name="Audit Dispather Exit" doc:id="d3b82c0e-1adf-48b3-9e26-ac325e2645a6" name="audit-dispatcher-exit-sub-flow" />
         <ee:transform xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+            <ee:message>
+                <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{
+  responseCode: 200,
+  responseText: "success"
+}]]></ee:set-payload>
+            </ee:message>
+        </ee:transform>
+    </flow>
+    <flow name="put:\transfer\shipped-received\orders:application\json:p-order-mgmt-api-config">
+        <set-variable value="#['put:\transfer\shipped-received\orders:application\json:p-order-mgmt-api-config']" doc:name="Flow Name" doc:id="cded9881-9e72-4007-9119-e37dc5c13b2c" variableName="flowName" />
+        <flow-ref doc:name="Log Receiver Entry" doc:id="69cb08b9-87ff-4cdf-97e1-1a76d2e450b8" name="log-receiver-entry-sub-flow" />
+        <flow-ref doc:name="Audit Receiver Entry" doc:id="4b2ac507-88e5-48bb-ae89-b3b9ed03a33b" name="audit-receiver-entry-sub-flow" />
+        <flow-ref doc:name="put-transfer-orders-impl-flow" doc:id="c3a510ba-93cf-4525-8f52-961efc888887" name="put-transfer-orders-impl-flow" />
+        <set-variable value="#['put:\transfer\shipped-received\orders:application\json:p-order-mgmt-api-config']" doc:name="Flow Name" doc:id="e7bba556-9863-45d3-bc30-0dc65f142b48" variableName="flowName" />
+        <flow-ref doc:name="Log Dispatcher Exit" doc:id="6bc30be8-cc11-4400-a331-24d101ffa0eb" name="log-dispatcher-exit-sub-flow" />
+        <flow-ref doc:name="Audit Dispather Exit" doc:id="d36836ef-e409-49ed-9fd9-817a9f8c77de" name="audit-dispatcher-exit-sub-flow" />
+        <ee:transform xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd" doc:id="693a1ff0-6404-4e81-b9a5-f40e164dd099">
             <ee:message>
                 <ee:set-payload><![CDATA[%dw 2.0
 output application/json
