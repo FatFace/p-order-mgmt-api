@@ -54,7 +54,7 @@ p('d365.dmf.transfer.orders.packageName') ++ now() as String {format: "ddMMyyyyh
 		</ee:transform>
 		<flow-ref doc:name="Log Receiver Entry" doc:id="f4deaa80-d46a-483e-a54b-aace8ef31dcc" name="log-receiver-entry-sub-flow"/>
 		<flow-ref doc:name="Audit Receiver Entry" doc:id="8cb8f75f-50d5-4b35-acfc-305bfde47361" name="audit-receiver-entry-sub-flow"/>
-		<flow-ref doc:name="call-d365-api-for-transfer-orders-sub-flow" doc:id="be39bef5-3e66-476a-8744-da064c658a7b" name="call-d365-api-for-transfer-orders-sub-flow"/>
+		<flow-ref doc:name="call-d365-export-api-for-transfer-orders-sub-flow" doc:id="be39bef5-3e66-476a-8744-da064c658a7b" name="call-d365-export-api-for-transfer-orders-sub-flow"/>
 		<ee:transform doc:name="Set Flow Name" doc:id="1f74272a-963c-4faa-845a-6d73fa3aa9fc" >
 			<ee:message >
 			</ee:message>
@@ -68,7 +68,7 @@ output application/java
 		<flow-ref doc:name="Audit Dispatcher Exit" doc:id="a90f4709-4ca6-4a0d-878f-2832288b2f54" name="audit-dispatcher-exit-sub-flow"/>
 		<flow-ref doc:name="Log Dispatcher Exit" doc:id="c5f662ef-4bac-480f-b838-7a70300344fb" name="log-dispatcher-exit-sub-flow"/>
 	</sub-flow>
-	<sub-flow name="call-d365-api-for-transfer-orders-sub-flow" doc:id="5a67db37-6360-4564-9e34-df654b8d528d" >
+	<sub-flow name="call-d365-export-api-for-transfer-orders-sub-flow" doc:id="5a67db37-6360-4564-9e34-df654b8d528d" >
 		<set-variable value="call-d365-api-for-transfer-orders-sub-flow" doc:name="Flow Name" doc:id="a6922803-4b13-422b-be75-32ef616908f0" variableName="flowName"/>
 		<flow-ref doc:name="Log Process Entry" doc:id="90bead1d-40f2-446a-bda1-b6f9ea5c691d" name="log-process-entry-sub-flow"/>
 		<flow-ref doc:name="Audit Process Entry" doc:id="ce02638c-e75e-4dbe-ad3d-269e9edf71f6" name="audit-process-entry-sub-flow"/>

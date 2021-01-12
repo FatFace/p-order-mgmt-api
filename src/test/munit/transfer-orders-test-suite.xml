@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <mule xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xmlns:munit="http://www.mulesoft.org/schema/mule/munit" xmlns:munit-tools="http://www.mulesoft.org/schema/mule/munit-tools"
 	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
@@ -74,7 +73,7 @@
 			</munit-tools:mock-when>
 		</munit:behavior>
 		<munit:execution >
-			<flow-ref doc:name="Flow-ref to put-transfer-orders-impl-flow" doc:id="4c685200-1f90-4582-8aa7-701633e1ea36" name="put-transfer-orders-impl-flow"/>
+			<flow-ref doc:name="put:\transfer\shipped-received\orders:application\json:p-order-mgmt-api-config" doc:id="4c685200-1f90-4582-8aa7-701633e1ea36" name="put:\transfer\shipped-received\orders:application\json:p-order-mgmt-api-config"/>
 		</munit:execution>
 		<munit:validation >
 			<munit-tools:assert-that doc:name="Assert that Payload" doc:id="42a625fb-3322-4406-927c-149465ebe2c0" is="#[MunitTools::notNullValue()]" expression="#['success']"/>
