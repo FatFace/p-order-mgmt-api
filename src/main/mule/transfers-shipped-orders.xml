@@ -58,7 +58,7 @@ p('region.UK')]]></ee:set-variable>
 				</ee:transform>
 				<choice doc:name="Choice" doc:id="71d49b58-9ee3-4f7e-afa1-e7a7cdbae670" >
 					<when expression='#[sizeOf(payload."transfer-orders") &gt; 0]'>
-						<flow-ref doc:name="call-transfers-shipped-orders-d365-api-sub-flow" doc:id="a6aa10ad-971d-4184-8223-8e89883de200" name="call-transfers-shipped-orders-d365-api-sub-flow" />
+						<flow-ref doc:name="call-transfers-shipped-orders-d365-import-api-sub-flow" doc:id="a6aa10ad-971d-4184-8223-8e89883de200" name="call-transfers-shipped-orders-d365-import-api-sub-flow" />
 					</when>
 					<otherwise >
 						<set-variable value="#[%dw 2.0 output application/java --- 'Empty Payload for UK Region' ++ p('region.UK')]" doc:name="Set Variable loggingPayload" doc:id="b04c9de6-6353-4bcb-9f88-cf63a8119970" variableName="loggingPayload" />
@@ -86,7 +86,7 @@ p('region.US')]]></ee:set-variable>
 				</ee:transform>
 				<choice doc:name="Choice" doc:id="5b0aa831-2ae5-486a-8ae6-5069d4c771fe" >
 					<when expression='#[sizeOf(payload."transfer-orders") &gt; 0]'>
-						<flow-ref doc:name="call-transfers-shipped-orders-d365-api-sub-flow" doc:id="989796c1-afb4-4e06-b8e9-a021de8249b2" name="call-transfers-shipped-orders-d365-api-sub-flow" />
+						<flow-ref doc:name="call-transfers-shipped-orders-d365-import-api-sub-flow" doc:id="989796c1-afb4-4e06-b8e9-a021de8249b2" name="call-transfers-shipped-orders-d365-import-api-sub-flow" />
 					</when>
 					<otherwise >
 						<set-variable value="#[%dw 2.0 output application/java --- 'Empty Payload for US Region' ++ p('region.US')]" doc:name="Set Variable loggingPayload" doc:id="dbee0c1b-26f9-43aa-a2de-c0038aee4461" variableName="loggingPayload"/>
@@ -132,7 +132,7 @@ output application/java
 		<flow-ref doc:name="Log Process Exit" doc:id="9e8db2ab-e35c-40e4-a534-15e81def3e18" name="log-process-exit-sub-flow" />
 <flow-ref doc:name="Audit Process Exit" doc:id="fa9cf27a-02f5-40f0-aa42-31dc72193ff0" name="audit-process-exit-sub-flow"/>
 	</sub-flow>
-	<sub-flow name="call-transfers-shipped-orders-d365-api-sub-flow" doc:id="541e27d0-caed-4a14-9255-d2fb78cc5639" >
+	<sub-flow name="call-transfers-shipped-orders-d365-import-api-sub-flow" doc:id="541e27d0-caed-4a14-9255-d2fb78cc5639" >
 		<set-variable value="call-transfers-shipped-orders-d365-api-sub-flow" doc:name="Flow Name" doc:id="0a433e14-cfc0-46d7-9c82-c3aa734f938e" variableName="flowName"/>
 		<flow-ref doc:name="Log Process Entry" doc:id="dc8aa12f-09ea-4f16-b632-50b7ebf8712a" name="log-process-entry-sub-flow"/>
 		<flow-ref doc:name="Audit Process Entry" doc:id="2471dac5-5aa6-450b-928e-4140c5882e7a" name="audit-process-entry-sub-flow"/>
