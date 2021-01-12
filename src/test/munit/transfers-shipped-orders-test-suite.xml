@@ -9,7 +9,7 @@
 		http://www.mulesoft.org/schema/mule/munit-tools  http://www.mulesoft.org/schema/mule/munit-tools/current/mule-munit-tools.xsd">
 	<munit:config name="transfers-shipped-orders-test-suite.xml" />
 	<import doc:name="Import" doc:id="ad8df143-52c3-4ddd-861d-c3fe0a410eb2" file="test-globals-suite.xml" />
-	<munit:test name="transfers-shipped-orders-test-suite-put-transfers-shipped-orders-impl-flowTest" description="Test" doc:id="db1ba5a6-a9cc-48bb-9e05-87883f6eb611" timeOut="12000000">
+	<munit:test name="transfers-shipped-orders-test-suite-put-transfers-shipped-orders-impl-flow-test-suit" description="Test" doc:id="db1ba5a6-a9cc-48bb-9e05-87883f6eb611" timeOut="12000000">
 		<munit:behavior >
 			<munit-tools:mock-when doc:name="Mock when DB Lookup Api" doc:id="5356e80b-971b-454c-b367-13e9373666e0" processor="http:request">
 				<munit-tools:with-attributes >
@@ -44,7 +44,7 @@
 			<flow-ref doc:name="Flow-ref to put-transfers-shipped-orders-impl-flow" doc:id="3ed3b271-a49a-4cfb-960e-3aaf2490bcaf" name="put-transfers-shipped-orders-impl-flow"/>
 		</munit:execution>
 		<munit:validation >
-			<munit-tools:assert-that doc:name="Assert that payload" doc:id="4fb49504-c5e2-4c43-a0c8-cf0cdaf0d668" is="#[MunitTools::notNullValue()]" expression="#['success']"/>
+			<munit-tools:assert-that doc:name="Assert that payload" doc:id="4fb49504-c5e2-4c43-a0c8-cf0cdaf0d668" is="#[MunitTools::notNullValue()]" expression="#['success']" message="Invalid Payload!!"/>
 			<munit-tools:verify-call doc:name="Verify call Invoke D365 System Layer" doc:id="c9550ba0-9471-4d12-9f69-2458b3e43f81" processor="http:request">
 				<munit-tools:with-attributes >
 					<munit-tools:with-attribute whereValue="Invoke D365 System Layer" attributeName="doc:name" />
@@ -53,7 +53,7 @@
 			</munit-tools:verify-call>
 		</munit:validation>
 	</munit:test>
-	<munit:test name="transfers-shipped-orders-test-suite-default-flowTest" description="Test" doc:id="46052213-a2fb-47d1-bfc8-45fa5b30e9f1" timeOut="12000000" ignore="true">
+	<munit:test name="transfers-shipped-orders-test-suite-default-flow-test-suit" description="Test" doc:id="46052213-a2fb-47d1-bfc8-45fa5b30e9f1" timeOut="12000000" ignore="true">
 		<munit:behavior >
 			<munit-tools:mock-when doc:name="Mock when DB Lookup Api" doc:id="7bf6bd23-77ac-482b-9544-2c79f5bb08ef" processor="http:request">
 				<munit-tools:with-attributes >
@@ -84,10 +84,10 @@
 			<flow-ref doc:name="put-transfers-shipped-orders-impl-flow" doc:id="c39f5eee-f85f-43ce-b89d-b7ea20c693eb" name="put-transfers-shipped-orders-impl-flow"/>
 		</munit:execution>
 		<munit:validation >
-			<munit-tools:assert-that doc:name="Assert that" doc:id="4406f1d1-3b78-4ad8-93c8-539e86434b4f" is="#[MunitTools::notNullValue()]" expression="#['success']"/>
+			<munit-tools:assert-that doc:name="Assert that Payload" doc:id="4406f1d1-3b78-4ad8-93c8-539e86434b4f" is="#[MunitTools::notNullValue()]" expression="#['success']" message="Invalid Payload!!"/>
 		</munit:validation>
 	</munit:test>
-	<munit:test name="transfers-shipped-orders-test-suite-DB-Exception-flowTest" description="Test" doc:id="623e416d-8910-40ce-ba29-841f735b6b3a" expectedErrorType="HTTP:CONNECTIVITY" timeOut="12000000" ignore="true">
+	<munit:test name="transfers-shipped-orders-test-suite-DB-Exception-flow-test-suit" description="Test" doc:id="623e416d-8910-40ce-ba29-841f735b6b3a" expectedErrorType="HTTP:CONNECTIVITY" timeOut="12000000" ignore="true">
 		<munit:behavior >
 			<munit-tools:mock-when doc:name="Mock when DB Lookup Api" doc:id="2a11192f-24c2-426f-af9f-07620370b4b7" processor="http:request">
 				<munit-tools:with-attributes >
@@ -114,10 +114,10 @@
 			<flow-ref doc:name="Flow-ref to put-transfers-shipped-orders-impl-flow" doc:id="82b066a9-f170-4546-815f-b04df55281a4" name="put-transfers-shipped-orders-impl-flow"/>
 		</munit:execution>
 		<munit:validation >
-			<munit-tools:assert-that doc:name="Assert that" doc:id="967fdf50-214e-4464-ae5d-2ed2e7058c87" is="#[MunitTools::notNullValue()]" expression="#['Connectivity Issue']"/>
+			<munit-tools:assert-that doc:name="Assert that Payload" doc:id="967fdf50-214e-4464-ae5d-2ed2e7058c87" is="#[MunitTools::notNullValue()]" expression="#['Connectivity Issue']" message="Invalid Payload!!"/>
 		</munit:validation>
 	</munit:test>
-	<munit:test name="transfers-shipped-orders-test-suite-Default-handling-flowTest" description="Test" doc:id="7539ac9e-ea5f-4c8e-acc3-a1332a756b7d" expectedErrorType="CLOUDHUB:CONNECTIVITY" timeOut="12000000" ignore="true">
+	<munit:test name="transfers-shipped-orders-test-suite-Default-handling-flow-test-suit" description="Test" doc:id="7539ac9e-ea5f-4c8e-acc3-a1332a756b7d" expectedErrorType="CLOUDHUB:CONNECTIVITY" timeOut="12000000" ignore="true">
 		<munit:behavior >
 			<munit-tools:mock-when doc:name="Mock when DB Lookup Api" doc:id="4d04587f-8244-4846-a3db-208f9bde4df6" processor="http:request">
 				<munit-tools:with-attributes >
@@ -149,7 +149,7 @@
 			<flow-ref doc:name="Flow-ref to put-transfers-shipped-orders-impl-flow" doc:id="8a9cda45-25bc-4e40-a349-299079969c0c" name="put-transfers-shipped-orders-impl-flow"/>
 		</munit:execution>
 		<munit:validation >
-			<munit-tools:assert-that doc:name="Assert that" doc:id="9a606348-def2-42df-acfb-1d276339c670" is="#[MunitTools::notNullValue()]" expression="#['success']"/>
+			<munit-tools:assert-that doc:name="Assert that Payload" doc:id="9a606348-def2-42df-acfb-1d276339c670" is="#[MunitTools::notNullValue()]" expression="#['success']" message="Invalid Payload!!"/>
 		</munit:validation>
 	</munit:test>
 
