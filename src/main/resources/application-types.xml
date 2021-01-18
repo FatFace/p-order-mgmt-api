@@ -40,4 +40,5 @@ type manifest = {|
       </types:output-event>
     </types:processor-declaration>
   </types:enrichment>
+  <types:enrichment select="#74d187b2-0d22-4346-9a10-7afa6547c966"/>
 </types:mule>

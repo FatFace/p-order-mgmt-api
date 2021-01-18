@@ -126,14 +126,6 @@ output application/json
 			<ee:message >
 				<ee:set-payload ><![CDATA[%dw 2.0
 output application/json
-fun fromMovement() = if(payload."transfer-orders"."transform-order-status"[0] == "Received") "SHOP-TRANS" 
-    else if(payload."transfer-orders"."transform-order-status"[0] == "Shipped") "SHOP-STOCK"
-    else ""
-fun toMovement() = if(payload."transfer-orders"."transform-order-status"[0] == "Received") "SHOP-STOCK" 
-else if ((payload."transfer-orders"."transform-order-status"[0] == "Shipped") and (payload."transfer-orders"."to-warehouse"[0] == "900015")) 
-"WH10-SHOP-TRANS"
-else if ((payload."transfer-orders"."transform-order-status"[0] == "Shipped") and ((payload."transfer-orders"."to-warehouse"[0] == "90003") or vars.vFlattenResponse[payload."transfer-orders"."to-warehouse"[0]] != null)) "SHOP-TRANS"  
-else ""
 ---
 payload."transfer-orders" map ((item,index) -> {
     "transfer-number" : item."transfer-number",
@@ -154,39 +146,34 @@ payload."transfer-orders" map ((item,index) -> {
     "transfer-qty" : item."transfer-qty",
     "to-warehouse" : item."to-warehouse",
     "transform-order-status" : item."transform-order-status",
-    "from-movement-type" : fromMovement(),
-    "to-movement-type" : toMovement()
+    "store-flag" : if(vars.vFlattenResponse[payload."transfer-orders"."to-warehouse"[0] != null]) true else false
 })
 ]]></ee:set-payload>
 			</ee:message>
 		</ee:transform>
-		<ee:transform doc:name="Filter success and failed data" doc:id="6787be33-c7c6-45b6-a074-c912dd378a06">
+		<!-- <ee:transform doc:name="Filter success and failed data" doc:id="6787be33-c7c6-45b6-a074-c912dd378a06">
 			<ee:message>
 			</ee:message>
 			<ee:variables>
 				<ee:set-variable variableName="vFailedRecords" ><![CDATA[%dw 2.0
 output application/json
 var toMovement = payload filter $."to-movement-type" == ""
----
+-&#45;&#45;
 {
     "transfer-orders" : toMovement
 }]]></ee:set-variable>
 				<ee:set-variable variableName="vSuccessRecords" ><![CDATA[%dw 2.0
 output application/json
 var toMovement = payload filter $."to-movement-type" != ""
----
+-&#45;&#45;
 {
     "transfer-orders" : toMovement
 }]]></ee:set-variable>
 			</ee:variables>
-		</ee:transform>
+		</ee:transform> -->
 		<flow-ref doc:name="call-s-wms-cims-api-sub-flow" doc:id="f72a0caf-0ef3-4f91-98c5-8f256e543eb6" name="call-s-wms-cims-api-sub-flow" targetValue="#[vars.vSuccessRecords]"/>
-		<ee:transform doc:name="Set Flow Name and capture failed records" doc:id="74d187b2-0d22-4346-9a10-7afa6547c966" >
+		<ee:transform doc:name="Set Flow Name" doc:id="74d187b2-0d22-4346-9a10-7afa6547c966" >
 			<ee:message >
-				<ee:set-payload ><![CDATA[%dw 2.0
-output application/json
----
-vars.vFailedRecords]]></ee:set-payload>
 			</ee:message>
 			<ee:variables >
 				<ee:set-variable variableName="flowName" ><![CDATA[%dw 2.0
