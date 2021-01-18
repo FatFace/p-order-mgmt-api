@@ -146,7 +146,7 @@ payload."transfer-orders" map ((item,index) -> {
     "transfer-qty" : item."transfer-qty",
     "to-warehouse" : item."to-warehouse",
     "transform-order-status" : item."transform-order-status",
-    "store-flag" : if(vars.vFlattenResponse[payload."transfer-orders"."to-warehouse"[0] != null]) true else false
+    "store-flag" : vars.vFlattenResponse[item."to-warehouse"] != null
 })
 ]]></ee:set-payload>
 			</ee:message>
