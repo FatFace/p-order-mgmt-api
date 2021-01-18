@@ -24,7 +24,7 @@ attributes.queryParams]]></ee:set-variable>
 		</ee:transform>
 		<flow-ref doc:name="Log Receiver Entry" doc:id="870e2552-ecb0-4f7c-8c9f-576de6946003" name="log-receiver-entry-sub-flow"/>
 		<flow-ref doc:name="Audit Receiver Entry" doc:id="7e232484-60ff-4f9f-93c1-0d267e5b5c5c" name="audit-receiver-entry-sub-flow"/>
-		<flow-ref doc:name="call-db-lookup-api-sub-flow" doc:id="e2c6e063-abce-4e72-aa6f-d41a25385e54" name="call-db-lookup-shipped-orders-api-sub-flow"/>		
+		<flow-ref doc:name="call-db-lookup-shipped-orders-api-sub-flow" doc:id="e2c6e063-abce-4e72-aa6f-d41a25385e54" name="call-db-lookup-shipped-orders-api-sub-flow"/>		
 		<ee:transform doc:name="Filter Lookup Key" doc:id="c9af6a91-e77b-4d14-a5ea-05e79ad7bec9">
 			<ee:message>
 			</ee:message>

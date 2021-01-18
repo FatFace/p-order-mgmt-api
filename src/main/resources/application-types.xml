@@ -31,4 +31,13 @@ type manifest = {|
   </types:enrichment>
   <types:enrichment select="#319457ce-8b6f-4639-8a07-e23e2545b514"/>
   <types:enrichment select="#acc4cf6b-344c-49d5-a467-ce6d7d214d45"/>
+  <types:enrichment select="#001092f3-16b9-40ce-b4e4-319b1a13514a">
+    <types:processor-declaration>
+      <types:output-event>
+        <types:message>
+          <types:payload type="manifest"/>
+        </types:message>
+      </types:output-event>
+    </types:processor-declaration>
+  </types:enrichment>
 </types:mule>

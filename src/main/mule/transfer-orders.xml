@@ -109,9 +109,84 @@ attributes.queryParams]]></ee:set-variable>
 		</ee:transform>
 		<flow-ref doc:name="Log Receiver Entry" doc:id="6624adec-fd7e-4237-b4d7-e6ac65954c82" name="log-receiver-entry-sub-flow"/>
 		<flow-ref doc:name="Audit Receiver Entry" doc:id="4e164d5a-eb47-42ba-9898-13988247cb3d" name="audit-receiver-entry-sub-flow"/>
-		<flow-ref doc:name="call-s-wms-cims-api-sub-flow" doc:id="f72a0caf-0ef3-4f91-98c5-8f256e543eb6" name="call-s-wms-cims-api-sub-flow"/>
-		<ee:transform doc:name="Set Flow Name" doc:id="74d187b2-0d22-4346-9a10-7afa6547c966" >
+		<flow-ref doc:name="call-db-lookup-shipped-orders-api-sub-flow" doc:id="a0cf2c5d-ec46-4e34-8c56-cb959479b379" name="call-db-lookup-shipped-orders-api-sub-flow"/>
+		<ee:transform doc:name="Filter Lookup keys" doc:id="3591dc6f-cc18-4853-a610-bdfbc66e1c1b" >
 			<ee:message >
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="vFlattenResponse" ><![CDATA[%dw 2.0
+output application/json
+---
+(flatten(vars.lookupResponse.lookups groupBy ($.lookup_id) pluck($)) map {
+    ($."lookup-key"): ($."lookup-value")
+} reduce ((item, accumulator) -> item ++ accumulator)) distinctBy ($$)]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+		<ee:transform doc:name="Request mapping" doc:id="001092f3-16b9-40ce-b4e4-319b1a13514a" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+fun fromMoment() = if(payload."transfer-orders"."transform-order-status"[0] == "Received") "SHOP-TRANS" 
+    else if(payload."transfer-orders"."transform-order-status"[0] == "Shipped") "SHOP-STOCK"
+    else ""
+fun toMoment() = if(payload."transfer-orders"."transform-order-status"[0] == "Received") "SHOP-STOCK" 
+else if ((payload."transfer-orders"."transform-order-status"[0] == "Shipped") and (payload."transfer-orders"."to-warehouse"[0] == "900015")) 
+"WH10-SHOP-TRANS"
+else if ((payload."transfer-orders"."transform-order-status"[0] == "Shipped") and ((payload."transfer-orders"."to-warehouse"[0] == "90003") or vars.vFlattenResponse[payload."transfer-orders"."to-warehouse"[0]] != null)) "SHOP-TRANS"  
+else ""
+---
+payload."transfer-orders" map ((item,index) -> {
+    "transfer-number" : item."transfer-number",
+    "line-number" : item."line-number",
+    "sku-id" : item."sku-id",
+    "colour" : item."colour",
+    "from-warehouse" : item."from-warehouse",
+    "item-number" : item."item-number",
+    "line-receipt-date" : item."line-receipt-date",
+    "receipt-date" : item."receipt-date",
+    "received-qty" : item."received-qty",
+    "receive-remain" : item."receive-remain",
+    "remaining" : item."remaining",
+    "shipped-date" : item."shipped-date",
+    "shipped-qty" : item."shipped-qty",
+    "size" : item."size",
+    "style" : item."style",
+    "transfer-qty" : item."transfer-qty",
+    "to-warehouse" : item."to-warehouse",
+    "transform-order-status" : item."transform-order-status",
+    "from-moment-type" : fromMoment(),
+    "to-moment-type" : toMoment()
+})
+]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<ee:transform doc:name="Filter success and failed data" doc:id="6787be33-c7c6-45b6-a074-c912dd378a06">
+			<ee:message>
+			</ee:message>
+			<ee:variables>
+				<ee:set-variable variableName="vFailedRecords" ><![CDATA[%dw 2.0
+output application/json
+var toMoment = payload filter $."to-moment-type" == ""
+---
+{
+    "transfer-orders" : toMoment
+}]]></ee:set-variable>
+				<ee:set-variable variableName="vSuccessRecords" ><![CDATA[%dw 2.0
+output application/json
+var toMoment = payload filter $."to-moment-type" != ""
+---
+{
+    "transfer-orders" : toMoment
+}]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+		<flow-ref doc:name="call-s-wms-cims-api-sub-flow" doc:id="f72a0caf-0ef3-4f91-98c5-8f256e543eb6" name="call-s-wms-cims-api-sub-flow" targetValue="#[vars.vSuccessRecords]"/>
+		<ee:transform doc:name="Set Flow Name and capture failed records" doc:id="74d187b2-0d22-4346-9a10-7afa6547c966" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+vars.vFailedRecords]]></ee:set-payload>
 			</ee:message>
 			<ee:variables >
 				<ee:set-variable variableName="flowName" ><![CDATA[%dw 2.0
@@ -128,6 +203,7 @@ output application/java
 		<flow-ref doc:name="Log Process Entry" doc:id="aec76d18-0d60-4cd0-9a0f-9942a68ded4f" name="log-process-entry-sub-flow"/>
 		<flow-ref doc:name="Audit Process Entry" doc:id="f7f513c1-6975-41b8-b894-ce70712360d3" name="audit-process-entry-sub-flow"/>
 		<http:request method="GET" doc:name="Invoke CIMS System Layer" doc:id="0a8dbd09-78d8-4964-9c39-e4238f2953c8" config-ref="s_wms_cims_HTTP_Request_configuration" path="${cims.sales.orders.path}">
+			<http:body ><![CDATA[#[vars.vSuccessRecords]]]></http:body>
 			<http:headers><![CDATA[#[output application/java
 ---
 {
@@ -139,7 +215,8 @@ output application/java
 			<http:query-params><![CDATA[#[output application/java
 ---
 {
-	"region" : vars.vQueryParams.region
+	"file-name" : vars.vQueryParams."file-name",
+	"IDD-Number" : vars.vQueryParams."IDD-Number"
 }]]]></http:query-params>
 		</http:request>
 		<flow-ref doc:name="Audit Process Exit" doc:id="dab5042d-348d-4b91-af71-549b252b27c9" name="audit-process-exit-sub-flow"/>

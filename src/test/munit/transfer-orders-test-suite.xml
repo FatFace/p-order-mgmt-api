@@ -73,6 +73,9 @@
 			</munit-tools:mock-when>
 		</munit:behavior>
 		<munit:execution >
+			<munit:set-event doc:name="Set Event" doc:id="d3f1080b-35b8-4580-b961-9ac6fadfd9a7" >
+				<munit:payload value="#[MunitTools::getResourceAsString('request/transfer-shipped-received-orders-request.json')]" mediaType="application/json" />
+			</munit:set-event>
 			<flow-ref doc:name="put:\transfer\shipped-received\orders:application\json:p-order-mgmt-api-config" doc:id="4c685200-1f90-4582-8aa7-701633e1ea36" name="put:\transfer\shipped-received\orders:application\json:p-order-mgmt-api-config"/>
 		</munit:execution>
 		<munit:validation >
