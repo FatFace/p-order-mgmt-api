@@ -126,10 +126,10 @@ output application/json
 			<ee:message >
 				<ee:set-payload ><![CDATA[%dw 2.0
 output application/json
-fun fromMoment() = if(payload."transfer-orders"."transform-order-status"[0] == "Received") "SHOP-TRANS" 
+fun fromMovement() = if(payload."transfer-orders"."transform-order-status"[0] == "Received") "SHOP-TRANS" 
     else if(payload."transfer-orders"."transform-order-status"[0] == "Shipped") "SHOP-STOCK"
     else ""
-fun toMoment() = if(payload."transfer-orders"."transform-order-status"[0] == "Received") "SHOP-STOCK" 
+fun toMovement() = if(payload."transfer-orders"."transform-order-status"[0] == "Received") "SHOP-STOCK" 
 else if ((payload."transfer-orders"."transform-order-status"[0] == "Shipped") and (payload."transfer-orders"."to-warehouse"[0] == "900015")) 
 "WH10-SHOP-TRANS"
 else if ((payload."transfer-orders"."transform-order-status"[0] == "Shipped") and ((payload."transfer-orders"."to-warehouse"[0] == "90003") or vars.vFlattenResponse[payload."transfer-orders"."to-warehouse"[0]] != null)) "SHOP-TRANS"  
@@ -154,8 +154,8 @@ payload."transfer-orders" map ((item,index) -> {
     "transfer-qty" : item."transfer-qty",
     "to-warehouse" : item."to-warehouse",
     "transform-order-status" : item."transform-order-status",
-    "from-moment-type" : fromMoment(),
-    "to-moment-type" : toMoment()
+    "from-movement-type" : fromMovement(),
+    "to-movement-type" : toMovement()
 })
 ]]></ee:set-payload>
 			</ee:message>
@@ -166,17 +166,17 @@ payload."transfer-orders" map ((item,index) -> {
 			<ee:variables>
 				<ee:set-variable variableName="vFailedRecords" ><![CDATA[%dw 2.0
 output application/json
-var toMoment = payload filter $."to-moment-type" == ""
+var toMovement = payload filter $."to-movement-type" == ""
 ---
 {
-    "transfer-orders" : toMoment
+    "transfer-orders" : toMovement
 }]]></ee:set-variable>
 				<ee:set-variable variableName="vSuccessRecords" ><![CDATA[%dw 2.0
 output application/json
-var toMoment = payload filter $."to-moment-type" != ""
+var toMovement = payload filter $."to-movement-type" != ""
 ---
 {
-    "transfer-orders" : toMoment
+    "transfer-orders" : toMovement
 }]]></ee:set-variable>
 			</ee:variables>
 		</ee:transform>
