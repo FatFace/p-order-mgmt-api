@@ -131,7 +131,7 @@ output application/json
     "transfer-orders" : 
     payload."transfer-orders" map ((item,index) -> {
     "transfer-number" : item."transfer-number",
-    "line-number" : item."line-number",
+    "line-number" : item."line-number" as Number,
     "sku-id" : item."sku-id",
     "colour" : item."colour",
     "from-warehouse" : item."from-warehouse",
