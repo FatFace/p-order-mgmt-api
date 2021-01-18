@@ -126,7 +126,12 @@ output application/json
 			<ee:message >
 				<ee:set-payload ><![CDATA[%dw 2.0
 output application/json
+import * from dw::core::Strings
+
 ---
+{
+    "transfer-orders" : [
+
 payload."transfer-orders" map ((item,index) -> {
     "transfer-number" : item."transfer-number",
     "line-number" : item."line-number",
@@ -146,8 +151,10 @@ payload."transfer-orders" map ((item,index) -> {
     "transfer-qty" : item."transfer-qty",
     "to-warehouse" : item."to-warehouse",
     "transform-order-status" : item."transform-order-status",
-    "store-flag" : vars.vFlattenResponse[item."to-warehouse"] != null
+    "storeInDB" : "",
+    "a" : substringAfterLast("a","b")
 })
+]}
 ]]></ee:set-payload>
 			</ee:message>
 		</ee:transform>
