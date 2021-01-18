@@ -62,12 +62,12 @@ jda:
   shippedorders:
     path: "/transfers/orders"
 cims:
-  host: "localhost"
-  port: "8092"
-  basepath: "/api/v1"
+  host: "mule-worker-internal-dev-s-erp-cims-api.ir-e1.cloudhub.io"
+  port: "8081"
+  basepath: "/api"
   sales:
     orders:
-      path: "/pos/sales/orders"
+      path: "/stock/orders"
 cloudhub:
   username: "![V1H6cIZG27BimoyWHnUmWwgd7Z72XsoF+lx6EKe7Hfc=]"
   password: "![pU6khIodBBpK1c7QxH7VmdEtcJxtRvmoKBlI+hYGFqk=]"
