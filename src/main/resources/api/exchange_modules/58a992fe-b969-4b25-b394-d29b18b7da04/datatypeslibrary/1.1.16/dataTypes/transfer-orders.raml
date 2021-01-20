@@ -2,27 +2,91 @@
 displayName: Transfer orders fields
 type: object
 properties:
-  record-type?: string  
-  tag-id?: string  
-  user-def-note-1?: string
-  user-def-type-1?: string 
-  region?: string
-  transfer-number?: string  
-  line-number: number  
-  sku-id: string
-  colour?: string
-  from-warehouse?: string  
-  item-number: string
-  line-receipt-date?: string
-  line-ship-date?: string
-  receipt-date?: string
-  received-qty?: string
-  receive-remain?: string
-  remaining?: string
-  shipped-date: string
-  shipped-qty: string
-  size?: string
-  style?: string
-  to-warehouse: string
-  transform-order-status?: string
-  transfer-qty?: string
+  record-type: 
+    description: Record type of the item
+    type: string
+    required: false
+  tag-id:   
+    description: Tag id of the item
+    type: string
+    required: false
+  region: 
+    description: Region value is based on UK or US
+    type: string
+    required: false
+  transfer-number: 
+    description: Number transferred based on the region uk or us
+    type: string
+    required: false  
+  line-number: 
+    description: Sequence number of items of a particular order
+    type: number
+    required: true  
+  sku-id: 
+    description: Barcode id of the item
+    type: string
+    required: true
+  colour: 
+    description: Colour of the item
+    type: string
+    required: false
+  from-warehouse: 
+    description: This is the from warehouse of the item
+    type: string
+    required: false  
+  item-number: 
+    description: Item number also referred as user-def-type-1
+    type: string
+    required: true
+  line-receipt-date: 
+    description: Line received date of the item
+    type: string
+    required: false
+  line-ship-date: 
+    description: Line shipped date of the item
+    type: string
+    required: false
+  receipt-date: 
+    description: Receipt date of the item
+    type: string
+    required: false
+  received-qty: 
+    description: Quantity received
+    type: string
+    required: false
+  receive-remain: 
+    description: Receive remain
+    type: string
+    required: false
+  remaining: 
+    description: Remaining receive updated
+    type: string
+    required: false
+  shipped-date: 
+    description: Shipped date of the item
+    type: string
+    required: true
+  shipped-qty: 
+    description: Quantity shipped
+    type: string
+    required: true
+  size: 
+    description: Size of the item
+    type: string
+    required: false
+  style: 
+    description: Style of the item
+    type: string
+    required: false
+  to-warehouse: 
+    description: to-warehouse of the item which is also referred as user-def-note-1
+    type: string
+    required: true
+  transform-order-status: 
+    description: This is to transfer the order status as Shipped or Received
+    type: string
+    required: false
+  transfer-qty: 
+    description: Quantity transferred
+    type: string
+    required: false

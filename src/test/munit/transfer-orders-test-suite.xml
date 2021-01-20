@@ -65,6 +65,12 @@
 	</munit:test>
 	<munit:test name="transfer-orders-test-suite-put-transfer-orders-impl-flowTest" doc:id="c1c29477-db6f-440d-af36-6ec8faa3f49b" description="Test">
 		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when Lookup API" doc:id="04a75bd4-bfd6-41d5-96ea-903f84a86e57" processor="http:request">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="Invoke System Layer Lookup Api to Get Lookup Key" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="8a0468f7-2b70-44ba-a64c-8bd4697f894e" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+			</munit-tools:mock-when>
 			<munit-tools:mock-when doc:name="Mock when Invoke CIMS System Layer" doc:id="23c82105-87c5-4936-9890-5f376416f740" processor="http:request">
 				<munit-tools:with-attributes >
 					<munit-tools:with-attribute whereValue="Invoke CIMS System Layer" attributeName="doc:name" />
@@ -75,6 +81,9 @@
 		<munit:execution >
 			<munit:set-event doc:name="Set Event" doc:id="d3f1080b-35b8-4580-b961-9ac6fadfd9a7" >
 				<munit:payload value="#[MunitTools::getResourceAsString('request/transfer-shipped-received-orders-request.json')]" mediaType="application/json" />
+				<munit:variables >
+					<munit:variable key="lookupResponse" value='{"lookups": [{"lookup_id": 14,"lookup-key": "70012","lookup-value": "1FFL"},{"lookup_id": 14,"lookup-key": "70017","lookup-value": "1FFL"}]}' mediaType="application/json" />
+				</munit:variables>
 			</munit:set-event>
 			<flow-ref doc:name="put:\transfer\shipped-received\orders:application\json:p-order-mgmt-api-config" doc:id="4c685200-1f90-4582-8aa7-701633e1ea36" name="put:\transfer\shipped-received\orders:application\json:p-order-mgmt-api-config"/>
 		</munit:execution>

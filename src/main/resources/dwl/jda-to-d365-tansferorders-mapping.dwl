@@ -3,12 +3,12 @@ output application/json
 ---
 payload."transfer-orders" map((item,index) -> {
     "record-type": item."record-type",
-    "region": vars.flattenResponse[item."user-def-note-1"],
+    "region": vars.flattenResponse[item."to-warehouse"],
     "tag-id": item."tag-id",
-    "user-def-note-1": item."user-def-note-1",
-    "shipped-dstamp": item."shipped-dstamp",
-    "user-def-type-1": item."user-def-note-1",
+    "to-warehouse": item."to-warehouse",
+    "shipped-date": item."shipped-date",
+    "item-number": item."item-number",
     "sku-id": item."sku-id",
-    "qty-shipped": item."qty-shipped",
+    "shipped-qty": item."shipped-qty",
     "line-number": item."line-number"
 })
