@@ -72,7 +72,7 @@ output application/java
 		<set-variable value="call-d365-api-for-transfer-orders-sub-flow" doc:name="Flow Name" doc:id="a6922803-4b13-422b-be75-32ef616908f0" variableName="flowName"/>
 		<flow-ref doc:name="Log Process Entry" doc:id="90bead1d-40f2-446a-bda1-b6f9ea5c691d" name="log-process-entry-sub-flow"/>
 		<flow-ref doc:name="Audit Process Entry" doc:id="ce02638c-e75e-4dbe-ad3d-269e9edf71f6" name="audit-process-entry-sub-flow"/>
-		<http:request method="GET" doc:name="Invoke D365 System Layer" doc:id="1c49a64f-66b4-4b9e-8001-7b39bf3d57a2" path="${d365.dmf.path}" config-ref="s_D365_Http_Request_configuration">
+		<http:request method="GET" doc:name="Invoke D365 System Layer" doc:id="1c49a64f-66b4-4b9e-8001-7b39bf3d57a2" path="${d365.dmf.path}" config-ref="s_D365_Http_Request_configuration" responseTimeout="${response.timeout.system.d365.exportOrders}">
 			<http:headers><![CDATA[#[output application/java
 ---
 {

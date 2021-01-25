@@ -138,7 +138,7 @@ output application/java
 		<set-variable value="call-transfers-shipped-orders-d365-api-sub-flow" doc:name="Flow Name" doc:id="0a433e14-cfc0-46d7-9c82-c3aa734f938e" variableName="flowName"/>
 		<flow-ref doc:name="Log Process Entry" doc:id="dc8aa12f-09ea-4f16-b632-50b7ebf8712a" name="log-process-entry-sub-flow"/>
 		<flow-ref doc:name="Audit Process Entry" doc:id="2471dac5-5aa6-450b-928e-4140c5882e7a" name="audit-process-entry-sub-flow"/>
-		<http:request method="PUT" doc:name="Invoke D365 System Layer" doc:id="f1543762-c91c-4613-9277-7fd96827eebd" config-ref="s_D365_Http_Request_configuration" path="${d365.transferShippedOrders}">
+		<http:request method="PUT" doc:name="Invoke D365 System Layer" doc:id="f1543762-c91c-4613-9277-7fd96827eebd" config-ref="s_D365_Http_Request_configuration" path="${d365.transferShippedOrders}" responseTimeout="${response.timeout.system.d365.exportOrders}">
 			<http:headers><![CDATA[#[output application/java
 ---
 {
