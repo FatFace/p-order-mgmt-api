@@ -7,7 +7,7 @@
 		http://www.mulesoft.org/schema/mule/munit http://www.mulesoft.org/schema/mule/munit/current/mule-munit.xsd
 		http://www.mulesoft.org/schema/mule/munit-tools  http://www.mulesoft.org/schema/mule/munit-tools/current/mule-munit-tools.xsd">
 	<munit:config name="transfer-orders-test-suite.xml" />
-	<munit:test name="transfer-orders-test-suite-transfer-orders-uk-scheduler-flowTest" doc:id="a24cb63b-97c8-4eaf-8fc5-15244242b99c" description="Test">
+	<munit:test name="transfer-orders-test-suite-transfer-orders-uk-scheduler-flowTest" doc:id="a24cb63b-97c8-4eaf-8fc5-15244242b99c" description="Test" ignore="true">
 		<munit:behavior >
 			<munit-tools:mock-when doc:name="Mock when UKScheduler" doc:id="5b838455-fe1b-42ff-9f16-2940beb5c76a" processor="scheduler">
 				<munit-tools:with-attributes >
@@ -35,7 +35,7 @@
 			</munit-tools:verify-call>
 		</munit:validation>
 	</munit:test>
-	<munit:test name="transfer-orders-test-suite-transfer-orders-us-scheduler-flowTest" doc:id="269d68e6-2e4b-4da0-9293-29a198ce8b3e" description="Test">
+	<munit:test name="transfer-orders-test-suite-transfer-orders-us-scheduler-flowTest" doc:id="269d68e6-2e4b-4da0-9293-29a198ce8b3e" description="Test" ignore="true">
 		<munit:behavior >
 			<munit-tools:mock-when doc:name="Mock when UKScheduler" doc:id="93f53944-1035-4349-95cb-a90e5aab491b" processor="scheduler">
 				<munit-tools:with-attributes >

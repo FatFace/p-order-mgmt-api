@@ -146,16 +146,5 @@ output application/json
         <set-variable value="#['put:\transfer\shipped-received\orders:application\json:p-order-mgmt-api-config']" doc:name="Flow Name" doc:id="e7bba556-9863-45d3-bc30-0dc65f142b48" variableName="flowName" />
         <flow-ref doc:name="Log Dispatcher Exit" doc:id="6bc30be8-cc11-4400-a331-24d101ffa0eb" name="log-dispatcher-exit-sub-flow" />
         <flow-ref doc:name="Audit Dispather Exit" doc:id="d36836ef-e409-49ed-9fd9-817a9f8c77de" name="audit-dispatcher-exit-sub-flow" />
-        <ee:transform xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd" doc:id="693a1ff0-6404-4e81-b9a5-f40e164dd099">
-            <ee:message>
-                <ee:set-payload><![CDATA[%dw 2.0
-output application/json
----
-{
-  responseCode: 200,
-  responseText: "success"
-}]]></ee:set-payload>
-            </ee:message>
-        </ee:transform>
     </flow>
 </mule>

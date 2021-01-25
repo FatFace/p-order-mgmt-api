@@ -8,12 +8,7 @@ http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/htt
 http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
 http://www.mulesoft.org/schema/mule/sqs http://www.mulesoft.org/schema/mule/sqs/current/mule-sqs.xsd
 http://www.mulesoft.org/schema/mule/os http://www.mulesoft.org/schema/mule/os/current/mule-os.xsd">
-	<ee:object-store-caching-strategy name="Caching_Strategy" doc:name="Caching Strategy" doc:id="5b5b7db0-2a94-44a0-aff2-50b2d45344c5" keyGenerationExpression='#["lookupResponse"]'>
-		<os:private-object-store persistent="false" config-ref="ObjectStore_Config"/>
-	</ee:object-store-caching-strategy>
-	<os:config name="ObjectStore_Config" doc:name="ObjectStore Config" doc:id="1c26958f-9295-4257-bccd-fe224d84c74b" >
-		<os:connection />
-	</os:config>
+	
 	<sub-flow name="put-transfers-shipped-orders-impl-flow" doc:id="2bfe72b6-7826-4a6a-b26f-9e326dd327b9" >
 		<ee:transform doc:name="Set flow name and query parameters" doc:id="626108d0-e540-4b4b-9e37-6d4ba1b9cc5d" >
 			<ee:message >

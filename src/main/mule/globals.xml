@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<mule xmlns:os="http://www.mulesoft.org/schema/mule/os" xmlns:tls="http://www.mulesoft.org/schema/mule/tls"
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns:os="http://www.mulesoft.org/schema/mule/os" xmlns:tls="http://www.mulesoft.org/schema/mule/tls"
 	xmlns:email="http://www.mulesoft.org/schema/mule/email"
 	xmlns:validation="http://www.mulesoft.org/schema/mule/validation"
 	xmlns:sqs="http://www.mulesoft.org/schema/mule/sqs" xmlns:sftp="http://www.mulesoft.org/schema/mule/sftp"
@@ -11,6 +12,7 @@
 	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd 
 http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd 
 http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
 http://www.mulesoft.org/schema/mule/api-gateway http://www.mulesoft.org/schema/mule/api-gateway/current/mule-api-gateway.xsd
@@ -121,5 +123,11 @@ http://www.mulesoft.org/schema/mule/os http://www.mulesoft.org/schema/mule/os/cu
 	<http:request-config name="s_wms_cims_HTTP_Request_configuration" doc:name="HTTP Request configuration" doc:id="d5cf27b6-fbbb-4feb-83cc-71d0f953e221" basePath="${cims.basepath}" >
 		<http:request-connection host="${cims.host}" port="${cims.port}" />
 	</http:request-config>
+	<ee:object-store-caching-strategy name="Caching_Strategy" doc:name="Caching Strategy" doc:id="6b803a54-2a0d-4ae3-b0aa-a84c15829c70" >
+		<os:private-object-store entryTtl="1" entryTtlUnit="HOURS" expirationInterval="3" expirationIntervalUnit="SECONDS" config-ref="ObjectStore_Config"/>
+	</ee:object-store-caching-strategy>
+	<os:config name="ObjectStore_Config" doc:name="ObjectStore Config" doc:id="1ecd6a37-b989-4a36-aa18-3fc409ba3d92" >
+		<os:connection />
+	</os:config>
 	
 </mule>
