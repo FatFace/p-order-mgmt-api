@@ -114,8 +114,7 @@ output application/java
 		<set-variable value="call-db-lookup-api-sub-flow" doc:name="Flow Name" doc:id="d9fb30e6-7c7a-40a6-a244-96f8a4ebd4b3" variableName="flowName"/>
 		<flow-ref doc:name="Log Process Entry" doc:id="9129be11-3336-47fe-b503-ea971845e730" name="log-process-entry-sub-flow"/>
 <flow-ref doc:name="Audit Process Entry" doc:id="9352c466-4ad8-4ecb-bf3a-e94335ff2a25" name="audit-process-entry-sub-flow"/>
-		<ee:cache doc:name="Cache" doc:id="76b28bf3-a576-4fec-8fe0-0278701c6858" cachingStrategy-ref="Caching_Strategy">
-			<http:request method="GET" doc:name="Invoke System Layer Lookup Api to Get Lookup Key" doc:id="8a0468f7-2b70-44ba-a64c-8bd4697f894e" path="${lookup.dbLookupPath}" responseTimeout="${response.timeout.system.dblookup.pickOrders}" config-ref="dbLookup_HTTP_Request_configuration" target="lookupResponse">
+		<http:request method="GET" doc:name="Invoke System Layer Lookup Api to Get Lookup Key" doc:id="8a0468f7-2b70-44ba-a64c-8bd4697f894e" path="${lookup.dbLookupPath}" responseTimeout="${response.timeout.system.dblookup.pickOrders}" config-ref="dbLookup_HTTP_Request_configuration" target="lookupResponse">
 					<http:headers><![CDATA[#[output application/java
 ---
 {
@@ -132,7 +131,6 @@ output application/java
 	"category" : p('lookup.queryParam.shippedorderscatgeory')
 }]]]></http:query-params>
 				</http:request>
-		</ee:cache>
 		<flow-ref doc:name="Log Process Exit" doc:id="9e8db2ab-e35c-40e4-a534-15e81def3e18" name="log-process-exit-sub-flow" />
 <flow-ref doc:name="Audit Process Exit" doc:id="fa9cf27a-02f5-40f0-aa42-31dc72193ff0" name="audit-process-exit-sub-flow"/>
 	</sub-flow>

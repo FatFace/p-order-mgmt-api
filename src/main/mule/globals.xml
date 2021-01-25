@@ -123,7 +123,7 @@ http://www.mulesoft.org/schema/mule/os http://www.mulesoft.org/schema/mule/os/cu
 	<http:request-config name="s_wms_cims_HTTP_Request_configuration" doc:name="HTTP Request configuration" doc:id="d5cf27b6-fbbb-4feb-83cc-71d0f953e221" basePath="${cims.basepath}" >
 		<http:request-connection host="${cims.host}" port="${cims.port}" />
 	</http:request-config>
-	<ee:object-store-caching-strategy name="Caching_Strategy" doc:name="Caching Strategy" doc:id="6b803a54-2a0d-4ae3-b0aa-a84c15829c70" >
+	<ee:object-store-caching-strategy name="Caching_Strategy" doc:name="Caching Strategy" doc:id="6b803a54-2a0d-4ae3-b0aa-a84c15829c70" keyGenerationExpression="#['lookupResponse']">
 		<os:private-object-store entryTtl="1" entryTtlUnit="HOURS" expirationInterval="3" expirationIntervalUnit="SECONDS" config-ref="ObjectStore_Config"/>
 	</ee:object-store-caching-strategy>
 	<os:config name="ObjectStore_Config" doc:name="ObjectStore Config" doc:id="1ecd6a37-b989-4a36-aa18-3fc409ba3d92" >

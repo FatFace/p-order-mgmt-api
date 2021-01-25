@@ -100,8 +100,8 @@ jda:
     path: "/pick/manifests" 
 cims:
   host: "mule-worker-internal-s-erp-cims-api.ir-e1.cloudhub.io"
-  port: "8081"
-  basepath: "/api"
+  port: "8091"
+  basepath: "/api/v1"
   stock:
     orders:
       path: "/stock/orders"
