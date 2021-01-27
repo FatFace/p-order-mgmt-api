@@ -64,6 +64,7 @@ d365:
   updateManifestPath: "/pick/manifests"
   updateOrderExtractPath: "/pick/orders" 
   webOrdersPath: "/web/orders"
+  transferShippedOrders: "/dmf/import"
   odata:
     host: "internal-ff-test-dlb.lb.anypointdns.net"
     port: "80"
