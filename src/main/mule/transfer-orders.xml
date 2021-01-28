@@ -76,9 +76,9 @@ output application/java
 			<http:headers><![CDATA[#[output application/java
 ---
 {
-	"transaction-id" : vars.transactionId,
-	"transaction-start-time" : vars.transactionStartTime,
+	"Transaction-Id" : vars.transactionId,
 	"client_secret" : p('secure::d365.clientSecret'),
+	"Transaction-Start-Time" : vars.transactionStartTime,
 	"client_id" : p('d365.clientId')
 }]]]></http:headers>
 			<http:query-params><![CDATA[#[output application/java
@@ -197,9 +197,9 @@ output application/java
 			<http:headers><![CDATA[#[output application/java
 ---
 {
-	"transaction-id" : vars.transactionId,
-	"transaction-start-time" : vars.transactionStartTime,
+	"Transaction-Id" : vars.transactionId,
 	"client_secret" : p('secure::d365.clientSecret'),
+	"Transaction-Start-Time" : vars.transactionStartTime,
 	"client_id" : p('d365.clientId')
 }]]]></http:headers>
 			<http:query-params><![CDATA[#[output application/java
