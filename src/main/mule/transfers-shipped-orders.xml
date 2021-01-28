@@ -118,9 +118,9 @@ output application/java
 					<http:headers><![CDATA[#[output application/java
 ---
 {
-	"Transaction-Id" : vars.transactionId,
+	"transaction-id" : vars.transactionId,
+	"transaction-start-time" : vars.transactionStartTime,
 	"client_secret" : p('secure::lookup.clientSecret'),
-	"Transaction-Start-Time" : vars.transactionStartTime,
 	"client_id" : p('lookup.clientId')
 }]]]></http:headers>
 					<http:query-params><![CDATA[#[output application/java
@@ -142,16 +142,16 @@ output application/java
 			<http:headers><![CDATA[#[output application/java
 ---
 {
-	"Transaction-Id" : vars.transactionId,
+	"transaction-id" : vars.transactionId,
+	"transaction-start-time" : vars.transactionStartTime,
 	"client_secret" : p('secure::d365.clientSecret'),
-	"Transaction-Start-Time" : vars.transactionStartTime,
 	"client_id" : p('d365.clientId')
 }]]]></http:headers>
 			<http:query-params ><![CDATA[#[output application/java
 ---
 {
-	"file-name" : vars.vQueryParams."file-name",
 	"legal-entity" : vars.vRegion,
+	"file-name" : vars.vQueryParams."file-name",
 	"idd-number" : "IDD040"
 }]]]></http:query-params>
 		</http:request>
