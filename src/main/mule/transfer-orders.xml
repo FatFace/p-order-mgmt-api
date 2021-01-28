@@ -84,9 +84,9 @@ output application/java
 			<http:query-params><![CDATA[#[output application/java
 ---
 {
-	"definitionGroupId" : p('d365.dmf.transfer.orders.definitionGroupId'),
 	"legal-entity" : vars.vRegion,
-	"packageName" : vars.packageName
+	"package-name" : vars.packageName,
+	"definition-group-id" : p('d365.dmf.transfer.orders.definitionGroupId')
 }]]]></http:query-params>
 		</http:request>
 		<flow-ref doc:name="Audit Process Exit" doc:id="576f648f-6b92-469f-b226-1202ff2fd5d2" name="audit-process-exit-sub-flow"/>
