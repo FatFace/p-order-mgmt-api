@@ -206,7 +206,7 @@ output application/java
 ---
 {
 	"file-name" : vars.vQueryParams."file-name",
-	"idd-number" : vars.vQueryParams."IDD-Number"
+	"idd-number" : vars.vQueryParams."idd-number"
 }]]]></http:query-params>
 		</http:request>
 		<flow-ref doc:name="Audit Process Exit" doc:id="dab5042d-348d-4b91-af71-549b252b27c9" name="audit-process-exit-sub-flow"/>
