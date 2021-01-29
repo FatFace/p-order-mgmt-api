@@ -119,6 +119,11 @@ uses:
           type: string
           required: true
           example: "transfer-orders-1.json"
+        idd-number:
+              description: IDD Number
+              type: string
+              required: true
+              example: "IDD040"
       body:
         application/json:   
           example: !include examples/transfer-orders.raml
@@ -144,7 +149,7 @@ uses:
               type: string
               required: true
               example: "transfer-orders-1.json"
-            IDD-Number:
+            idd-number:
               description: IDD Number
               type: string
               required: true
