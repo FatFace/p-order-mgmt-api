@@ -8,7 +8,21 @@
                 <http:body><![CDATA[#[payload]]]></http:body>
             </http:error-response>
         </http:listener>
-        <apikit:router config-ref="p-order-mgmt-api-config" />
+        <ee:transform doc:name="Set Headers" doc:id="42644c83-e4ac-460e-9c98-9bab7a617f11" >
+			<ee:message >
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="transactionId" ><![CDATA[%dw 2.0
+output application/java
+---
+attributes.headers."Transaction-Id" default ""]]></ee:set-variable>
+				<ee:set-variable variableName="transactionStartTime" ><![CDATA[%dw 2.0
+output application/java
+---
+attributes.headers."Transaction-Start-Time" default ""]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+		<apikit:router config-ref="p-order-mgmt-api-config" />
     </flow>
     <flow name="p-order-mgmt-api-console">
         <http:listener config-ref="p-order-mgmt-api-httpListenerConfig" path="/console/*">

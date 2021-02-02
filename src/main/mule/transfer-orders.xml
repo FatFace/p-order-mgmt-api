@@ -193,7 +193,7 @@ output application/java
 		<set-variable value="#['call-s-wms-cims-api-sub-flow']" doc:name="Flow Name" doc:id="3898e92a-fc1a-4737-b6db-305a431e5bbe" variableName="flowName"/>
 		<flow-ref doc:name="Log Process Entry" doc:id="aec76d18-0d60-4cd0-9a0f-9942a68ded4f" name="log-process-entry-sub-flow"/>
 		<flow-ref doc:name="Audit Process Entry" doc:id="f7f513c1-6975-41b8-b894-ce70712360d3" name="audit-process-entry-sub-flow"/>
-		<http:request method="PUT" doc:name="Invoke CIMS System Layer" doc:id="0a8dbd09-78d8-4964-9c39-e4238f2953c8" config-ref="s_wms_cims_HTTP_Request_configuration" path="${cims.stock.orders.path}">
+		<http:request method="PUT" doc:name="Invoke CIMS System Layer" doc:id="0a8dbd09-78d8-4964-9c39-e4238f2953c8" config-ref="s_wms_cims_HTTP_Request_configuration" path="${cims.stock.orders.path}" responseTimeout="${response.timeout.system.d365.exportOrders}">
 			<http:headers><![CDATA[#[output application/java
 ---
 {
