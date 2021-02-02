@@ -31,6 +31,13 @@ d365:
     basepath: "/api/v1"
     clientId: "c1751cc13ad746a8a49c404c966839f7"
     clientSecret: "7d3aFbC44E8e49048935f06A7A2a099d"  
+  import:
+    host: "mule-worker-internal-dev-s-d365-import-api.ir-e1.cloudhub.io"
+    port: "8091"
+    basepath: "/api/v1"
+    clientId: "c1751cc13ad746a8a49c404c966839f7"
+    clientSecret: "![Uve1NAvt5zaIs55ecLLnd6rhKY81uIy0j5/clihbaHvBkxed9l+lipNeE/ztkCnm]" 
+    transferShippedOrders: "/dmf/import"
   dmf: 
     path: "/dmf/export"
     pick:
@@ -132,8 +139,8 @@ lookup:
     type: "ORDER_TYPE"
     catgeory: "MODE_OF_DELIVERY"
     source: "D365"
-    shippedorderstype: "Entity"
-    shippedorderscatgeory: "Store Entity"
+    shippedorderstype: "Store Entity"
+    shippedorderscatgeory: "Legal Entity"
     shippedorderssource: "JDA"
     aptos:
       modeOfDelivery:
