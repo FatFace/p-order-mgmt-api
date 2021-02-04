@@ -78,6 +78,12 @@ http://www.mulesoft.org/schema/mule/os http://www.mulesoft.org/schema/mule/os/cu
 		<http:request-connection host="${d365.host}"
 			port="${d365.port}" />
 	</http:request-config>
+	<http:request-config name="s_D365_Export_Http_Request_configuration"
+		doc:name="HTTP Request configuration" doc:id="2732754f-c781-4965-9762-a82bcf103c3e"
+		basePath="${d365.export.basepath}">
+		<http:request-connection host="${d365.export.host}"
+			port="${d365.export.port}" />
+	</http:request-config>
 	<http:request-config name="s_D365_Import_Http_Request_configuration"
 		doc:name="HTTP Request configuration" doc:id="cd89f4b4-64b7-42f5-b013-6d748a51b48e"
 		basePath="${d365.import.basepath}">

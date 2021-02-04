@@ -152,7 +152,7 @@ output application/java
 {
 	"legal-entity" : vars.vRegion,
 	"file-name" : vars.vQueryParams."file-name",
-	"idd-number" : "IDD040"
+	"idd-number" : p('idd-number.idd-number-IDD040')
 }]]]></http:query-params>
 		</http:request>
 		<flow-ref doc:name="Log Process Exit" doc:id="40d18afd-1a63-44c0-a2f6-65c3e32a560c" name="log-process-exit-sub-flow"/>

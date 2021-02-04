@@ -38,6 +38,12 @@ d365:
     clientId: "c1751cc13ad746a8a49c404c966839f7"
     clientSecret: "![Uve1NAvt5zaIs55ecLLnd6rhKY81uIy0j5/clihbaHvBkxed9l+lipNeE/ztkCnm]" 
     transferShippedOrders: "/dmf/import"
+  export:
+    host: "mule-worker-internal-dev-s-d365-export-api.ir-e1.cloudhub.io"
+    port: "8091"
+    basepath: "/api/v1"
+    clientId: "c1751cc13ad746a8a49c404c966839f7"
+    clientSecret: "![Uve1NAvt5zaIs55ecLLnd6rhKY81uIy0j5/clihbaHvBkxed9l+lipNeE/ztkCnm]" 
   dmf: 
     path: "/dmf/export"
     pick:

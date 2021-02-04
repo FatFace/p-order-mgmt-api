@@ -49,6 +49,8 @@ response:
       xcm:
         salesOrders: "60000"
         returnOrders: "60000"
+      cims:
+        stockOrders: "120000"
 shipment:
   labelImageFormat: "PNG"  
 
@@ -107,4 +109,6 @@ error:
 system:
   layer:
     response: "No Data from System Layer"
+idd-number:
+  idd-number-IDD040: "IDD040"
         
