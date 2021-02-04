@@ -23,7 +23,7 @@ pipeline {
  	    
         gitParameter name: 'BRANCH_TAG',
                      type: 'PT_BRANCH_TAG',
-                     defaultValue: 'feature/IDD040',
+                     defaultValue: 'feature/IDD041',
                      description: 'Choose a git branch to start CI/CD pipeline.'	
     	
     }
