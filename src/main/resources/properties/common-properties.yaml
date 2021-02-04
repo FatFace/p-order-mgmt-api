@@ -111,4 +111,7 @@ system:
     response: "No Data from System Layer"
 idd-number:
   idd-number-IDD040: "IDD040"
+caching:
+  entryttl: "1"
+  expiration: "3"
         

@@ -20,6 +20,10 @@ attributes.headers."Transaction-Id" default ""]]></ee:set-variable>
 output application/java
 ---
 attributes.headers."Transaction-Start-Time" default ""]]></ee:set-variable>
+				<ee:set-variable variableName="correlationId" ><![CDATA[%dw 2.0
+output application/java
+---
+attributes.headers."Correlation-Id"]]></ee:set-variable>
 			</ee:variables>
 		</ee:transform>
 		<apikit:router config-ref="p-order-mgmt-api-config" />
