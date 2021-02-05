@@ -40,7 +40,7 @@ attributes.queryParams]]></ee:set-variable>
 				<ee:set-payload resource="dwl/jda-to-d365-tansferorders-mapping.dwl" />
 			</ee:message>
 		</ee:transform>
-		<scatter-gather doc:name="Scatter-Gather" doc:id="9f2a1b6d-91c6-41bf-82f2-dc7ac28c79d3" timeout="1200000">
+		<scatter-gather doc:name="Region as US or UK" doc:id="9f2a1b6d-91c6-41bf-82f2-dc7ac28c79d3" timeout="1200000">
 			<route >
 				<ee:transform doc:name="Filter using region as UK and capture region" doc:id="54ccd760-1e84-47d2-a79a-b333a907c9b1" >
 					<ee:message >
@@ -59,7 +59,7 @@ output application/java
 p('region.UK')]]></ee:set-variable>
 					</ee:variables>
 				</ee:transform>
-				<choice doc:name="Choice" doc:id="71d49b58-9ee3-4f7e-afa1-e7a7cdbae670" >
+				<choice doc:name="transfer-orders &gt; 0" doc:id="71d49b58-9ee3-4f7e-afa1-e7a7cdbae670" >
 					<when expression='#[sizeOf(payload."transfer-orders") &gt; 0]'>
 						<flow-ref doc:name="call-transfers-shipped-orders-d365-import-api-sub-flow" doc:id="a6aa10ad-971d-4184-8223-8e89883de200" name="call-transfers-shipped-orders-d365-import-api-sub-flow" />
 					</when>
@@ -87,7 +87,7 @@ output application/java
 p('region.US')]]></ee:set-variable>
 					</ee:variables>
 				</ee:transform>
-				<choice doc:name="Choice" doc:id="5b0aa831-2ae5-486a-8ae6-5069d4c771fe" >
+				<choice doc:name="transfer-orders &gt; 0" doc:id="5b0aa831-2ae5-486a-8ae6-5069d4c771fe" >
 					<when expression='#[sizeOf(payload."transfer-orders") &gt; 0]'>
 						<flow-ref doc:name="call-transfers-shipped-orders-d365-import-api-sub-flow" doc:id="989796c1-afb4-4e06-b8e9-a021de8249b2" name="call-transfers-shipped-orders-d365-import-api-sub-flow" />
 					</when>
