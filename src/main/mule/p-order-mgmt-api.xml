@@ -157,7 +157,7 @@ attributes.queryParams."idd-number"]]></ee:set-variable>
 		</ee:transform>
 		<flow-ref doc:name="Log Receiver Entry" doc:id="0e3f9aee-aa81-4c64-8a01-1f682134028a" name="log-receiver-entry-sub-flow" />
         <flow-ref doc:name="Audit Receiver Entry" doc:id="6d5a9e3e-e186-4c02-8248-5419115ea981" name="audit-receiver-entry-sub-flow" />
-		<flow-ref doc:name="Transfers Shipped Orders Flow" doc:id="8e58f97a-944f-4a07-9387-edc5f1f97756" name="put-transfers-shipped-orders-impl-flow" />
+		<flow-ref doc:name="put-transfers-shipped-orders-impl-flow" doc:id="8e58f97a-944f-4a07-9387-edc5f1f97756" name="put-transfers-shipped-orders-impl-flow" />
         <set-variable value="#['put:\transfers\shipped-orders:application\json:p-order-mgmt-api-config']" doc:name="Flow Name" doc:id="c3b94629-93e5-4b86-b435-d70a7786f6b1" variableName="flowName" />
         <flow-ref doc:name="Log Dispatcher Exit" doc:id="fb697afb-1f3c-45d7-9d1b-97e26148a9bc" name="log-dispatcher-exit-sub-flow" />
         <flow-ref doc:name="Audit Dispather Exit" doc:id="d3b82c0e-1adf-48b3-9e26-ac325e2645a6" name="audit-dispatcher-exit-sub-flow" />

@@ -6,7 +6,7 @@
 http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
 http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
 	<flow name="transfer-orders-uk-scheduler-flow" doc:id="3fac95f7-22da-4026-8473-77304e261855" >
-		<scheduler doc:name="UKScheduler" doc:id="480066af-347c-43f0-acb6-5f12076211e4" >
+		<scheduler doc:name="UK Scheduler" doc:id="480066af-347c-43f0-acb6-5f12076211e4" >
 			<scheduling-strategy >
 				<cron expression="${cron.expression.ukTransferOrders}" />
 			</scheduling-strategy>
@@ -24,7 +24,7 @@ p('region.UK')]]></ee:set-variable>
 		<flow-ref doc:name="transfer-orders-scheduler-sub-flow" doc:id="3b5a9068-cf7e-4eb6-b6c1-670ecfbc0ddd" name="transfer-orders-scheduler-sub-flow"/>
 	</flow>
 		<flow name="transfer-orders-us-scheduler-flow" doc:id="cac1e877-8733-49f5-bef9-2d5809c6cfb1" >
-		<scheduler doc:name="USScheduler" doc:id="6c0803f7-7630-4c02-b96a-a98358e060af" >
+		<scheduler doc:name="US Scheduler" doc:id="6c0803f7-7630-4c02-b96a-a98358e060af" >
 			<scheduling-strategy >
 				<cron expression="${cron.expression.usTransferOrders}" />
 			</scheduling-strategy>
@@ -124,35 +124,7 @@ output application/json
 		</ee:transform>
 		<ee:transform doc:name="Request mapping" doc:id="001092f3-16b9-40ce-b4e4-319b1a13514a" >
 			<ee:message >
-				<ee:set-payload ><![CDATA[%dw 2.0
-output application/json
----
-{
-    "transfer-orders" : 
-    payload."transfer-orders" map ((item,index) -> {
-    "transfer-number" : item."transfer-number",
-    "line-number" : item."line-number" as Number,
-    "sku-id" : item."sku-id",
-    "colour" : item."colour",
-    "from-warehouse" : item."from-warehouse",
-    "item-number" : item."item-number",
-    "line-receipt-date" : item."line-receipt-date",
-    "receipt-date" : item."receipt-date",
-    "received-qty" : item."received-qty",
-    "receive-remain" : item."receive-remain",
-    "remaining" : item."remaining",
-    "shipped-date" : item."shipped-date",
-    "shipped-qty" : item."shipped-qty",
-    "size" : item."size",
-    "style" : item."style",
-    "transfer-qty" : item."transfer-qty",
-    "to-warehouse" : item."to-warehouse",
-    "transform-order-status" : item."transform-order-status",
-    "store-flag" : vars.vFlattenResponse[item."to-warehouse"] != null
-})
-}
-
-]]></ee:set-payload>
+				<ee:set-payload resource="dwl/put-transfer-orders-request.json.dwl" />
 			</ee:message>
 		</ee:transform>
 		<!-- <ee:transform doc:name="Filter success and failed data" doc:id="6787be33-c7c6-45b6-a074-c912dd378a06">
