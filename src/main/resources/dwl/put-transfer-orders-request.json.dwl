@@ -22,6 +22,7 @@ output application/json
     "transfer-qty" : item."transfer-qty",
     "to-warehouse" : item."to-warehouse",
     "transform-order-status" : item."transform-order-status",
+    "location": item.'location',
     "store-flag" : vars.vFlattenResponse[item."to-warehouse"] != null
 })
 }

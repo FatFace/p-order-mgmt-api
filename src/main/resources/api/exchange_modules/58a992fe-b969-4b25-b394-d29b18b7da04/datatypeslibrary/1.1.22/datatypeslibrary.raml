@@ -48,8 +48,12 @@ types:
     items: !include dataTypes//carrier.raml
   transfer-orders:
     type: array
-    items: !include dataTypes//shippedorder-dataheader.raml
-  transfer-order:
+    items: !include dataTypes//transfer-orders.raml
+  retail-sales-orders:
     type: array
-    items: !include dataTypes//orderstransfer.raml
-    
+    items: !include dataTypes//retailSalesOrders.raml
+  business-event:
+    type: !include dataTypes//business-event.raml
+  marketing-preferences:
+      type: array
+      items: !include dataTypes//marketing-preference.raml  
