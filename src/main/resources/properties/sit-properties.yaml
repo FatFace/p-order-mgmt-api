@@ -54,7 +54,7 @@ sqs:
       orderQueueUrl: "https://sqs.eu-west-1.amazonaws.com/691628577374/order-extract-q"
         
 d365:
-  host: "mule-worker-internal-sit-s-d365-export-api.ir-e1.cloudhub.io"
+  host: "mule-worker-internal-sit-s-d365-api.ir-e1.cloudhub.io"
   port: "8091"
   basepath: "/api/v1"
   clientId: "a1c25cbc41dc4a43a1c5c3ecbf1251c5"

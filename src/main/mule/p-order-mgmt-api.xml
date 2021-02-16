@@ -174,11 +174,11 @@ output application/java
 				<ee:set-variable variableName="primaryKey" ><![CDATA[%dw 2.0
 output application/java
 ---
-attributes.queryParams."file-name"]]></ee:set-variable>
+attributes.queryParams."execution-id"]]></ee:set-variable>
 				<ee:set-variable variableName="secondaryKey" ><![CDATA[%dw 2.0
 output application/java
 ---
-attributes.queryParams."idd-number"]]></ee:set-variable>
+attributes.queryParams."file-name"]]></ee:set-variable>
 			</ee:variables>
 		</ee:transform>
 		<flow-ref doc:name="Log Receiver Entry" doc:id="69cb08b9-87ff-4cdf-97e1-1a76d2e450b8" name="log-receiver-entry-sub-flow" />

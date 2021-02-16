@@ -154,6 +154,11 @@ uses:
               type: string
               required: true
               example: "IDD041"
+            execution-id:
+              description: Execution Id generated in D365 system  
+              type: string
+              required: true
+              example: ExportPackage-11/02/2021 10:46:03
           body:
             application/json:   
               example: !include examples/orders-transfer.raml
