@@ -70,10 +70,8 @@ jda:
   orders:
     path: "/pick/orders"
     ordersPath: "/orders"  
-    manifests:
-      path: "/pick/manifests" 
-    shippedorders:
-      path: "/transfers/orders"
+  manifests:
+    path: "/pick/manifests" 
 cims:
   host: "mule-worker-internal-dev-s-erp-cims-api.ir-e1.cloudhub.io"
   port: "8091"
