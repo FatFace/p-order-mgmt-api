@@ -1,0 +1,51 @@
+#%RAML 1.0 DataType
+description: Customer Marketing Preferenmces Object
+displayName: Customer Marketing Preference
+type: object
+properties:
+  customer-id:
+    type: string
+    required: false
+    example: CU10000001
+    description: Defines the unique ID of the customer
+
+  salesforce-id:
+    type: string
+    required: false
+    example: SF20210
+    description: Defines Salesforce ID of the customer
+
+  email:
+    type: string
+    required: false
+    example: testemail@email.com
+    description: Defines the email id of the customer
+
+  legal-entity:
+    type: string
+    required: false
+    example: 1FFL
+    description: Defines the region of the customer. 1FFL is for UK and 2FFC for US
+
+  post-opt-in:
+     type: boolean|nil
+     example: true
+     required: false
+     description: Defines if the customer has opted in for postal communication
+
+  sms-opt-in:
+     type: boolean|nil
+     example: true
+     required: false
+     description: Defines if the customer has opted in for SMS communication
+
+  opt-in:
+      type: boolean|nil
+      example: true
+      required: false
+      description: Defines if the customer has opted in for email communication
+
+
+       
+      
+      

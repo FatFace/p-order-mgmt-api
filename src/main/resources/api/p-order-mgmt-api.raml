@@ -1,12 +1,12 @@
 #%RAML 1.0
 title: Process API for Order Management
 version: v1
-baseUri: http://localhost:8081/api/{version}
+baseUri: http://localhost:8081/api/v1
 
 uses:
-  dataTypesLib: exchange_modules/58a992fe-b969-4b25-b394-d29b18b7da04/datatypeslibrary/1.1.3/datatypeslibrary.raml
+  dataTypesLib: exchange_modules/58a992fe-b969-4b25-b394-d29b18b7da04/datatypeslibrary/1.1.22/datatypeslibrary.raml
   resourceTypesLib: exchange_modules/58a992fe-b969-4b25-b394-d29b18b7da04/resourcetypeslibrary/1.0.1/resourcetypeslibrary.raml
-  traitsLib: exchange_modules/58a992fe-b969-4b25-b394-d29b18b7da04/traitslibrary/1.0.3/traitslibrary.raml
+  traitsLib: exchange_modules/58a992fe-b969-4b25-b394-d29b18b7da04/traitslibrary/1.0.6/traitslibrary.raml
 
 /orders:
   description: |
@@ -105,5 +105,68 @@ uses:
             application/json:
               example: |
                 { "responseCode" : 0,  "responseText" : "success"}
-
-              
+/transfer:
+  /shipped-orders:
+    type: 
+      resourceTypesLib.collection:
+    is: [traitsLib.traceable: {required: true}, traitsLib.secured: {required: true}] 
+    put:
+      description: |
+        Create Transfer shippedorders in Reporting DB and D365
+      queryParameters: 
+        file-name:
+          description: Name of the file
+          type: string
+          required: true
+          example: "transfer-orders-1.json"
+        idd-number:
+              description: IDD Number
+              type: string
+              required: true
+              example: "IDD040"
+      body:
+        application/json:   
+          example: !include examples/transfer-orders.raml
+          properties:
+            transfer-orders: dataTypesLib.transfer-orders
+      responses:
+        200:
+          body:
+            application/json:
+              example: |
+                { "responseCode" : 200,  "responseText" : "success"}
+  /shipped-received:
+     /orders:
+        type:
+          resourceTypesLib.collection:
+        is: [traitsLib.traceable: {required: true}, traitsLib.secured: {required: true}] 
+        put:
+          description: |
+            Create Transfer Orders in Reporting D365
+          queryParameters: 
+            file-name:
+              description: Name of the file
+              type: string
+              required: true
+              example: "transfer-orders-1.json"
+            idd-number:
+              description: IDD Number
+              type: string
+              required: true
+              example: "IDD041"
+            execution-id:
+              description: Execution Id generated in D365 system  
+              type: string
+              required: true
+              example: ExportPackage-11/02/2021 10:46:03
+          body:
+            application/json:   
+              example: !include examples/orders-transfer.raml
+              properties:
+                transfer-orders: dataTypesLib.transfer-orders
+          responses:
+            200:
+              body:
+                application/json:
+                  example: |
+                    { "responseCode" : 200,  "responseText" : "success"}      

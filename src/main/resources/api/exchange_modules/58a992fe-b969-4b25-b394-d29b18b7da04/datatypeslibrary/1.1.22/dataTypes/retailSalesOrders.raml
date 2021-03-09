@@ -1,0 +1,76 @@
+#%RAML 1.0 DataType
+displayName: Transfer orders fields
+type: object
+properties:
+  sku-id: 
+    description: Barcode id of the item
+    type: string
+    required: true
+  colour: 
+    description: Colour of the item
+    type: string
+    required: true
+  item-number: 
+    description: Item number also referred as user-def-type-1
+    type: string
+    required: true
+  size: 
+    description: Size of the item
+    type: string
+    required: true
+  style: 
+    description: Style of the item
+    type: string
+    required: true
+  quantity:
+    description: Quantity of the item
+    type: string
+    required: true
+  store-name:
+    description: Name of the store
+    type: string
+    required: true
+  order-type:
+    description: Type of the order
+    type: string
+    required: true
+  warehouse:
+    description: Warehouse
+    type: string
+    required: true
+  to-location: 
+    description: To location of item
+    type: string
+    required: false
+  to-movement-type: 
+    description: To movement type of the item
+    type: string
+    required: false
+  from-location:
+    description: From location of item
+    type: string
+    required: false
+  from-movement-type:
+    description: From movement type of item
+    type: string
+    required: false
+  delivery-type:
+    description: Delivery type
+    type: string
+    required: false
+  ship-type:
+    description: Shipping type of item
+    type: string
+    required: false
+  comments:
+    description: Comments
+    type: string
+    required: false
+  transaction-date:
+    description: transaction date
+    type: string
+    required: false
+  currency:
+    description: Currency
+    type: string
+    required: false

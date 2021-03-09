@@ -1,0 +1,14 @@
+{	
+	"transfer-orders": 
+ [
+	{
+		"record-type": "MAN",  
+		  "tag-id": "T0026192189",  
+		  "user-def-note-1": "70465",
+		  "shipped-dstamp": "20201209163707",
+		  "user-def-type-1": "77666",  
+		  "sku-id": "505275220194",
+		  "qty-shipped": "1.000000"
+	}
+  ]
+}

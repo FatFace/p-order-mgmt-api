@@ -8,7 +8,25 @@
                 <http:body><![CDATA[#[payload]]]></http:body>
             </http:error-response>
         </http:listener>
-        <apikit:router config-ref="p-order-mgmt-api-config" />
+        <ee:transform doc:name="Set Headers" doc:id="42644c83-e4ac-460e-9c98-9bab7a617f11" >
+			<ee:message >
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="transactionId" ><![CDATA[%dw 2.0
+output application/java
+---
+attributes.headers."Transaction-Id" default ""]]></ee:set-variable>
+				<ee:set-variable variableName="transactionStartTime" ><![CDATA[%dw 2.0
+output application/java
+---
+attributes.headers."Transaction-Start-Time" default ""]]></ee:set-variable>
+				<ee:set-variable variableName="correlationId" ><![CDATA[%dw 2.0
+output application/java
+---
+attributes.headers."Correlation-Id"]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+		<apikit:router config-ref="p-order-mgmt-api-config" />
     </flow>
     <flow name="p-order-mgmt-api-console">
         <http:listener config-ref="p-order-mgmt-api-httpListenerConfig" path="/console/*">
@@ -110,12 +128,64 @@ output application/java
         <flow-ref doc:name="Audit Dispather Exit" doc:id="4b49aa4e-7cde-40e7-90ce-b9abe98804ae" name="audit-dispatcher-exit-sub-flow" />
     </flow>
     <flow name="post:\sales\orders\emails:application\json:p-order-mgmt-api-config">
-    	<set-variable value="#['post:\sales\orders\emails:application\json:p-order-mgmt-api-config']" doc:name="Flow Name" doc:id="03eb330c-138a-4b5d-9aa0-20539c914232" variableName="flowName" />
+        <set-variable value="#['post:\sales\orders\emails:application\json:p-order-mgmt-api-config']" doc:name="Flow Name" doc:id="03eb330c-138a-4b5d-9aa0-20539c914232" variableName="flowName" />
         <flow-ref doc:name="Log Receiver Entry" doc:id="d6038fdc-40ab-4eb7-805d-9048d7041e5b" name="log-receiver-entry-sub-flow" />
         <flow-ref doc:name="Audit Receiver Entry" doc:id="4caaec6c-4881-405e-a196-7809501d4216" name="audit-receiver-entry-sub-flow" />
-        <flow-ref doc:name="Transactional Email Flow" doc:id="256565ce-26d1-42cc-8de7-fc34ca9533b6" name="post-transactional-email-impl-sub-slow"/>
+        <flow-ref doc:name="Transactional Email Flow" doc:id="256565ce-26d1-42cc-8de7-fc34ca9533b6" name="post-transactional-email-impl-sub-slow" />
         <set-variable value="#['post:\sales\orders\emails:application\json:p-order-mgmt-api-config']" doc:name="Flow Name" doc:id="340b0842-78fd-43ac-a0e0-9f5643b9399d" variableName="flowName" />
         <flow-ref doc:name="Log Dispatcher Exit" doc:id="d0722907-6d8b-4851-b4d5-13da55ae75dc" name="log-dispatcher-exit-sub-flow" />
         <flow-ref doc:name="Audit Dispather Exit" doc:id="15d7b4c8-82f3-4ea6-b56f-536744441cb4" name="audit-dispatcher-exit-sub-flow" />
+    </flow>
+    <flow name="put:\transfer\shipped-orders:application\json:p-order-mgmt-api-config">
+		<ee:transform doc:name="Set Flow Name, primary key and secondary key" doc:id="1fc0c1c0-59e1-4d8c-9c16-cf14f6c60722" >
+			<ee:message >
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="flowName" ><![CDATA[%dw 2.0
+output application/java
+---
+"put:\transfer\shipped-orders:application\json:p-order-mgmt-api-config"]]></ee:set-variable>
+				<ee:set-variable variableName="primaryKey" ><![CDATA[%dw 2.0
+output application/java
+---
+attributes.queryParams."file-name"]]></ee:set-variable>
+				<ee:set-variable variableName="secondaryKey" ><![CDATA[%dw 2.0
+output application/java
+---
+attributes.queryParams."idd-number"]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+		<flow-ref doc:name="Log Receiver Entry" doc:id="0e3f9aee-aa81-4c64-8a01-1f682134028a" name="log-receiver-entry-sub-flow" />
+        <flow-ref doc:name="Audit Receiver Entry" doc:id="6d5a9e3e-e186-4c02-8248-5419115ea981" name="audit-receiver-entry-sub-flow" />
+		<flow-ref doc:name="put-transfers-shipped-orders-impl-flow" doc:id="8e58f97a-944f-4a07-9387-edc5f1f97756" name="put-transfers-shipped-orders-impl-flow" />
+        <set-variable value="#['put:\transfers\shipped-orders:application\json:p-order-mgmt-api-config']" doc:name="Flow Name" doc:id="c3b94629-93e5-4b86-b435-d70a7786f6b1" variableName="flowName" />
+        <flow-ref doc:name="Log Dispatcher Exit" doc:id="fb697afb-1f3c-45d7-9d1b-97e26148a9bc" name="log-dispatcher-exit-sub-flow" />
+        <flow-ref doc:name="Audit Dispather Exit" doc:id="d3b82c0e-1adf-48b3-9e26-ac325e2645a6" name="audit-dispatcher-exit-sub-flow" />
+    </flow>
+    <flow name="put:\transfer\shipped-received\orders:application\json:p-order-mgmt-api-config">
+        <ee:transform doc:name="Set Flow Name, primary key and secondary key" doc:id="8888b624-e614-4005-bbd4-e4cc81f56561" >
+			<ee:message >
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="flowName" ><![CDATA[%dw 2.0
+output application/java
+---
+"put:\transfer\shipped-received\orders:application\json:p-order-mgmt-api-config"]]></ee:set-variable>
+				<ee:set-variable variableName="primaryKey" ><![CDATA[%dw 2.0
+output application/java
+---
+attributes.queryParams."execution-id"]]></ee:set-variable>
+				<ee:set-variable variableName="secondaryKey" ><![CDATA[%dw 2.0
+output application/java
+---
+attributes.queryParams."file-name"]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+		<flow-ref doc:name="Log Receiver Entry" doc:id="69cb08b9-87ff-4cdf-97e1-1a76d2e450b8" name="log-receiver-entry-sub-flow" />
+        <flow-ref doc:name="Audit Receiver Entry" doc:id="4b2ac507-88e5-48bb-ae89-b3b9ed03a33b" name="audit-receiver-entry-sub-flow" />
+        <flow-ref doc:name="put-transfer-orders-impl-flow" doc:id="c3a510ba-93cf-4525-8f52-961efc888887" name="put-transfer-orders-impl-flow" />
+        <set-variable value="#['put:\transfer\shipped-received\orders:application\json:p-order-mgmt-api-config']" doc:name="Flow Name" doc:id="e7bba556-9863-45d3-bc30-0dc65f142b48" variableName="flowName" />
+        <flow-ref doc:name="Log Dispatcher Exit" doc:id="6bc30be8-cc11-4400-a331-24d101ffa0eb" name="log-dispatcher-exit-sub-flow" />
+        <flow-ref doc:name="Audit Dispather Exit" doc:id="d36836ef-e409-49ed-9fd9-817a9f8c77de" name="audit-dispatcher-exit-sub-flow" />
     </flow>
 </mule>

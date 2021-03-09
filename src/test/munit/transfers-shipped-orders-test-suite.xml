@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:munit="http://www.mulesoft.org/schema/mule/munit" xmlns:munit-tools="http://www.mulesoft.org/schema/mule/munit-tools"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xsi:schemaLocation="
+		http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+		http://www.mulesoft.org/schema/mule/munit http://www.mulesoft.org/schema/mule/munit/current/mule-munit.xsd
+		http://www.mulesoft.org/schema/mule/munit-tools  http://www.mulesoft.org/schema/mule/munit-tools/current/mule-munit-tools.xsd">
+	<munit:config name="transfers-shipped-orders-test-suite.xml" />
+	<import doc:name="Import" doc:id="ad8df143-52c3-4ddd-861d-c3fe0a410eb2" file="test-globals-suite.xml" />
+	<munit:test name="transfers-shipped-orders-test-suite-put-transfers-shipped-orders-impl-flowTest" description="Test" doc:id="db1ba5a6-a9cc-48bb-9e05-87883f6eb611" timeOut="12000000">
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when DB Lookup Api" doc:id="5356e80b-971b-454c-b367-13e9373666e0" processor="http:request">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="Invoke System Layer Lookup Api to Get Lookup Key" attributeName="doc:name" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:variables >
+						<munit-tools:variable key="lookupResponse" value="#[MunitTools::getResourceAsString('response/dblookup_response.json')]" mediaType="application/json" />
+					</munit-tools:variables>
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when doc:name="Mock when Invoke D365 System Layer" doc:id="53a072d2-47fc-41aa-8a67-effb0473fbf2" processor="http:request">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="Invoke D365 System Layer" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="2eb85d11-4ccf-41c6-a908-29b11d4668de" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:attributes value='#[{"httpStatus" : 200}]' />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<munit:set-event doc:name="Set Event" doc:id="7b593885-275c-4edb-afc1-844873ae1343" >
+				<munit:payload value="#[MunitTools::getResourceAsString('request/transfer-shipped-orders-request.json')]" mediaType="application/json" />
+				<munit:attributes value='#[{"headers" :  {"has-more-files":"false","file-name":"testFile"}}]' />
+				<munit:variables >
+					<munit:variable key="messageCorrelationId" value="testCorrelation" mediaType="application/java" />
+					<munit:variable key="transactionStartTime" value="2020-02-17T17:17:05.899Z" mediaType="application/java" />
+				</munit:variables>
+			
+		</munit:set-event>
+			<flow-ref doc:name="Flow-ref to put-transfers-shipped-orders-impl-flow" doc:id="3ed3b271-a49a-4cfb-960e-3aaf2490bcaf" name="put-transfers-shipped-orders-impl-flow"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that payload" doc:id="4fb49504-c5e2-4c43-a0c8-cf0cdaf0d668" is="#[MunitTools::notNullValue()]" expression="#['success']" message="Invalid Payload!!"/>
+			<munit-tools:verify-call doc:name="Verify call Invoke D365 System Layer" doc:id="c9550ba0-9471-4d12-9f69-2458b3e43f81" processor="http:request">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="Invoke D365 System Layer" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="998385bd-fc89-4e2c-b9de-a65a1036d64f" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+			</munit-tools:verify-call>
+		</munit:validation>
+	</munit:test>
+<munit:test name="transfers-shipped-orders-test-suite-default-flowTest" description="Test" doc:id="d7fee5e4-716a-4410-a479-dba414c53d67" timeOut="12000000" ignore="true">
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when DB Lookup Api" doc:id="3410b881-570c-4acb-83ff-c2721dc93c00" processor="http:request">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="Invoke System Layer Lookup Api to Get Lookup Key" attributeName="doc:name" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:variables >
+						<munit-tools:variable key="lookupResponse" value="#[MunitTools::getResourceAsString('response/dblookup_response.json')]" mediaType="application/json" />
+					</munit-tools:variables>
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when doc:name="Mock when Invoke D365 System Layer" doc:id="19a71453-cd4f-4aa6-ba59-d351551e88bb" processor="http:request">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="Invoke D365 System Layer" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="2eb85d11-4ccf-41c6-a908-29b11d4668de" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<munit:set-event doc:name="Set Event" doc:id="59c91ee9-8155-43af-9877-2558570e3786" >
+				<munit:attributes value='#[{"headers" :  {"has-more-files":"false","file-name":"testFile"}}]' />
+				<munit:variables >
+					<munit:variable key="messageCorrelationId" value="testCorrelation" mediaType="application/java" />
+					<munit:variable key="transactionStartTime" value="2020-02-17T17:17:05.899Z" mediaType="application/java" />
+				</munit:variables>
+			
+		</munit:set-event>
+			<flow-ref doc:name="put-transfers-shipped-orders-impl-flow" doc:id="6b731d07-f1f3-486e-ad9a-ed6fed3bfe91" name="put-transfers-shipped-orders-impl-flow"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that" doc:id="a4b18f8a-f6a8-4dcf-8199-454260831af0" is="#[MunitTools::notNullValue()]" expression="#['success']" message="Invalid Payload!!"/>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="transfers-shipped-orders-test-suite-DB-Exception-flowTest" description="Test" doc:id="68fc0cd1-48e9-4d9c-b9f6-049945888a4d" expectedErrorType="HTTP:CONNECTIVITY" timeOut="12000000" ignore="true">
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when DB Lookup Api" doc:id="3a2bcb16-e80d-4424-b974-6c88d498469b" processor="http:request">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="Invoke System Layer Lookup Api to Get Lookup Key" attributeName="doc:name" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:error typeId="HTTP:CONNECTIVITY" />
+					<munit-tools:variables >
+						<munit-tools:variable key="lookupResponse" value="#[MunitTools::getResourceAsString('response/dblookup_response.json')]" mediaType="application/json" />
+					</munit-tools:variables>
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<munit:set-event doc:name="Set Event" doc:id="cf535878-a4a4-46b1-9508-46e2fb165649" >
+				<munit:payload value="#[MunitTools::getResourceAsString('request/transfer-shipped-orders-request.json')]" mediaType="application/json" />
+				<munit:attributes value='#[{"headers" :  {"has-more-files":"false","file-name":"testFile"}}]' />
+				<munit:variables >
+					<munit:variable key="messageCorrelationId" value="testCorrelation" mediaType="application/java" />
+					<munit:variable key="transactionStartTime" value="2020-02-17T17:17:05.899Z" mediaType="application/java" />
+				</munit:variables>
+			
+		</munit:set-event>
+			<flow-ref doc:name="Flow-ref to put-transfers-shipped-orders-impl-flow" doc:id="bcea725b-1a0a-4ba8-9d31-9f1dbd975997" name="put-transfers-shipped-orders-impl-flow"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that" doc:id="32d069d5-1548-4184-9f50-c8c63b046624" is="#[MunitTools::notNullValue()]" expression="#['Connectivity Issue']" message="Invalid Payload!!"/>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="transfers-shipped-orders-test-suite-Default-handling-flowTest" description="Test" doc:id="e5e7cdb1-be48-457c-b6fb-85cf979916f4" expectedErrorType="CLOUDHUB:CONNECTIVITY" timeOut="12000000" ignore="true">
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when DB Lookup Api" doc:id="6e38abf7-743c-4bc6-9d7b-dbdffad45397" processor="http:request">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="Invoke System Layer Lookup Api to Get Lookup Key" attributeName="doc:name" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:variables >
+						<munit-tools:variable key="lookupResponse" value="#[MunitTools::getResourceAsString('response/dblookup_response.json')]" mediaType="application/json" />
+					</munit-tools:variables>
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when doc:name="Mock when Invoke D365 System Layer" doc:id="d46bc510-f4e7-464b-a74f-0c30423dedf2" processor="http:request">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="Invoke D365 System Layer" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="2eb85d11-4ccf-41c6-a908-29b11d4668de" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<munit:set-event doc:name="Set Event" doc:id="7a077ecb-6dfb-4904-a8dc-9be063afc148" >
+				<munit:payload value="#[MunitTools::getResourceAsString('request/transfer-shipped-orders-request.json')]" mediaType="application/json" />
+				<munit:attributes value='#[{"headers" :  {"has-more-files":"false","file-name":"testFile"}}]' />
+				<munit:variables >
+					<munit:variable key="messageCorrelationId" value="testCorrelation" mediaType="application/java" />
+					<munit:variable key="transactionStartTime" value="2020-02-17T17:17:05.899Z" mediaType="application/java" />
+				</munit:variables>
+			
+		</munit:set-event>
+			<flow-ref doc:name="Flow-ref to put-transfers-shipped-orders-impl-flow" doc:id="f9f4d73e-f234-45f1-b75c-5fabc055cab8" name="put-transfers-shipped-orders-impl-flow"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that" doc:id="6018346a-778f-4594-95e0-e24574bdb6d8" is="#[MunitTools::notNullValue()]" expression="#['success']" message="Invalid Payload!!"/>
+		</munit:validation>
+	</munit:test>
+
+</mule>

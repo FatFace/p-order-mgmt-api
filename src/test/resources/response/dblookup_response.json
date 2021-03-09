@@ -1,79 +1,1244 @@
 {
   "lookups": [
     {
-      "lookup_id": 1,
-      "lookup-key": "standardGBP",
-      "lookup-value": "5"
+      "lookup_id": 14,
+      "lookup-key": "70012",
+      "lookup-value": "1FFL"
     },
     {
-      "lookup_id": 1,
-      "lookup-key": "nextdayGBP",
-      "lookup-value": "1"
+      "lookup_id": 14,
+      "lookup-key": "70017",
+      "lookup-value": "1FFL"
     },
     {
-      "lookup_id": 1,
-      "lookup-key": "ClickandCollectGBP",
-      "lookup-value": "n/a"
+      "lookup_id": 14,
+      "lookup-key": "70027",
+      "lookup-value": "1FFL"
     },
     {
-      "lookup_id": 1,
-      "lookup-key": "ClickandCollectGBP",
-      "lookup-value": "4"
+      "lookup_id": 14,
+      "lookup-key": "70056",
+      "lookup-value": "1FFL"
     },
     {
-      "lookup_id": 1,
-      "lookup-key": "ClickandCollectGBP",
-      "lookup-value": "4"
+      "lookup_id": 14,
+      "lookup-key": "70061",
+      "lookup-value": "1FFL"
     },
     {
-      "lookup_id": 1,
-      "lookup-key": "PerdelivertostoreGBP",
-      "lookup-value": "7"
+      "lookup_id": 14,
+      "lookup-key": "70063",
+      "lookup-value": "1FFL"
     },
     {
-      "lookup_id": 1,
-      "lookup-key": "PerstanardGBP",
-      "lookup-value": "8"
+      "lookup_id": 14,
+      "lookup-key": "70075",
+      "lookup-value": "1FFL"
     },
     {
-      "lookup_id": 1,
-      "lookup-key": "GLOBALE_STANDARD",
-      "lookup-value": "3"
+      "lookup_id": 14,
+      "lookup-key": "70084",
+      "lookup-value": "1FFL"
     },
     {
-      "lookup_id": 1,
-      "lookup-key": "overseasUSD",
-      "lookup-value": "9"
+      "lookup_id": 14,
+      "lookup-key": "70085",
+      "lookup-value": "1FFL"
     },
     {
-      "lookup_id": 1,
-      "lookup-key": "delivertostoreGBP",
-      "lookup-value": "4"
+      "lookup_id": 14,
+      "lookup-key": "70086",
+      "lookup-value": "1FFL"
     },
     {
-      "lookup_id": 1,
-      "lookup-key": "delivertostoreGBP",
-      "lookup-value": "4"
+      "lookup_id": 14,
+      "lookup-key": "70099",
+      "lookup-value": "1FFL"
     },
     {
-      "lookup_id": 1,
-      "lookup-key": "standardGBP1",
-      "lookup-value": "5"
+      "lookup_id": 14,
+      "lookup-key": "70101",
+      "lookup-value": "1FFL"
     },
     {
-      "lookup_id": 1,
-      "lookup-key": "nextdayGBP1",
-      "lookup-value": "1"
+      "lookup_id": 14,
+      "lookup-key": "70103",
+      "lookup-value": "1FFL"
     },
     {
-      "lookup_id": 1,
-      "lookup-key": "delivertostoreGBP",
-      "lookup-value": "4"
+      "lookup_id": 14,
+      "lookup-key": "70104",
+      "lookup-value": "1FFL"
     },
-	{
-	  "lookup_id": 1,
-      "lookup-key": "Courier",
-      "lookup-value": "5"
-	}
+    {
+      "lookup_id": 14,
+      "lookup-key": "70105",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70107",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70109",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70110",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70119",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70120",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70125",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70135",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70140",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70142",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70143",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70144",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70147",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70149",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70151",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70152",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70154",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70155",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70158",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70160",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70161",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70164",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70168",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70169",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70170",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70172",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70176",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70177",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70180",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70181",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70183",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70186",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70189",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70190",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70191",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70193",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70194",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70195",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70197",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70198",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70200",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70203",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70204",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70206",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70207",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70211",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70212",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70213",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70215",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70216",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70217",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70218",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70220",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70221",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70225",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70226",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70227",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70228",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70229",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70230",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70232",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70234",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70235",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70236",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70238",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70240",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70241",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70242",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70243",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70244",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70245",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70247",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70248",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70249",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70250",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70251",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70252",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70254",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70256",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70257",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70258",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70259",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70260",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70261",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70263",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70265",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70266",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70268",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70270",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70272",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70273",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70274",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70275",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70278",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70279",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70281",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70282",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70283",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70284",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70285",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70286",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70287",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70288",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70291",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70292",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70293",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70295",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70297",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70299",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70300",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70301",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70302",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70303",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70304",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70305",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70306",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70307",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70308",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70309",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70310",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70311",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70312",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70313",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70314",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70316",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70317",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70318",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70319",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70320",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70322",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70323",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70324",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70325",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70326",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70327",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70328",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70329",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70330",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70331",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70332",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70333",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70334",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70335",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70336",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70337",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70338",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70339",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70340",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70341",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70342",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70343",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70345",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70346",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70347",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70348",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70349",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70350",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70351",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70352",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70353",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70354",
+      "lookup-value": "2FFC"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70355",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70356",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70358",
+      "lookup-value": "2FFC"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70359",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70360",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70361",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70362",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70363",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70364",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70365",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70367",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70368",
+      "lookup-value": "2FFC"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70369",
+      "lookup-value": "2FFC"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70370",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70371",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70374",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70376",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70377",
+      "lookup-value": "2FFC"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70378",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70379",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70380",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70381",
+      "lookup-value": "2FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70382",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70383",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70385",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70386",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70394",
+      "lookup-value": "2FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70395",
+      "lookup-value": "2FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70396",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70397",
+      "lookup-value": "2FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70398",
+      "lookup-value": "2FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70399",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70400",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70401",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70402",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70405",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70406",
+      "lookup-value": "2FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70407",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70408",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70409",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70411",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70412",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70414",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70415",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70421",
+      "lookup-value": "2FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70425",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70427",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70428",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70429",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70430",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70432",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70438",
+      "lookup-value": "2FFC"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70439",
+      "lookup-value": "2FFC"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70441",
+      "lookup-value": "2FFC"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70442",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70444",
+      "lookup-value": "2FFC"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70445",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70446",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70447",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70449",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70450",
+      "lookup-value": "2FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70451",
+      "lookup-value": "2FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70452",
+      "lookup-value": "2FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70453",
+      "lookup-value": "2FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70455",
+      "lookup-value": "2FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70456",
+      "lookup-value": "2FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70457",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70458",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70459",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70460",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70461",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70463",
+      "lookup-value": "1FFL"
+    },
+    {
+      "lookup_id": 14,
+      "lookup-key": "70465",
+      "lookup-value": "2FFL"
+    }
   ]
 }

@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mule xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:munit="http://www.mulesoft.org/schema/mule/munit" xmlns:munit-tools="http://www.mulesoft.org/schema/mule/munit-tools"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xsi:schemaLocation="
+		http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+		http://www.mulesoft.org/schema/mule/munit http://www.mulesoft.org/schema/mule/munit/current/mule-munit.xsd
+		http://www.mulesoft.org/schema/mule/munit-tools  http://www.mulesoft.org/schema/mule/munit-tools/current/mule-munit-tools.xsd">
+	<munit:config name="transfer-orders-test-suite.xml" />
+	<munit:test name="transfer-orders-test-suite-transfer-orders-uk-scheduler-flowTest" doc:id="a24cb63b-97c8-4eaf-8fc5-15244242b99c" description="Test" ignore="true">
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when UKScheduler" doc:id="5b838455-fe1b-42ff-9f16-2940beb5c76a" processor="scheduler">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="UKScheduler" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="480066af-347c-43f0-acb6-5f12076211e4" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when doc:name="Mock when Invoke D365 System Layer" doc:id="33b37d07-ed41-406f-af8f-5dd8762b4892" processor="http:request">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="Invoke D365 System Layer" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="1c49a64f-66b4-4b9e-8001-7b39bf3d57a2" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to transfer-orders-uk-scheduler-flow" doc:id="f26fbf6d-a0ad-47b0-866a-902a30b25797" name="transfer-orders-uk-scheduler-flow"/>
+		</munit:execution>
+		<munit:validation>
+			<munit-tools:assert-that doc:name="Assert that Payload" doc:id="e55a964f-4112-48fa-89b0-a043fd89d2f6" expression="#['success']" is="#[MunitTools::notNullValue()]" message="Invalid Payload!!"/>
+			<munit-tools:verify-call doc:name="Verify call Invoke D365 System Layer" doc:id="46d19385-a71e-4483-9157-cb58c44f4394" processor="http:request">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="Invoke D365 System Layer" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="1c49a64f-66b4-4b9e-8001-7b39bf3d57a2" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+			</munit-tools:verify-call>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="transfer-orders-test-suite-transfer-orders-us-scheduler-flowTest" doc:id="269d68e6-2e4b-4da0-9293-29a198ce8b3e" description="Test" ignore="true">
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when UKScheduler" doc:id="93f53944-1035-4349-95cb-a90e5aab491b" processor="scheduler">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="UKScheduler" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="480066af-347c-43f0-acb6-5f12076211e4" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when doc:name="Mock when Invoke D365 System Layer" doc:id="9a9454d4-088a-42cd-a9c8-4508b698ceb0" processor="http:request">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="Invoke D365 System Layer" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="1c49a64f-66b4-4b9e-8001-7b39bf3d57a2" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to transfer-orders-us-scheduler-flow" doc:id="aaa8b8a0-1832-4d8e-bacd-b57e32ae07ec" name="transfer-orders-us-scheduler-flow"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that Payload" doc:id="30ad2656-678e-4c72-9003-4f3dce621660" is="#[MunitTools::notNullValue()]" expression="#['success']" message="Invalid Payload!!"/>
+			<munit-tools:verify-call doc:name="Verify call Invoke D365 System Layer" doc:id="a508f7f3-bdf5-40c3-9e56-1c8d174df699" processor="http:request">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="Invoke D365 System Layer" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="1c49a64f-66b4-4b9e-8001-7b39bf3d57a2" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+			</munit-tools:verify-call>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="transfer-orders-test-suite-put-transfer-orders-impl-flowTest" doc:id="c1c29477-db6f-440d-af36-6ec8faa3f49b" description="Test">
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when Lookup API" doc:id="04a75bd4-bfd6-41d5-96ea-903f84a86e57" processor="http:request">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="Invoke System Layer Lookup Api to Get Lookup Key" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="8a0468f7-2b70-44ba-a64c-8bd4697f894e" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+			</munit-tools:mock-when>
+			<munit-tools:mock-when doc:name="Mock when Invoke CIMS System Layer" doc:id="23c82105-87c5-4936-9890-5f376416f740" processor="http:request">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="Invoke CIMS System Layer" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="0a8dbd09-78d8-4964-9c39-e4238f2953c8" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<munit:set-event doc:name="Set Event" doc:id="d3f1080b-35b8-4580-b961-9ac6fadfd9a7" >
+				<munit:payload value="#[MunitTools::getResourceAsString('request/transfer-shipped-received-orders-request.json')]" mediaType="application/json" />
+				<munit:variables >
+					<munit:variable key="lookupResponse" value='{"lookups": [{"lookup_id": 14,"lookup-key": "70012","lookup-value": "1FFL"},{"lookup_id": 14,"lookup-key": "70017","lookup-value": "1FFL"}]}' mediaType="application/json" />
+				</munit:variables>
+			</munit:set-event>
+			<flow-ref doc:name="put:\transfer\shipped-received\orders:application\json:p-order-mgmt-api-config" doc:id="4c685200-1f90-4582-8aa7-701633e1ea36" name="put:\transfer\shipped-received\orders:application\json:p-order-mgmt-api-config"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-that doc:name="Assert that Payload" doc:id="42a625fb-3322-4406-927c-149465ebe2c0" is="#[MunitTools::notNullValue()]" expression="#['success']" message="Invalid Payload!!"/>
+			<munit-tools:verify-call doc:name="Verify call Invoke CIMS System Layer" doc:id="3b8c9587-f391-4dfc-8ca4-0288c08cfd0d" processor="http:request">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="Invoke CIMS System Layer" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="0a8dbd09-78d8-4964-9c39-e4238f2953c8" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+			</munit-tools:verify-call>
+		</munit:validation>
+	</munit:test>
+
+
+</mule>

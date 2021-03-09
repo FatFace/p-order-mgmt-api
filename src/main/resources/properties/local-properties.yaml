@@ -31,6 +31,19 @@ d365:
     basepath: "/api/v1"
     clientId: "c1751cc13ad746a8a49c404c966839f7"
     clientSecret: "7d3aFbC44E8e49048935f06A7A2a099d"  
+  import:
+    host: "mule-worker-internal-dev-s-d365-import-api.ir-e1.cloudhub.io"
+    port: "8091"
+    basepath: "/api/v1"
+    clientId: "c1751cc13ad746a8a49c404c966839f7"
+    clientSecret: "![Uve1NAvt5zaIs55ecLLnd6rhKY81uIy0j5/clihbaHvBkxed9l+lipNeE/ztkCnm]" 
+    transferShippedOrders: "/dmf/import"
+  export:
+    host: "mule-worker-internal-dev-s-d365-export-api.ir-e1.cloudhub.io"
+    port: "8091"
+    basepath: "/api/v1"
+    clientId: "c1751cc13ad746a8a49c404c966839f7"
+    clientSecret: "![Uve1NAvt5zaIs55ecLLnd6rhKY81uIy0j5/clihbaHvBkxed9l+lipNeE/ztkCnm]" 
   dmf: 
     path: "/dmf/export"
     pick:
@@ -41,6 +54,10 @@ d365:
       orders:
         definitionGroupId: "IDD015-OrderInfoExport-Export"
         packageName: "OrderInfo-Data-"
+    transfer:
+      orders:
+        definitionGroupId: "IDD041-TransferOrders-Export"
+        packageName: "Transfer-Orders-"
       
 jda:
   host: "localhost"
@@ -54,11 +71,20 @@ jda:
     path: "/pick/orders"
   ordersPath: "/orders"  
   manifests:
-    path: "/pick/manifests" 
-
+    path: "/pick/manifests"
+  shippedorders:
+    path: "/transfers/orders"
+cims:
+  host: "localhost"
+  port: "8091"
+  basepath: "/api/v1"
+  stock:
+    orders:
+      path: "/stock/orders"
 cloudhub:
   username: "![V1H6cIZG27BimoyWHnUmWwgd7Z72XsoF+lx6EKe7Hfc=]"
   password: "![pU6khIodBBpK1c7QxH7VmdEtcJxtRvmoKBlI+hYGFqk=]"
+
 
 db:
  audit: 
@@ -119,6 +145,9 @@ lookup:
     type: "ORDER_TYPE"
     catgeory: "MODE_OF_DELIVERY"
     source: "D365"
+    shippedorderstype: "Store Entity"
+    shippedorderscatgeory: "Legal Entity"
+    shippedorderssource: "JDA"
     aptos:
       modeOfDelivery:
         type: "MODE_OF_DELIVERY"
@@ -141,8 +170,11 @@ lookup:
 cron:
   expression: 
     manifest: "0 0/5 * 1/1 * ? *"
-    orderextract: "0 3/20 * 1/1 * ? *"   
-    exportOrders:  "0 0 1 1/1 * ? *"
+    orderextract: "0 3/20 * 1/1 * ? *"  
+    exportOrders: "0 0 1 1/1 * ? *"   
+    shippedOrders: "0 0 * ? * * *"
+    ukTransferOrders: "0 0 * ? * * *"
+    usTransferOrders: "0 0 * ? * * *"
    
 orders:
   export: 
@@ -196,3 +228,7 @@ pooling:
       idle:
         size: "1"
       wait: "0"  
+      
+region:
+  UK: "1FFL"
+  US: "2FFC"

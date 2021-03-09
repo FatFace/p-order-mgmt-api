@@ -15,9 +15,9 @@ scheduler:
     expression: "0 0/15 * 1/1 * ? *"
         
 d365:
-  host: "internal-ff-test-dlb.lb.anypointdns.net"
-  port: "80"
-  basepath: "/dev-s-d365-api/api/v1"
+  host: "mule-worker-internal-dev-s-d365-api.ir-e1.cloudhub.io"
+  port: "8091"
+  basepath: "/api/v1"
   clientId: "c1751cc13ad746a8a49c404c966839f7"
   clientSecret: "![Uve1NAvt5zaIs55ecLLnd6rhKY81uIy0j5/clihbaHvBkxed9l+lipNeE/ztkCnm]"
   getCustomerGroupPath: "/data/CustomerGroups"
@@ -25,10 +25,23 @@ d365:
   updateManifestPath: "/pick/manifests"
   updateOrderExtractPath: "/pick/orders"
   webOrdersPath: "/web/orders"
+  import:
+    host: "mule-worker-internal-dev-s-d365-import-api.ir-e1.cloudhub.io"
+    port: "8091"
+    basepath: "/api/v1"
+    clientId: "c1751cc13ad746a8a49c404c966839f7"
+    clientSecret: "![Uve1NAvt5zaIs55ecLLnd6rhKY81uIy0j5/clihbaHvBkxed9l+lipNeE/ztkCnm]" 
+    transferShippedOrders: "/dmf/import"
+  export:
+    host: "mule-worker-internal-dev-s-d365-export-api.ir-e1.cloudhub.io"
+    port: "8091"
+    basepath: "/api/v1"
+    clientId: "c1751cc13ad746a8a49c404c966839f7"
+    clientSecret: "![Uve1NAvt5zaIs55ecLLnd6rhKY81uIy0j5/clihbaHvBkxed9l+lipNeE/ztkCnm]" 
   odata:
-    host: "internal-ff-test-dlb.lb.anypointdns.net"
-    port: "80"
-    basepath: "/dev-s-d365-odata-api/api/v1"
+    host: "mule-worker-internal-dev-s-d365-odata-api.ir-e1.cloudhub.io"
+    port: "8091"
+    basepath: "/api/v1"
     clientId: "c1751cc13ad746a8a49c404c966839f7"
     clientSecret: "![Uve1NAvt5zaIs55ecLLnd6rhKY81uIy0j5/clihbaHvBkxed9l+lipNeE/ztkCnm]"
   dmf: 
@@ -41,8 +54,10 @@ d365:
       orders:
         definitionGroupId: "IDD015-OrderInfoExport-Export"
         packageName: "OrderInfo-Data-"
-
-
+    transfer:
+      orders:
+        definitionGroupId: "IDD041-TransferOrders-Export"
+        packageName: "Transfer-Orders-"
 jda:
   host: "mule-worker-internal-dev-s-jda-data-int.ir-e1.cloudhub.io"
   port: "8092"
@@ -54,9 +69,16 @@ jda:
     password: "![yqrYtFIRqm28xrunLqR/2kqfcVd97HqoY0AWEfF+m8M=]"
   orders:
     path: "/pick/orders"
-  ordersPath: "/orders"  
+    ordersPath: "/orders"  
   manifests:
     path: "/pick/manifests" 
+cims:
+  host: "mule-worker-internal-dev-s-erp-cims-api.ir-e1.cloudhub.io"
+  port: "8091"
+  basepath: "/api/v1"
+  stock:
+    orders:
+      path: "/stock/orders"
 
 #----Common Block---No change Needed----      
 cloudhub:
@@ -97,6 +119,7 @@ sqs:
     url:
       manifestQueueUrl: "https://sqs.eu-west-1.amazonaws.com/691628577374/dev-shipping-manifest-q"
       orderQueueUrl: "https://sqs.eu-west-1.amazonaws.com/691628577374/dev-order-extract-q"
+      transferorderQueueUrl: "https://sqs.eu-west-1.amazonaws.com/691628577374/dev-shipped-orders-queue"
 
 lookup:
   host: "mule-worker-internal-dev-s-dblookup-api.ir-e1.cloudhub.io"
@@ -119,6 +142,9 @@ lookup:
     type: "ORDER_TYPE"
     catgeory: "MODE_OF_DELIVERY"
     source: "D365"
+    shippedorderstype: "Store Entity"
+    shippedorderscatgeory: "Legal Entity"
+    shippedorderssource: "JDA"
     aptos:
       modeOfDelivery:
         type: "MODE_OF_DELIVERY"
@@ -143,6 +169,9 @@ cron:
     manifest: "0 0/5 * 1/1 * ? *"
     orderextract: "0 3/20 * 1/1 * ? *"  
     exportOrders: "0 0 1 1/1 * ? *"   
+    shippedOrders: "0 0 * ? * * *"
+    ukTransferOrders: "0 0 * ? * * *"
+    usTransferOrders: "0 0 * ? * * *"
    
 orders:
   export:
@@ -163,6 +192,7 @@ report:
   clientId: "c1751cc13ad746a8a49c404c966839f7"
   clientSecret: "![Uve1NAvt5zaIs55ecLLnd6rhKY81uIy0j5/clihbaHvBkxed9l+lipNeE/ztkCnm]"
   ordersPath: "/orders"
+  shippedordersPath: "/transfers/shipped-orders"
   
 xcm:
   host: "mule-worker-internal-dev-s-xcm-api.ir-e1.cloudhub.io"
@@ -197,3 +227,7 @@ pooling:
       idle:
         size: "1"
       wait: "0"
+      
+region:
+  UK: "1FFL"
+  US: "2FFC"

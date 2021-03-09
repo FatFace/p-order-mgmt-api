@@ -1,0 +1,13 @@
+#%RAML 1.0 DataType
+type: object
+displayName: carrier details
+properties:
+  transaction-id?: string
+  carrier-code?: string
+  label-image?: string
+  label-image-format?: string
+  packages?:
+    description: packages details
+    type: array
+    items: 
+      type: !include package.raml
